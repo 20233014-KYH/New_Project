@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plango – Sign In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --primary: #0066ff;
+    --primary-hover: #0055cc;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #333333;
+    --muted: #666666;
+    --error: #d32f2f;
+    --radius: .5rem;
+    --spacing: 1rem;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { font-family: var(--font-sans); font-size: 100%; }
+  body {
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding: var(--spacing);
+    animation: fadeIn .4s ease-out;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .card {
+    background: var(--card-bg);
+    padding: calc(var(--spacing)*1.5);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    width: 100%;
+    max-width: 380px;
+  }
+  h1 {
+    margin:0 0 .75rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  p { margin:0 0 .75rem; color: var(--muted); }
+
+  .field {
+    margin-bottom: var(--spacing);
+  }
+  label {
+    display:block;
+    margin-bottom:.25rem;
+    font-size:.875rem;
+    font-weight:500;
+  }
+  input[type="email"],
+  input[type="password"] {
+    width:100%;
+    padding:.75rem;
+    font-size:1rem;
+    border:1px solid #ccc;
+    border-radius: var(--radius);
+    transition:border-color .2s;
+  }
+  input:focus {
+    outline:none;
+    border-color: var(--primary);
+    box-shadow:0 0 0 2px rgba(0,102,255,.2);
+  }
+  .checkbox {
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    font-size:.875rem;
+  }
+  .actions {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:calc(var(--spacing)*1.5);
+  }
+  .btn-primary {
+    background: var(--primary);
+    color:#fff;
+    border:none;
+    padding:.75rem 1.5rem;
+    font-size:1rem;
+    font-weight:600;
+    border-radius: var(--radius);
+    cursor:pointer;
+    transition:background .2s;
+  }
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background: var(--primary-hover);
+  }
+  .link {
+    font-size:.875rem;
+    color: var(--primary);
+    text-decoration:none;
+  }
+  .link:hover,
+  .link:focus { text-decoration:underline; }
+
+  .error-msg {
+    background: var(--error);
+    color:#fff;
+    padding:.5rem 1rem;
+    border-radius: var(--radius);
+    margin-top:.75rem;
+    font-size:.875rem;
+    display:none;
+  }
+  .error-msg[aria-hidden="false"] { display:block; }
+
+  @media (max-width: 420px) {
+    .card { padding: var(--spacing); }
+  }
+</style>
+</head>
+<body>
+  <section class="card" aria-labelledby="login-title">
+    <h1 id="login-title">Sign in to Plango</h1>
+    <p>Plan, collaborate, and achieve together.</p>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required aria-describedby="error-msg">
+      </div>
+
+      <div class="field checkbox">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Remember me</label>
+      </div>
+
+      <div class="error-msg" id="error-msg" role="alert" aria-live="assertive" aria-hidden="true">
+        Incorrect password. Please try again.
+      </div>
+
+      <div class="actions">
+        <a href="#" class="link">Forgot password?</a>
+        <button type="submit" class="btn-primary">Sign In</button>
+      </div>
+
+      <p style="margin-top:1rem; text-align:center;">
+        <a href="#" class="link">Create an account</a>
+      </p>
+    </form>
+  </section>
+
+<script>
+  // Simple demo validation – replace with real auth in production
+  const form = document.getElementById('login-form');
+  const errorMsg = document.getElementById('error-msg');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const pwd = form.password.value;
+    // Demo condition: only "password123" is accepted
+    if(pwd !== 'password123'){
+      errorMsg.setAttribute('aria-hidden','false');
+      form.password.setAttribute('aria-invalid','true');
+      form.password.focus();
+    } else {
+      errorMsg.setAttribute('aria-hidden','true');
+      form.password.removeAttribute('aria-invalid');
+      alert('✅ Logged in – replace this with real navigation.');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bookstore Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --primary: #2c3e50;
+  --accent: #3498db;
+  --bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --text: #333333;
+  --muted: #777777;
+  --success: #27ae60;
+  --warning: #e67e22;
+  --danger: #c0392b;
+  --radius: .5rem;
+  --transition: .2s ease-out;
+  --focus: 2px solid #ffcc00;
+}
+
+/* Reset */
+*,
+*::before,
+*::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+body { background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+a { color: var(--accent); text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button { background: none; border: none; cursor: pointer; }
+button:focus-visible { outline: var(--focus); }
+
+/* Layout */
+#app { display: flex; flex: 1; overflow: hidden; }
+nav { background: var(--primary); color: #fff; width: 240px; flex-shrink: 0; display: flex; flex-direction: column; transition: transform var(--transition); }
+nav a { color: #fff; padding: .75rem 1rem; display: block; }
+nav a:hover, nav a:focus { background: rgba(255,255,255,.1); }
+nav[aria-hidden="true"] { transform: translateX(-100%); }
+main { flex: 1; padding: 1rem; overflow-y: auto; }
+header { background: var(--primary); color: #fff; padding: .75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+header .search { flex: 1; margin: 0 .5rem; }
+header input { width: 100%; padding: .4rem .6rem; border-radius: var(--radius); border: none; }
+header button { color: #fff; font-size: 1.2rem; }
+header .user { position: relative; }
+header .user button { font-size: 1rem; }
+header .dropdown { position: absolute; right:0; top:100%; background:#fff; color:#000; min-width:150px; border-radius: var(--radius); box-shadow:0 4px 12px rgba(0,0,0,.15); display:none; }
+header .dropdown a { padding:.5rem 1rem; display:block; color:var(--text); }
+header .dropdown a:hover, header .dropdown a:focus { background:var(--bg); }
+header .user[aria-expanded="true"] .dropdown { display:block; }
+
+/* Summary cards */
+.summary { display: grid; gap:1rem; margin-bottom:1rem; }
+.summary .card {
+  background: var(--card-bg);
+  padding:1rem;
+  border-radius: var(--radius);
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.summary .value { font-size:2rem; font-weight:600; }
+.summary .label { font-size:.9rem; color:var(--muted); }
+
+/* Table */
+table { width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius); overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.1); }
+thead { background:var(--primary); color:#fff; }
+th, td { padding:.75rem 1rem; text-align:left; }
+tbody tr:nth-child(even) { background:var(--bg); }
+.status { font-weight:600; border-radius: var(--radius); padding:.2rem .5rem; font-size:.85rem; }
+.status.pending { background:#ffe9b3; color:#b35c00; }
+.status.completed { background:#d4edda; color:#155724; }
+.status.cancelled { background:#f8d7da; color:#721c24; }
+
+/* Empty state */
+.empty-state {
+  background: var(--card-bg);
+  padding:2rem;
+  border-radius: var(--radius);
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+.empty-state svg { width:80px; height:80px; margin-bottom:1rem; fill:var(--muted); }
+.empty-state h3 { margin-bottom:.5rem; font-size:1.25rem; }
+.empty-state p { color:var(--muted); }
+
+/* Responsive */
+@media (max-width: 767px) {
+  nav { position:fixed; top:0; left:0; height:100%; z-index:1000; }
+  #menu-toggle { display:block; }
+  header .search { order:3; width:100%; margin-top:.5rem; }
+  header { flex-wrap:wrap; }
+}
+@media (min-width: 768px) {
+  #menu-toggle { display:none; }
+  .summary { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav id="sidebar" aria-hidden="true">
+    <a href="#">Dashboard</a>
+    <a href="#">Orders</a>
+    <a href="#">Products</a>
+    <a href="#">Customers</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <main>
+    <header>
+      <button id="menu-toggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">&#9776;</button>
+      <div class="search"><input type="search" placeholder="Search…"></div>
+      <div class="user" id="user-menu" aria-expanded="false">
+        <button aria-haspopup="true" aria-controls="user-dropdown">Admin ▼</button>
+        <div class="dropdown" id="user-dropdown" role="menu">
+          <a href="#">Profile</a>
+          <a href="#">Settings</a>
+          <a href="#">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="summary">
+      <div class="card" aria-label="Today’s orders">
+        <div class="value">124</div>
+        <div class="label">Today's Orders</div>
+      </div>
+      <div class="card" aria-label="Revenue today">
+        <div class="value">$2,340</div>
+        <div class="label">Revenue</div>
+      </div>
+      <div class="card" aria-label="Returns today">
+        <div class="value">5</div>
+        <div class="label">Returns</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="recent-orders-title">
+      <h2 id="recent-orders-title">Recent Orders</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>00123</td>
+            <td>Jane Doe</td>
+            <td>3</td>
+            <td>$45.00</td>
+            <td><span class="status pending">Pending</span></td>
+          </tr>
+          <tr>
+            <td>00122</td>
+            <td>John Smith</td>
+            <td>1</td>
+            <td>$12.99</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td>00121</td>
+            <td>Emily Chen</td>
+            <td>2</td>
+            <td>$23.50</td>
+            <td><span class="status cancelled">Cancelled</span></td>
+          </tr>
+          <tr>
+            <td>00120</td>
+            <td>Mike Lee</td>
+            <td>5</td>
+            <td>$78.20</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td>00119</td>
+            <td>Sara Khan</td>
+            <td>4</td>
+            <td>$54.00</td>
+            <td><span class="status pending">Pending</span></td>
+          </tr>
+          <tr>
+            <td>00118</td>
+            <td>Alex Rivera</td>
+            <td>2</td>
+            <td>$30.75</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="low-stock-title" class="empty-state">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M32 4a28 28 0 1028 28A28 28 0 0032 4zm0 52a24 24 0 1124-24 24 24 0 01-24 24z"/>
+        <path d="M44 30H20a2 2 0 000 4h24a2 2 0 000-4z"/>
+      </svg>
+      <h3 id="low-stock-title">No Low‑Stock Alerts</h3>
+      <p>All inventory levels are healthy.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+/* Navigation toggle */
+const menuBtn = document.getElementById('menu-toggle');
+const sidebar = document.getElementById('sidebar');
+menuBtn.addEventListener('click', () => {
+  const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+  menuBtn.setAttribute('aria-expanded', !expanded);
+  sidebar.setAttribute('aria-hidden', expanded);
+});
+
+/* User menu */
+const userBtn = document.querySelector('#user-menu > button');
+const userMenu = document.getElementById('user-menu');
+userBtn.addEventListener('click', (e) => {
+  const expanded = userMenu.getAttribute('aria-expanded') === 'true';
+  userMenu.setAttribute('aria-expanded', !expanded);
+});
+document.addEventListener('click', (e) => {
+  if (!userMenu.contains(e.target)) {
+    userMenu.setAttribute('aria-expanded', 'false');
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plango – Sign In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* Reset & base */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5;
+  background:#f5f7fa;
+  color:#212529;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:1rem;
+}
+
+/* Card */
+.login-card{
+  background:#fff;
+  width:100%;
+  max-width:400px;
+  padding:2rem;
+  border-radius:0.75rem;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.logo{
+  font-size:1.75rem;
+  font-weight:600;
+  color:#0066ff;
+  margin-bottom:0.5rem;
+  text-align:center;
+}
+.tagline{
+  font-size:0.95rem;
+  color:#555;
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+/* Form */
+.form-group{
+  margin-bottom:1.25rem;
+}
+label{
+  display:block;
+  font-size:0.875rem;
+  margin-bottom:0.35rem;
+  color:#333;
+}
+input{
+  width:100%;
+  padding:0.6rem 0.75rem;
+  font-size:1rem;
+  border:1px solid #ced4da;
+  border-radius:0.4rem;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus{
+  outline:none;
+  border-color:#0066ff;
+  box-shadow:0 0 0 3px rgba(0,102,255,0.15);
+}
+input[type="checkbox"]{
+  width:auto;
+  margin-right:0.5rem;
+}
+
+/* Remember & actions */
+.actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:1.5rem;
+}
+.remember{
+  display:flex;
+  align-items:center;
+  font-size:0.875rem;
+}
+.remember label{
+  margin:0;
+}
+
+/* Button */
+button{
+  width:100%;
+  padding:0.75rem;
+  font-size:1rem;
+  font-weight:600;
+  color:#fff;
+  background:#0066ff;
+  border:none;
+  border-radius:0.5rem;
+  cursor:pointer;
+  transition:background .2s,transform .1s;
+}
+button:hover{background:#0052cc;}
+button:active{transform:scale(0.98);}
+
+/* Links */
+.link{
+  display:block;
+  font-size:0.875rem;
+  text-align:center;
+  color:#0066ff;
+  text-decoration:none;
+  margin-top:0.75rem;
+}
+.link:hover{text-decoration:underline;}
+
+/* Error */
+.error-msg{
+  color:#d32f2f;
+  font-size:0.875rem;
+  margin-top:0.5rem;
+  display:none;
+}
+.error-visible{
+  display:block;
+  animation:shake 0.35s ease-in-out;
+}
+
+/* Animation */
+@keyframes shake{
+  0%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(8px);}
+  60%{transform:translateX(-6px);}
+  80%{transform:translateX(6px);}
+  100%{transform:translateX(0);}
+}
+
+/* Responsive tweaks */
+@media (min-width:768px){
+  .login-card{
+    padding:2.5rem 3rem;
+  }
+  .logo{font-size:2rem;}
+}
+</style>
+</head>
+<body>
+<div class="login-card" role="dialog" aria-labelledby="login-title">
+  <h1 id="login-title" class="logo">Plango</h1>
+  <p class="tagline">Team planning made simple</p>
+  <form id="login-form" novalidate>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" id="email" name="email" autocomplete="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+    </div>
+    <div class="actions">
+      <div class="remember">
+        <input type="checkbox" id="remember" name="remember">
+        <label for="remember">Remember me</label>
+      </div>
+      <a href="#" class="link" id="forgot-link">Forgot password?</a>
+    </div>
+    <button type="submit">Sign In</button>
+    <p id="error" class="error-msg" role="alert" aria-live="assertive"></p>
+    <a href="#" class="link" id="create-link">Create an account</a>
+  </form>
+</div>
+
+<script>
+(() => {
+  const form = document.getElementById('login-form');
+  const errorEl = document.getElementById('error');
+
+  // Dummy credentials for demo
+  const VALID_EMAIL = 'user@example.com';
+  const VALID_PASS = 'password123';
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = form.email.value.trim();
+    const pass = form.password.value;
+
+    // Simple validation
+    if (email === VALID_EMAIL && pass === VALID_PASS) {
+      errorEl.className = 'error-msg';
+      alert('✅ Login successful! (demo)');
+      form.reset();
+    } else {
+      errorEl.textContent = 'Incorrect email or password.';
+      errorEl.className = 'error-msg error-visible';
+      form.password.focus();
+    }
+  });
+
+  // Prevent navigation for demo links
+  document.getElementById('forgot-link').addEventListener('click', e => e.preventDefault());
+  document.getElementById('create-link').addEventListener('click', e => e.preventDefault());
+})();
+</script>
+</body>
+</html>

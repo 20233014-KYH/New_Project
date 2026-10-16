@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bookstore Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-bg: #1e1e2f;
+  --color-surface: #262637;
+  --color-accent: #00bfa6;
+  --color-text: #e0e0e0;
+  --color-muted: #a0a0b5;
+  --color-success: #4caf50;
+  --color-warning: #ffb300;
+  --color-error: #e53935;
+  --radius: 6px;
+  --gap: 1rem;
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  font-family: var(--font-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+a { color: var(--color-accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+button, input {
+  font: inherit;
+  border: none;
+  outline: none;
+}
+button { cursor:pointer; }
+[hidden] { display:none !important; }
+
+/* Layout */
+#app { display:flex; min-height:100vh; }
+nav#sidebar {
+  width: 240px;
+  background: var(--color-surface);
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  padding: var(--gap);
+}
+nav#sidebar a {
+  display:block;
+  padding: .5rem 1rem;
+  margin: .25rem 0;
+  border-radius: var(--radius);
+  color: var(--color-muted);
+}
+nav#sidebar a.active,
+nav#sidebar a:hover { background: var(--color-accent); color:#fff; }
+
+header#topbar {
+  height:56px;
+  background: var(--color-surface);
+  display:flex;
+  align-items:center;
+  padding:0 var(--gap);
+  flex:1;
+  justify-content:space-between;
+}
+#menuBtn { display:none; background:transparent; font-size:1.5rem; color:var(--color-text); }
+#searchBox {
+  flex:1;
+  max-width:400px;
+  margin:0 var(--gap);
+  position:relative;
+}
+#searchBox input {
+  width:100%;
+  padding:.5rem 2rem .5rem .75rem;
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color:var(--color-text);
+}
+#searchBox::after{
+  content:"🔍";
+  position:absolute;
+  right:.75rem;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--color-muted);
+}
+#userMenu {
+  position:relative;
+}
+#userBtn {
+  background: var(--color-accent);
+  width:32px; height:32px;
+  border-radius:50%;
+  color:#fff;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#userDropdown {
+  position:absolute;
+  right:0;
+  top:calc(100% + .5rem);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  min-width:150px;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+  padding:.5rem 0;
+}
+#userDropdown a {
+  display:block;
+  padding:.5rem 1rem;
+  color:var(--color-muted);
+}
+#userDropdown a:hover { background:var(--color-accent); color:#fff; }
+
+/* Main content */
+main {
+  flex:1;
+  padding: var(--gap);
+  overflow:auto;
+}
+section.summary {
+  display:grid;
+  gap: var(--gap);
+  grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  margin-bottom: var(--gap);
+}
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding:1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+}
+.card .value {
+  font-size:2rem;
+  font-weight:600;
+  color:var(--color-accent);
+}
+.card .label { color:var(--color-muted); font-size:.9rem; }
+
+section#orders {
+  margin-bottom: var(--gap);
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  overflow:hidden;
+}
+th, td {
+  padding:.75rem 1rem;
+  text-align:left;
+}
+thead {
+  background: var(--color-bg);
+}
+tbody tr:nth-child(even){background:rgba(255,255,255,.02);}
+.status {
+  display:inline-block;
+  padding:.25rem .5rem;
+  border-radius: var(--radius);
+  font-size:.85rem;
+  font-weight:500;
+  text-transform:capitalize;
+}
+.status.pending { background:rgba(255,165,0,.2); color:#ffb300; }
+.status.shipped { background:rgba(76,175,80,.2); color:#4caf50; }
+.status.canceled { background:rgba(229,57,53,.2); color:#e53935; }
+
+section#lowstock {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding:2rem;
+  text-align:center;
+}
+section#lowstock h2 { margin-bottom:.5rem; }
+section#lowstock p { margin-bottom:1rem; color:var(--color-muted); }
+section#lowstock button {
+  background: var(--color-accent);
+  color:#fff;
+  border:none;
+  padding:.5rem 1rem;
+  border-radius: var(--radius);
+}
+
+/* Responsive */
+@media (max-width:600px){
+  nav#sidebar { position:fixed; inset:0; transform:translateX(-100%); transition:transform .3s ease; z-index:10; }
+  nav#sidebar.open { transform:translateX(0); }
+  #menuBtn { display:block; }
+  header#topbar { padding:0 .5rem; }
+  main { padding:.5rem; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav id="sidebar" aria-label="Primary">
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Orders</a>
+    <a href="#">Products</a>
+    <a href="#">Customers</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <div style="flex:1; display:flex; flex-direction:column;">
+    <header id="topbar">
+      <button id="menuBtn" aria-label="Open menu">☰</button>
+      <div id="searchBox"><input type="search" placeholder="Search books, orders…"></div>
+      <div id="userMenu">
+        <button id="userBtn" aria-haspopup="true" aria-expanded="false">A</button>
+        <div id="userDropdown" hidden>
+          <a href="#">Profile</a>
+          <a href="#">Settings</a>
+          <a href="#">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="summary">
+        <div class="card">
+          <div class="value">128</div>
+          <div class="label">Today's Orders</div>
+        </div>
+        <div class="card">
+          <div class="value">$4,560</div>
+          <div class="label">Revenue</div>
+        </div>
+        <div class="card">
+          <div class="value">5</div>
+          <div class="label">Returns</div>
+        </div>
+      </section>
+
+      <section id="orders">
+        <h2 style="margin-bottom:.5rem;">Recent Orders</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Customer</th><th>Amount</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1023</td><td>Jane Doe</td><td>$45.99</td><td><span class="status pending">Pending</span></td></tr>
+            <tr><td>1022</td><td>Mark Smith</td><td>$120.00</td><td><span class="status shipped">Shipped</span></td></tr>
+            <tr><td>1021</td><td>Liu Wei</td><td>$78.45</td><td><span class="status canceled">Canceled</span></td></tr>
+            <tr><td>1020</td><td>Aisha Khan</td><td>$33.20</td><td><span class="status shipped">Shipped</span></td></tr>
+            <tr><td>1019</td><td>Pedro Alvarez</td><td>$59.99</td><td><span class="status pending">Pending</span></td></tr>
+            <tr><td>1018</td><td>Sofia Rossi</td><td>$88.10</td><td><span class="status shipped">Shipped</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="lowstock">
+        <h2>No low‑stock alerts</h2>
+        <p>You’re all set. When a title drops below the threshold, it will appear here.</p>
+        <button type="button">Create alert</button>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+/* Sidebar toggle */
+const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+menuBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+/* User menu */
+const userBtn = document.getElementById('userBtn');
+const userDropdown = document.getElementById('userDropdown');
+userBtn.addEventListener('click', (e) => {
+  const expanded = userBtn.getAttribute('aria-expanded') === 'true';
+  userBtn.setAttribute('aria-expanded', !expanded);
+  userDropdown.hidden = expanded;
+});
+document.addEventListener('click', (e) => {
+  if (!userBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+    userBtn.setAttribute('aria-expanded', 'false');
+    userDropdown.hidden = true;
+  }
+});
+
+/* Respect reduced motion */
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('button, a').forEach(el => {
+    el.style.transition = 'none';
+  });
+}
+</script>
+</body>
+</html>
