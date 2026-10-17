@@ -1,6 +1,6 @@
 {
   "schema": "judgment_sample/v0",
-  "note": "내 PC(2026-10-16)에서 직접 스캔한 사실로 만든 샘플. 'facts'는 코드가 계산한 값이고, 'ai_opinion'은 아직 비어 있다(AI 판정 전). 상시 토큰은 스킬 이름+설명 글자수÷3 추정치. (2026-10-16 정정: 'hooks_all_tools'는 조건 없는 시점의 훅까지 센 계산 오류라 삭제했다.)",
+  "note": "내 PC(2026-10-16)에서 직접 스캔한 사실로 만든 샘플. 'facts'는 코드가 계산한 값이고, 'ai_opinion'은 아직 비어 있다(AI 판정 전). 상시 토큰은 스킬 이름+설명 글자수÷3 추정치. (2026-10-16 정정: 'hooks_all_tools'는 조건 없는 시점의 훅까지 센 계산 오류라 삭제했다.) (2026-10-17 추가: 'measured'는 Claude Code를 조합별로 따로 실행해 첫 응답에서 빈 환경보다 더 읽힌 입력 토큰이다. 글자수÷3 추정은 ECC에서 실측의 약 3배였다.)",
   "tools": [
     {
       "id": "obra/superpowers",
@@ -74,9 +74,10 @@
             "SessionStart": 2
           }
         },
-        "always_on_tokens_est_combined": 26786
+        "always_on_tokens_est_combined": 26786,
+        "first_response_tokens_measured_combined": 9238
       },
-      "facts_note_ko": "둘 다 세션이 시작될 때 훅을 실행합니다(1개 + 2개). 함께 켜면 상시 토큰은 약 26,800으로 추정됩니다.",
+      "facts_note_ko": "둘 다 세션이 시작될 때 훅을 실행합니다(1개 + 2개). 함께 켜면 첫 응답 입력 토큰이 빈 환경보다 +9,238 늘어납니다(실측). 글자수 기준 추정 26,786은 실측보다 약 3배 컸습니다.",
       "ai_opinion": null,
       "evidence_level": "calc",
       "needs_review": true
@@ -107,5 +108,23 @@
       "needs_review": true
     }
   ],
-  "what_if": "ECC는 현재 내 환경에서 꺼져 있다. 위 겹침은 'ECC를 켰을 경우'를 계산한 값이며, 켜 둔 3종(superpowers, karpathy, impeccable)끼리는 겹치는 이름·훅 이벤트가 없다."
+  "what_if": "ECC는 현재 내 환경에서 꺼져 있다. 위 겹침은 'ECC를 켰을 경우'를 계산한 값이며, 켜 둔 3종(superpowers, karpathy, impeccable)끼리는 겹치는 이름·훅 이벤트가 없다.",
+  "measured": {
+    "date": "2026-10-17",
+    "method": "Claude Code CLI 2.1.191, 빈 폴더, --settings 로 enabledPlugins 만 지정, 첫 응답 입력 토큰, 2회 재현(±2)",
+    "delta_vs_none": {
+      "obra/superpowers": 1377,
+      "affaan-m/ECC": 8198,
+      "both": 9238
+    },
+    "hooks_observed_per_session": {
+      "obra/superpowers": {
+        "SessionStart": 1
+      },
+      "affaan-m/ECC": {
+        "SessionStart": 2,
+        "Stop": 7
+      }
+    }
+  }
 }
