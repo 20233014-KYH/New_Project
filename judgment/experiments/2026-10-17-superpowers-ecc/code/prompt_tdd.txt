@@ -1,0 +1,1 @@
+Create a Python function slugify(text) in slugify.py that turns a title into a URL slug (lowercase, spaces to hyphens, drop punctuation). Add unit tests in test_slugify.py and make them pass. Use test-driven development.
