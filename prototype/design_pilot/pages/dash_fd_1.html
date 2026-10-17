@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bookstore Admin Dashboard</title>
+<style>
+  /* ==== Core variables ==== */
+  :root {
+    --color-bg: #f7f9fc;
+    --color-primary: #2a3d66;      /* deep navy */
+    --color-accent: #e09f3e;       /* warm amber */
+    --color-text: #222222;
+    --color-muted: #555555;
+    --color-success: #2e7d32;
+    --color-warning: #c17900;
+    --color-error: #c41c00;
+    --radius: 6px;
+    --gap: 1rem;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Merriweather", Georgia, serif;
+    --scale-0: 0.875rem;   /* 14px */
+    --scale-1: 1rem;       /* 16px */
+    --scale-2: 1.25rem;    /* 20px */
+    --scale-3: 1.563rem;   /* 25px */
+    --scale-4: 1.953rem;   /* 31px */
+  }
+
+  /* ==== Reset & base ==== */
+  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  html { font-family: var(--font-sans); font-size: 100%; }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: var(--color-primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ==== Layout ==== */
+  .topbar {
+    background: var(--color-primary);
+    color: #fff;
+    padding: var(--gap);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top:0;
+    z-index: 10;
+  }
+  .topbar .logo { font-family: var(--font-serif); font-size: var(--scale-3); font-weight: 600; }
+  .topbar .search {
+    flex:1;
+    margin:0 var(--gap);
+    max-width: 400px;
+  }
+  .topbar input {
+    width:100%;
+    padding: .4rem .6rem;
+    border:none;
+    border-radius: var(--radius);
+    font-size: var(--scale-1);
+  }
+  .topbar .user { cursor:pointer; }
+
+  .container {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    flex:1;
+  }
+  .nav {
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    padding: var(--gap);
+    display:flex;
+    flex-direction:column;
+    gap: var(--gap);
+  }
+  .nav a {
+    padding: .4rem .6rem;
+    border-radius: var(--radius);
+    color: var(--color-muted);
+  }
+  .nav a.active,
+  .nav a:hover {
+    background: var(--color-accent);
+    color:#fff;
+  }
+  .main {
+    padding: var(--gap);
+    overflow-x:auto;
+  }
+
+  /* ==== Summary cards ==== */
+  .summary {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-bottom: var(--gap);
+  }
+  .card {
+    background:#fff;
+    border-left: .4rem solid var(--color-accent);
+    padding: var(--gap);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,.07);
+    position:relative;
+  }
+  .card::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(135deg, rgba(224,159,62,.05) 0%, transparent 60%);
+    pointer-events:none;
+    border-radius: var(--radius);
+  }
+  .card h2 {
+    font-family: var(--font-serif);
+    font-size: var(--scale-4);
+    margin:0;
+    line-height:1;
+    color: var(--color-primary);
+  }
+  .card p {
+    margin-top:.3rem;
+    font-size: var(--scale-1);
+    color: var(--color-muted);
+  }
+
+  /* ==== Table ==== */
+  table {
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius: var(--radius);
+    overflow:hidden;
+    box-shadow:0 2px 4px rgba(0,0,0,.07);
+  }
+  thead {
+    background:var(--color-primary);
+    color:#fff;
+  }
+  th, td {
+    padding: .8rem .6rem;
+    text-align:left;
+    font-size: var(--scale-1);
+  }
+  tbody tr:nth-child(even) { background:#f9fafb; }
+  .badge {
+    display:inline-block;
+    padding:.2rem .5rem;
+    border-radius:12px;
+    font-size: .75rem;
+    font-weight:600;
+    color:#fff;
+  }
+  .badge.pending { background:var(--color-warning); }
+  .badge.shipped { background:var(--color-success); }
+  .badge.canceled { background:var(--color-error); }
+
+  /* ==== Empty state ==== */
+  .empty-state {
+    margin-top: var(--gap);
+    padding: 2rem;
+    text-align:center;
+    color: var(--color-muted);
+    border: 2px dashed var(--color-muted);
+    border-radius: var(--radius);
+    background:#fff;
+  }
+  .empty-state::before {
+    content:"\u26A0"; /* warning sign */
+    display:block;
+    font-size:2.5rem;
+    margin-bottom:.5rem;
+    color:var(--color-accent);
+  }
+
+  /* ==== Responsive ==== */
+  @media (max-width: 768px) {
+    .container { grid-template-columns:1fr; }
+    .nav {
+      position:fixed;
+      inset:0;
+      transform: translateX(-100%);
+      transition: transform .3s ease;
+      z-index:20;
+      background:#fff;
+    }
+    .nav.open { transform: translateX(0); }
+    .nav-toggle {
+      background:none;
+      border:none;
+      color:#fff;
+      font-size:1.5rem;
+      cursor:pointer;
+    }
+    .topbar .search { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="nav-toggle" aria-label="Open navigation" onclick="toggleNav()">☰</button>
+  <div class="logo">Bookstore Admin</div>
+  <div class="search"><input type="search" placeholder="Search orders, books…" aria-label="Search"></div>
+  <div class="user" tabindex="0">Jane Doe ▼</div>
+</header>
+
+<div class="container">
+  <nav class="nav" id="nav">
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Orders</a>
+    <a href="#">Products</a>
+    <a href="#">Customers</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </nav>
+
+  <main class="main">
+    <!-- Summary figures -->
+    <section class="summary">
+      <div class="card">
+        <h2>27</h2>
+        <p>Today's Orders</p>
+      </div>
+      <div class="card">
+        <h2>$1,842</h2>
+        <p>Revenue (USD)</p>
+      </div>
+      <div class="card">
+        <h2>3</h2>
+        <p>Returns</p>
+      </div>
+    </section>
+
+    <!-- Recent orders table -->
+    <section>
+      <h2 style="font-family:var(--font-serif);font-size:var(--scale-3);margin-bottom:var(--gap);color:var(--color-primary);">Recent Orders</h2>
+      <table aria-label="Most recent orders">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1024</td>
+            <td>Alice Smith</td>
+            <td>$45.90</td>
+            <td><span class="badge pending">Pending</span></td>
+            <td>Oct 15</td>
+          </tr>
+          <tr>
+            <td>1023</td>
+            <td>Bob Johnson</td>
+            <td>$78.20</td>
+            <td><span class="badge shipped">Shipped</span></td>
+            <td>Oct 15</td>
+          </tr>
+          <tr>
+            <td>1022</td>
+            <td>Clara Lee</td>
+            <td>$12.50</td>
+            <td><span class="badge canceled">Canceled</span></td>
+            <td>Oct 14</td>
+          </tr>
+          <tr>
+            <td>1021</td>
+            <td>David Wu</td>
+            <td>$33.00</td>
+            <td><span class="badge shipped">Shipped</span></td>
+            <td>Oct 14</td>
+          </tr>
+          <tr>
+            <td>1020</td>
+            <td>Eva Martín</td>
+            <td>$59.99</td>
+            <td><span class="badge pending">Pending</span></td>
+            <td>Oct 13</td>
+          </tr>
+          <tr>
+            <td>1019</td>
+            <td>Frank O'Neil</td>
+            <td>$22.45</td>
+            <td><span class="badge shipped">Shipped</span></td>
+            <td>Oct 13</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Low stock alerts empty state -->
+    <section class="empty-state">
+      <p>No low‑stock alerts at the moment.</p>
+      <button style="
+        margin-top:.8rem;
+        background:var(--color-accent);
+        color:#fff;
+        border:none;
+        padding:.5rem 1rem;
+        border-radius:var(--radius);
+        cursor:pointer;
+        font-size:var(--scale-1);
+      ">Add stock alert rule</button>
+    </section>
+  </main>
+</div>
+
+<script>
+  function toggleNav(){
+    document.getElementById('nav').classList.toggle('open');
+  }
+  // Close nav when clicking outside (mobile)
+  document.addEventListener('click', function(e){
+    const nav = document.getElementById('nav');
+    if(nav.classList.contains('open') && !nav.contains(e.target) && !e.target.classList.contains('nav-toggle')){
+      nav.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>

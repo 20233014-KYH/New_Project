@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bookstore Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --color-bg: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-primary: #0066cc;
+  --color-primary-dark: #004c99;
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-text: #212529;
+  --color-muted: #6c757d;
+  --radius: .5rem;
+  --gap: 1rem;
+  --transition: .2s ease-out;
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+*,
+*::before,
+*::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-family: var(--font-base); font-size: 100%; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+}
+a { color: var(--color-primary); text-decoration: none; }
+a:hover, a:focus { text-decoration: underline; }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  padding: .5rem .75rem;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+button:hover, button:focus { background: var(--color-primary-dark); }
+header, nav, main { background: var(--color-surface); }
+header {
+  position: sticky;
+  top:0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap);
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+header .logo { font-weight: 600; font-size: 1.25rem; }
+header .search {
+  flex:1;
+  margin: 0 var(--gap);
+}
+header .search input {
+  width:100%;
+  padding:.5rem .75rem;
+  border:1px solid #ccc;
+  border-radius: var(--radius);
+}
+header .user-menu {
+  position: relative;
+}
+header .user-menu button {
+  background: transparent;
+  color: var(--color-text);
+}
+header .user-menu ul {
+  position:absolute;
+  right:0;
+  top:100%;
+  background: var(--color-surface);
+  list-style:none;
+  min-width:150px;
+  border:1px solid #ddd;
+  border-radius: var(--radius);
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  display:none;
+}
+header .user-menu:focus-within ul,
+header .user-menu button[aria-expanded="true"] + ul { display:block; }
+header .user-menu li a {
+  display:block;
+  padding:.5rem .75rem;
+}
+header .user-menu li a:hover,
+header .user-menu li a:focus { background:#eee; }
+
+nav {
+  width: 240px;
+  flex-shrink:0;
+  padding: var(--gap);
+  border-right:1px solid #ddd;
+}
+nav ul { list-style:none; }
+nav li + li { margin-top:.5rem; }
+nav a {
+  display:block;
+  padding:.5rem .75rem;
+  border-radius: var(--radius);
+}
+nav a:hover, nav a:focus { background:#e9f5ff; color:var(--color-primary); }
+
+main {
+  flex:1;
+  padding: var(--gap);
+  display:flex;
+  flex-direction:column;
+  gap: var(--gap);
+}
+.summary {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap: var(--gap);
+}
+.card {
+  background: var(--color-surface);
+  padding: var(--gap);
+  border-radius: var(--radius);
+  box-shadow:0 1px 3px rgba(0,0,0,.1);
+}
+.card h2 {
+  font-size:1.5rem;
+  margin-bottom:.25rem;
+}
+.card p {
+  color: var(--color-muted);
+  font-size:.875rem;
+}
+.table-wrapper {
+  overflow-x:auto;
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px;
+}
+th, td {
+  text-align:left;
+  padding:.75rem .5rem;
+  border-bottom:1px solid #eaeaea;
+}
+th {
+  background: var(--color-bg);
+  font-weight:600;
+}
+.status {
+  display:inline-block;
+  padding:.25rem .5rem;
+  border-radius: var(--radius);
+  font-size:.75rem;
+  font-weight:600;
+  color:#fff;
+}
+.status.processing { background: var(--color-warning); }
+.status.shipped { background: var(--color-success); }
+.status.returned { background: var(--color-danger); }
+
+.empty-state {
+  text-align:center;
+  padding:2rem var(--gap);
+  border:2px dashed var(--color-muted);
+  border-radius: var(--radius);
+  color: var(--color-muted);
+}
+.empty-state::before {
+  content:"\26A0"; /* warning sign */
+  display:block;
+  font-size:2rem;
+  margin-bottom:.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav {
+    position:fixed;
+    inset:0 0 0 -100%;
+    background: var(--color-surface);
+    transition: inset var(--transition);
+    z-index:20;
+  }
+  nav.open { inset:0 0 0 0; }
+  header .menu-toggle {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:2rem;
+    height:2rem;
+    background:transparent;
+    border:none;
+    font-size:1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .summary { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<header>
+  <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="side-nav" aria-expanded="false">&#9776;</button>
+  <div class="logo">Bookstore Admin</div>
+  <div class="search">
+    <label for="search" class="visually-hidden">Search</label>
+    <input type="search" id="search" placeholder="Search…">
+  </div>
+  <div class="user-menu">
+    <button aria-haspopup="true" aria-expanded="false">Jane Doe ▾</button>
+    <ul role="menu">
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </div>
+</header>
+
+<nav id="side-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="#">Dashboard</a></li>
+    <li><a href="#">Orders</a></li>
+    <li><a href="#">Products</a></li>
+    <li><a href="#">Customers</a></li>
+    <li><a href="#">Reports</a></li>
+    <li><a href="#">Settings</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section class="summary" aria-label="Key metrics">
+    <article class="card">
+      <h2>124</h2>
+      <p>Today's Orders</p>
+    </article>
+    <article class="card">
+      <h2>$3,420</h2>
+      <p>Revenue</p>
+    </article>
+    <article class="card">
+      <h2>5</h2>
+      <p>Returns</p>
+    </article>
+  </section>
+
+  <section class="table-wrapper" aria-label="Recent orders">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1001</td>
+          <td>Alice Smith</td>
+          <td>2026‑10‑14</td>
+          <td>$45.00</td>
+          <td><span class="status processing">Processing</span></td>
+        </tr>
+        <tr>
+          <td>1000</td>
+          <td>Bob Johnson</td>
+          <td>2026‑10‑13</td>
+          <td>$89.99</td>
+          <td><span class="status shipped">Shipped</span></td>
+        </tr>
+        <tr>
+          <td>0999</td>
+          <td>Clara Lee</td>
+          <td>2026‑10‑13</td>
+          <td>$27.50</td>
+          <td><span class="status returned">Returned</span></td>
+        </tr>
+        <tr>
+          <td>0998</td>
+          <td>David Kim</td>
+          <td>2026‑10‑12</td>
+          <td>$120.00</td>
+          <td><span class="status shipped">Shipped</span></td>
+        </tr>
+        <tr>
+          <td>0997</td>
+          <td>Eve Torres</td>
+          <td>2026‑10‑12</td>
+          <td>$15.75</td>
+          <td><span class="status processing">Processing</span></td>
+        </tr>
+        <tr>
+          <td>0996</td>
+          <td>Frank Wu</td>
+          <td>2026‑10‑11</td>
+          <td>$33.20</td>
+          <td><span class="status shipped">Shipped</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="empty-state" aria-label="Low stock alerts">
+    <p>No low‑stock alerts at the moment.</p>
+  </section>
+</main>
+
+<script>
+  // Toggle side navigation on small screens
+  const toggleBtn = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('side-nav');
+
+  toggleBtn.addEventListener('click', () => {
+    const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    toggleBtn.setAttribute('aria-expanded', String(!expanded));
+    nav.classList.toggle('open');
+  });
+
+  // Close nav when clicking outside (optional)
+  document.addEventListener('click', e => {
+    if (!nav.contains(e.target) && !toggleBtn.contains(e.target) && nav.classList.contains('open')) {
+      nav.classList.remove('open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plango – Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --primary:#0066ff;
+    --primary-dark:#004bbb;
+    --bg:#f5f7fa;
+    --text:#333;
+    --error:#d93025;
+    --border:#ccc;
+    --radius:6px;
+    --font:Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:1rem;
+}
+.container{
+    background:#fff;
+    padding:2rem;
+    border-radius:var(--radius);
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+    width:100%;
+    max-width:400px;
+}
+h1{
+    margin-bottom:1.5rem;
+    font-size:1.8rem;
+    text-align:center;
+}
+.form-group{
+    margin-bottom:1rem;
+}
+label{
+    display:block;
+    margin-bottom:.3rem;
+    font-size:.9rem;
+}
+input[type="email"],
+input[type="password"]{
+    width:100%;
+    padding:.6rem .8rem;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    font-size:1rem;
+}
+input[type="email"]:focus,
+input[type="password"]:focus{
+    outline:none;
+    border-color:var(--primary);
+}
+input.error{
+    border-color:var(--error);
+}
+.error-msg{
+    color:var(--error);
+    font-size:.85rem;
+    margin-top:.3rem;
+}
+.actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:1rem 0;
+}
+.remember{
+    display:flex;
+    align-items:center;
+    font-size:.9rem;
+}
+.remember input{
+    margin-right:.4rem;
+}
+button{
+    width:100%;
+    padding:.8rem;
+    background:var(--primary);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius);
+    font-size:1rem;
+    cursor:pointer;
+    transition:background .2s;
+}
+button:hover{
+    background:var(--primary-dark);
+}
+.links{
+    text-align:center;
+    margin-top:1rem;
+    font-size:.9rem;
+}
+.links a{
+    color:var(--primary);
+    text-decoration:none;
+}
+.links a:hover{
+    text-decoration:underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 420px) {
+    .container{
+        padding:1.5rem;
+    }
+    h1{
+        font-size:1.5rem;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Plango Login</h1>
+    <form id="loginForm" novalidate>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <div class="error-msg" id="emailError" style="display:none;"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <div class="error-msg" id="passError" style="display:none;"></div>
+        </div>
+        <div class="actions">
+            <div class="remember">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            <a href="#" id="forgot">Forgot password?</a>
+        </div>
+        <button type="submit">Sign In</button>
+    </form>
+    <div class="links">
+        <p>Don’t have an account? <a href="#">Create one</a></p>
+    </div>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Clear previous errors
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passError = document.getElementById('passError');
+
+    emailError.style.display = 'none';
+    passError.style.display = 'none';
+    emailInput.classList.remove('error');
+    passInput.classList.remove('error');
+
+    let hasError = false;
+
+    // Simple email validation
+    if (!emailInput.value.trim()){
+        emailError.textContent = 'Please enter your email.';
+        emailError.style.display = 'block';
+        emailInput.classList.add('error');
+        hasError = true;
+    }
+
+    // Password check – demo uses a hard‑coded correct password
+    const correctPassword = 'password123';
+    if (!passInput.value){
+        passError.textContent = 'Please enter your password.';
+        passError.style.display = 'block';
+        passInput.classList.add('error');
+        hasError = true;
+    } else if (passInput.value !== correctPassword){
+        passError.textContent = 'Incorrect password. Please try again.';
+        passError.style.display = 'block';
+        passInput.classList.add('error');
+        hasError = true;
+    }
+
+    if (!hasError){
+        // In a real app you would submit the form via fetch/AJAX.
+        alert('Login successful! (Demo)');
+        // Reset form
+        this.reset();
+    }
+});
+
+// Optional: simple handler for the "Forgot password?" link
+document.getElementById('forgot').addEventListener('click', function(e){
+    e.preventDefault();
+    alert('Password reset flow is not implemented in this demo.');
+});
+</script>
+</body>
+</html>

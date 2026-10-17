@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plango – Sign In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg-dark: #1e1e2f;
+  --form-bg: #f9f9ff;
+  --accent: #00bfa6;
+  --accent-dark: #009c8a;
+  --error: #ff6b6b;
+  --text-dark: #212121;
+  --text-light: #e0e0e0;
+  --radius: 8px;
+  --gap: 1rem;
+  --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+html,body{
+  margin:0; padding:0; height:100%; font-family:var(--font-base);
+  background: linear-gradient(135deg, var(--bg-dark) 0%, #2b2b40 100%);
+  color: var(--text-light);
+  display:flex; align-items:center; justify-content:center;
+}
+@media (prefers-reduced-motion: no-preference){
+  *{transition: background-color .25s ease, color .25s ease, transform .25s ease;}
+}
+.container{
+  background: var(--form-bg);
+  color: var(--text-dark);
+  padding: calc(var(--gap)*1.5) var(--gap);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+  max-width: 420px;
+  width: 90%;
+  position:relative;
+}
+.container::before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(45deg, var(--accent) 0%, var(--accent-dark) 100%);
+  opacity:.07;
+  border-radius: var(--radius);
+  z-index:-1;
+}
+h1{
+  margin:0 0 .5rem;
+  font-size:1.8rem;
+  font-weight:600;
+  text-align:center;
+}
+form{
+  display:flex; flex-direction:column; gap:var(--gap);
+}
+label{
+  font-size:.9rem;
+  font-weight:500;
+}
+input[type="email"],
+input[type="password"]{
+  padding:.6rem .8rem;
+  border:1px solid #c4c4d4;
+  border-radius:4px;
+  font-size:1rem;
+}
+input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(0,191,166,.2);
+}
+.error-msg{
+  color:var(--error);
+  font-size:.85rem;
+  min-height:1.2em;
+}
+.remember{
+  display:flex; align-items:center; gap:.4rem;
+  font-size:.9rem;
+}
+.remember input{
+  width:1rem; height:1rem;
+}
+button{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:.7rem;
+  border-radius:4px;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{background:var(--accent-dark);}
+button:focus{
+  outline:2px solid var(--accent-dark);
+  outline-offset:2px;
+}
+.links{
+  display:flex; justify-content:space-between; font-size:.85rem;
+}
+a{
+  color:var(--accent-dark);
+  text-decoration:none;
+}
+a:hover{ text-decoration:underline; }
+@media (min-width:768px){
+  .container{padding:2rem;}
+}
+</style>
+</head>
+<body>
+<div class="container" role="dialog" aria-labelledby="login-title">
+  <h1 id="login-title">Welcome to Plango</h1>
+  <form id="login-form" novalidate>
+    <div>
+      <label for="email">Email address</label>
+      <input type="email" id="email" required autocomplete="email" placeholder="you@domain.com">
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" required autocomplete="current-password">
+      <div class="error-msg" id="error-msg" aria-live="polite"></div>
+    </div>
+    <div class="remember">
+      <input type="checkbox" id="remember">
+      <label for="remember">Remember me</label>
+    </div>
+    <button type="submit">Sign in</button>
+    <div class="links">
+      <a href="#" id="forgot">Forgot password?</a>
+      <a href="#" id="signup">Create account</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const password = document.getElementById('password').value;
+  const errorEl = document.getElementById('error-msg');
+  // Demo validation: only "demo123" is accepted
+  if(password !== 'demo123'){
+    errorEl.textContent = 'Incorrect password – please try again.';
+    document.getElementById('password').setAttribute('aria-invalid','true');
+  } else {
+    errorEl.textContent = '';
+    document.getElementById('password').removeAttribute('aria-invalid');
+    alert('Signed in! (demo)');
+    // In a real app you’d submit the form here.
+  }
+});
+</script>
+</body>
+</html>
