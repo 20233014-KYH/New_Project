@@ -1,0 +1,37 @@
+﻿분야,도구,측정,1회차_첫응답입력토큰,2회차,도구없음대비(2회차),더해진스킬수,더해진명령수,에이전트수,MCP도구수,MCP연결상태,실행된훅,훅이상,메모
+1 기획·작업 방식,obra/superpowers,측정함,20701,20698,1562,15,15,6,0,,SessionStart:startupx1,0,
+1 기획·작업 방식,affaan-m/ECC,측정함,28307,28305,9169,313,397,77,32,chrome-devtools:connected,SessionStart:startupx2; UserPromptSubmitx1; Stopx8,4,
+1 기획·작업 방식,garrytan/gstack,측정함,20271,20271,1135,57,56,6,0,,,0,setup 스크립트가 하는 스킬 등록을 프로젝트 범위로 재현(브라우저 바이너리 빌드는 안 함)
+1 기획·작업 방식,open-gsd/gsd-core,측정함,24066,24069,4933,72,144,41,0,,SessionStart:startupx2; Stopx1,0,
+1 기획·작업 방식,OthmanAdi/planning-with-files,측정함,19700,19700,564,6,14,6,0,,SessionStart:startupx1; UserPromptSubmitx1; Stopx1,0,
+1 기획·작업 방식,phuryn/pm-skills,측정함,20415,20416,1280,69,103,6,0,,,0,
+2 토큰·컨텍스트,JuliusBrussee/caveman,측정함,21781,21779,2643,22,23,9,0,,SessionStart:startupx1; UserPromptSubmitx1,0,
+2 토큰·컨텍스트,rtk-ai/rtk,측정함,19154,19153,17,0,0,6,0,,,0,
+2 토큰·컨텍스트,headroomlabs-ai/headroom,측정함,19163,19160,24,0,0,6,0,,SessionStart:startupx1,0,주 기능은 프록시(세션 밖). 여기서는 플러그인 2개만 잼
+2 토큰·컨텍스트,thedotmack/claude-mem,측정함,20208,20211,1075,30,30,6,0,mcp-search:failed,SessionStart:startupx4; UserPromptSubmitx2; Stopx2,10,
+2 토큰·컨텍스트,jarrodwatts/claude-hud,측정함,19214,19214,78,0,2,6,0,,,0,
+2 토큰·컨텍스트,ccusage/ccusage,명령줄 도구. 세션에 읽히는 것 없음(README 기준),,,,,,,,,,,
+3 코드 이해·검색,Graphify-Labs/graphify,측정함,19713,19708,572,1,1,6,0,,,0,graphify install --project 결과로 잼
+3 코드 이해·검색,colbymchenry/codegraph,측정함,19973,19975,839,0,0,6,1,codegraph:connected,,0,
+3 코드 이해·검색,zilliztech/claude-context,측정함,19205,19207,71,0,0,6,4,claude-context:connected,,0,키 가짜 값
+3 코드 이해·검색,upstash/context7,측정함,19154,19150,14,0,0,6,0,context7:needs-auth,,0,
+3 코드 이해·검색,oraios/serena,측정함,19280,19285,149,0,0,6,3,serena:connected,,0,MCP 리소스 읽기 도구 3개가 함께 붙음
+3 코드 이해·검색,Egonex-AI/Understand-Anything,측정함,20031,20029,893,9,9,16,0,,SessionStart:startupx1,0,
+4 디자인·프론트엔드,nextlevelbuilder/ui-ux-pro-max-skill,측정함,19888,19887,751,7,7,6,0,,,0,
+4 디자인·프론트엔드,Leonxlnx/taste-skill,측정함,20096,20093,957,14,14,6,0,,,0,
+4 디자인·프론트엔드,pbakaus/impeccable,측정함,19598,19599,463,1,1,10,0,,Stopx1,0,이 컴퓨터에 설치된 4.0.4
+4 디자인·프론트엔드,GLips/Figma-Context-MCP,측정함,19196,19194,58,0,0,6,2,figma:connected,,0,키 가짜 값
+4 디자인·프론트엔드,grab/cursor-talk-to-figma-mcp,측정함,19786,19787,651,0,6,6,40,TalkToFigma:connected,,0,bun 대신 node로 실행
+4 디자인·프론트엔드,Jpisnice/shadcn-ui-mcp-server,측정함,19320,19322,186,0,5,6,10,shadcn:connected,,0,MCP 리소스 읽기 도구 3개가 함께 붙음
+5 백엔드·인프라,bytebase/dbhub,측정함,19221,19223,87,2,2,6,0,dbhub:failed,,0,DSN 없음
+5 백엔드·인프라,googleapis/mcp-toolbox,Windows 실행 파일 294MB + 실제 DB 필요 → 실측 안 함,,,,,,,,,,,
+5 백엔드·인프라,supabase/mcp,측정함,19700,19707,571,0,0,6,19,supabase:connected,,0,토큰 가짜 값
+5 백엔드·인프라,containers/kubernetes-mcp-server,측정함,19155,19159,23,0,0,6,0,kubernetes:failed,,0,kubeconfig 없음
+5 백엔드·인프라,Flux159/mcp-server-kubernetes,측정함,19261,19414,278,0,1,6,23,kubernetes:connected,,0,kubeconfig 없음; MCP 리소스 읽기 도구 3개가 함께 붙음; 1·2회차 차이 큼
+5 백엔드·인프라,hashicorp/terraform-mcp-server,측정함,19807,19808,672,0,0,6,9,terraform:connected,,0,MCP 리소스 읽기 도구 3개가 함께 붙음
+6 QA·테스트,microsoft/playwright-mcp,측정함,19406,19409,273,0,0,6,25,playwright:connected,,0,
+6 QA·테스트,ChromeDevTools/chrome-devtools-mcp,측정함,20077,20075,939,7,7,6,32,chrome-devtools:connected,,0,
+6 QA·테스트,alibaba/open-code-review,측정함,19224,19220,84,0,2,6,0,,,0,
+6 QA·테스트,nizos/tdd-guard,측정함,19155,19150,14,1,1,6,0,,SessionStart:startupx1; UserPromptSubmitx1,0,
+6 QA·테스트,trailofbits/skills,측정함,22604,22602,3466,84,91,36,0,serena:failed,SessionStart:startupx3,0,
+6 QA·테스트,anthropics/claude-code-security-review,측정함,19182,19181,45,0,0,6,0,,,0,주 기능은 GitHub Action. 여기서는 명령 파일만 잼
