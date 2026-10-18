@@ -1,0 +1,9 @@
+﻿조건,1회차_첫응답입력토큰,2회차_첫응답입력토큰,불러온스킬수,caveman상태줄안내
+기준(superpowers+karpathy+impeccable),25050,25050,29,False
+기준+caveman,26853,26852,51,False
+기준+rtk,25049,25047,29,False
+기준+caveman+rtk,26851,26853,51,False
+도구 없음,23166,23167,13,False
+caveman,25816,25690,35,True
+rtk,23174,23170,13,False
+caveman+rtk,25690,25690,35,False
