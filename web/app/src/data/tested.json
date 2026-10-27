@@ -1,0 +1,16 @@
+[
+  {
+    "tool": "caveman",
+    "effect": "출력 토큰 -38%, 시간 -27%, 입력 -14% (기준 조합 대비, 조건마다 9번 모두 성공)",
+    "caution": "버그를 고칠 때 superpowers 디버깅 절차를 3번 중 3번 건너뛰었어요",
+    "caution_work": "bugfix",
+    "date": "2026-10-18"
+  },
+  {
+    "tool": "rtk",
+    "effect": "바꾼 명령의 출력은 -69%였지만, 작은 과제 전체로는 -4%로 차이가 거의 없었어요",
+    "caution": "Windows에서 Claude가 PowerShell로 명령을 실행하면 작동하지 않아요",
+    "caution_shell": "powershell",
+    "date": "2026-10-18"
+  }
+]

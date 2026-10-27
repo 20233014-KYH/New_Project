@@ -1,0 +1,78 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import "tailwindcss";
+
+@theme {
+  --color-text: #121c21;
+  --color-bg: #f8fdff;
+  --color-surface: #eaf4f8;
+  --color-primary: #1a7c9e;
+  --color-on-primary: #ffffff;
+  --color-secondary: #bde5f7;
+  --color-accent: #b3548a;
+  --color-border: #d9e3e7;
+  --color-mute: #4d5d65;
+}
+
+:root {
+  --text: #121c21;
+  --bg: #f8fdff;
+  --surface: #eaf4f8;
+  --primary: #1a7c9e;
+  --on-primary: #ffffff;
+  --secondary: #bde5f7;
+  --accent: #b3548a;
+  --border: #d9e3e7;
+  --mute: #4d5d65;
+  --r-sm: 6px;
+  --r-md: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --text: #e6f5fb;
+    --bg: #0e1518;
+    --surface: #192024;
+    --primary: #0280a5;
+    --on-primary: #ffffff;
+    --secondary: #0d3241;
+    --accent: #db78af;
+    --border: #252d30;
+    --mute: #9db0b8;
+  }
+}
+
+:root[data-theme="dark"] {
+  --text: #e6f5fb;
+  --bg: #0e1518;
+  --surface: #192024;
+  --primary: #0280a5;
+  --on-primary: #ffffff;
+  --secondary: #0d3241;
+  --accent: #db78af;
+  --border: #252d30;
+  --mute: #9db0b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
