@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/tools")
@@ -37,7 +36,7 @@ public class ToolController {
             tools = tools.stream()
                 .filter(t -> t.name.toLowerCase().contains(lq)
                     || (t.summary_ko != null && t.summary_ko.toLowerCase().contains(lq)))
-                .collect(Collectors.toList());
+                .toList();
         }
 
         tools = new ArrayList<>(tools);
@@ -59,10 +58,10 @@ public class ToolController {
             return ResponseEntity.notFound().build();
         }
         Tool tool = opt.get();
-        List<Judgment> similar = judgmentService.findByPair(id, id).stream().toList();
-        // 같은 분야 판정 목록
+        // 같은 분야의 다른 도구와의 판정 목록 (자기 자신 제외)
         List<Judgment> judgments = tool.category > 0
             ? toolRepo.findByCategory(tool.category).stream()
+                .filter(other -> !other.id.equals(id))
                 .flatMap(other -> judgmentService.findByPair(id, other.id).stream())
                 .distinct()
                 .toList()

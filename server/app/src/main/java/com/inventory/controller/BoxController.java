@@ -5,6 +5,7 @@ import com.inventory.service.RecommendService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,10 @@ public class BoxController {
         if (req.tools() == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "tools 필드가 필요해요"));
         }
-        JudgmentService.BoxResult result = judgmentService.judgeBox(req.tools());
+        // memo_tools 는 카탈로그에 없는 사용자 정의 도구 → unknown_tools 에 포함
+        List<String> allTools = new ArrayList<>(req.tools());
+        if (req.memo_tools() != null) allTools.addAll(req.memo_tools());
+        JudgmentService.BoxResult result = judgmentService.judgeBox(allTools);
         return ResponseEntity.ok(result);
     }
 
