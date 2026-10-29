@@ -38,3 +38,29 @@ describe('도구 목록', () => {
     expect(tools.length).toBeGreaterThan(0)
   })
 })
+
+describe('판정 근거가 화면까지 전달됨', () => {
+  it('검수 상태를 그대로 유지: 사람 검토 87쌍, 직접 시험 3쌍', async () => {
+    const { getTool } = await import('./api.js')
+    const ids = (await getTools()).map(t => t.id)
+    const seen = new Map()
+    for (const id of ids) for (const p of (await getTool(id)).pairs) seen.set([p.a, p.b].sort().join('|'), p.review)
+    const counts = [...seen.values()].reduce((m, r) => ({ ...m, [r]: (m[r] || 0) + 1 }), {})
+    expect(counts['사람 검토']).toBe(87)
+    expect(counts['직접 시험']).toBe(3)
+  })
+
+  it('저장된 판정에는 이유·출처·확인일이 붙음', async () => {
+    const [p] = await judgeBox(['superpowers', 'ecc'])
+    expect(p.reason).toBeTruthy()
+    expect(p.sources.length).toBeGreaterThan(0)
+    expect(p.judged_at).toBe('2026-10-19')
+    const rec = await getRecommend(['superpowers', 'ecc'], { work: '', shell: '' })
+    expect(rec.remove[0].reason).toBeTruthy()
+  })
+
+  it('도구 설명(영어 원문)이 비어 있지 않음', async () => {
+    const tools = await getTools()
+    expect(tools.filter(t => !t.desc_en)).toHaveLength(0)
+  })
+})

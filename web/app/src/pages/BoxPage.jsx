@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getTools, getCategories, judgeBox, fmt } from '../api.js'
 import Steps from '../components/Steps.jsx'
+import Reason from '../components/Reason.jsx'
 
 const KO = { overlap: 'ov', situational: 'si', complement: 'co', none: 'no', no_info: 'no' }
 const KO_LABEL = { overlap: '겹침', situational: '상황따라', complement: '보완', none: '관계 없음', no_info: '확인된 정보 없음' }
@@ -132,7 +133,8 @@ export default function BoxPage() {
                   <div key={`${p.a}-${p.b}`} className="pair">
                     <div>
                       {byId[p.a]?.name || p.a} × {byId[p.b]?.name || p.b}
-                      <small>{p.review}</small>
+                      <small>{p.review}{p.judged_at ? ` · 확인 ${p.judged_at}` : ''}</small>
+                      <Reason p={p} />
                     </div>
                     <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
                   </div>

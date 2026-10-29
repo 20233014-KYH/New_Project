@@ -203,6 +203,10 @@ h3 { margin: 0; font-size: 17px; }
 .pair { display: flex; justify-content: space-between; gap: var(--s3); align-items: center; padding: var(--s3) 0; border-bottom: 1px solid var(--border); font-size: 15px; }
 .pair a { text-decoration: none; font-weight: 600; }
 .pair small { display: block; color: var(--mute); font-size: 13px; }
+.why { margin-top: var(--s1); font-size: 13.5px; color: var(--mute); }
+.why summary { cursor: pointer; color: var(--primary); }
+.why p { margin: var(--s1) 0 0; max-width: 60ch; }
+.why .src { font-size: 12.5px; overflow-wrap: anywhere; }
 
 /* 도구함 */
 .status { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s6); align-items: center; padding: var(--s3) var(--s4); border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--surface); margin-bottom: var(--s6); font-size: 15px; }

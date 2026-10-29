@@ -5,6 +5,7 @@
 import entriesRaw from './data/entries.json'
 import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
+import descRaw from './data/desc_en.json'
 
 const BASE = import.meta.env.VITE_API_BASE || ''
 
@@ -15,7 +16,7 @@ function normalizeEntry(e) {
     name: e.name,
     repo: e.repo,
     category: e.category,
-    desc_en: e.desc_en || '',
+    desc_en: e.desc_en || descRaw.desc?.[e.id] || '',
     version: e.version || null,
     license: e.auto?.license || null,
     stars: e.auto?.stars || null,
@@ -28,12 +29,16 @@ function normalizeEntry(e) {
 }
 
 // compat.json pairs → 와이어프레임 pairs 형식으로 변환
+// 검수 상태(review_state)와 근거 종류(evidence[].type)는 다른 값이라 섞지 않는다
 function normalizePair(p) {
   return {
     a: p.a,
     b: p.b,
     relation: p.relation,
-    review_state: p.evidence?.[0]?.type || 'human_review',
+    review_state: p.review_state || 'ai_estimate',
+    reason: p.reason_ko || null,
+    sources: [...new Set((p.evidence || []).map(e => e.source).filter(Boolean))],
+    judged_at: p.judged_at || null,
   }
 }
 
@@ -70,7 +75,8 @@ function judgeLocal(ids, byId, pairMap) {
     for (let j = i + 1; j < ids.length; j++) {
       const p = pairMap[pairKey(ids[i], ids[j])]
       out.push(p
-        ? { a: p.a, b: p.b, state: 'saved', relation: p.relation, label: KO[p.relation], review: RS[p.review_state] }
+        ? { a: p.a, b: p.b, state: 'saved', relation: p.relation, label: KO[p.relation], review: RS[p.review_state],
+            reason: p.reason, sources: p.sources, judged_at: p.judged_at }
         : { a: ids[i], b: ids[j], state: 'no_info', label: '확인된 정보 없음',
             review: byId[ids[i]]?.category === byId[ids[j]]?.category ? '판정 없음' : '다른 분야' })
     }
@@ -87,7 +93,8 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     const big = (a.tokens || 0) >= (b.tokens || 0) ? a : b
     const keep = big === a ? b : a
     if (!remove.find(r => r.tool === big.id))
-      remove.push({ tool: big.id, keep: keep.id, save: big.tokens || 0, review: p.review })
+      remove.push({ tool: big.id, keep: keep.id, save: big.tokens || 0, review: p.review,
+        reason: p.reason, sources: p.sources, judged_at: p.judged_at })
   })
   const add = []
   Object.values(testedMap).forEach(t => {

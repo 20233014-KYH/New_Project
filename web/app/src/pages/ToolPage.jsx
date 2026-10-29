@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getTool, getCategories, fmt } from '../api.js'
+import Reason from '../components/Reason.jsx'
 
 const KO = { overlap: 'ov', situational: 'si', complement: 'co', none: 'no', no_info: 'no' }
 const KO_LABEL = { overlap: '겹침', situational: '상황따라', complement: '보완', none: '관계 없음', no_info: '확인된 정보 없음' }
@@ -82,7 +83,8 @@ export default function ToolPage() {
               <div key={p.otherId} className="pair">
                 <div>
                   <Link to={`/tool/${p.otherId}`}>{p.otherId}</Link>
-                  <small>{p.review}</small>
+                  <small>{p.review}{p.judged_at ? ` · 확인 ${p.judged_at}` : ''}</small>
+                  <Reason p={p} />
                 </div>
                 <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
               </div>
