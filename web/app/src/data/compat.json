@@ -59,7 +59,7 @@
    "a": "superpowers",
    "b": "gsd-core",
    "relation": "overlap",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] gsd-core는 discuss→plan→execute 단계 반복으로 AI를 진행시키는 방식이고(gsd-plan-phase, gsd-execute-phase, gsd-debug, gsd-code-review), superpowers도 brainstorming→writing-plans→executing-plans→code review를 강제함. 둘 다 '절차 전체를 정하는' 도구라 같은 일을 함. 시험은 안 해봄(S×ECC처럼 시험하면 확정) (출처: open-gsd/gsd-core, obra/superpowers README, features.json, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 superpowers +1,562, gsd-core +4,933 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] gsd-core는 discuss→plan→execute 단계 반복으로 AI를 진행시키는 방식이고(gsd-plan-phase, gsd-execute-phase, gsd-debug, gsd-code-review), superpowers도 brainstorming→writing-plans→executing-plans→code review를 강제함. 둘 다 '절차 전체를 정하는' 도구라 같은 일을 함. 시험은 안 해봄(S×ECC처럼 시험하면 확정) (출처: open-gsd/gsd-core, obra/superpowers README, features.json, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 superpowers +1,562, gsd-core +4,933 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지 [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] gsd-core는 discuss→plan→execute 단계 반복으로 AI를 진행시키는 방식이고(gsd-plan-phase, gsd-execute-phase, gsd-debug, gsd-code-review), superpowers도 brainstorming→writing-plans→executing-plans→code review를 강제함. 둘 다 '절차 전체를 정하는' 도구라 같은 일을 함. 시험은 안 해봄(S×ECC처럼 시험하면 확정) (출처: open-gsd/gsd-core, o",
@@ -131,10 +131,10 @@
    "a": "ecc",
    "b": "gstack",
    "relation": "overlap",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ROH 계산에서 skill-health~health(0.57), learn~learn(0.56), review-pr~review(0.49)처럼 이름·설명이 거의 같은 스킬이 실제로 있음. 둘 다 수백 개 규모 하니스라 겹침 가능성 높음(실측은 안 함) (출처: affaan-m/ECC, garrytan/gstack README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ECC +9,169, gstack +1,135 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ROH 계산에서 skill-health~health(0.57), learn~learn(0.56), review-pr~review(0.49)처럼 이름·설명이 거의 같은 스킬이 실제로 있음. 둘 다 수백 개 규모 하니스라 겹침 가능성 높음(실측은 안 함) (출처: affaan-m/ECC, garrytan/gstack README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ECC +9,169, gstack +1,135 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지 [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
-     "claim": "[AI 초안·김용현 확인 2026-10-19] ROH 계산에서 skill-health~health(0.57), learn~learn(0.56), review-pr~review(0.49)처럼 이름·설명이 거의 같은 스킬이 실제로 있음. 둘 다 수백 개 규모 하니스라 겹침 가능성 높음(실측은 안 함) (출처: affaan-m/ECC, garrytan/gstack README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ECC +9,169, gstack +1,135 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지",
+     "claim": "[AI 초안·김용현 확인 2026-10-19] ROH 계산에서 skill-health~health(0.57), learn~learn(0.56), review-pr~review(0.49)처럼 이름·설명이 거의 같은 스킬이 실제로 있음. 둘 다 수백 개 규모 하니스라 겹침 가능성 높음(실측은 안 함) (출처: affaan-m/ECC, garrytan/gstack README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ECC +9,169, gstack +1,135 토큰] → 둘 다 1,000토큰 이상이라 겹침 유지 [",
      "type": "doc",
      "source": "README·features.json",
      "checked_at": "2026-10-19"
@@ -299,7 +299,7 @@
    "a": "gsd-core",
    "b": "planning-with-files",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 '컨텍스트가 길어져 품질이 떨어지는 문제(context rot)'를 계획·진행 파일로 푸는 도구. gsd-core는 단계별 파일과 새 컨텍스트 서브에이전트, planning-with-files는 task_plan.md를 매 턴 주입. 중간 확신(실측 필요) (출처: open-gsd/gsd-core, OthmanAdi/planning-with-files README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 gsd-core +4,933, planning-with-files +564 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 '컨텍스트가 길어져 품질이 떨어지는 문제(context rot)'를 계획·진행 파일로 푸는 도구. gsd-core는 단계별 파일과 새 컨텍스트 서브에이전트, planning-with-files는 task_plan.md를 매 턴 주입. 중간 확신(실측 필요) (출처: open-gsd/gsd-core, OthmanAdi/planning-with-files README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 gsd-core +4,933, planning-with-files +564 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 '컨텍스트가 길어져 품질이 떨어지는 문제(context rot)'를 계획·진행 파일로 푸는 도구. gsd-core는 단계별 파일과 새 컨텍스트 서브에이전트, planning-with-files는 task_plan.md를 매 턴 주입. 중간 확신(실측 필요) (출처: open-gsd/gsd-core, OthmanAdi/planning-with-files README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 gsd-core +4,933, planning-with",
@@ -371,7 +371,7 @@
    "a": "caveman",
    "b": "rtk",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 실측에서는 충돌 없음. 그러나 caveman 4.0 README는 'Read less(로그·JSON·테스트 출력 압축)'와 'Browse'를 설치 후 기본 켜짐으로 소개하는데 이는 rtk의 일(명령 출력 줄이기)과 같음. ROH 시험에서도 rtk를 더해 추가 절감이 -14%→-15%로 1%p뿐. 보완이 입증된 게 아니라 기능은 겹치고 추가 이득이 작은 것으로 보임. ※ 시험 때 caveman의 Read less가 켜져 있었는지 확인 필요 (출처: JuliusBrussee/caveman README 'Six rocks', rtk-ai/rtk README, judgment/experiments/2026-10-18 결과 3, 2026-10-19 확인)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19, 설치 방식 반영 2026-10-28] 설치 방식에 따라 다름. ① 플러그인만 설치(시험 2에서 실측): caveman은 '말 줄이기'만 하고 훅은 SessionStart·UserPromptSubmit 등 4개뿐이라 도구 출력을 줄이지 않음. 충돌 없고 서로 다른 곳을 줄여서 보완. ② CLI 전체 설치: caveman 4.0 README의 'Read less(로그·JSON·테스트 출력 압축)'가 별도 프록시로 켜져 rtk와 같은 일(명령·파일 출력 줄이기)을 해서 겹칠 수 있음(문서 근거, 시험 안 함). 시험 2에서 rtk를 더해도 추가 절감이 작았던 것(-14%→-15%)은 겹침 때문이 아니라 rtk가 작은 과제에서 효과가 작았기 때문(ROH 답변). 그래서 판정은 상황따라로 두고 설치 방식을 이유에 적음 (출처: JuliusBrussee/caveman README 'Six rocks', rtk-ai/rtk README, judgment/experiments/2026-10-18 결과 3, PR #4 ROH 코멘트 2026-10-20)",
    "evidence": [
     {
      "claim": "같이 켜서 직접 시험함",
@@ -380,7 +380,7 @@
      "checked_at": "2026-10-18"
     },
     {
-     "claim": "[AI 초안·김용현 확인 2026-10-19] 실측에서는 충돌 없음. 그러나 caveman 4.0 README는 'Read less(로그·JSON·테스트 출력 압축)'와 'Browse'를 설치 후 기본 켜짐으로 소개하는데 이는 rtk의 일(명령 출력 줄이기)과 같음. ROH 시험에서도 rtk를 더해 추가 절감이 -14%→-15%로 1%p뿐. 보완이 입증된 게 아니라 기능은 겹치고 추가 이득이 작은 것으로 보임. ※ 시험 때 caveman의 Read less가 켜져 있었는지 확인 필요 (출처: JuliusBrussee/caveman ",
+     "claim": "[AI 초안·김용현 확인 2026-10-19, 설치 방식 반영 2026-10-28] 설치 방식에 따라 다름. ① 플러그인만 설치(시험 2에서 실측): caveman은 '말 줄이기'만 하고 훅은 SessionStart·UserPromptSubmit 등 4개뿐이라 도구 출력을 줄이지 않음. 충돌 없고 서로 다른 곳을 줄여서 보완. ② CLI 전체 설치: caveman 4.0 README의 'Read less(로그·JSON·테스트 출력 압축)'가 별도 프록시로 켜져 rtk와 같은 일(명령·파일 출력 줄이기)을 해서 겹칠 수 있음(문서 근",
      "type": "doc",
      "source": "README·features.json",
      "checked_at": "2026-10-19"
@@ -723,10 +723,10 @@
    "a": "graphify",
    "b": "codegraph",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 검색하는 도구. 다만 graphify는 문서·PDF·이미지까지, codegraph는 코드 중심 (출처: Graphify-Labs/graphify, colbymchenry/codegraph README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, codegraph +839 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 검색하는 도구. 다만 graphify는 문서·PDF·이미지까지, codegraph는 코드 중심 (출처: Graphify-Labs/graphify, colbymchenry/codegraph README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, codegraph +839 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
-     "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 검색하는 도구. 다만 graphify는 문서·PDF·이미지까지, codegraph는 코드 중심 (출처: Graphify-Labs/graphify, colbymchenry/codegraph README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, codegraph +839 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+     "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 검색하는 도구. 다만 graphify는 문서·PDF·이미지까지, codegraph는 코드 중심 (출처: Graphify-Labs/graphify, colbymchenry/codegraph README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, codegraph +839 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,0",
      "type": "doc",
      "source": "README·features.json",
      "checked_at": "2026-10-19"
@@ -747,7 +747,7 @@
    "a": "graphify",
    "b": "claude-context",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] graphify(코드를 그래프로 질의)와 claude-context(코드를 벡터 DB로 의미 검색)는 방식은 달라도 '전체 코드에서 필요한 부분만 찾아 컨텍스트로 가져오기'라는 같은 일. 중간 확신 (출처: Graphify-Labs/graphify, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] graphify(코드를 그래프로 질의)와 claude-context(코드를 벡터 DB로 의미 검색)는 방식은 달라도 '전체 코드에서 필요한 부분만 찾아 컨텍스트로 가져오기'라는 같은 일. 중간 확신 (출처: Graphify-Labs/graphify, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] graphify(코드를 그래프로 질의)와 claude-context(코드를 벡터 DB로 의미 검색)는 방식은 달라도 '전체 코드에서 필요한 부분만 찾아 컨텍스트로 가져오기'라는 같은 일. 중간 확신 (출처: Graphify-Labs/graphify, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실",
@@ -819,7 +819,7 @@
    "a": "graphify",
    "b": "understand-anything",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 탐색·질문하는 것이 핵심(소개 문구도 거의 같음). Understand-Anything은 사람이 보는 대시보드 쪽이 강함 (출처: Egonex-AI/Understand-Anything, Graphify-Labs/graphify README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 탐색·질문하는 것이 핵심(소개 문구도 거의 같음). Understand-Anything은 사람이 보는 대시보드 쪽이 강함 (출처: Egonex-AI/Understand-Anything, Graphify-Labs/graphify README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드를 지식 그래프로 만들어 탐색·질문하는 것이 핵심(소개 문구도 거의 같음). Understand-Anything은 사람이 보는 대시보드 쪽이 강함 (출처: Egonex-AI/Understand-Anything, Graphify-Labs/graphify README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 graphify +572, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮",
@@ -843,7 +843,7 @@
    "a": "codegraph",
    "b": "claude-context",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] codegraph(코드 그래프)와 claude-context(의미 검색) 모두 '필요한 코드만 가져와 토큰을 줄인다'는 같은 목적 (출처: colbymchenry/codegraph, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] codegraph(코드 그래프)와 claude-context(의미 검색) 모두 '필요한 코드만 가져와 토큰을 줄인다'는 같은 목적 (출처: colbymchenry/codegraph, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] codegraph(코드 그래프)와 claude-context(의미 검색) 모두 '필요한 코드만 가져와 토큰을 줄인다'는 같은 목적 (출처: colbymchenry/codegraph, zilliztech/claude-context README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, claude-context +71 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 ",
@@ -891,10 +891,10 @@
    "a": "codegraph",
    "b": "serena",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] codegraph와 serena 모두 코드의 의미 단위 검색을 에이전트에 제공. serena는 편집 기능이 추가됨. 중간 확신 (출처: colbymchenry/codegraph, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] codegraph와 serena 모두 코드의 의미 단위 검색을 에이전트에 제공. serena는 편집 기능이 추가됨. 중간 확신 (출처: colbymchenry/codegraph, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
-     "claim": "[AI 초안·김용현 확인 2026-10-19] codegraph와 serena 모두 코드의 의미 단위 검색을 에이전트에 제공. serena는 편집 기능이 추가됨. 중간 확신 (출처: colbymchenry/codegraph, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+     "claim": "[AI 초안·김용현 확인 2026-10-19] codegraph와 serena 모두 코드의 의미 단위 검색을 에이전트에 제공. serena는 편집 기능이 추가됨. 중간 확신 (출처: colbymchenry/codegraph, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: ",
      "type": "doc",
      "source": "README·features.json",
      "checked_at": "2026-10-19"
@@ -915,7 +915,7 @@
    "a": "codegraph",
    "b": "understand-anything",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드 지식 그래프. Understand-Anything은 멀티에이전트 분석과 시각화 대시보드가 추가 (출처: colbymchenry/codegraph, Egonex-AI/Understand-Anything README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드 지식 그래프. Understand-Anything은 멀티에이전트 분석과 시각화 대시보드가 추가 (출처: colbymchenry/codegraph, Egonex-AI/Understand-Anything README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 코드 지식 그래프. Understand-Anything은 멀티에이전트 분석과 시각화 대시보드가 추가 (출처: colbymchenry/codegraph, Egonex-AI/Understand-Anything README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 codegraph +839, Understand-Anything +893 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
@@ -963,7 +963,7 @@
    "a": "claude-context",
    "b": "serena",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] claude-context(의미 검색)와 serena(심볼 검색·편집) 모두 코드 검색 도구. 같이 켜면 에이전트가 어느 쪽을 쓸지 갈릴 수 있음(시험 안 함) (출처: zilliztech/claude-context, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 claude-context +71, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] claude-context(의미 검색)와 serena(심볼 검색·편집) 모두 코드 검색 도구. 같이 켜면 에이전트가 어느 쪽을 쓸지 갈릴 수 있음(시험 안 함) (출처: zilliztech/claude-context, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 claude-context +71, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] claude-context(의미 검색)와 serena(심볼 검색·편집) 모두 코드 검색 도구. 같이 켜면 에이전트가 어느 쪽을 쓸지 갈릴 수 있음(시험 안 함) (출처: zilliztech/claude-context, oraios/serena README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 claude-context +71, serena +149 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은",
@@ -1083,7 +1083,7 @@
    "a": "ui-ux-pro-max-skill",
    "b": "taste-skill",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·taste-skill는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ui-ux-pro-max-skill +751, taste-skill +957 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·taste-skill는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ui-ux-pro-max-skill +751, taste-skill +957 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·taste-skill는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽",
@@ -1107,7 +1107,7 @@
    "a": "ui-ux-pro-max-skill",
    "b": "impeccable",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ui-ux-pro-max-skill +751, impeccable +463 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 ui-ux-pro-max-skill +751, impeccable +463 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] ui-ux-pro-max-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는",
@@ -1203,7 +1203,7 @@
    "a": "taste-skill",
    "b": "impeccable",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] taste-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 taste-skill +957, impeccable +463 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] taste-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 taste-skill +957, impeccable +463 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] taste-skill·impeccable는 모두 'AI가 만든 화면의 디자인 품질을 높이는 지침 스킬'(디자인 인텔리전스 / 취향·아트 디렉션 / 디자인 언어)이라 같은 일. 둘의 지침이 서로 다르면 결과가 섞일 수 있음. 실제로 같이 켜는 시험은 안 함 (출처: nextlevelbuilder/ui-ux-pro-max-skill, Leonxlnx/taste-skill, pbakaus/impeccable README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 taste",
@@ -1371,7 +1371,7 @@
    "a": "figma-context-mcp",
    "b": "cursor-talk-to-figma-mcp",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 Figma 디자인을 읽는 MCP 서버. cursor-talk-to-figma는 Figma 플러그인과 연결해 쓰기(수정)도 함. 읽기 부분이 겹침 (출처: GLips/Figma-Context-MCP, grab/cursor-talk-to-figma-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 Figma-Context-MCP +58, cursor-talk-to-figma-mcp +651 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 Figma 디자인을 읽는 MCP 서버. cursor-talk-to-figma는 Figma 플러그인과 연결해 쓰기(수정)도 함. 읽기 부분이 겹침 (출처: GLips/Figma-Context-MCP, grab/cursor-talk-to-figma-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 Figma-Context-MCP +58, cursor-talk-to-figma-mcp +651 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 Figma 디자인을 읽는 MCP 서버. cursor-talk-to-figma는 Figma 플러그인과 연결해 쓰기(수정)도 함. 읽기 부분이 겹침 (출처: GLips/Figma-Context-MCP, grab/cursor-talk-to-figma-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 Figma-Context-MCP +58, cursor-talk-to-figma-mcp +651 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지",
@@ -1443,7 +1443,7 @@
    "a": "dbhub",
    "b": "mcp-toolbox",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 초안은 '판정 못 함'이라 README로 새로 판정함. 둘 다 여러 종류 데이터베이스에 붙는 범용 DB MCP 서버(dbhub: Postgres·MySQL 등, mcp-toolbox: 데이터베이스용 MCP) (출처: bytebase/dbhub, googleapis/mcp-toolbox README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 dbhub +87, mcp-toolbox +측정 안 함 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 초안은 '판정 못 함'이라 README로 새로 판정함. 둘 다 여러 종류 데이터베이스에 붙는 범용 DB MCP 서버(dbhub: Postgres·MySQL 등, mcp-toolbox: 데이터베이스용 MCP) (출처: bytebase/dbhub, googleapis/mcp-toolbox README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 dbhub +87, mcp-toolbox +측정 안 함 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 초안은 '판정 못 함'이라 README로 새로 판정함. 둘 다 여러 종류 데이터베이스에 붙는 범용 DB MCP 서버(dbhub: Postgres·MySQL 등, mcp-toolbox: 데이터베이스용 MCP) (출처: bytebase/dbhub, googleapis/mcp-toolbox README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 dbhub +87, mcp-toolbox +측정 안 함 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따",
@@ -1711,7 +1711,7 @@
    "a": "kubernetes-mcp-server",
    "b": "mcp-server-kubernetes",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 쿠버네티스 클러스터를 다루는 MCP 서버(containers는 OpenShift도 지원) (출처: containers/kubernetes-mcp-server, Flux159/mcp-server-kubernetes README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 kubernetes-mcp-server +23, mcp-server-kubernetes +278 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 쿠버네티스 클러스터를 다루는 MCP 서버(containers는 OpenShift도 지원) (출처: containers/kubernetes-mcp-server, Flux159/mcp-server-kubernetes README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 kubernetes-mcp-server +23, mcp-server-kubernetes +278 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 쿠버네티스 클러스터를 다루는 MCP 서버(containers는 OpenShift도 지원) (출처: containers/kubernetes-mcp-server, Flux159/mcp-server-kubernetes README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 kubernetes-mcp-server +23, mcp-server-kubernetes +278 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는",
@@ -1783,7 +1783,7 @@
    "a": "playwright-mcp",
    "b": "chrome-devtools-mcp",
    "relation": "situational",
-   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 브라우저를 열어 조작하는 MCP 서버(playwright는 자동화·테스트, chrome-devtools는 DevTools 디버깅이 강함) (출처: microsoft/playwright-mcp, ChromeDevTools/chrome-devtools-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 playwright-mcp +273, chrome-devtools-mcp +939 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)",
+   "reason_ko": "[AI 초안·김용현 확인 2026-10-19] 둘 다 브라우저를 열어 조작하는 MCP 서버(playwright는 자동화·테스트, chrome-devtools는 DevTools 디버깅이 강함) (출처: microsoft/playwright-mcp, ChromeDevTools/chrome-devtools-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 playwright-mcp +273, chrome-devtools-mcp +939 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시) [1,000토큰은 임시 기준: 시험 후 500으로 조정 가능]",
    "evidence": [
     {
      "claim": "[AI 초안·김용현 확인 2026-10-19] 둘 다 브라우저를 열어 조작하는 MCP 서버(playwright는 자동화·테스트, chrome-devtools는 DevTools 디버깅이 강함) (출처: microsoft/playwright-mcp, ChromeDevTools/chrome-devtools-mcp README, 2026-10-19 확인) [겹침 기준 적용: 처음 읽는 양 playwright-mcp +273, chrome-devtools-mcp +939 토큰] → 한쪽이 1,000토큰 미만이라 토큰 손해가 확실하지 않아 상",
