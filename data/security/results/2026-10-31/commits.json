@@ -1,0 +1,51 @@
+{
+ "nextlevelbuilder_ui-ux-pro-max-skill": {
+  "commit": "28b3b8d",
+  "date": "2026-10-26"
+ },
+ "rtk-ai_rtk": {
+  "commit": "e05c7bd",
+  "date": "2026-10-25"
+ },
+ "obra_superpowers": {
+  "commit": "2ce8aa1",
+  "date": "2026-10-21"
+ },
+ "microsoft_playwright-mcp": {
+  "commit": "0c4107a",
+  "date": "2026-10-22",
+  "npm": "@playwright/mcp 0.0.83 → playwright-core 1.64.0-alpha-1790635538000"
+ },
+ "Leonxlnx_taste-skill": {
+  "commit": "12af471",
+  "date": "2026-10-25"
+ },
+ "bytebase_dbhub": {
+  "commit": "1f3fa03",
+  "date": "2026-10-26"
+ },
+ "colbymchenry_codegraph": {
+  "commit": "01e0ac3",
+  "date": "2026-10-28"
+ },
+ "Graphify-Labs_graphify": {
+  "commit": "0a8cd4e",
+  "date": "2026-10-27"
+ },
+ "ChromeDevTools_chrome-devtools-mcp": {
+  "commit": "b701776",
+  "date": "2026-10-28"
+ },
+ "affaan-m_ECC": {
+  "commit": "25278e7",
+  "date": "2026-10-26"
+ },
+ "JuliusBrussee_caveman": {
+  "commit": "9b68f7e",
+  "date": "2026-10-25"
+ },
+ "googleapis_mcp-toolbox": {
+  "commit": "bfd4ffa",
+  "date": "2026-10-27"
+ }
+}
