@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>웹 와이어프레임</title>
+<style>
+  :root { --ink:#1f1f1f; --mute:#6b6b6b; --line:#bdbdbd; --box:#ececec; --box2:#d9d9d9; --paper:#fafafa; --note:#fff7d6; --noteline:#e3c96a; --warn:#f4dede; --ok:#e3eedf; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink:#eee; --mute:#a5a5a5; --line:#555; --box:#2c2c2c; --box2:#3a3a3a; --paper:#1b1b1b; --note:#3a3420; --noteline:#8a7a3a; --warn:#4a2c2c; --ok:#2c3d2a; } }
+  :root[data-theme="dark"] { --ink:#eee; --mute:#a5a5a5; --line:#555; --box:#2c2c2c; --box2:#3a3a3a; --paper:#1b1b1b; --note:#3a3420; --noteline:#8a7a3a; --warn:#4a2c2c; --ok:#2c3d2a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:14px/1.55 system-ui, "Malgun Gothic", sans-serif; }
+  header.top { padding:24px 16px 8px; max-width:1240px; margin:0 auto; }
+  h1 { font-size:22px; margin:0 0 6px; }
+  .lead { color:var(--mute); margin:0 0 12px; max-width:860px; }
+  nav.toc { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 0; }
+  nav.toc a { border:1px solid var(--line); border-radius:999px; padding:3px 10px; color:var(--ink); text-decoration:none; font-size:13px; }
+  .flow { max-width:1240px; margin:12px auto 0; padding:0 16px; color:var(--mute); font-size:13px; }
+  section.screen { max-width:1240px; margin:28px auto; padding:0 16px; display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:16px; align-items:start; }
+  @media (max-width:860px) { section.screen { grid-template-columns:1fr; } }
+  .frame { border:2px solid var(--ink); border-radius:8px; background:var(--paper); overflow:hidden; }
+  .bar { border-bottom:1px solid var(--line); padding:8px 12px; display:flex; gap:10px; align-items:center; font-size:12px; color:var(--mute); }
+  .bar b { color:var(--ink); }
+  .body { padding:14px; display:grid; gap:10px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .box { background:var(--box); border:1px dashed var(--line); border-radius:6px; padding:10px; min-width:0; }
+  .box.solid { border-style:solid; }
+  .grow { flex:1 1 200px; }
+  .btn { display:inline-block; border:1.5px solid var(--ink); border-radius:6px; padding:5px 12px; font-size:13px; background:var(--paper); }
+  .btn.primary { background:var(--ink); color:var(--paper); }
+  .chip { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:12px; margin:2px 4px 2px 0; background:var(--paper); }
+  .ph { height:10px; background:var(--box2); border-radius:3px; margin:5px 0; }
+  .ph.s { width:40%; } .ph.m { width:65%; } .ph.l { width:90%; }
+  .label { font-size:12px; color:var(--mute); }
+  .t { font-weight:600; }
+  .warn { background:var(--warn); }
+  .ok { background:var(--ok); }
+  table.mini { width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.mini td, table.mini th { border-bottom:1px solid var(--line); padding:4px 6px; text-align:left; vertical-align:top; }
+  aside.note { background:var(--note); border:1px solid var(--noteline); border-radius:6px; padding:12px; font-size:13px; }
+  aside.note h3 { margin:0 0 6px; font-size:14px; }
+  aside.note ul { margin:4px 0 8px 18px; padding:0; }
+  aside.note code { font-size:12px; word-break:break-all; }
+  h2 { font-size:17px; margin:0 0 8px; grid-column:1 / -1; }
+  .grid3 { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
+  @media (max-width:600px) { .grid3 { grid-template-columns:1fr 1fr; } }
+  footer { max-width:1240px; margin:32px auto 48px; padding:0 16px; color:var(--mute); font-size:12.5px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>AI 도구 인벤토리(가칭): 웹 와이어프레임</h1>
+  <p class="lead">기획안 v2.1의 5장(흐름·화면 구성)과 6-5장(추천 순서·조건 묻기)을 회색 상자로 옮긴 거예요. 색·글꼴·꾸밈은 정하지 않았어요. 예시 값은 실제 측정·판정 데이터(<code>sample-data/</code>)에서 가져왔어요. 오른쪽 노란 칸은 그 화면이 쓰는 데이터와 API예요.</p>
+  <nav class="toc">
+    <a href="#s1">① 시작</a><a href="#s2">② 처음이에요</a><a href="#s3">③ 둘러보기</a><a href="#s4">④ 도구 카드</a><a href="#s5">⑤ 도구함</a><a href="#s6">⑥ 조건 묻기</a><a href="#s7">⑦ 결과</a>
+  </nav>
+</header>
+<p class="flow">흐름: ① 시작 → (이미 쓰는 사람) ⑤ 도구함 → ⑥ 조건 묻기 → ⑦ 결과 → ④ 도구 카드 · (처음인 사람) ② 처음이에요 → ⑤ · ① → ③ 둘러보기 → ④</p>
+
+<!-- ① 시작 -->
+<section class="screen" id="s1">
+  <h2>① 시작</h2>
+  <div class="frame">
+    <div class="bar"><b>로고</b><span class="box" style="flex:1;padding:4px 8px">도구 검색…</span><span>둘러보기</span><span>도구함 (0)</span></div>
+    <div class="body">
+      <div class="box solid"><div class="t">내 Claude Code 도구, 겹쳐서 토큰을 버리고 있지 않나요?</div><div class="ph m"></div></div>
+      <div class="row">
+        <div class="box solid grow"><div class="t">이미 쓰고 있어요</div><div class="label">쓰는 도구를 담고 겹침·추천 보기</div><br><span class="btn primary">도구함에 담기 →</span></div>
+        <div class="box solid grow"><div class="t">처음이에요</div><div class="label">시작용 도구 3~5개</div><br><span class="btn">시작하기 →</span></div>
+      </div>
+      <div class="label">분야별 둘러보기</div>
+      <div class="grid3">
+        <div class="box">1 기획·작업 방식</div><div class="box">2 토큰·컨텍스트</div><div class="box">3 코드 이해·검색</div>
+        <div class="box">4 디자인·프론트엔드</div><div class="box">5 백엔드·인프라</div><div class="box">6 QA·테스트</div>
+      </div>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li><code>GET /api/categories</code> (분야 6개 + "이럴 때 찾으세요")</li><li>검색창 → ③ 둘러보기로 <code>q=</code></li></ul><h3>기획안</h3><ul><li>5장 "두 입구"</li><li>디자인은 목업에서 고른 ② 디렉터리형을 따름</li></ul></aside>
+</section>
+
+<!-- ② 처음이에요 -->
+<section class="screen" id="s2">
+  <h2>② 처음이에요</h2>
+  <div class="frame">
+    <div class="bar"><b>처음이에요</b></div>
+    <div class="body">
+      <div class="box solid"><div class="t">무슨 일에 Claude Code를 쓰나요?</div><span class="chip">웹 화면</span><span class="chip">서버·DB</span><span class="chip">버그 고치기</span><span class="chip">잘 모르겠어요</span></div>
+      <div class="label">시작용 도구 (예시 자리, 목록은 아직 안 정함)</div>
+      <div class="row">
+        <div class="box grow"><div class="ph s"></div><div class="ph l"></div><span class="btn">담기</span></div>
+        <div class="box grow"><div class="ph s"></div><div class="ph l"></div><span class="btn">담기</span></div>
+        <div class="box grow"><div class="ph s"></div><div class="ph l"></div><span class="btn">담기</span></div>
+      </div>
+      <div class="box">서로 겹치지 않는 조합만 보여 줘요 (저장된 판정이 <span class="chip">관계 없음</span> 또는 <span class="chip">보완</span>인 것끼리)</div>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li>시작 조합은 <code>compat.json</code>에서 overlap이 없는 쌍으로 고름</li><li>시작용 목록 자체는 <b>기획안 7장 2단계</b>(MVP 이후)</li></ul><h3>정할 것</h3><ul><li>시작용 3~5개 목록 (기획안에 아직 없음)</li></ul></aside>
+</section>
+
+<!-- ③ 둘러보기 -->
+<section class="screen" id="s3">
+  <h2>③ 둘러보기 (분야 목록)</h2>
+  <div class="frame">
+    <div class="bar"><b>1 기획·작업 방식</b><span>Claude가 일하는 순서와 계획을 정함</span></div>
+    <div class="body">
+      <div class="row"><span class="chip">정렬: 별 수 ▾</span><span class="chip">최근 업데이트</span><span class="box" style="flex:1;padding:4px 8px">이 분야에서 검색…</span></div>
+      <table class="mini">
+        <tr><th>도구</th><th>처음 읽는 양</th><th>구성</th><th>확인일</th><th></th></tr>
+        <tr><td>superpowers v7.0.0</td><td>+1,562</td><td>스킬 15 · 훅 1</td><td>10-18</td><td><span class="btn">담기</span></td></tr>
+        <tr><td>ECC v2.2.3</td><td>+9,169</td><td>스킬 313 · 명령 397 · 훅 27</td><td>10-18</td><td><span class="btn">담기</span></td></tr>
+        <tr><td>gsd-core</td><td>+4,933</td><td>스킬 72 · 명령 144</td><td>10-18</td><td><span class="btn">담기</span></td></tr>
+        <tr><td>gstack</td><td>+1,135</td><td>스킬 57</td><td>10-18</td><td><span class="btn">담기</span></td></tr>
+        <tr><td>…</td><td></td><td></td><td></td><td></td></tr>
+      </table>
+      <div class="label">"처음 읽는 양" = 도구 하나만 켜고 첫 응답에서 더 읽는 토큰(실측). 옆에 작은 글씨로 측정일·버전</div>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li><code>GET /api/tools?category=1&amp;sort=stars</code></li><li><code>always_on_tokens_est</code>, <code>scope</code>, <code>checked_at</code>, <code>auto.stars</code>, <code>auto.pushed_at</code></li></ul><h3>기획안</h3><ul><li>5장 "둘러보기: 별 수·최근 업데이트순, 검색"</li><li>6-7 v2.1 "토큰은 실측"</li></ul></aside>
+</section>
+
+<!-- ④ 도구 카드 -->
+<section class="screen" id="s4">
+  <h2>④ 도구 카드</h2>
+  <div class="frame">
+    <div class="bar"><b>caveman</b><span>v4.0.1 · Apache-2.0 · 확인일 2026-10-18 · 최신</span></div>
+    <div class="body">
+      <div class="box solid"><div class="label">한 줄 설명 (summary_ko, 아직 안 씀)</div><div class="ph l"></div><div class="label">하는 일 (role_summary, 아직 안 씀)</div><div class="ph m"></div></div>
+      <div class="row">
+        <div class="box grow"><div class="t">역할 범위</div>스킬 22 · 에이전트 3 · 명령 23<br>훅 4개: 세션 시작 1 · 서브에이전트 시작 1 · 프롬프트 제출 1 · 세션 끝 1<br><span class="label">"이 도구가 어디까지 할 수 있는지"를 사실로만</span></div>
+        <div class="box grow"><div class="t">토큰</div>처음 읽는 양 <b>+2,643</b><br><span class="label">첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191)</span><br>효과: <span class="chip">확인 안 됨</span> <span class="label">(시험한 조합에서만 따로 표시)</span></div>
+      </div>
+      <div class="box"><div class="t">설치</div><div class="ph m"></div><div class="label">설치 방식에 따라 판정이 달라요: 플러그인만 / CLI 전체</div></div>
+      <div class="box"><div class="t">내장 기능과 함께 쓰는 법</div><span class="chip">내장 기능으로 되는 것</span><span class="chip">오픈소스가 더해 주는 것</span><span class="chip">함께 쓰는 법</span></div>
+      <div class="box"><div class="t">같은 분야 판정</div><table class="mini"><tr><td>× rtk</td><td><span class="chip">상황따라</span></td><td>직접 시험 · 설치 방식에 따라 다름(플러그인만이면 충돌 없음)</td></tr><tr><td>× claude-hud</td><td><span class="chip">상황따라</span></td><td>직접 시험 · 상태줄 자리 하나</td></tr><tr><td>× headroom</td><td><span class="chip">상황따라</span></td><td>사람 검토</td></tr></table></div>
+      <div class="label">카드 아래 고정 문구: "도움말이며 보증이 아닙니다"</div>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li><code>GET /api/tools/caveman</code> → <code>entries</code> 한 건 + 같은 분야 <code>compat</code></li><li>확인일 표시 3가지(6-4): 최신 / 확인 이후 업데이트됨 / 분석 안 됨</li></ul><h3>정할 것</h3><ul><li><b>위험 표시 자리</b>: 6-6장(쓰지 않음) vs 허준서 안(낮음·보통·주의). 정해지면 이 카드에 칸을 넣을지 결정</li></ul></aside>
+</section>
+
+<!-- ⑤ 도구함 -->
+<section class="screen" id="s5">
+  <h2>⑤ 도구함</h2>
+  <div class="frame">
+    <div class="bar"><b>내 도구함 (3)</b><span>브라우저에 저장 · 로그인 없음</span></div>
+    <div class="body">
+      <div class="row"><span class="chip">쓰는 중 (3)</span><span class="chip">써볼 예정 (0)</span></div>
+      <div class="box solid">superpowers <span class="label">기획·작업 방식 · +1,562</span> <span class="btn">빼기</span></div>
+      <div class="box solid">ECC <span class="label">기획·작업 방식 · +9,169</span> <span class="btn">빼기</span></div>
+      <div class="box solid">caveman <span class="label">토큰·컨텍스트 · +2,643</span> <span class="btn">빼기</span></div>
+      <div class="box">메모: "내가 만든 스킬" <span class="label">목록에 없는 도구는 비교하지 않아요</span></div>
+      <div class="box">처음 읽는 양 합계: 최대 <b>+13,374</b> <span class="label">(하나씩 잰 값의 합, 실제로는 조금 적게 나와요)</span></div>
+      <span class="btn primary">겹침·추천 보기 →</span>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li>도구함은 브라우저 저장(목업 <code>box.jsx</code>). 로그인·DB 동기화는 후순위(7장)</li><li>합계 = <code>always_on_tokens_est</code> 합, 라벨 "최대치"(6-7 v2.1)</li></ul></aside>
+</section>
+
+<!-- ⑥ 조건 묻기 -->
+<section class="screen" id="s6">
+  <h2>⑥ 조건 묻기 (v2.1에서 새로 생김)</h2>
+  <div class="frame">
+    <div class="bar"><b>추천 전에 두 가지만 물어볼게요</b><span>건너뛰기 가능</span></div>
+    <div class="body">
+      <div class="box solid"><div class="t">주로 무슨 일을 하나요?</div><span class="chip">버그 고치기</span><span class="chip">새 기능 만들기</span><span class="chip">큰 빌드·테스트 로그</span><span class="chip">잘 모르겠어요</span></div>
+      <div class="box solid"><div class="t">어떤 환경인가요?</div><span class="chip">Windows</span><span class="chip">macOS</span><span class="chip">Linux</span><div class="label">Windows면: Claude가 명령을 주로 Bash로 실행하나요, PowerShell로 실행하나요? (모르면 건너뛰기)</div></div>
+      <div class="box">왜 묻나요: 같은 도구라도 하는 일·환경에 따라 이득이 달라요. 예: rtk는 PowerShell 명령에는 끼어들지 못해요.</div>
+      <span class="btn primary">결과 보기 →</span>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li><code>POST /api/box/recommend</code>의 <code>work</code>, <code>env</code></li></ul><h3>기획안</h3><ul><li>6-5장 v2.1 "조건 묻기"</li></ul></aside>
+</section>
+
+<!-- ⑦ 결과 -->
+<section class="screen" id="s7">
+  <h2>⑦ 결과 (겹침 + 추천)</h2>
+  <div class="frame">
+    <div class="bar"><b>결과</b><span>도구 3개 · 확인한 쌍의 범위에서만 판단</span></div>
+    <div class="body">
+      <div class="box solid warn"><div class="t">겹침 1건</div>superpowers × ECC: 비슷한 일을 해서, 같이 켜면 안 쓰는 쪽도 매번 읽혀요.<br><span class="chip">직접 시험</span> 같은 결과에 토큰 약 1.9배 · 27번 · sonnet · 2026-10-17<br><span class="btn">근거 보기</span></div>
+      <div class="box solid"><div class="t">확인된 정보 없음 2건</div>caveman × superpowers, caveman × ECC <span class="label">(다른 분야라 아직 판정 안 함. "안전"이 아니에요)</span></div>
+      <div class="t">추천</div>
+      <div class="box solid ok"><div class="t">빼기: ECC</div>superpowers와 겹침 · 빼면 처음 읽는 양 −9,169 · <span class="chip">직접 시험</span></div>
+      <div class="box solid"><div class="t">더하기: 지금 데이터로는 후보 없음</div><span class="label">caveman은 이미 담겨 있어요. 더하기 후보는 도구함의 모든 도구와 판정이 있어야 보여 줘요. 판정 없는 쌍은 "미확인"으로 표시</span></div>
+      <div class="box"><div class="t">이미 쓰는 caveman 주의</div>버그 고칠 때 superpowers 디버깅 절차를 건너뛸 수 있어요 <span class="chip">직접 시험</span> <span class="label">(3번 중 3번, 이유는 추정)</span></div>
+      <div class="label">고정 문구: "도움말이며 보증이 아닙니다" · 근거 종류(직접 시험 / 문서 / 계산 / AI 추정)와 검수 상태를 따로 표시</div>
+    </div>
+  </div>
+  <aside class="note"><h3>데이터·API</h3><ul><li><code>POST /api/box/judge</code> → 쌍마다 <code>state</code>(saved / no_info / outdated …)</li><li><code>POST /api/box/recommend</code> → remove / add / replace</li><li><code>review_state</code>: tested / human_review / ai_estimate</li></ul><h3>기획안</h3><ul><li>6-1 "분석 안 한 쌍은 확인된 정보 없음"</li><li>6-5 v2.1 "쌍 판정 → 효율 근거 → 추천"</li><li>6-3 "3개 이상 조합: 확인한 쌍의 범위에서"</li></ul></aside>
+</section>
+
+<footer>와이어프레임 초안 · 2026-10-26 · 노형원 · 예시 숫자는 <code>judgment/review/2026-10-18-measure36/</code>와 김용현 1차 검수(PR #4) 기준 · 색·글꼴·배치는 디자인 단계에서 정함</footer>
+</body>
+</html>
