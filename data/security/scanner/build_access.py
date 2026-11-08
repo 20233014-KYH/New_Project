@@ -47,8 +47,13 @@ def ref(s):
 table = {f: {c: dict(status=None, facts=[], notes=[]) for c in COLS} for f in TOOLS}
 
 
-# 저장소 CLAUDE.md의 근거 종류(calc/doc/tested/ai)와 맞춤. "코드 확인"은 Claude가 읽은 것이라 사람 검수 전까지 ai.
-EVIDENCE_CODE = {"검사": "calc", "코드 확인": "ai", "문서": "doc", "실측(팀)": "tested"}
+# 근거 종류. 저장소 CLAUDE.md의 calc/doc/tested/ai에 맞추되, 김용현 의견(PR #12)대로 calc는 "정확히 센 값"에만 씀.
+# - 프로그램이 셈: 설정 파일(JSON)을 읽어 정확히 센 값 (지금은 R2 훅만) → calc
+# - 프로그램이 찾음(글자 패턴): 정규식·이름 규칙으로 찾은 것. 놓치거나 잘못 잡을 수 있음 → pattern (사람 확인 전)
+# - 코드 확인: Claude가 코드를 읽고 확인 → 사람 검수 전까지 ai
+COUNT = "프로그램이 셈"
+PATTERN = "프로그램이 찾음(글자 패턴)"
+EVIDENCE_CODE = {COUNT: "calc", PATTERN: "pattern", "코드 확인": "ai", "문서": "doc", "실측(팀)": "tested"}
 
 
 def fact(folder, col, text, when, evidence, refs=(), confirm=None):
@@ -86,14 +91,14 @@ for (folder, rule, sub), sigs in by.items():
             fact(folder, "명령 실행",
                  f"설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 ({host}, {src}) · 서로 다른 명령 {len(v['urls'])}개, "
                  f"신호 {len(v['sigs'])}건({'/'.join({'install':'설치 경로','docs':'문서','code':'코드','hook':'훅'}.get(w,w) for w in where)})",
-                 "설치", "검사", [ref(s) for s in v["sigs"]])
+                 "설치", PATTERN, [ref(s) for s in v["sigs"]])
         if dropped:
             table[folder]["명령 실행"]["notes"].append(
                 f"원격 실행 형태 {dropped}건은 다른 도구 설치 안내 데이터 등으로 보여 사실에서 뺌(사람 확인 전)")
     elif rule == "R1" and sub == "exec-pipe":
         for s in kept:
             fact(folder, "명령 실행", "업데이트 명령이 원격 설치 스크립트를 내려받아 셸로 바로 실행 (저장소 소유자 도메인)",
-                 s.get("when", "사용"), "검사", [ref(s)])
+                 s.get("when", "사용"), PATTERN, [ref(s)])
     elif rule == "R2":
         events = defaultdict(int)
         for s in kept:
@@ -104,7 +109,7 @@ for (folder, rule, sub), sigs in by.items():
         fact(folder, "명령 실행",
              f"플러그인 훅 {len(kept)}개가 자동 실행 ({freq})" + (" · 훅마다 node -e 인라인 코드로 스크립트 위치를 찾은 뒤 실행" if inline else
                                                          " · 저장소 안의 고정 스크립트 실행"),
-             "사용", "검사", [ref(s) for s in kept])
+             "사용", COUNT, [ref(s) for s in kept])
     elif rule == "R9":
         label = {"perm-allow": "자동 허용 권한(permissions.allow)에 자기 도구 등록",
                  "mcp-config": "MCP 서버 설정(~/.claude.json·.mcp.json) 수정",
@@ -113,9 +118,9 @@ for (folder, rule, sub), sigs in by.items():
         glob = any("전역" in a for s in kept for a in s["adjust"])
         conf = "사람 확인 필요: 설치 경로에서 실제로 쓰는지" if all(s["severity"] == "low" for s in kept) else None
         fact(folder, "설정 바꾸기", f"{label}{' (전역 설정)' if glob else ' (프로젝트 설정)'}",
-             "설치", "검사", [ref(s) for s in kept], conf)
+             "설치", PATTERN, [ref(s) for s in kept], conf)
         if sub == "settings-hooks":
-            fact(folder, "명령 실행", "설치기가 settings.json에 등록한 훅이 이후 자동 실행", "사용", "검사",
+            fact(folder, "명령 실행", "설치기가 settings.json에 등록한 훅이 이후 자동 실행", "사용", PATTERN,
                  [ref(s) for s in kept], conf)
     elif rule == "R3" and sub == "envkey":
         names = set()
@@ -135,21 +140,21 @@ for (folder, rule, sub), sigs in by.items():
         shown = ", ".join(sorted(names)[:6]) + (" 외" if len(names) > 6 else "")
         dev_only = all(re.match(r"(scripts|tools|docker|ci|\.github|bench\w*)/", s["file"]) for s in kept)
         fact(folder, "내 파일", f"토큰·키 환경변수를 읽음 ({shown or '이름은 코드 참조'}) · {len(kept)}곳",
-             "사용", "검사", [ref(s) for s in kept],
+             "사용", PATTERN, [ref(s) for s in kept],
              "사람 확인 필요: 모두 개발용 스크립트 위치라 사용자 실행 경로인지" if dev_only else None)
     elif rule == "R3":
         prot = [s for s in kept if any("차단·제외" in a for a in s["adjust"])]
         real = [s for s in kept if s not in prot]
         if real:
             lab = sigs[0]["detail"]
-            fact(folder, "내 파일", f"{lab}에 접근하는 코드 {len(real)}곳", "사용", "검사", [ref(s) for s in real],
+            fact(folder, "내 파일", f"{lab}에 접근하는 코드 {len(real)}곳", "사용", PATTERN, [ref(s) for s in real],
                  "사람 확인 필요: 실제로 읽는지, 보호 목록인지")
         n = len(prot) + dropped
         if n:
             table[folder]["내 파일"]["notes"].append(
                 f"민감 경로 언급 {n}건은 차단·제외 목록으로 보여 사실에서 뺌(사람 확인 전)")
     elif rule == "R5":
-        fact(folder, "내 파일", f"{sigs[0]['detail']} {len(kept)}곳", "사용", "검사", [ref(s) for s in kept])
+        fact(folder, "내 파일", f"{sigs[0]['detail']} {len(kept)}곳", "사용", PATTERN, [ref(s) for s in kept])
 
 # ---------------------------------------------------------------------------
 # 2) MCP 도구 목록(R7) → DB·외부 / 브라우저 / 내 파일
@@ -165,7 +170,7 @@ for folder, r in M.items():
         ro = sorted({t["toolset"] for t in tools if "SQL 실행(읽기 전용)" in t["caps"]})
         fact(folder, "DB·외부 서비스",
              f"미리 만든 설정(--prebuilt) {len(sets)}종, 도구 {len(tools)}개. 그중 {len(full)}종이 임의 SQL 실행 도구(execute_sql) 포함, "
-             f"{len(ro)}종은 읽기 전용 SQL만", "사용", "검사",
+             f"{len(ro)}종은 읽기 전용 SQL만", "사용", PATTERN,
              ["internal/prebuiltconfigs/tools/*.yaml"])
         continue
     exp = [t for t in tools if t["exposed"]]
@@ -190,20 +195,20 @@ for folder, r in M.items():
                 f"MCP 도구 {len(tools)}개는 모두 자기 데이터 조회({', '.join(t['name'] for t in tools[:4])} 등) · "
                 "외부 DB·서비스 연결 도구는 찾지 못함")
             continue
-    fact(folder, col, head, "사용", "검사", sorted({t["file"] for t in tools})[:3])
+    fact(folder, col, head, "사용", PATTERN, sorted({t["file"] for t in tools})[:3])
     for c in sorted(hi_caps):
         on = names({c}, exp)
         off = [(t["name"], t["exposed_why"]) for t in gated if c in t["caps"]]
         if on:
-            fact(folder, col, f"기본 노출: {c} — {', '.join(on[:6])}{' 외' if len(on) > 6 else ''}", "사용", "검사",
+            fact(folder, col, f"기본 노출: {c} — {', '.join(on[:6])}{' 외' if len(on) > 6 else ''}", "사용", PATTERN,
                  sorted({f"{t['file']}:{t['line']}" for t in exp if c in t['caps']})[:3])
         if off:
             why = sorted({w for _, w in off})
-            fact(folder, col, f"옵션을 켜야 노출: {c} {len(off)}개 ({'; '.join(why)})", "사용", "검사",
+            fact(folder, col, f"옵션을 켜야 노출: {c} {len(off)}개 ({'; '.join(why)})", "사용", PATTERN,
                  sorted({f"{t['file']}:{t['line']}" for t in gated if c in t['caps']})[:2])
     up = names({"파일 올리기·저장"}, exp)
     if up:
-        fact(folder, "내 파일", f"MCP 도구로 내 파일을 페이지에 올리거나 결과를 파일로 저장 ({', '.join(up[:4])})", "사용", "검사",
+        fact(folder, "내 파일", f"MCP 도구로 내 파일을 페이지에 올리거나 결과를 파일로 저장 ({', '.join(up[:4])})", "사용", PATTERN,
              sorted({f"{t['file']}:{t['line']}" for t in exp if t['name'] in up})[:3])
 
 # ---------------------------------------------------------------------------
@@ -252,7 +257,8 @@ for f, cols in table.items():
 out = {
     "schema": "access-scope/v0",
     "generated": "2026-10-31",
-    "evidence_kinds": {"검사": "calc", "코드 확인": "ai", "문서": "doc", "실측(팀)": "tested"},
+    "evidence_kinds": EVIDENCE_CODE,
+    "evidence_revised": "2026-11-08: 글자 패턴으로 찾은 결과를 calc에서 pattern으로 바꿈(PR #12 의견). 사실·상태는 그대로",
     "note": "도움말이며 보증이 아님. 찾지 못함은 없음이 아니다. reviewed=false는 사람 검수 전.",
     "statuses": ["찾음", "검사에서 찾지 못함", "검사 전", "해당 없음(MCP 도구 없음)"],
     "columns": COLS,
@@ -270,7 +276,9 @@ for t in out["tools"]:
         cell = t["cells"][c]
         md.append(f"- **{c}** [{cell['status']}]")
         for x in cell["facts"]:
-            md.append(f"    - ({x['when']}) {x['text']} — {x['evidence']}" + (f" · {x['confirm']}" if x.get("confirm") else ""))
+            md.append(f"    - ({x['when']}) {x['text']} — {x['evidence']}"
+                      + (", 사람 확인 전" if x["evidence_code"] == "pattern" else "")
+                      + (f" · {x['confirm']}" if x.get("confirm") else ""))
         for n in cell["notes"]:
             md.append(f"    - 참고: {n}")
     md.append("")

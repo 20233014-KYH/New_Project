@@ -2,11 +2,13 @@
  "schema": "access-scope/v0",
  "generated": "2026-10-31",
  "evidence_kinds": {
-  "검사": "calc",
+  "프로그램이 셈": "calc",
+  "프로그램이 찾음(글자 패턴)": "pattern",
   "코드 확인": "ai",
   "문서": "doc",
   "실측(팀)": "tested"
  },
+ "evidence_revised": "2026-11-08: 글자 패턴으로 찾은 결과를 calc에서 pattern으로 바꿈(PR #12 의견). 사실·상태는 그대로",
  "note": "도움말이며 보증이 아님. 찾지 못함은 없음이 아니다. reviewed=false는 사람 검수 전.",
  "statuses": [
   "찾음",
@@ -46,8 +48,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (BRAINSTORM_TOKEN, BRAINSTORM_TOKEN_FILE) · 3곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "skills/brainstorming/scripts/server.cjs:123",
@@ -69,7 +71,7 @@
       {
        "text": "플러그인 훅 1개가 자동 실행 (SessionStart 1) · 저장소 안의 고정 스크립트 실행",
        "when": "사용",
-       "evidence": "검사",
+       "evidence": "프로그램이 셈",
        "evidence_code": "calc",
        "reviewed": false,
        "refs": [
@@ -111,8 +113,8 @@
       {
        "text": ".env 로드에 접근하는 코드 1곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "skills/videodb/scripts/ws_listener.py:39"
@@ -122,8 +124,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (ANTHROPIC_API_KEY, CLAUDE_CODE_OAUTH_TOKEN, CODEX_API_KEY, DISCORD_BOT_TOKEN, GITHUB_TOKEN, GRADER_TOKEN 외) · 9곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "docker/context-profiles/ai-eval-lib.js:297",
@@ -137,8 +139,8 @@
       {
        "text": "SSH 키 경로에 접근하는 코드 1곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "ecc2/src/observability/mod.rs:142"
@@ -156,8 +158,8 @@
       {
        "text": "CLAUDE.md 등 에이전트 지시 파일에 내용 추가 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "skills/ck/hooks/session-start.mjs:66",
@@ -169,8 +171,8 @@
       {
        "text": "MCP 서버 설정(~/.claude.json·.mcp.json) 수정 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/hooks/mcp-health-check.js:88",
@@ -181,8 +183,8 @@
       {
        "text": "settings.json에 훅 등록 (프로젝트 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/hooks/insaits-security-monitor.py:16"
@@ -198,7 +200,7 @@
       {
        "text": "플러그인 훅 27개가 자동 실행 (PreToolUse 10·Stop 8·SessionStart 2·PostToolUse 2·PostToolUseFailure 2·UserPromptSubmit 1·PreCompact 1·SessionEnd 1) · 훅마다 node -e 인라인 코드로 스크립트 위치를 찾은 뒤 실행",
        "when": "사용",
-       "evidence": "검사",
+       "evidence": "프로그램이 셈",
        "evidence_code": "calc",
        "reviewed": false,
        "refs": [
@@ -212,8 +214,8 @@
       {
        "text": "설치기가 settings.json에 등록한 훅이 이후 자동 실행",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/hooks/insaits-security-monitor.py:16"
@@ -271,8 +273,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (ANTHROPIC_API_KEY, CAVEMAN_BINARY_SIGNING_PRIVATE_KEY_PEM, CAVE_KMS_AUTH_TOKEN, GEMINI_API_KEY, OPENAI_API_KEY, SCW_SECRET_KEY) · 10곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "shared/platform/kms/kms.go:133",
@@ -293,8 +295,8 @@
       {
        "text": "CLAUDE.md 등 에이전트 지시 파일에 내용 추가 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "skills/caveman-compress/scripts/compress.py:113",
@@ -306,8 +308,8 @@
       {
        "text": "settings.json에 훅 등록 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/hooks/install.ps1:24",
@@ -321,8 +323,8 @@
       {
        "text": "MCP 서버 설정(~/.claude.json·.mcp.json) 수정 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "installer/install.js:1990"
@@ -338,7 +340,7 @@
       {
        "text": "플러그인 훅 4개가 자동 실행 (SessionStart 1·SubagentStart 1·UserPromptSubmit 1·SessionEnd 1) · 저장소 안의 고정 스크립트 실행",
        "when": "사용",
-       "evidence": "검사",
+       "evidence": "프로그램이 셈",
        "evidence_code": "calc",
        "reviewed": false,
        "refs": [
@@ -351,8 +353,8 @@
       {
        "text": "설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (raw.githubusercontent.com, 저장소 소유자 도메인) · 서로 다른 명령 8개, 신호 13건(훅/설치 경로)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "install.ps1:7",
@@ -365,8 +367,8 @@
       {
        "text": "설치기가 settings.json에 등록한 훅이 이후 자동 실행",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/hooks/install.ps1:24",
@@ -434,8 +436,8 @@
       {
        "text": "settings.json에 훅 등록 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/hooks/integrity.rs:225",
@@ -445,8 +447,8 @@
       {
        "text": "CLAUDE.md 등 에이전트 지시 파일에 내용 추가 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/hooks/init/claude.rs:115",
@@ -462,8 +464,8 @@
       {
        "text": "설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (raw.githubusercontent.com, 저장소 소유자 도메인) · 서로 다른 명령 2개, 신호 22건(문서/설치 경로)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "README_zh.md:86",
@@ -476,8 +478,8 @@
       {
        "text": "설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (github.com, 저장소 소유자 도메인) · 서로 다른 명령 1개, 신호 3건(코드)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/check-installation.sh:27",
@@ -488,8 +490,8 @@
       {
        "text": "설치기가 settings.json에 등록한 훅이 이후 자동 실행",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/hooks/integrity.rs:225",
@@ -548,8 +550,8 @@
       {
        "text": "CLAUDE.md 등 에이전트 지시 파일에 내용 추가 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "graphify/install.py:187"
@@ -558,8 +560,8 @@
       {
        "text": "settings.json에 훅 등록 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "graphify/install.py:1047"
@@ -574,8 +576,8 @@
       {
        "text": "설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (astral.sh, 제3자 공식 설치기) · 서로 다른 명령 1개, 신호 64건(설치 경로)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "README.md:163",
@@ -588,8 +590,8 @@
       {
        "text": "설치기가 settings.json에 등록한 훅이 이후 자동 실행",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "graphify/install.py:1047"
@@ -620,8 +622,8 @@
       {
        "text": "MCP 도구 10개 추출, 기본 설정에서 10개 노출 (읽기·기타 7, 외부 서비스 조회(GitHub PR) 3)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "graphify/serve.py"
@@ -630,8 +632,8 @@
       {
        "text": "기본 노출: 외부 서비스 조회(GitHub PR) — list_prs, get_pr_impact, triage_prs",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "graphify/serve.py:2396",
@@ -682,8 +684,8 @@
       {
        "text": "자동 허용 권한(permissions.allow)에 자기 도구 등록 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/installer/targets/claude.ts:433"
@@ -692,8 +694,8 @@
       {
        "text": "MCP 서버 설정(~/.claude.json·.mcp.json) 수정 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/installer/targets/claude.ts:83",
@@ -704,8 +706,8 @@
       {
        "text": "CLAUDE.md 등 에이전트 지시 파일에 내용 추가 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/installer/targets/claude.ts:100"
@@ -715,8 +717,8 @@
       {
        "text": "settings.json에 훅 등록 (전역 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/installer/targets/claude.ts:97"
@@ -732,8 +734,8 @@
       {
        "text": "설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (raw.githubusercontent.com, 저장소 소유자 도메인) · 서로 다른 명령 5개, 신호 13건(코드/문서/설치 경로)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "install.ps1:6",
@@ -746,8 +748,8 @@
       {
        "text": "설치기가 settings.json에 등록한 훅이 이후 자동 실행",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/installer/targets/claude.ts:97"
@@ -757,8 +759,8 @@
       {
        "text": "업데이트 명령이 원격 설치 스크립트를 내려받아 셸로 바로 실행 (저장소 소유자 도메인)",
        "when": "업데이트",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/upgrade/index.ts:668"
@@ -842,8 +844,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (GITHUB_TOKEN, UI_PRO_MAX_GITHUB_TOKEN) · 1곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "cli/src/utils/github.ts:50"
@@ -935,8 +937,8 @@
       {
        "text": ".env 로드에 접근하는 코드 2곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/config/env.ts:1",
@@ -947,8 +949,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (DBHUB_AUTH_TOKEN, DB_PASSWORD, SSH_PASSWORD) · 4곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/config/env.ts:174",
@@ -960,8 +962,8 @@
       {
        "text": "SSH 키 경로에 접근하는 코드 8곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/config/env.ts:647",
@@ -994,8 +996,8 @@
       {
        "text": "MCP 서버 설정(~/.claude.json·.mcp.json) 수정 (프로젝트 설정)",
        "when": "설치",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/sync-version.mjs:40"
@@ -1021,8 +1023,8 @@
       {
        "text": "MCP 도구 4개 추출, 기본 설정에서 4개 노출 (DB 구조·상태 읽기 3, 임의 SQL 실행 1)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/builtin-tools.ts"
@@ -1031,8 +1033,8 @@
       {
        "text": "기본 노출: 임의 SQL 실행 — execute_sql",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/builtin-tools.ts:6"
@@ -1095,8 +1097,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (GEMINI_API_KEY, GOOGLE_API_KEY) · 2곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "internal/embeddingmodels/gemini/gemini.go:61",
@@ -1127,8 +1129,8 @@
       {
        "text": "미리 만든 설정(--prebuilt) 40종, 도구 453개. 그중 19종이 임의 SQL 실행 도구(execute_sql) 포함, 2종은 읽기 전용 SQL만",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "internal/prebuiltconfigs/tools/*.yaml"
@@ -1160,8 +1162,8 @@
       {
        "text": "MCP 도구로 내 파일을 페이지에 올리거나 결과를 파일로 저장 (browser_file_upload, browser_drop)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "lib/coreBundle.js:65875",
@@ -1218,8 +1220,8 @@
       {
        "text": "MCP 도구 83개 추출, 기본 설정에서 25개 노출 (브라우저 조작 14, 관찰(읽기) 7, 파일 올리기·저장 2, 임의 코드 실행 2)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "lib/coreBundle.js"
@@ -1228,8 +1230,8 @@
       {
        "text": "옵션을 켜야 노출: 네트워크 가로채기 4개 (--caps=network 필요)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "lib/coreBundle.js:68900",
@@ -1239,8 +1241,8 @@
       {
        "text": "기본 노출: 임의 코드 실행 — browser_evaluate, browser_run_code_unsafe",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "lib/coreBundle.js:68085",
@@ -1250,8 +1252,8 @@
       {
        "text": "옵션을 켜야 노출: 쿠키·저장소 접근 17개 (--caps=storage 필요)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "lib/coreBundle.js:67741",
@@ -1298,8 +1300,8 @@
       {
        "text": "토큰·키 환경변수를 읽음 (GEMINI_API_KEY) · 2곳",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "scripts/count_tokens.ts:12",
@@ -1310,8 +1312,8 @@
       {
        "text": "MCP 도구로 내 파일을 페이지에 올리거나 결과를 파일로 저장 (upload_file, screencast_start, screencast_stop)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/input.ts:567",
@@ -1359,8 +1361,8 @@
       {
        "text": "MCP 도구 44개 추출, 기본 설정에서 34개 노출 (브라우저 조작 14, 관찰(읽기) 14, 파일 올리기·저장 3, 페이지 제공 도구 실행 2, 임의 코드 실행 1)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/comments.ts",
@@ -1371,8 +1373,8 @@
       {
        "text": "기본 노출: 임의 코드 실행 — evaluate_script",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/script.ts:32"
@@ -1381,8 +1383,8 @@
       {
        "text": "옵션을 켜야 노출: 임의 코드 실행 1개 (--slim=true 필요)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/slim/tools.ts:110"
@@ -1391,8 +1393,8 @@
       {
        "text": "기본 노출: 페이지 제공 도구 실행 — execute_3p_developer_tool, execute_webmcp_tool",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/thirdPartyDeveloper.ts:72",
@@ -1402,8 +1404,8 @@
       {
        "text": "옵션을 켜야 노출: 확장 프로그램 설치·실행 4개 (--categoryExtensions=true 필요)",
        "when": "사용",
-       "evidence": "검사",
-       "evidence_code": "calc",
+       "evidence": "프로그램이 찾음(글자 패턴)",
+       "evidence_code": "pattern",
        "reviewed": false,
        "refs": [
         "src/tools/extensions.ts:13",

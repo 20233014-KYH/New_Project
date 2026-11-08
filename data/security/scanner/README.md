@@ -26,16 +26,16 @@ git clone --depth 1 https://github.com/rtk-ai/rtk repos/rtk-ai_rtk
 npm pack playwright-core@<버전> && mkdir pw && tar -xzf playwright-core-*.tgz -C pw
 
 # 2) 행동 신호
-python3 -I security/scanner/scanner.py repos out
+python3 -I data/security/scanner/scanner.py repos out
 
 # 3) MCP 도구 목록
-python3 -I security/scanner/mcp_tools.py repos out microsoft_playwright-mcp=pw/package
+python3 -I data/security/scanner/mcp_tools.py repos out microsoft_playwright-mcp=pw/package
 
 # 4) out/commits.json 에 저장소별 {"commit": ..., "date": ...} 를 적은 뒤 접근 범위 표
-cd security/scanner && python3 build_access.py ../../out ../../repos
+cd data/security/scanner && python3 build_access.py ../../../out ../../../repos
 
 # 5) 라벨링 시트
-python3 security/scanner/build_xlsx.py out
+python3 data/security/scanner/build_xlsx.py out
 ```
 
 `-I`는 받은 저장소 안의 파이썬 파일이 실수로 불러와지지 않게 하는 옵션입니다.
@@ -51,7 +51,17 @@ tools[] → cells[칸 이름] → {
 ```
 
 - 칸 6개: 내 파일 / 설정 바꾸기 / 명령 실행 / 밖으로 보내기 / DB·외부 서비스 / 브라우저
-- `evidence_code`는 CLAUDE.md의 근거 종류에 맞췄습니다: 검사 → `calc`, 문서 → `doc`, 팀 실측 → `tested`, 코드 확인(Claude가 코드를 읽고 확인) → `ai`
+- `evidence_code`는 CLAUDE.md의 근거 종류에 맞췄고, `calc`는 **정확히 센 값**에만 씁니다(2026-11-08, PR #12 김용현 의견 반영).
+
+  | `evidence` (화면 글) | `evidence_code` | 뜻 |
+  |---|---|---|
+  | 프로그램이 셈 | `calc` | 설정 파일(JSON)을 읽어 정확히 센 값. 지금은 R2 훅 개수·시점만 |
+  | 프로그램이 찾음(글자 패턴) | `pattern` | 정규식·이름 규칙으로 찾은 것. 놓치거나 잘못 잡을 수 있어 **사람 확인 전**으로 보여 줌 |
+  | 코드 확인 | `ai` | Claude가 코드를 읽고 확인한 것. 사람 검수 전까지 AI 추정 |
+  | 문서 | `doc` | README·공식 문서·제작자 주장 |
+  | 실측(팀) | `tested` | 팀이 직접 켜서 확인한 것 |
+
+  `pattern`은 CLAUDE.md의 네 가지(calc/doc/tested/ai)에 없는 **새 값**입니다. 팀이 받아들이면 CLAUDE.md 용어 표에 추가가 필요합니다(공동 문서라 여기서는 고치지 않음).
 - `reviewed`는 모두 `false`입니다. 사람이 확인하면 `true`로 바꿉니다.
 - `confirm`이 있는 줄은 "설치 경로에서 실제로 쓰는지" 같은 확인이 남은 것입니다.
 - `build_access.py`의 `MANUAL` 목록은 스캐너 밖에서 코드·문서로 확인한 사실입니다(파일:줄 근거 포함).
