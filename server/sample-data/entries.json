@@ -1,0 +1,1205 @@
+{
+ "_note": "샘플 데이터. 기획안 6-1장 형식. summary_ko·role_summary·install 은 아직 안 씀(null). 토큰은 실측.",
+ "entries": [
+  {
+   "id": "superpowers",
+   "repo": "obra/superpowers",
+   "aliases": [],
+   "name": "superpowers",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v7.0.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 15,
+    "agents": 0,
+    "commands": 15,
+    "mcp": 0,
+    "hooks_total": 1,
+    "hook_events": {
+     "SessionStart": 1
+    }
+   },
+   "always_on_tokens_est": 1562,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 304883,
+    "pushed_at": "2026-10-23T03:48:57Z",
+    "license": "MIT",
+    "open_issues": 363
+   }
+  },
+  {
+   "id": "ecc",
+   "repo": "affaan-m/ECC",
+   "aliases": [],
+   "name": "ECC",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v2.2.3",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 313,
+    "agents": 71,
+    "commands": 397,
+    "mcp": 32,
+    "hooks_total": 27,
+    "hook_events": {
+     "PreToolUse": 10,
+     "UserPromptSubmit": 1,
+     "PreCompact": 1,
+     "SessionStart": 2,
+     "PostToolUse": 2,
+     "PostToolUseFailure": 2,
+     "Stop": 8,
+     "SessionEnd": 1
+    }
+   },
+   "always_on_tokens_est": 9169,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 288551,
+    "pushed_at": "2026-10-20T23:08:28Z",
+    "license": "MIT",
+    "open_issues": 309
+   }
+  },
+  {
+   "id": "gstack",
+   "repo": "garrytan/gstack",
+   "aliases": [],
+   "name": "gstack",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": null,
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 57,
+    "agents": 0,
+    "commands": 56,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 1135,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "setup 스크립트가 하는 스킬 등록을 프로젝트 범위로 재현(브라우저 바이너리 빌드는 안 함)",
+   "reviews": [],
+   "auto": {
+    "stars": 137644,
+    "pushed_at": "2026-10-25T15:31:24Z",
+    "license": "MIT",
+    "open_issues": 63
+   }
+  },
+  {
+   "id": "gsd-core",
+   "repo": "open-gsd/gsd-core",
+   "aliases": [],
+   "name": "gsd-core",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.17.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 72,
+    "agents": 35,
+    "commands": 144,
+    "mcp": 0,
+    "hooks_total": 14,
+    "hook_events": {
+     "SessionStart": 2,
+     "PreToolUse": 6,
+     "PostToolUse": 2,
+     "SubagentStop": 1,
+     "Stop": 1,
+     "PreCompact": 1,
+     "FileChanged": 1
+    }
+   },
+   "always_on_tokens_est": 4933,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 10847,
+    "pushed_at": "2026-10-25T15:30:29Z",
+    "license": "MIT",
+    "open_issues": 253
+   }
+  },
+  {
+   "id": "planning-with-files",
+   "repo": "OthmanAdi/planning-with-files",
+   "aliases": [],
+   "name": "planning-with-files",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v3.24.3",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 6,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 6,
+    "hook_events": {
+     "SessionStart": 1,
+     "UserPromptSubmit": 1,
+     "PreToolUse": 1,
+     "PostToolUse": 1,
+     "PreCompact": 1,
+     "Stop": 1
+    }
+   },
+   "always_on_tokens_est": 564,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 27635,
+    "pushed_at": "2026-10-24T17:24:38Z",
+    "license": "MIT",
+    "open_issues": 10
+   }
+  },
+  {
+   "id": "pm-skills",
+   "repo": "phuryn/pm-skills",
+   "aliases": [],
+   "name": "pm-skills",
+   "category": 1,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": "전체 설치",
+   "version": "v2.2.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 69,
+    "agents": 0,
+    "commands": 103,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 1280,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 27363,
+    "pushed_at": "2026-10-16T12:28:37Z",
+    "license": "MIT",
+    "open_issues": 48
+   }
+  },
+  {
+   "id": "caveman",
+   "repo": "JuliusBrussee/caveman",
+   "aliases": [],
+   "name": "caveman",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v4.0.1",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 22,
+    "agents": 3,
+    "commands": 23,
+    "mcp": 0,
+    "hooks_total": 4,
+    "hook_events": {
+     "SessionStart": 1,
+     "SubagentStart": 1,
+     "UserPromptSubmit": 1,
+     "SessionEnd": 1
+    }
+   },
+   "always_on_tokens_est": 2643,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 114956,
+    "pushed_at": "2026-10-25T09:24:33Z",
+    "license": "Apache-2.0",
+    "open_issues": 103
+   }
+  },
+  {
+   "id": "rtk",
+   "repo": "rtk-ai/rtk",
+   "aliases": [],
+   "name": "rtk",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.0.1",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 1,
+    "hook_events": {
+     "PreToolUse": 1
+    }
+   },
+   "always_on_tokens_est": 17,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 84512,
+    "pushed_at": "2026-10-25T14:18:13Z",
+    "license": "Apache-2.0",
+    "open_issues": 1623
+   }
+  },
+  {
+   "id": "headroom",
+   "repo": "headroomlabs-ai/headroom",
+   "aliases": [],
+   "name": "headroom",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": "전체 설치",
+   "version": "v0.41.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "SessionStart": 1,
+     "PreToolUse": 1
+    }
+   },
+   "always_on_tokens_est": 24,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "주 기능은 프록시(세션 밖). 여기서는 플러그인 2개만 잼",
+   "reviews": [],
+   "auto": {
+    "stars": 77791,
+    "pushed_at": "2026-10-24T19:15:37Z",
+    "license": "Apache-2.0",
+    "open_issues": 548
+   }
+  },
+  {
+   "id": "claude-mem",
+   "repo": "thedotmack/claude-mem",
+   "aliases": [],
+   "name": "claude-mem",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": "전체 설치",
+   "version": "v14.0.1",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 30,
+    "agents": 0,
+    "commands": 30,
+    "mcp": 0,
+    "hooks_total": 17,
+    "hook_events": {
+     "Setup": 1,
+     "SessionStart": 4,
+     "UserPromptSubmit": 2,
+     "PostToolUse": 2,
+     "PostToolUseFailure": 1,
+     "PreToolUse": 2,
+     "Stop": 2,
+     "SessionEnd": 2,
+     "SubagentStop": 1
+    }
+   },
+   "always_on_tokens_est": 1075,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 103016,
+    "pushed_at": "2026-10-25T12:33:40Z",
+    "license": "Apache-2.0",
+    "open_issues": 98
+   }
+  },
+  {
+   "id": "claude-hud",
+   "repo": "jarrodwatts/claude-hud",
+   "aliases": [],
+   "name": "claude-hud",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v0.11.3",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 78,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 28861,
+    "pushed_at": "2026-10-24T08:41:07Z",
+    "license": "MIT",
+    "open_issues": 1
+   }
+  },
+  {
+   "id": "ccusage",
+   "repo": "ccusage/ccusage",
+   "aliases": [],
+   "name": "ccusage",
+   "category": 2,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v20.0.35",
+   "checked_at": "2026-10-18",
+   "scope": null,
+   "always_on_tokens_est": null,
+   "token_effect": null,
+   "token_note": "명령줄 도구. 세션에 읽히는 것 없음(README 기준)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 19175,
+    "pushed_at": "2026-10-25T03:36:22Z",
+    "license": "NOASSERTION",
+    "open_issues": 4
+   }
+  },
+  {
+   "id": "graphify",
+   "repo": "Graphify-Labs/graphify",
+   "aliases": [],
+   "name": "graphify",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v0.9.92",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 1,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 572,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "graphify install --project 결과로 잼",
+   "reviews": [],
+   "auto": {
+    "stars": 134869,
+    "pushed_at": "2026-10-23T17:59:28Z",
+    "license": "Apache-2.0",
+    "open_issues": 1631
+   }
+  },
+  {
+   "id": "codegraph",
+   "repo": "colbymchenry/codegraph",
+   "aliases": [],
+   "name": "codegraph",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.6.2",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 1,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 839,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 75284,
+    "pushed_at": "2026-10-24T02:16:34Z",
+    "license": "MIT",
+    "open_issues": 529
+   }
+  },
+  {
+   "id": "claude-context",
+   "repo": "zilliztech/claude-context",
+   "aliases": [],
+   "name": "claude-context",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": null,
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 4,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 71,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "키 가짜 값",
+   "reviews": [],
+   "auto": {
+    "stars": 12646,
+    "pushed_at": "2026-07-14T12:00:38Z",
+    "license": "MIT",
+    "open_issues": 147
+   }
+  },
+  {
+   "id": "context7",
+   "repo": "upstash/context7",
+   "aliases": [],
+   "name": "context7",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "ctx7@0.8.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 14,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 63648,
+    "pushed_at": "2026-10-23T13:48:26Z",
+    "license": "MIT",
+    "open_issues": 45
+   }
+  },
+  {
+   "id": "serena",
+   "repo": "oraios/serena",
+   "aliases": [],
+   "name": "serena",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v2.0.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 3,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 149,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
+   "reviews": [],
+   "auto": {
+    "stars": 30700,
+    "pushed_at": "2026-10-20T08:47:27Z",
+    "license": "NOASSERTION",
+    "open_issues": 122
+   }
+  },
+  {
+   "id": "understand-anything",
+   "repo": "Egonex-AI/Understand-Anything",
+   "aliases": [],
+   "name": "Understand-Anything",
+   "category": 3,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v2.9.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 9,
+    "agents": 10,
+    "commands": 9,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "SessionStart": 1
+    }
+   },
+   "always_on_tokens_est": 893,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 88191,
+    "pushed_at": "2026-10-22T16:12:04Z",
+    "license": "MIT",
+    "open_issues": 336
+   }
+  },
+  {
+   "id": "ui-ux-pro-max-skill",
+   "repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+   "aliases": [],
+   "name": "ui-ux-pro-max-skill",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v2.15.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 751,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 140233,
+    "pushed_at": "2026-10-23T10:06:31Z",
+    "license": "MIT",
+    "open_issues": 90
+   }
+  },
+  {
+   "id": "taste-skill",
+   "repo": "Leonxlnx/taste-skill",
+   "aliases": [],
+   "name": "taste-skill",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v2.0.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 14,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 957,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 102303,
+    "pushed_at": "2026-10-25T14:31:58Z",
+    "license": "MIT",
+    "open_issues": 3
+   }
+  },
+  {
+   "id": "impeccable",
+   "repo": "pbakaus/impeccable",
+   "aliases": [],
+   "name": "impeccable",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "cli-v4.6.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 1,
+    "agents": 4,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "Stop": 1
+    }
+   },
+   "always_on_tokens_est": 463,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "이 컴퓨터에 설치된 4.0.4",
+   "reviews": [],
+   "auto": {
+    "stars": 87231,
+    "pushed_at": "2026-10-25T15:02:18Z",
+    "license": "Apache-2.0",
+    "open_issues": 40
+   }
+  },
+  {
+   "id": "figma-context-mcp",
+   "repo": "GLips/Figma-Context-MCP",
+   "aliases": [],
+   "name": "Figma-Context-MCP",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v0.13.2",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 2,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 58,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "키 가짜 값",
+   "reviews": [],
+   "auto": {
+    "stars": 16069,
+    "pushed_at": "2026-10-24T04:14:11Z",
+    "license": "MIT",
+    "open_issues": 28
+   }
+  },
+  {
+   "id": "cursor-talk-to-figma-mcp",
+   "repo": "grab/cursor-talk-to-figma-mcp",
+   "aliases": [],
+   "name": "cursor-talk-to-figma-mcp",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": null,
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 6,
+    "mcp": 40,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 651,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "bun 대신 node로 실행",
+   "reviews": [],
+   "auto": {
+    "stars": 7069,
+    "pushed_at": "2026-07-26T07:14:26Z",
+    "license": "MIT",
+    "open_issues": 93
+   }
+  },
+  {
+   "id": "shadcn-ui-mcp-server",
+   "repo": "Jpisnice/shadcn-ui-mcp-server",
+   "aliases": [],
+   "name": "shadcn-ui-mcp-server",
+   "category": 4,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v3.0.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 5,
+    "mcp": 10,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 186,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
+   "reviews": [],
+   "auto": {
+    "stars": 3070,
+    "pushed_at": "2026-10-03T15:17:41Z",
+    "license": "MIT",
+    "open_issues": 7
+   }
+  },
+  {
+   "id": "dbhub",
+   "repo": "bytebase/dbhub",
+   "aliases": [],
+   "name": "dbhub",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.5.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 2,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 87,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "DSN 없음",
+   "reviews": [],
+   "auto": {
+    "stars": 3717,
+    "pushed_at": "2026-10-21T04:19:56Z",
+    "license": "MIT",
+    "open_issues": 2
+   }
+  },
+  {
+   "id": "mcp-toolbox",
+   "repo": "googleapis/mcp-toolbox",
+   "aliases": [],
+   "name": "mcp-toolbox",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.14.0",
+   "checked_at": "2026-10-18",
+   "scope": null,
+   "always_on_tokens_est": null,
+   "token_effect": null,
+   "token_note": "Windows 실행 파일 294MB + 실제 DB 필요 → 실측 안 함",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 16721,
+    "pushed_at": "2026-10-23T20:48:56Z",
+    "license": "Apache-2.0",
+    "open_issues": 406
+   }
+  },
+  {
+   "id": "supabase-mcp",
+   "repo": "supabase/mcp",
+   "aliases": [],
+   "name": "mcp",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "mcp-server-supabase-v0.14.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 19,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 571,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "토큰 가짜 값",
+   "reviews": [],
+   "auto": {
+    "stars": 2969,
+    "pushed_at": "2026-10-25T06:20:52Z",
+    "license": "Apache-2.0",
+    "open_issues": 132
+   }
+  },
+  {
+   "id": "kubernetes-mcp-server",
+   "repo": "containers/kubernetes-mcp-server",
+   "aliases": [],
+   "name": "kubernetes-mcp-server",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v0.0.67",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 23,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "kubeconfig 없음",
+   "reviews": [],
+   "auto": {
+    "stars": 2180,
+    "pushed_at": "2026-10-23T20:04:55Z",
+    "license": "Apache-2.0",
+    "open_issues": 127
+   }
+  },
+  {
+   "id": "mcp-server-kubernetes",
+   "repo": "Flux159/mcp-server-kubernetes",
+   "aliases": [],
+   "name": "mcp-server-kubernetes",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v4.1.9",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 23,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 278,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "kubeconfig 없음; MCP 리소스 읽기 도구 3개가 함께 붙음; 1·2회차 차이 큼",
+   "reviews": [],
+   "auto": {
+    "stars": 1607,
+    "pushed_at": "2026-10-21T20:57:49Z",
+    "license": "MIT",
+    "open_issues": 13
+   }
+  },
+  {
+   "id": "terraform-mcp-server",
+   "repo": "hashicorp/terraform-mcp-server",
+   "aliases": [],
+   "name": "terraform-mcp-server",
+   "category": 5,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.3.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 9,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 672,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
+   "reviews": [],
+   "auto": {
+    "stars": 1553,
+    "pushed_at": "2026-10-23T21:46:33Z",
+    "license": "MPL-2.0",
+    "open_issues": 50
+   }
+  },
+  {
+   "id": "playwright-mcp",
+   "repo": "microsoft/playwright-mcp",
+   "aliases": [],
+   "name": "playwright-mcp",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v0.0.83",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 25,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 273,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 38612,
+    "pushed_at": "2026-10-22T17:43:26Z",
+    "license": "Apache-2.0",
+    "open_issues": 2
+   }
+  },
+  {
+   "id": "chrome-devtools-mcp",
+   "repo": "ChromeDevTools/chrome-devtools-mcp",
+   "aliases": [],
+   "name": "chrome-devtools-mcp",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "chrome-devtools-mcp-v1.11.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 32,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 939,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 54113,
+    "pushed_at": "2026-10-25T00:06:53Z",
+    "license": "Apache-2.0",
+    "open_issues": 111
+   }
+  },
+  {
+   "id": "open-code-review",
+   "repo": "alibaba/open-code-review",
+   "aliases": [],
+   "name": "open-code-review",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.13.1",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 84,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 48251,
+    "pushed_at": "2026-10-22T04:24:26Z",
+    "license": "Apache-2.0",
+    "open_issues": 351
+   }
+  },
+  {
+   "id": "tdd-guard",
+   "repo": "nizos/tdd-guard",
+   "aliases": [],
+   "name": "tdd-guard",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": "v1.7.0",
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 1,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 3,
+    "hook_events": {
+     "PreToolUse": 1,
+     "UserPromptSubmit": 1,
+     "SessionStart": 1
+    }
+   },
+   "always_on_tokens_est": 14,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 2367,
+    "pushed_at": "2026-10-12T07:53:21Z",
+    "license": "MIT",
+    "open_issues": 20
+   }
+  },
+  {
+   "id": "trailofbits-skills",
+   "repo": "trailofbits/skills",
+   "aliases": [],
+   "name": "skills",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": "전체 설치",
+   "version": null,
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 84,
+    "agents": 30,
+    "commands": 91,
+    "mcp": 0,
+    "hooks_total": 8,
+    "hook_events": {
+     "SessionStart": 3,
+     "PreToolUse": 2,
+     "SessionEnd": 1,
+     "Stop": 1,
+     "SubagentStop": 1
+    }
+   },
+   "always_on_tokens_est": 3466,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": null,
+   "reviews": [],
+   "auto": {
+    "stars": 7795,
+    "pushed_at": "2026-10-24T01:53:03Z",
+    "license": "CC-BY-SA-4.0",
+    "open_issues": 141
+   }
+  },
+  {
+   "id": "claude-code-security-review",
+   "repo": "anthropics/claude-code-security-review",
+   "aliases": [],
+   "name": "claude-code-security-review",
+   "category": 6,
+   "summary_ko": null,
+   "role_summary": null,
+   "install_basis": null,
+   "version": null,
+   "checked_at": "2026-10-18",
+   "scope": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "always_on_tokens_est": 45,
+   "token_effect": null,
+   "token_note": "첫 응답 기준 실측(2026-10-18, Claude Code 2.1.191, 도구 없음 대비)",
+   "install": null,
+   "cautions": "주 기능은 GitHub Action. 여기서는 명령 파일만 잼",
+   "reviews": [],
+   "auto": {
+    "stars": 6539,
+    "pushed_at": "2026-02-11T18:01:23Z",
+    "license": "MIT",
+    "open_issues": 102
+   }
+  }
+ ]
+}
