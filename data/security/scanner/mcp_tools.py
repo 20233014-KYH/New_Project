@@ -39,7 +39,12 @@ PY_DEF_RX = re.compile(r"^\s*(?:async\s+)?def\s+([a-z_][a-z0-9_]*)\s*\(")
 # (설명 전체를 키워드로 훑으면 "resource"의 rce, "tablespace"의 tab 같은 오탐이 많았다)
 MCP_KIND = {"bytebase_dbhub": "db", "googleapis_mcp-toolbox": "db",
             "microsoft_playwright-mcp": "browser", "ChromeDevTools_chrome-devtools-mcp": "browser",
-            "colbymchenry_codegraph": "code"}
+            "colbymchenry_codegraph": "code",
+            # 2026-11-09 추가: 외부 서비스·클러스터에 연결하는 MCP는 db와 같이 "DB·외부 서비스" 칸으로
+            "supabase_mcp": "db", "containers_kubernetes-mcp-server": "db", "Flux159_mcp-server-kubernetes": "db",
+            "hashicorp_terraform-mcp-server": "db", "GLips_Figma-Context-MCP": "db", "grab_cursor-talk-to-figma-mcp": "db",
+            "Jpisnice_shadcn-ui-mcp-server": "db", "upstash_context7": "db", "zilliztech_claude-context": "db",
+            "garrytan_gstack": "browser"}
 NAME_CAPS = [
     ("임의 코드 실행", re.compile(r"(^|_)(run_code|evaluate|eval|execute_script|exec|shell|bash|run_command)(_|$)")),
     ("SQL 실행(읽기 전용)", re.compile(r"(^|_)(execute_sql|run_query|query)_?read_?only(_|$)|readonly_sql")),

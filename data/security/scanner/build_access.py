@@ -29,6 +29,17 @@ out_dir = Path(sys.argv[1])
 repos_dir = Path(sys.argv[2])
 S = [json.loads(l) for l in open(out_dir / "signals.jsonl", encoding="utf-8")]
 M = json.load(open(out_dir / "mcp_tools.json", encoding="utf-8"))
+# v4(2026-11-09): MCP 도구 추출기는 처음 12개 저장소 형식에 맞춰 만들어서, 새로 더한 24개에서는
+# Go(api.Tool), server.tool(...) 같은 형식을 놓치거나 다른 패키지 도구까지 잡았다. 그래서 12개만 쓴다.
+MCP_VALIDATED = {"obra_superpowers", "affaan-m_ECC", "JuliusBrussee_caveman", "rtk-ai_rtk", "Graphify-Labs_graphify",
+                 "colbymchenry_codegraph", "nextlevelbuilder_ui-ux-pro-max-skill", "Leonxlnx_taste-skill",
+                 "bytebase_dbhub", "googleapis_mcp-toolbox", "microsoft_playwright-mcp", "ChromeDevTools_chrome-devtools-mcp"}
+M = {k: v for k, v in M.items() if k in MCP_VALIDATED}
+# MCP 서버가 있지만 추출기를 쓰지 않은 새 저장소: DB·외부 / 브라우저 칸은 "검사 전"으로 둔다
+MCP_UNSCANNED = {"zilliztech_claude-context", "oraios_serena", "GLips_Figma-Context-MCP", "grab_cursor-talk-to-figma-mcp",
+                 "Jpisnice_shadcn-ui-mcp-server", "supabase_mcp", "containers_kubernetes-mcp-server",
+                 "Flux159_mcp-server-kubernetes", "hashicorp_terraform-mcp-server", "upstash_context7",
+                 "headroomlabs-ai_headroom"}
 commits = json.load(open(out_dir / "commits.json", encoding="utf-8"))
 
 
@@ -235,6 +246,33 @@ MANUAL = [
     ("bytebase_dbhub", "내 파일", "~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만)", "사용", "코드 확인", ["src/utils/ssh-config-parser.ts:15", "src/connectors/manager.ts:159"]),
     ("microsoft_playwright-mcp", "명령 실행", "MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출)", "사용", "코드 확인", ["playwright-core 1.64.0-alpha lib/coreBundle.js:69192"]),
     ("rtk-ai_rtk", "명령 실행", "훅은 Bash 도구 호출에만 걸려 모든 셸 명령을 실행 전에 rtk 명령으로 바꿔 씀(Read·Grep·Glob 제외)", "사용", "문서", ["README.md"]),
+    # --- 2026-11-09 추가 (36개 조사, README·코드 확인) ---
+    ("obra_superpowers", "밖으로 보내기", "선택 기능(브레인스토밍 시각 화면)이 제작사 로고를 웹에서 불러오며 버전이 전달됨. 끄기: SUPERPOWERS_DISABLE_TELEMETRY", "사용", "문서", ["README.md:398-400"]),
+    ("garrytan_gstack", "브라우저", "/qa·/browse 등 브라우저 스킬이 setup 때 빌드한 Chromium을 조작. macOS에서 Aside 브라우저가 열려 있으면 그 브라우저의 로그인 세션을 씀 (MCP가 아닌 자체 바이너리)", "사용", "문서", ["README.md:239-247"]),
+    ("garrytan_gstack", "밖으로 보내기", "업데이트 확인(GitHub 요청)이 기본 켜짐. 끄기: gstack-config set update_check false", "사용", "문서", ["README.md:284-286"]),
+    ("garrytan_gstack", "밖으로 보내기", "외부 리뷰가 기본 켜짐: 내 로그인으로 Codex·Claude Code에 코드를 보냄. 끄기: gstack-config set codex_reviews disabled. 사용 통계는 기본 꺼짐", "사용", "문서", ["README.md:284-286"]),
+    ("open-gsd_gsd-core", "내 파일", "세션 시작 때 ~/.claude/gsd-core/에 플러그인 폴더를 가리키는 바로가기 5개를 만듦", "사용", "실측(팀)", ["judgment/review/2026-10-18-measure36/side_effects.md"]),
+    ("thedotmack_claude-mem", "밖으로 보내기", "익명 사용 통계가 기본 켜짐. 끄기: npx claude-mem telemetry disable", "사용", "문서", ["README.md:149"]),
+    ("thedotmack_claude-mem", "밖으로 보내기", "작업 기록을 관찰 기록으로 만드는 모델(유료 observer, 내 OpenRouter·Gemini 키, 또는 Anthropic 요금제)로 보냄. 클라우드 동기화는 선택", "사용", "문서", ["README.md:145-149", "README.md:274-288"]),
+    ("headroomlabs-ai_headroom", "밖으로 보내기", "업데이트 확인(PyPI, 하루 한 번)이 기본 켜짐. 끄기: HEADROOM_UPDATE_CHECK=off. 압축 자체는 내 컴퓨터에서 한다고 제작자 설명", "사용", "문서", ["README.md:36-41", "README.md:564-566"]),
+    ("headroomlabs-ai_headroom", "설정 바꾸기", "headroom wrap이 serena를 MCP 서버로 ~/.claude.json에 등록(프로젝트 범위, unwrap으로 제거)", "설치", "문서", ["README.md:162-168"]),
+    ("zilliztech_claude-context", "밖으로 보내기", "코드 조각을 임베딩 API(기본 OpenAI)로 보내고, 결과 벡터를 Zilliz Cloud·Milvus에 저장", "사용", "문서", ["README.md:35-75"]),
+    ("upstash_context7", "밖으로 보내기", "라이브러리 이름과 질문을 Upstash의 Context7 서버로 보냄(서버 쪽 코드는 비공개)", "사용", "문서", ["README.md:59", "README.md:137"]),
+    ("oraios_serena", "내 파일", "처음 실행 때 ~/.serena/에 전역 설정·로그·메모리 폴더를 만듦", "사용", "실측(팀)", ["judgment/review/2026-10-18-measure36/side_effects.md"]),
+    ("pbakaus_impeccable", "밖으로 보내기", "새 디자인 시작 때 impeccable.style에서 방향 목록을 받아 옴(통계를 꺼도 요청은 감). 어떤 방향을 골랐는지 익명 기록이 기본 켜짐. 끄기: npx impeccable telemetry off, DO_NOT_TRACK=1", "사용", "문서", ["README.md:211"]),
+    ("pbakaus_impeccable", "명령 실행", "설치된 훅은 모델 승인과 상관없이 돌아 첫 편집 때 엔진을 내려받을 수 있다고 제작자가 경고", "사용", "문서", ["README.md:207"]),
+    ("GLips_Figma-Context-MCP", "밖으로 보내기", "실행하면 사용 통계가 기본 켜짐(FRAMELINK_TELEMETRY=off 또는 DO_NOT_TRACK=1로 끔)", "사용", "실측(팀)", ["judgment/review/2026-10-18-measure36/side_effects.md"]),
+    ("GLips_Figma-Context-MCP", "DB·외부 서비스", "Figma 개인 접근 토큰으로 Figma API에서 디자인 데이터·이미지를 읽음(쓰기 없음)", "사용", "문서", ["README.md:40-57"]),
+    ("grab_cursor-talk-to-figma-mcp", "DB·외부 서비스", "로컬 WebSocket 서버와 Figma 플러그인을 거쳐 Figma 디자인을 읽고 수정함", "사용", "문서", ["README.md:3-33"]),
+    ("Jpisnice_shadcn-ui-mcp-server", "DB·외부 서비스", "GitHub API로 shadcn/ui 저장소의 컴포넌트 원문을 읽음(GitHub 토큰 선택)", "사용", "문서", ["README.md:11-44"]),
+    ("supabase_mcp", "DB·외부 서비스", "Supabase 계정에 OAuth로 로그인해 DB·스토리지·Edge Functions·브랜치를 다룸. read_only 옵션은 서버 코드 기본값이 꺼짐", "사용", "코드 확인", ["packages/mcp-server-supabase/src/server.ts:82-85", "README.md:22"]),
+    ("containers_kubernetes-mcp-server", "DB·외부 서비스", "kubeconfig로 클러스터에 연결해 자원 생성·수정·삭제, 파드 exec, 이미지 실행. read_only·disable_destructive 기본값 false", "사용", "문서", ["docs/configuration.md:600-601", "README.md:15-43"]),
+    ("Flux159_mcp-server-kubernetes", "DB·외부 서비스", "현재 kubectl 컨텍스트로 클러스터에 연결해 kubectl·Helm 작업과 파드 exec. 읽기 전용·삭제 금지 모드는 환경변수로 켜야 함(기본 꺼짐)", "사용", "문서", ["README.md:109", "ADVANCED_README.md:149-208"]),
+    ("hashicorp_terraform-mcp-server", "DB·외부 서비스", "기본은 Terraform Registry 조회. TFE_TOKEN을 주면 HCP Terraform 워크스페이스를 다루고, 승인이 필요한 작업 도구는 ENABLE_TF_OPERATIONS=true일 때만", "사용", "문서", ["README.md:105-135", "README.md:714-724"]),
+    ("ChromeDevTools_chrome-devtools-mcp", "밖으로 보내기", "성능 도구가 트레이스 URL을 Google CrUX API로 보낼 수 있음. 끄기: --no-performance-crux", "사용", "문서", ["README.md:35-39"]),
+    ("alibaba_open-code-review", "밖으로 보내기", "Git diff와 바뀐 파일을 사용자가 설정한 LLM 제공자로 보냄", "사용", "문서", ["README.md:47", "README.md:128-136"]),
+    ("nizos_tdd-guard", "밖으로 보내기", "파일 쓰기마다 변경 내용을 검증 모델(기본 Claude Agent SDK, 내 구독)로 보냄", "사용", "문서", ["docs/validation-model.md:5-15"]),
+    ("anthropics_claude-code-security-review", "밖으로 보내기", "GitHub Action으로 쓰면 PR 변경을 Anthropic API로 보냄(API 키 필요)", "사용", "문서", ["README.md:3", "README.md:53"]),
 ]
 for f, col, text, when, ev, refs in MANUAL:
     fact(f, col, text, when, ev, refs)
@@ -249,6 +287,9 @@ for f, cols in table.items():
             cell["status"] = "찾음"
         elif c == "밖으로 보내기":
             cell["status"] = "검사 전"
+        elif c in {"DB·외부 서비스", "브라우저"} and f in MCP_UNSCANNED:
+            cell["status"] = "검사 전"
+            cell["notes"].append("MCP 도구 추출기가 이 저장소 형식을 아직 지원하지 않음. MCP 도구 개수는 팀 실측(measured_36.csv) 참고")
         elif c in {"DB·외부 서비스", "브라우저"}:
             cell["status"] = "검사에서 찾지 못함" if is_mcp or c == "DB·외부 서비스" and cell["notes"] else "해당 없음(MCP 도구 없음)"
         else:
@@ -256,7 +297,7 @@ for f, cols in table.items():
 
 out = {
     "schema": "access-scope/v0",
-    "generated": "2026-10-31",
+    "generated": "2026-11-09",
     "evidence_kinds": EVIDENCE_CODE,
     "evidence_revised": "2026-11-08: 글자 패턴으로 찾은 결과를 calc에서 pattern으로 바꿈(PR #12 의견). 사실·상태는 그대로",
     "note": "도움말이며 보증이 아님. 찾지 못함은 없음이 아니다. reviewed=false는 사람 검수 전.",

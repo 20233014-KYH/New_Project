@@ -34,6 +34,31 @@ TOOLS = {
     "googleapis_mcp-toolbox":               {"no": 26, "name": "googleapis/mcp-toolbox",            "cat": {"database", "cloud"}},
     "microsoft_playwright-mcp":             {"no": 31, "name": "microsoft/playwright-mcp",          "cat": {"browser"}},
     "ChromeDevTools_chrome-devtools-mcp":   {"no": 32, "name": "ChromeDevTools/chrome-devtools-mcp", "cat": {"browser"}},
+    # 2026-11-09 추가 24개 (measured_36.csv 순서 번호)
+    "garrytan_gstack":                      {"no": 3,  "name": "garrytan/gstack",                   "cat": {"workflow", "browser"}},
+    "open-gsd_gsd-core":                    {"no": 4,  "name": "open-gsd/gsd-core",                 "cat": {"workflow"}},
+    "OthmanAdi_planning-with-files":        {"no": 5,  "name": "OthmanAdi/planning-with-files",     "cat": {"workflow"}},
+    "phuryn_pm-skills":                     {"no": 6,  "name": "phuryn/pm-skills",                  "cat": {"workflow"}},
+    "headroomlabs-ai_headroom":             {"no": 9,  "name": "headroomlabs-ai/headroom",          "cat": {"token", "cli-proxy"}},
+    "thedotmack_claude-mem":                {"no": 10, "name": "thedotmack/claude-mem",             "cat": {"token"}},
+    "jarrodwatts_claude-hud":               {"no": 11, "name": "jarrodwatts/claude-hud",            "cat": {"token"}},
+    "ccusage_ccusage":                      {"no": 12, "name": "ccusage/ccusage",                   "cat": {"token"}},
+    "zilliztech_claude-context":            {"no": 15, "name": "zilliztech/claude-context",         "cat": {"code-index", "cloud"}},
+    "upstash_context7":                     {"no": 16, "name": "upstash/context7",                  "cat": {"code-index"}},
+    "oraios_serena":                        {"no": 17, "name": "oraios/serena",                     "cat": {"code-index"}},
+    "Egonex-AI_Understand-Anything":        {"no": 18, "name": "Egonex-AI/Understand-Anything",     "cat": {"code-index"}},
+    "pbakaus_impeccable":                   {"no": 21, "name": "pbakaus/impeccable",                "cat": {"design"}},
+    "GLips_Figma-Context-MCP":              {"no": 22, "name": "GLips/Figma-Context-MCP",           "cat": {"design"}},
+    "grab_cursor-talk-to-figma-mcp":        {"no": 23, "name": "grab/cursor-talk-to-figma-mcp",     "cat": {"design"}},
+    "Jpisnice_shadcn-ui-mcp-server":        {"no": 24, "name": "Jpisnice/shadcn-ui-mcp-server",     "cat": {"design"}},
+    "supabase_mcp":                         {"no": 27, "name": "supabase/mcp",                      "cat": {"database", "cloud"}},
+    "containers_kubernetes-mcp-server":     {"no": 28, "name": "containers/kubernetes-mcp-server",  "cat": {"cloud"}},
+    "Flux159_mcp-server-kubernetes":        {"no": 29, "name": "Flux159/mcp-server-kubernetes",     "cat": {"cloud"}},
+    "hashicorp_terraform-mcp-server":       {"no": 30, "name": "hashicorp/terraform-mcp-server",    "cat": {"cloud"}},
+    "alibaba_open-code-review":             {"no": 33, "name": "alibaba/open-code-review",          "cat": {"security"}},
+    "nizos_tdd-guard":                      {"no": 34, "name": "nizos/tdd-guard",                   "cat": {"workflow"}},
+    "trailofbits_skills":                   {"no": 35, "name": "trailofbits/skills",                "cat": {"security"}},
+    "anthropics_claude-code-security-review": {"no": 36, "name": "anthropics/claude-code-security-review", "cat": {"security"}},
 }
 
 # R3 목적 대조 허용표: 도구 분류 -> 접근이 설명과 맞는 민감 경로 종류
@@ -103,6 +128,10 @@ def read_text(p: Path):
     return b.decode("utf-8", errors="replace")
 
 
+DEV_HINT = re.compile(r"(^|/)(\.github|\.devcontainer|\.circleci|\.gitlab)/|(^|/)(Dockerfile[^/]*|Makefile|[^/]*\.mk)$"
+                      r"|(^|/)(vitest|jest|playwright)[^/]*\.config\.[cm]?[jt]s$")
+
+
 def context_of(rel: str, hook_files: set):
     """파일 위치 분류: hook / install / test / instruction / docs / code"""
     if rel in hook_files:
@@ -110,6 +139,8 @@ def context_of(rel: str, hook_files: set):
     name = rel.rsplit("/", 1)[-1].lower()
     if TEST_HINT.search(rel) or TEST_FILE.search(rel):
         return "test"
+    if DEV_HINT.search(rel):  # v4: 저장소 개발자용 CI·컨테이너·빌드 설정 (사용자 설치 경로가 아님)
+        return "dev"
     if re.match(r"(readme|install)[^/]*\.(md|mdx|txt)$", name) or \
        re.match(r"install[^/]*\.(sh|ps1|cmd|bat)$", name) or name == "package.json":
         return "install"
@@ -249,6 +280,11 @@ def scan_hooks(repo: Path, signals: list, tool: str):
                         sev, adj = "medium", []
                     else:
                         sev, adj = "low", ["저장소 안의 고정 스크립트 실행 -1"]
+                    # v4: 저장소 자체의 개발용 설정(.claude/settings.json)과 다른 제품용 변형(cowork/)은
+                    # Claude Code 플러그인 설치로 사용자에게 들어가지 않으므로 참고로만 둔다
+                    shipped = not (cfg_rel.startswith(".claude/") or cfg_rel.startswith("cowork/"))
+                    if not shipped:
+                        adj = adj + ["저장소 개발용·다른 제품용 설정 → 참고"]
                     signals.append(dict(
                         tool=tool, rule="R2", sub="hook", file=cfg_rel, line=0,
                         context="hook", base="medium", severity=sev, adjust=adj,
@@ -256,7 +292,7 @@ def scan_hooks(repo: Path, signals: list, tool: str):
                                + (f" · {', '.join(flags)}" if flags else "")
                                + (f" · 스크립트: {', '.join(scripts[:3])}" if scripts else ""),
                         snippet=cmd[:160] + ("…" if len(cmd) > 160 else ""),
-                        counted=True))
+                        counted=shipped))
     return hook_files, len(cfgs)
 
 
@@ -389,7 +425,7 @@ def scan_repo(folder: str, repo: Path):
                     signals.append(dict(tool=folder, rule="R1", sub="pipe-to-shell", file=rel, line=i,
                                         context=ctx, base="high", severity=sev, adjust=adj,
                                         detail=f"원격 스크립트를 셸로 바로 실행 · {host}",
-                                        snippet=ln.strip()[:160], counted=ctx not in {"test"}))
+                                        snippet=ln.strip()[:160], counted=ctx not in {"test", "dev"}))
                     break
         # R1-b: 실행 함수 인자 안에서 조립한 "다운로드 | 셸" (URL이 변수·상수라 위 패턴이 놓치는 경우)
         if p.suffix.lower() in CODE_EXT and p.suffix.lower() not in SHELL_EXT_R1:
@@ -408,7 +444,7 @@ def scan_repo(folder: str, repo: Path):
                     signals.append(dict(tool=folder, rule="R1", sub="exec-pipe", file=rel, line=i,
                                         context=ctx, base="high", severity=sev, adjust=adj,
                                         detail=f"실행 함수 안에서 원격 스크립트를 셸로 바로 실행 ({when} 시점)",
-                                        snippet=ln.strip()[:160], counted=ctx not in {"test"}, when=when))
+                                        snippet=ln.strip()[:160], counted=ctx not in {"test", "dev"}, when=when))
         # package.json 설치 시점 스크립트
         if p.name == "package.json":
             try:
@@ -421,7 +457,7 @@ def scan_repo(folder: str, repo: Path):
                     signals.append(dict(tool=folder, rule="R1", sub="npm-lifecycle", file=rel, line=0,
                                         context=ctx, base="medium", severity="medium", adjust=[],
                                         detail=f"npm {k} 스크립트(설치 시 자동 실행)", snippet=f"{k}: {v[:140]}",
-                                        counted=ctx not in {"test"}))
+                                        counted=ctx not in {"test", "dev"}))
 
         if not is_code:
             # 문서·지시문은 R3/R5/R9 코드 규칙 대상이 아니다. 지시문 속 위험 명령은 R8-b 후보로만 남긴다.
