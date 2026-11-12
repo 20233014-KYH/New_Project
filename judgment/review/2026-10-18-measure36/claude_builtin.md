@@ -3,9 +3,10 @@
 우리가 모은 36개는 **모두 외부 오픈소스**예요. Claude Code에 원래 들어 있는 기능은 빠져 있어요.
 그런데 기본 기능과 오픈소스가 **같은 일을 하는 경우**가 있어요. 이것도 겹침이 될 수 있어서 따로 확인해야 해요.
 
-- 목록 출처: 플러그인을 하나도 안 켠 Claude Code 2.1.191의 시작 기록(측정 기록 `_none`)
+- 목록 출처: 플러그인을 하나도 안 켠 Claude Code 2.1.191의 시작 기록(측정 기록 `_none`). **Windows에서 잰 기록**이에요(`code/measure36.py`가 `claude.exe`를 실행).
 - **이름만 보고 분야를 나눈 것**이에요. 기능 설명은 **확인 안 됨**이에요. 실제로 무엇을 하는지는 직접 써 보고 확인해야 해요.
 - 기본 기능 목록은 Claude Code 서버 설정에 따라 바뀌어요. 예: 측정 도중 `schedule` 스킬과 도구 4개가 사라졌어요.
+- **Glob·Grep은 운영체제마다 달라요.** 공식 문서(tools-reference, 2026-11-12 확인)에 따르면 Windows에는 기본으로 있지만, Mac·Linux·WSL에서는 빠지고 Claude가 Bash의 find·grep으로 찾아요.
 
 | 분야 | 기본 기능 (이름) | 종류 | 겹칠 수 있는 오픈소스 (후보) |
 |---|---|---|---|
@@ -19,7 +20,7 @@
 | | ToolSearch (MCP 도구를 필요할 때 찾아 읽기) | 도구 | |
 | | statusline-setup | 에이전트 | claude-hud (상태줄 자리 하나) |
 | 3 코드 이해·검색 | Explore | 에이전트 | serena, codegraph, graphify, Understand-Anything |
-| | Glob, Grep, Read | 도구 | claude-context, codegraph |
+| | Glob, Grep(Mac·Linux·WSL은 Bash의 find·grep), Read | 도구 | claude-context, codegraph |
 | | WebFetch, WebSearch | 도구 | context7 |
 | | claude-api | 스킬 | context7 (문서 찾기) |
 | 4 디자인·프론트엔드 | design-sync, DesignSync | 스킬·도구 | Figma MCP 2개 |
