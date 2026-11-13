@@ -59,8 +59,17 @@ export default function ToolPage() {
         <div className="toolhead">
           <div>
             <h1 tabIndex={-1}>{tool.name}</h1>
-            <p className="lead" lang="en" style={{ marginTop: 'var(--s2)' }}>{tool.desc_en}</p>
-            <p className="mute" style={{ fontSize: 13, margin: 'var(--s1) 0 0' }}>설명은 저장소 원문(영어)이에요.</p>
+            {tool.summary_ko
+              ? <>
+                  <p className="lead" style={{ marginTop: 'var(--s2)' }}>{tool.summary_ko}</p>
+                  {tool.when_ko && <p style={{ margin: 'var(--s1) 0 0' }}><b>이럴 때 쓰세요</b> · {tool.when_ko}</p>}
+                  <p className="mute" lang="en" style={{ fontSize: 13, margin: 'var(--s1) 0 0' }}>저장소 원문: {tool.desc_en}</p>
+                  <p className="mute" style={{ fontSize: 13, margin: 0 }}>한국어 소개는 원문을 옮긴 것이고 팀원 확인 전이에요.</p>
+                </>
+              : <>
+                  <p className="lead" lang="en" style={{ marginTop: 'var(--s2)' }}>{tool.desc_en}</p>
+                  <p className="mute" style={{ fontSize: 13, margin: 'var(--s1) 0 0' }}>설명은 저장소 원문(영어)이에요.</p>
+                </>}
           </div>
           <button
             className={`btn ${inBox ? '' : 'btn-p'}`}

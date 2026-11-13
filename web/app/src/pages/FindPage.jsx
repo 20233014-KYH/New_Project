@@ -55,7 +55,7 @@ export default function FindPage() {
                   <div>
                     <Link className="i-name" to={`/tool/${t.id}`}>{t.name}</Link>
                     <div className="i-repo">{t.repo}</div>
-                    <div className="i-desc">{t.desc_en}</div>
+                    <div className="i-desc">{t.summary_ko || t.desc_en}</div>
                   </div>
                   <div className="i-tok">
                     {t.tokens == null

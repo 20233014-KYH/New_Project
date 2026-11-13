@@ -47,7 +47,8 @@ export default function BrowsePage() {
 
   const cat = categories.find(c => c.id === catId)
   const filtered = tools
-    .filter(t => !q.trim() || t.name.toLowerCase().includes(q.toLowerCase()) || (t.desc_en || '').toLowerCase().includes(q.toLowerCase()))
+    .filter(t => !q.trim() || t.name.toLowerCase().includes(q.toLowerCase()) || (t.desc_en || '').toLowerCase().includes(q.toLowerCase()) ||
+      (t.summary_ko || '').toLowerCase().includes(q.toLowerCase()))
     .sort((a, b) => sort === 'tokens' ? (a.tokens ?? 1e9) - (b.tokens ?? 1e9) : (b.stars || 0) - (a.stars || 0))
 
   return (
@@ -96,7 +97,7 @@ export default function BrowsePage() {
                 <div>
                   <Link className="i-name" to={`/tool/${t.id}`}>{t.name}</Link>
                   <div className="i-repo">{t.repo}</div>
-                  <div className="i-desc">{t.desc_en}</div>
+                  <div className="i-desc">{t.summary_ko || t.desc_en}</div>
                   {clashMap[t.id] && box.includes(t.id) && (
                     <div className="clash">도구함의 {clashMap[t.id].join(', ')}와 겹쳐요</div>
                   )}

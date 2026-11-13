@@ -6,7 +6,9 @@ import entriesRaw from './data/entries.json'
 import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
+import cardsRaw from './data/cards_ko.json'
 
+// 서버 모드: VITE_API_BASE=http://localhost:8080/api (server/app, Spring). 같은 데이터·같은 규칙이라 결과 모양이 같다.
 const BASE = import.meta.env.VITE_API_BASE || ''
 
 // entries.json → 와이어프레임 tools 형식으로 변환
@@ -17,6 +19,8 @@ function normalizeEntry(e) {
     repo: e.repo,
     category: e.category,
     desc_en: e.desc_en || descRaw.desc?.[e.id] || '',
+    summary_ko: cardsRaw.cards?.[e.id]?.summary_ko || null,
+    when_ko: cardsRaw.cards?.[e.id]?.when_ko || null,
     version: e.version || null,
     license: e.auto?.license || null,
     stars: e.auto?.stars || null,
@@ -149,7 +153,8 @@ export async function getTools({ categoryId, q } = {}) {
   if (categoryId) list = list.filter(t => t.category === Number(categoryId))
   if (q) {
     const lq = q.toLowerCase()
-    list = list.filter(t => t.name.toLowerCase().includes(lq) || (t.desc_en || '').toLowerCase().includes(lq))
+    list = list.filter(t => t.name.toLowerCase().includes(lq) || (t.desc_en || '').toLowerCase().includes(lq) ||
+      (t.summary_ko || '').toLowerCase().includes(lq))
   }
   return list
 }
