@@ -164,7 +164,7 @@
 
 | 도구 | 다루는 대상 | 찾는 방식 | 편집까지 하나 | 준비 비용 |
 |---|---|---|---|---|
-| Graphify-Labs/graphify | 코드(약 40개 언어) + 문서·PDF·이미지·영상·음성 `doc` | 지식 그래프(벡터 검색 아님). 질문, 두 지점 사이 경로 찾기, 개념 설명. 연결마다 '원문에서 읽음/추론함' 표시 `doc` | 찾기만 함. MCP 도구 10개는 그래프 조회와 GitHub PR 조회(gh 로그인 사용) `calc` | /graphify . 로 그래프를 먼저 만들어야 함. 코드는 내 컴퓨터에서 분석(LLM 안 씀), 문서·이미지는 Claude 모델로 보내 개념을 뽑음 `doc` |
+| Graphify-Labs/graphify | 코드(약 40개 언어) + 문서·PDF·이미지·영상·음성 `doc` | 지식 그래프(벡터 검색 아님). 질문, 두 지점 사이 경로 찾기, 개념 설명. 연결마다 '원문에서 읽음/추론함' 표시 `doc` | 찾기만 함. MCP 도구 10개는 그래프 조회와 GitHub PR 조회(gh 로그인 사용) `pattern` | /graphify . 로 그래프를 먼저 만들어야 함. 코드는 내 컴퓨터에서 분석(LLM 안 씀), 문서·이미지는 Claude 모델로 보내 개념을 뽑음 `doc` |
 | colbymchenry/codegraph | 코드만 (20개 이상 언어, 웹 프레임워크 라우트·iOS/React Native 연결 포함) `doc` | 심볼·호출·의존성 그래프 + 이름 전문 검색. 한 번 호출로 관련 코드 원문·호출 흐름·영향 범위를 돌려줌 `doc` | 찾기만 함. 기본 노출 MCP 도구는 codegraph_explore 1개(나머지 7개는 숨김) `doc` | 색인을 한 번 만들고, 이후 파일 감시로 자동 갱신. 외부 서비스·API 키 없음(SQLite) `doc` |
 | Egonex-AI/Understand-Anything | 코드 + 업무 흐름(도메인) + 마크다운 위키 지식 베이스 `doc` | 여러 에이전트가 파일·함수·클래스·의존성을 분석해 지식 그래프를 만들고, 쉬운 말 요약을 붙임 `doc` | 찾고 설명만 함. 변경 영향 분석(/understand-diff), 신입용 안내서(/understand-onboard) 생성 `doc` | 처음 /understand가 코드 전체를 모델로 분석해 큰 프로젝트에선 토큰을 많이 씀(제작자 경고). 결과는 .ua/knowledge-graph.json `doc` |
 | zilliztech/claude-context | 코드 `doc` | 벡터 의미 검색(임베딩). 글자가 달라도 뜻이 비슷한 코드를 찾음 `doc` | 찾기만 함. MCP 도구 4개(색인·검색·상태·삭제, 팀 실측) `tested` | 벡터 DB(Zilliz Cloud 또는 Milvus)와 임베딩 API 키(기본 OpenAI, VoyageAI·Gemini·Ollama 선택 가능)가 필요. 코드 조각이 임베딩 제공자로 전송됨 `doc` |
@@ -370,7 +370,7 @@
 - **다른 점**: 같은 분야의 chrome-devtools-mcp에 비해 여러 브라우저를 다루는 테스트 자동화에 초점이 있고, 화면 구조(접근성 트리)로 조작해 이미지 모델이 필요 없음
 - **이럴 때**: 웹 앱의 로그인·결제 같은 흐름을 Claude가 실제 브라우저로 따라가며 확인하게 하고 싶을 때
 - **약한 점**: 임의 코드 실행 도구(browser_run_code_unsafe)가 기본 노출(제작자: 원격 코드 실행과 같음). 기본 프로필에 로그인 정보가 남음(--isolated로 막음)
-- **실행 방식**: 자동: MCP 도구로 불림 (기본 노출 25개, PR #12) `calc`
+- **실행 방식**: 자동: MCP 도구로 불림 (기본 노출 25개, PR #12) `pattern`
 - **비용**: 라이선스 Apache-2.0 · 처음 읽는 양 273 · npx @playwright/mcp. 추가 서비스·키 없음
 - **접근 범위**: 내 파일:찾음 / 설정 바꾸기:못 찾음 / 명령 실행:찾음 / 밖으로 보내기:검사 전 / DB·외부 서비스:못 찾음 / 브라우저:찾음
 - 버전 0.0.83 (package.json) · 커밋 0c4107a(2026-10-22) · 출처: README.md:3-16, 415-468; playwright-core lib/coreBundle.js:69192(PR #12)
@@ -379,7 +379,7 @@
 - **다른 점**: 같은 분야의 playwright-mcp에 비해 Chrome 개발자 도구 기능(성능 트레이스, 네트워크·콘솔 분석)을 그대로 쓸 수 있어 디버깅·성능 분석이 깊음
 - **이럴 때**: 페이지가 왜 느린지, 어떤 요청이 실패하는지 Chrome 개발자 도구 수준으로 Claude가 분석하게 하고 싶을 때
 - **약한 점**: 사용 통계를 기본으로 Google에 보냄(--no-usage-statistics로 끔). 성능 도구가 트레이스 URL을 Google CrUX API로 보낼 수 있음(--no-performance-crux). 페이지 안 임의 JavaScript 실행이 기본 켜짐
-- **실행 방식**: 자동: MCP 도구로 불림 (기본 노출 34개, PR #12). 스킬 7개도 함께(팀 실측) `calc`
+- **실행 방식**: 자동: MCP 도구로 불림 (기본 노출 34개, PR #12). 스킬 7개도 함께(팀 실측) `pattern`
 - **비용**: 라이선스 Apache-2.0 · 처음 읽는 양 939 · npx chrome-devtools-mcp 또는 플러그인. Chrome 필요. 추가 키 없음
 - **접근 범위**: 내 파일:찾음 / 설정 바꾸기:못 찾음 / 명령 실행:못 찾음 / 밖으로 보내기:찾음 / DB·외부 서비스:못 찾음 / 브라우저:찾음
 - 버전 1.12.0 (.claude-plugin/plugin.json) · 커밋 b701776(2026-10-28) · 출처: README.md:9-39; src/config/mcp-options.ts:194, 200(PR #12); measured_36.csv
