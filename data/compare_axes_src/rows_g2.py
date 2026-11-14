@@ -30,8 +30,8 @@ dict(
     when="테스트 로그·git diff처럼 출력이 큰 명령을 자주 돌리는 작업에서 Claude가 읽는 양을 줄이고 싶을 때",
     weak="출력이 작은 과제에선 효과가 거의 없음. 기본 배포판은 Apache-2.0 + BUSL-1.1(남에게 상업 서비스로 제공할 때 제한)",
     install="Rust 바이너리 설치(설치 안내에 원격 스크립트를 셸로 바로 실행하는 방법 포함, PR #12) 후 rtk init -g. 사용 통계는 기본 꺼짐",
-    sources="README.md:45-76, 96-140, 142-166, 306; judgment/experiments/2026-10-18-statusline-caveman-rtk/README.md:63-67",
-    unverified="",
+    sources="README.md:45-76, 96-140, 142-166, 306; judgment/experiments/2026-10-18-statusline-caveman-rtk/README.md:63-67, 85",
+    unverified="README·보안 스캔은 기본 브랜치 develop(e05c7bd) 기준이라 배포 버전(master 브랜치에서 릴리스)과 다를 수 있음",
 ),
 dict(
     repo="headroomlabs-ai/headroom", group="",

@@ -26,6 +26,10 @@ VERSION = {
  "googleapis/mcp-toolbox": "1.15.0 (cmd/version.txt)", "hashicorp/terraform-mcp-server": "1.4.1 (version/VERSION)",
  "supabase/mcp": "0.16.1 (mcp-server-supabase)", "phuryn/pm-skills": "2.3.0 (marketplace.json)",
  "alibaba/open-code-review": "확인 안 됨 (package.json 0.0.0)",
+ # 2026-11-15 고침(PR #17 김용현): 기본 브랜치 표기가 실제 배포 버전과 다른 저장소
+ "rtk-ai/rtk": "1.0.1 (릴리스 태그 v1.0.1, 2026-10-14). 기본 브랜치 develop의 Cargo.toml은 0.49.0으로 남아 있음",
+ "upstash/context7": "MCP 4.5.1 (packages/mcp/package.json), CLI 0.10.0",
+ "oraios/serena": "2.1.1.dev0 (개발 중 표기, 마지막 릴리스 v2.1.0)",
 }
 ACCESS_SHORT = {"찾음": "찾음", "검사에서 찾지 못함": "못 찾음", "검사 전": "검사 전", "해당 없음(MCP 도구 없음)": "해당 없음"}
 
