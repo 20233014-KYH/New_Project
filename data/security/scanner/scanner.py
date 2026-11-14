@@ -260,7 +260,21 @@ def scan_hooks(repo: Path, signals: list, tool: str):
                 matcher = g.get("matcher", "*") if isinstance(g, dict) else "*"
                 for hk in (g.get("hooks", []) if isinstance(g, dict) else []):
                     cmd = hk.get("command", "")
+                    htype = hk.get("type", "command")
                     if not cmd:
+                        # v4.1: 셸 명령이 없는 훅(type: prompt 등)도 훅 개수에 셈. 실행하는 명령은 없어서 낮음
+                        # (이전에는 건너뛰어 trailofbits fp-check의 Stop·SubagentStop 훅 2개를 놓침)
+                        body = hk.get("prompt") or hk.get("url") or ""
+                        if not isinstance(body, str) or not body:
+                            continue
+                        shipped = not (cfg_rel.startswith(".claude/") or cfg_rel.startswith("cowork/"))
+                        signals.append(dict(
+                            tool=tool, rule="R2", sub="hook", file=cfg_rel, line=0,
+                            context="hook", base="medium", severity="low",
+                            adjust=[f"셸 명령 없는 {htype} 훅 -1"] + ([] if shipped else ["저장소 개발용·다른 제품용 설정 → 참고"]),
+                            detail=f"{event} [{matcher}] ({HOOK_EVENT_FREQ.get(event, event)}) · type: {htype}",
+                            snippet=body[:160] + ("…" if len(body) > 160 else ""),
+                            counted=shipped))
                         continue
                     flags = [label for rx, label in R2_DANGER if rx.search(cmd)]
                     scripts = []

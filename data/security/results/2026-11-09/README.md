@@ -6,7 +6,7 @@
 | 파일 | 내용 |
 |---|---|
 | `access_scope.json` / `.md` | 도구 × 접근 범위 6칸 표 |
-| `signals.jsonl` | 스캐너 신호 전체 (판정 반영 628개 + 참고 1270개) |
+| `signals.jsonl` | 스캐너 신호 전체 (판정 반영 630개 + 참고 1270개) |
 | `mcp_tools.json` | MCP 도구 추출 결과. **표에는 앞의 12개만 씀**(아래 참고) |
 | `scan_labeling.xlsx` | 사람 라벨링 시트. "AI 예비 판단"은 앞의 12개 신호에만 있음 |
 | `commits.json` | 저장소별 확인한 커밋과 날짜 |
@@ -22,6 +22,8 @@
 - 저장소 자체의 `.claude/settings.json` 훅과 다른 제품용 변형(claude-mem의 `cowork/`)은 참고로만 둠. Claude Code 플러그인 설치로 들어가지 않기 때문
 - MCP 도구 추출기는 새 24개 형식(Go `api.Tool`, `server.tool(...)` 등)을 놓치거나 다른 패키지 도구까지 잡아서, 새 저장소의 DB·외부 서비스·브라우저 칸은 "검사 전"으로 두고 README·코드로 확인한 사실만 넣음. MCP 도구 개수는 팀 실측을 봄
 - README·코드로 확인한 사실 26줄 추가(밖으로 보내기, 읽기 전용 기본값 등). `build_access.py`의 `MANUAL`에 파일:줄 근거가 있음
+
+- 2026-11-15: 셸 명령이 없는 훅(`type: prompt`)도 셈. trailofbits 훅이 6개 → 8개(5가지 시점)로 바뀜 (PR #14 대조 중 발견)
 
 ## 남은 확인
 

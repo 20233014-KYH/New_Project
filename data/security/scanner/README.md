@@ -71,6 +71,7 @@ tools[] → cells[칸 이름] → {
 - `scanner.py`의 `TOOLS`에 24개를 더해 36개 전체를 스캔합니다. 결과: [`../results/2026-11-09/`](../results/2026-11-09/)
 - 저장소 개발자용 파일(`.github/`, `.devcontainer/`, `Dockerfile`, `Makefile`, 테스트 설정)은 `dev` 맥락으로 분류해 참고로만 둡니다.
 - 저장소 자체의 `.claude/settings.json` 훅과 claude-mem의 `cowork/`(다른 제품용)는 R2에서 참고로만 둡니다.
+- 2026-11-15: R2가 `command` 없는 훅(`type: prompt`)을 건너뛰던 것을 고쳐 훅 개수에 셉니다(셸 실행이 없어 낮음).
 - `build_access.py`: MCP 도구 추출 결과는 앞의 12개(`MCP_VALIDATED`)만 쓰고, 추출기가 아직 지원하지 않는 새 MCP 서버 11개(`MCP_UNSCANNED`)는 DB·외부 서비스·브라우저 칸을 "검사 전"으로 둡니다. README·코드로 확인한 사실 26줄을 `MANUAL`에 더했습니다.
 
 ## v3에서 바뀐 것
