@@ -1,6 +1,6 @@
 # 추천 규칙 v0 (김용현 초안, 팀 검토 전)
 
-작성: 김용현 · 작성일: 2026-11-07 · 고친 날: 2026-11-16 (10장 기준 A·B·C·D·E, 허준서 님 비교표 반영) · 상태: **초안**
+작성: 김용현 · 작성일: 2026-11-07 · 고친 날: 2026-11-18 (10장 기준 A·B·C·D·E, 허준서 님 비교표·#14 리뷰 반영) · 상태: **초안**
 
 이 문서는 "어떤 상황이면 어떤 도구(또는 Claude 기본 기능)를 추천할지"를 정한 **규칙**과, 그 규칙에 필요한 **질문**을 설명합니다.
 기획안 6-5장의 원칙 "추천은 규칙으로 후보를 뽑고, AI는 이유만 설명한다"를 실제 규칙으로 옮긴 첫 버전입니다.
@@ -174,7 +174,7 @@ AI가 그때그때 고르는 게 아니라, 미리 정한 규칙대로 서버가
 | R2-08 | 지금 한도·세션 비용만 | 기본충분: /usage | doc |
 | R2-09 | 지난 사용량 추이 | 추가: ccusage | doc |
 | R2-10 | 다른 AI 코딩 도구도 함께 | 추가: ccusage | doc |
-| R2-11 | 세션이 바뀌어도 기억 | 추가: claude-mem (훅 17개 함께 표시) | doc |
+| R2-11 | 세션이 바뀌어도 기억 | 추가: claude-mem (훅 10개 함께 표시) | doc |
 
 ### 4-3. QA·테스트 (C6)
 | 규칙 | 언제 | 결과 | 근거 |
@@ -186,7 +186,7 @@ AI가 그때그때 고르는 게 아니라, 미리 정한 규칙대로 서버가
 | R6-05 | 언어별 깊은 보안 감사 | 추가: Trail of Bits skills | doc |
 | R6-06 | 브라우저 자동 테스트 | 추가: playwright-mcp | doc |
 | R6-07 | DevTools 성능·네트워크 디버깅 | 추가: chrome-devtools-mcp | doc |
-| R6-08 | TDD 강제 | 추가: tdd-guard | doc(약함) |
+| R6-08 | TDD 강제 | 추가: tdd-guard | doc |
 | R6-09 | 완료 전 실행 확인 (superpowers 없음) | 기본충분: /verify | doc (공식 문서) |
 | R6-10 | 완료 전 실행 확인 (superpowers 있음) | 주의: 확인이 두 번 될 수 있음 | ai |
 
@@ -215,7 +215,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 | R5-02 | 다른 DB를 다루고 싶음 | 추가(택1): dbhub 또는 mcp-toolbox | doc |
 | R5-03 | 쿠버네티스 (OpenShift 아님) | 추가(택1): kubernetes-mcp-server 또는 mcp-server-kubernetes | doc |
 | R5-04 | OpenShift | 추가: kubernetes-mcp-server | doc |
-| R5-05 | Terraform | 추가: terraform-mcp-server | doc(약함) |
+| R5-05 | Terraform | 추가: terraform-mcp-server | doc |
 | R5-06 | OpenShift인데 mcp-server-kubernetes가 있음 | 주의(바꿔 보기) | doc + 확인 안 됨 |
 
 ### 4-6. 디자인·프론트엔드 (C4)
@@ -224,7 +224,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 | R4-01 | Figma를 읽기만 | 추가: Figma-Context-MCP | doc |
 | R4-02 | Figma를 직접 고치게 | 추가: cursor-talk-to-figma-mcp | doc |
 | R4-03 | 디자인 품질 지침 | 추가(택1): impeccable / taste-skill / ui-ux-pro-max-skill (순서 없음) | doc |
-| R4-04 | shadcn/ui를 씀 | 추가: shadcn-ui-mcp-server | doc(약함) |
+| R4-04 | shadcn/ui를 씀 | 추가: shadcn-ui-mcp-server | doc |
 | R4-05 | Figma-Context-MCP가 있는데 고치기까지 | 주의(바꿔 보기): cursor-talk-to-figma-mcp | doc |
 
 디자인 파일럿 결과(impeccable 간격 일관성 42%→90%)는 **방법 시험**이라 우열 근거로 쓰지 않았어요. 그래서 R4-03은 셋을 순서 없이 보여 줘요.
@@ -280,11 +280,11 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 ## 8. 아직 약하거나 비어 있는 곳
 
 - **효율 근거가 적어요.** 직접 시험은 superpowers×ECC, caveman, rtk뿐이에요. 팀 원칙(11-08, 화면엔 시험한 것만)에 따라 다른 추가 결과는 시험 전까지 화면에 안 올라가요.
-- **설명 확인이 약한 도구 3개**: shadcn-ui-mcp-server, terraform-mcp-server(도구 설명이 비어 이름만 확인), tdd-guard(setup 명령 설명과 훅만 확인). 준서 님 조사를 기다려요.
+- **설명 확인이 약했던 도구 3개**(shadcn-ui-mcp-server, terraform-mcp-server, tdd-guard)는 준서 님 README 확인(비교표 PR #17, 11-14 #14 리뷰)으로 `doc`이 됐어요(사람 확인 전). tdd-guard는 제작자가 새 프로젝트에 후속작 Probity를 권해서, 36개 목록을 정할 때 같이 봐야 해요.
 - **비교 근거가 없는 그룹**: 디자인 지침 3개, 범용 DB 2개, 쿠버네티스 2개는 순서 없이 보여 줘요.
 - **판정 보류·모름이라 규칙이 없는 쌍**: open-code-review(builtin #3 보류), worktree(builtin #13), caveman×/compact(builtin #14), statusline-setup×claude-hud(builtin #16).
 - **겹침 기준이 바뀔 수 있어요.** 1,000토큰은 임시이고 "작업 중 토큰"을 넣자는 논의가 진행 중이라 R1-02, R1-03의 표시가 바뀔 수 있어요. 기준 E 시험은 과제 전체 토큰을 재서 이 논의에도 답할 수 있어요(10-E).
-- **준서 님 PR #12(접근 범위) 검토 뒤 추가할 것**: DB 도구가 쓰기(임의 SQL 실행)를 기본으로 열어 두는지, 브라우저 MCP의 임의 코드 실행 도구 등은 역할 범위로 보여 줄 예정이에요. 지금 규칙에는 넣지 않았어요(기획안 6-6: 검수 전 정규식 검사 결과는 화면에 쓰지 않음).
+- **접근 범위(준서 님 PR #12, 11-18 승인)**: DB 도구의 쓰기 기본값은 R5-02 메모에 넣었어요. 브라우저 MCP의 임의 코드 실행 도구 등도 역할 범위로 보여 줄 예정이에요. `pattern` 근거는 사람이 확인한 뒤에만 보여 줘요(R0-11, 기획안 6-6).
 - **준서 님 비교표가 왔어요(PR #17, 2026-11-09).** 36개 모두 "다른 점·이럴 때·실행 방식"이 있지만 아직 사람 확인 전이에요. 기준 A·B(10장, 2026-11-12)대로 **선택지 ↔ 축 값 표**를 우선 16개 그룹부터 만들고(초안 v0: 질문 C1·C3·C4·C5, 10-A), 쓰는 칸만 확인해서 규칙 v1에 넣어요. 지금 규칙은 아직 **기능 차이**만 써요.
 - **시작 조합**(도구함이 비고 분야도 안 고른 경우)은 기획안 9장 "대표 조합" 결정을 기다려요.
 - **백엔드 분야 추천이 한동안 빌 수 있어요.** 6개 모두 외부 환경(DB·쿠버네티스·계정)이 필요해서 시험 순서 맨 뒤예요(10-C ⑥).
@@ -305,6 +305,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 | "셋 다 ~지침이라" (두 도구 쌍인데 셋이라고 씀) | `situational_38.csv` #46 | PR #9에서 고칠 거리 |
 | pm-skills "103개 스킬" | `pairs_90.csv` #5 이유 | `entries.json` 기준은 스킬 69개·명령 103개 |
 | "사람이 봐야 하는" 분야: 분야 4·6 vs 디자인(4)·기획서(1) | `axes_v0.md` "아직 정하지 않은 것"(main, PR #13) vs 10-E E-4(2026-11-16) | E-4를 따름. QA(6)는 심어 둔 버그로 채점해요(10-C ③). `axes_v0.md`는 이 브랜치에 없어서 따로 고쳐야 함 |
+| 훅 개수: claude-mem 17개(9가지 시점), impeccable 2개인데 버전은 cli-v4.6.0, gstack 0개 | `server/sample-data/entries.json`(2026-10-18) vs 원문(2026-11-18 확인, 준서 님 #14 리뷰) | 원문을 따름. claude-mem은 플러그인 10개(17개는 다른 제품 cowork 7개 포함), impeccable 2개는 측정한 4.0.4 기준(4.6.0은 3개), gstack은 스킬 파일 안 훅 16개(R2-11·R4-03·R1-06). `entries.json`은 형원 님 파일이라 따로 고쳐야 함 |
 
 ---
 
@@ -627,7 +628,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 - 판정 90쌍(검수본): `judgment/review/2026-10-18-measure36/pairs_90.csv` (PR #4), 서버 샘플 `compat.json`과 90/90 일치 확인
 - 상황따라 38쌍 문장: `judgment/review/2026-10-18-measure36/situational_38.csv` (PR #9)
 - Claude 기본 기능 25쌍과 추천 상황: `judgment/review/2026-10-18-measure36/builtin_pairs.csv` (PR #11)
-- 도구 36개의 처음 읽는 양·구성 요소·훅: `entries.json`(형원 님 샘플 데이터, 실측 v2.1), `measured_36.csv`, `features.json`
+- 도구 36개의 처음 읽는 양·구성 요소·훅: `entries.json`(형원 님 샘플 데이터, 실측 v2.1), `measured_36.csv`, `features.json` (훅 개수 3곳은 원문으로 고침, 9장)
 - 시험 1: `judgment/experiments/2026-10-17-superpowers-ecc/README.md`
 - 시험 2: `judgment/experiments/2026-10-18-statusline-caveman-rtk/README.md`, 형원 님 `tested.json`
 - 화면과 서버: `ROH-front` 브랜치 `web/app/src/pages/Ask1Page.jsx`·`Ask2Page.jsx`·`api.js`, `ROH-server` 브랜치 `server/api-draft.md`·`RecommendService.java`
@@ -638,3 +639,6 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 - 도구 36개 비교표: `data/compare_axes_v0.csv`·`data/compare_axes_v0.md` (허준서 님, PR #17, 2026-11-09, 사람 확인 전)
 - 시험 3(기획 도구 상황별): `prototype/planning-test-2026-11-08/` (노형원 님, PR #16, 2026-11-08, 상황마다 1번·사람 확인 전)
 - 기준 A 표 초안: `judgment/recommendation/axis_values_v0.csv`(도구별 보기 값 60칸)·`option_axes_v0.csv`(선택지 26개) (2026-11-12 만듦, 11-16에 비교표 PR #17 `ba03054` 판으로 다시 만듦, 사람 확인 전)
+- 준서 님 PR #14 리뷰(2026-11-14): 규칙을 비교표·스캔 결과와 대조, 버전·훅 개수 지적 (2026-11-18 반영)
+- 훅 개수 원문 대조(2026-11-18): claude-mem v14.0.1·v16.0.0의 `plugin/hooks/hooks.json`·`cowork/hooks/hooks.json`, impeccable cli-v4.0.4·cli-v4.6.0·cli-v4.9.2의 `plugin/hooks/hooks.json`, gstack `1e798cd`(2026-10-18)의 스킬 파일 65개, planning-with-files v3.24.3·Understand-Anything v2.9.0의 훅 파일과 스킬 파일
+- Claude Code 공식 문서 hooks 페이지 "Hooks in skills and agents"(https://code.claude.com/docs/en/hooks, 2026-11-18 확인): 스킬 안 훅은 스킬을 부른 뒤 세션이 끝날 때까지 돎 (R1-06)
