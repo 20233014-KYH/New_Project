@@ -60,7 +60,7 @@ export default function AskSituationPage() {
                 </label>
               </div>
             </fieldset>
-            <p className="why">왜 묻나요? 상황마다 기본 기능으로 어디까지 되는지, 어떤 오픈소스를 깔면 더 좋은지 직접 시험한 결과로 알려 드려요. 지금은 시험을 마친 2개 분야의 상황만 있어요.</p>
+            <p className="why">왜 묻나요? 상황마다 기본 기능으로 어디까지 되는지, 어떤 오픈소스를 깔면 더 좋은지 직접 시험한 결과로 알려 드려요. 지금은 시험을 마친 분야의 상황만 있어요.</p>
             <div className="row-actions">
               <button className="btn btn-p" type="submit">다음</button>
             </div>
