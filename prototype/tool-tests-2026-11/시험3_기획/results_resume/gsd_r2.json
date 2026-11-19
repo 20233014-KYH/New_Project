@@ -1,0 +1,153 @@
+{
+  "condition": "gsd",
+  "rep": 2,
+  "turnA": {
+    "sec": 41.2,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "~/.claude/gsd-core/workflows/quick.md"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\.planning\\quick\\20261113-due-date\\PLAN.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r2\\tests\\test_model.py"
+    ],
+    "texts": [
+      "1단계(저장 형식에 마감일 추가, 기존 데이터 호환)를 구현했고 테스트 7개가 모두 통과했습니다. 커밋은 `be14bfe`입니다.\n\nGSD 워크플로 파일(`~/.claude/gsd-core/workflows/quick.md`)과 `gsd-tools`가 이 환경에 없어서, 서브에이전트나 STATE.md 갱신 없이 같은 흐름(`.planning/quick/` 계획 → 구현 → 테스트 → 커밋)을 직접 따라갔습니다.\n\n**전체 계획** (`.planning/quick/20261113-due-date/PLAN.md`)\n1. 저장 형식 + 기존 데이터 호환 (오늘 한 부분)\n2. 모델: 날짜 형식 검증, 마감일 수정/해제, 지난 마감 판정\n3. CLI: `add --due`, 목록에 마감일 표시, 마감일 수정 명령\n4. 웹: POST `/api/items`에서 `due` 받기, 표에 마감일 열 추가\n5. 정리: README 갱신, 마감일 순 정렬 여부 결정\n\n**1단계에서 바꾼 것**\n- `todo/storage.py`: 저장 형식을 버전 3으로 올렸습니다. 항목마다 `\"due\"`(`YYYY-MM-DD` 또는 `null`)가 들어갑니다. `migrate()`는 v1 → v2 → v3로 이어서 변환하고, 기존 항목은 `due = null`이 됩니다. 기존 필드(id, title, done, created)는 그대로입니다.\n- `todo/model.py`: `add_item(data, title, due=None)`가 새 형식의 항목을 만듭니다.\n- 테스트: v1·v2·v3 변환, 변환 후 필드 보존, v2 파일을 읽어 v3로 저장, 파일이 없을 때의 기본값, 새 항목의 `due`를 확인합니다. 기존 `test_v2_unchanged`는 v2가 이제 v3로 바뀌므로 `test_v3_unchanged`와 `test_migrate_v2_...`로 대체했습니다.\n\nCLI와 웹 코드는 건드리지 않았습니다. 둘 다 `due`가 있는 항목을 읽어도 그대로 동작하지만, 화면에 마감일을 보여 주는 것은 3·4단계입니다.\n\n2단계에서 날짜 검증을 넣기 전까지는 `add_item`에 아무 문자열이나 `due`로 넘겨도 저장됩니다."
+    ],
+    "denied": [],
+    "session": "bfacd9e0-958b-41b8-ad67-ebe9433e0cd1",
+    "result": "1단계(저장 형식에 마감일 추가, 기존 데이터 호환)를 구현했고 테스트 7개가 모두 통과했습니다. 커밋은 `be14bfe`입니다.\n\nGSD 워크플로 파일(`~/.claude/gsd-core/workflows/quick.md`)과 `gsd-tools`가 이 환경에 없어서, 서브에이전트나 STATE.md 갱신 없이 같은 흐름(`.planning/quick/` 계획 → 구현 → 테스트 → 커밋)을 직접 따라갔습니다.\n\n**전체 계획** (`.planning/quick/20261113-due-date/PLAN.md`)\n1. 저장 형식 + 기존 데이터 호환 (오늘 한 부분)\n2. 모델: 날짜 형식 검증, 마감일 수정/해제, 지난 마감 판정\n3. CLI: `add --due`, 목록에 마감일 표시, 마감일 수정 명령\n4. 웹: POST `/api/items`에서 `due` 받기, 표에 마감일 열 추가\n5. 정리: README 갱신, 마감일 순 정렬 여부 결정\n\n**1단계에서 바꾼 것**\n- `todo/storage.py`: 저장 형식을 버전 3으로 올렸습니다. 항목마다 `\"due\"`(`YYYY-MM-DD` 또는 `null`)가 들어갑니다. `migrate()`는 v1 → v2 → v3로 이어서 변환하고, 기존 항목은 `due = null`이 됩니다. 기존 필드(id, title, done, created)는 그대로입니다.\n- `todo/model.py`: `add_item(data, title, due=None)`가 새 형식의 항목을 만듭니다.\n- 테스트: v1·v2·v3 변환, 변환 후 필드 보존, v2 파일을 읽어 v3로 저장, 파일이 없을 때의 기본값, 새 항목의 `due`를 확인합니다. 기존 `test_v2_unchanged`는 v2가 이제 v3로 바뀌므로 `test_v3_unchanged`와 `test_migrate_v2_...`로 대체했습니다.\n\nCLI와 웹 코드는 건드리지 않았습니다. 둘 다 `due`가 있는 항목을 읽어도 그대로 동작하지만, 화면에 마감일을 보여 주는 것은 3·4단계입니다.\n\n2단계에서 날짜 검증을 넣기 전까지는 `add_item`에 아무 문자열이나 `due`로 넘겨도 저장됩니다.",
+    "usage": {
+      "input_tokens": 11,
+      "cache_creation_input_tokens": 30181,
+      "cache_read_input_tokens": 288718,
+      "output_tokens": 5039,
+      "output_tokens_details": {
+        "thinking_tokens": 573
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 30181,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 907,
+          "cache_read_input_tokens": 56475,
+          "cache_creation_input_tokens": 448,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 448
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 12,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "turnB": {
+    "sec": 27.7,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "Step 1 is done and committed, so I'm doing step 2 (model validation, set/clear due, `is_overdue`).",
+      "어제 하던 마감일 작업의 다음 단계인 **2단계(모델 검증)**를 끝냈습니다. `python -m pytest`는 15개 모두 통과했습니다. 이전 7개에 새 8개가 더해졌습니다.\n\n**상태**\n- 1단계(저장 형식 v3와 v1/v2 변환)는 이미 커밋돼 있었습니다.\n- 이 저장소에는 `resume-project.md` 워크플로 파일과 STATE.md가 없었습니다. 그래서 `.planning/quick/20261113-due-date/PLAN.md`와 git 기록으로 진행 상황을 파악했습니다.\n\n**2단계에서 바꾼 것** (`todo/model.py`)\n- `parse_due()`는 `YYYY-MM-DD` 형식인지 확인합니다. `2026-02-30` 같은 존재하지 않는 날짜도 `ValueError`로 거절합니다.\n- `add_item()`은 형식이 잘못된 마감일이면 항목을 추가하지 않고 오류를 냅니다.\n- `set_due(data, id, due)`로 마감일을 수정하고, `due=None`이면 해제합니다.\n- `is_overdue(item, today=None)`는 마감일이 오늘보다 앞서고 아직 끝나지 않은 항목이면 `True`를 반환합니다. 오늘이 마감일인 항목과 완료한 항목은 지난 것으로 보지 않습니다.\n- 새 테스트는 `tests/test_model.py`에 있습니다.\n\nCLI와 웹은 계획대로 건드리지 않았습니다.\n\n커밋은 `49ae074`입니다.\n\n**남은 단계**\n- 3단계는 CLI(`add --due`, `list`에 마감일과 지난 항목 표시, 마감일 수정 명령)입니다.\n- 4단계는 웹의 `due` 입력과 마감일 열입니다.\n- 5단계는 README 갱신과 정렬 여부 결정입니다.\n\n다음에는 3단계를 이어서 진행하면 됩니다."
+    ],
+    "denied": [],
+    "session": "98269697-c46d-4ce8-8357-61fbb9e28f75",
+    "result": "어제 하던 마감일 작업의 다음 단계인 **2단계(모델 검증)**를 끝냈습니다. `python -m pytest`는 15개 모두 통과했습니다. 이전 7개에 새 8개가 더해졌습니다.\n\n**상태**\n- 1단계(저장 형식 v3와 v1/v2 변환)는 이미 커밋돼 있었습니다.\n- 이 저장소에는 `resume-project.md` 워크플로 파일과 STATE.md가 없었습니다. 그래서 `.planning/quick/20261113-due-date/PLAN.md`와 git 기록으로 진행 상황을 파악했습니다.\n\n**2단계에서 바꾼 것** (`todo/model.py`)\n- `parse_due()`는 `YYYY-MM-DD` 형식인지 확인합니다. `2026-02-30` 같은 존재하지 않는 날짜도 `ValueError`로 거절합니다.\n- `add_item()`은 형식이 잘못된 마감일이면 항목을 추가하지 않고 오류를 냅니다.\n- `set_due(data, id, due)`로 마감일을 수정하고, `due=None`이면 해제합니다.\n- `is_overdue(item, today=None)`는 마감일이 오늘보다 앞서고 아직 끝나지 않은 항목이면 `True`를 반환합니다. 오늘이 마감일인 항목과 완료한 항목은 지난 것으로 보지 않습니다.\n- 새 테스트는 `tests/test_model.py`에 있습니다.\n\nCLI와 웹은 계획대로 건드리지 않았습니다.\n\n커밋은 `49ae074`입니다.\n\n**남은 단계**\n- 3단계는 CLI(`add --due`, `list`에 마감일과 지난 항목 표시, 마감일 수정 명령)입니다.\n- 4단계는 웹의 `due` 입력과 마감일 열입니다.\n- 5단계는 README 갱신과 정렬 여부 결정입니다.\n\n다음에는 3단계를 이어서 진행하면 됩니다.",
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 22372,
+      "cache_read_input_tokens": 313561,
+      "output_tokens": 2602,
+      "output_tokens_details": {
+        "thinking_tokens": 242
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 22372,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 726,
+          "cache_read_input_tokens": 50271,
+          "cache_creation_input_tokens": 465,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 465
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 7,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "a_tests": true,
+  "b_tests": true,
+  "a_log": ".......                                                                  [100%]\n7 passed in 0.07s\n",
+  "b_log": "...............                                                          [100%]\n15 passed in 0.04s\n",
+  "due_after_a": true,
+  "overdue_after_b": false,
+  "b_changed_code": true,
+  "b_knew_done": true,
+  "plan_files": [
+    "./.planning/"
+  ],
+  "tokens": {
+    "A": {
+      "total_in": 318910,
+      "output": 5039,
+      "turns": 12,
+      "sec": 41.2
+    },
+    "B": {
+      "total_in": 335947,
+      "output": 2602,
+      "turns": 7,
+      "sec": 27.7
+    }
+  }
+}

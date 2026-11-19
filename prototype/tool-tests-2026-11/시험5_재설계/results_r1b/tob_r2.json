@@ -1,0 +1,120 @@
+{
+  "condition": "tob",
+  "rep": 2,
+  "turn": {
+    "sec": 38.8,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\_vendor\\ffmpy\\ffmpy.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\tunneling.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\components\\_docs_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\reload.py"
+    ],
+    "writes": [],
+    "texts": [
+      "Candidates: processing_utils.py:1110 (seed), flagging.py:351, screen_recording_utils.py:281, plus several to inspect.",
+      "같은 원인(명령 문자열에 값을 끼워 넣고 셸로 실행)의 취약점이 씨앗 말고 1곳 더 있습니다. 코드는 수정하지 않았고, 실행해서 재현해 보지도 않았습니다. 코드를 읽어서 판단한 결과입니다.\n\n- **`gradio/flagging.py:archive_flagged_media`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 따옴표 없이 값을 셸에 넣습니다. `label`이나 `flag_dir`에 `;`, `$()`, 공백이 들어가면 명령이 주입됩니다. 이 저장소 안에서는 이 함수를 호출하는 곳이 없습니다. 그래서 지금 당장 도달하는 경로는 없고, `label`이 사용자 입력에서 온다면 취약합니다.\n- **`gradio/screen_recording_utils.py:zoom_in`**: `ffprobe ... \"{input_path}\"` 문자열을 `asyncio.create_subprocess_shell`로 실행합니다. 같은 패턴이지만, 호출한 `routes.py:2031`에서 `input_path`는 `tempfile.NamedTemporaryFile(suffix=\".mp4\", dir=DEFAULT_TEMP_DIR)`가 만든 서버 생성 경로입니다. 업로드 파일명이 들어가지 않아 지금은 공격자가 조작할 수 없습니다. 다만 `GRADIO_TEMP_DIR`에 셸 특수문자가 있으면 깨지는 잠재 위험은 있습니다. 그래서 취약 목록이 아니라 \"비슷하지만 안전\"에 넣었고, 하드닝은 권장합니다.\n\n나머지 `subprocess`, `os.system`, `Popen` 호출은 모두 인자 리스트 방식이라 셸을 거치지 않습니다. 상수 인자만 쓰거나, 사용자 값이 들어가도 단일 인자로만 전달됩니다. 다음 사항도 확인했습니다.\n- `ffmpy`는 `self._cmd` 리스트를 `Popen`에 넘깁니다. `ff.cmd`(문자열)는 로그와 예외 메시지용으로만 쓰입니다.\n- `screen_recording_utils.py`와 `video.py`의 `ff.cmd.split()`은 `create_subprocess_exec`로 실행되어 셸 주입은 아닙니다. 다만 공백이 든 경로를 쪼개는 문제는 있을 수 있는데, 이는 별개의 버그입니다.\n- JS 쪽 `execSync`와 `shell: true`는 빌드 스크립트나 테스트의 고정 인자입니다.\n- `demo/text_analysis/run.py`의 `os.system`은 상수 문자열입니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:zoom_in\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\ngradio/processing_utils.py:video_is_playable\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:run\ngradio/tunneling.py:_start_tunnel\ngradio/cli/commands/reload.py:main\ngradio/cli/commands/components/_docs_utils.py:format\ndemo/text_analysis/run.py:<module>\n\n`combine_stream`, `_start_tunnel`, `main`은 함수 이름을 직접 확인하지 않고 해당 줄의 호출만 보고 적었으니, 필요하면 이름을 다시 확인하세요."
+    ],
+    "denied": [],
+    "session": "528d636c-bb47-4e5b-ab87-052b454c6367",
+    "result": "같은 원인(명령 문자열에 값을 끼워 넣고 셸로 실행)의 취약점이 씨앗 말고 1곳 더 있습니다. 코드는 수정하지 않았고, 실행해서 재현해 보지도 않았습니다. 코드를 읽어서 판단한 결과입니다.\n\n- **`gradio/flagging.py:archive_flagged_media`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 따옴표 없이 값을 셸에 넣습니다. `label`이나 `flag_dir`에 `;`, `$()`, 공백이 들어가면 명령이 주입됩니다. 이 저장소 안에서는 이 함수를 호출하는 곳이 없습니다. 그래서 지금 당장 도달하는 경로는 없고, `label`이 사용자 입력에서 온다면 취약합니다.\n- **`gradio/screen_recording_utils.py:zoom_in`**: `ffprobe ... \"{input_path}\"` 문자열을 `asyncio.create_subprocess_shell`로 실행합니다. 같은 패턴이지만, 호출한 `routes.py:2031`에서 `input_path`는 `tempfile.NamedTemporaryFile(suffix=\".mp4\", dir=DEFAULT_TEMP_DIR)`가 만든 서버 생성 경로입니다. 업로드 파일명이 들어가지 않아 지금은 공격자가 조작할 수 없습니다. 다만 `GRADIO_TEMP_DIR`에 셸 특수문자가 있으면 깨지는 잠재 위험은 있습니다. 그래서 취약 목록이 아니라 \"비슷하지만 안전\"에 넣었고, 하드닝은 권장합니다.\n\n나머지 `subprocess`, `os.system`, `Popen` 호출은 모두 인자 리스트 방식이라 셸을 거치지 않습니다. 상수 인자만 쓰거나, 사용자 값이 들어가도 단일 인자로만 전달됩니다. 다음 사항도 확인했습니다.\n- `ffmpy`는 `self._cmd` 리스트를 `Popen`에 넘깁니다. `ff.cmd`(문자열)는 로그와 예외 메시지용으로만 쓰입니다.\n- `screen_recording_utils.py`와 `video.py`의 `ff.cmd.split()`은 `create_subprocess_exec`로 실행되어 셸 주입은 아닙니다. 다만 공백이 든 경로를 쪼개는 문제는 있을 수 있는데, 이는 별개의 버그입니다.\n- JS 쪽 `execSync`와 `shell: true`는 빌드 스크립트나 테스트의 고정 인자입니다.\n- `demo/text_analysis/run.py`의 `os.system`은 상수 문자열입니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:zoom_in\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\ngradio/processing_utils.py:video_is_playable\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:run\ngradio/tunneling.py:_start_tunnel\ngradio/cli/commands/reload.py:main\ngradio/cli/commands/components/_docs_utils.py:format\ndemo/text_analysis/run.py:<module>\n\n`combine_stream`, `_start_tunnel`, `main`은 함수 이름을 직접 확인하지 않고 해당 줄의 호출만 보고 적었으니, 필요하면 이름을 다시 확인하세요.",
+    "usage": {
+      "input_tokens": 11,
+      "cache_creation_input_tokens": 37283,
+      "cache_read_input_tokens": 278041,
+      "output_tokens": 4691,
+      "output_tokens_details": {
+        "thinking_tokens": 936
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 37283,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1457,
+          "cache_read_input_tokens": 58981,
+          "cache_creation_input_tokens": 3137,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3137
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 16,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "tokens": {
+    "total_in": 315335,
+    "output": 4691
+  }
+}

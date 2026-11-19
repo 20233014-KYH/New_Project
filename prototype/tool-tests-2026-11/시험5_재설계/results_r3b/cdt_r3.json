@@ -1,0 +1,108 @@
+{
+  "condition": "cdt",
+  "rep": 3,
+  "turn": {
+    "sec": 77.9,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r3\\tests\\todo.spec.js",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r3\\tests\\todo.spec.js"
+    ],
+    "texts": [
+      "사이트 코드가 없으니 먼저 실제 DOM 구조를 확인하겠습니다.",
+      "DOM 구조를 확인했고, 이제 테스트 파일을 작성합니다.",
+      "`tests/todo.spec.js`를 만들었고, `npx playwright test`로 돌려서 6개가 모두 통과했습니다. 주소는 `process.env.BASE_URL`을 쓰고, 없으면 `http://127.0.0.1:8949/`를 씁니다.\n\n사이트 코드가 없어서 브라우저로 실제 화면의 구조를 먼저 확인했습니다. 선택자는 거기서 본 접근성 이름(체크박스 `\"{할 일} 완료\"`, 삭제 버튼 `\"{할 일} 삭제\"`, 필터 버튼의 `aria-pressed`)을 기준으로 잡았습니다. 사이트의 이 이름이 바뀌면 테스트도 고쳐야 합니다.\n\n테스트가 확인하는 내용은 다음과 같습니다.\n1. **초기 상태**: 목록이 비어 있고, \"남은 할 일 0개\"가 보이며, \"전체\" 필터가 선택돼 있습니다.\n2. **추가**: 항목이 목록에 나타나고, 입력창이 비워지고, 남은 개수가 1, 2로 늘어납니다.\n3. **완료 체크**: 체크하면 남은 개수가 줄고, 체크를 해제하면 다시 늘고, 모두 체크하면 0개가 됩니다.\n4. **삭제**: 선택한 항목만 사라집니다. 완료된 항목을 지우면 남은 개수가 그대로고, 진행 중인 항목을 지우면 줄어듭니다.\n5. **필터**: \"진행 중\"은 미완료만, \"완료\"는 완료만, \"전체\"는 모두 보여주고, `aria-pressed`도 맞게 바뀝니다. 남은 개수는 필터와 관계없이 전체 기준입니다.\n6. **필터 중 체크**: \"진행 중\" 보기에서 항목을 체크하면 그 항목이 목록에서 바로 사라지고, \"완료\" 보기에서 나타납니다.\n\n테스트마다 시작 전에 `localStorage`를 비워서 서로 영향을 주지 않게 했습니다.\n\n처음 돌렸을 때 6번 테스트가 한 번 실패했습니다. 사이트 문제가 아니라, `check()`가 클릭 뒤에 체크 상태를 확인하려는데 그 항목이 필터에서 이미 사라져 있었기 때문입니다. 그래서 그 자리만 `click()`으로 바꿨습니다.\n\n`curl`로 HTML을 가져오는 첫 시도는 승인이 필요해서 진행되지 않았고, 대신 Chrome 도구로 같은 페이지를 열어 확인했습니다. 그 과정에서 사이트에 \"샘플\" 항목을 하나 추가했다가 완료 처리했습니다. 이 사이트에서 그 항목이 남아 있는지는 확인하지 않았지만, 테스트는 매번 `localStorage`를 비우고 시작해서 결과에는 영향이 없습니다."
+    ],
+    "denied": [
+      "Bash",
+      "Bash"
+    ],
+    "session": "7ee8a377-90c6-4871-9aa4-98994ae63a65",
+    "result": "`tests/todo.spec.js`를 만들었고, `npx playwright test`로 돌려서 6개가 모두 통과했습니다. 주소는 `process.env.BASE_URL`을 쓰고, 없으면 `http://127.0.0.1:8949/`를 씁니다.\n\n사이트 코드가 없어서 브라우저로 실제 화면의 구조를 먼저 확인했습니다. 선택자는 거기서 본 접근성 이름(체크박스 `\"{할 일} 완료\"`, 삭제 버튼 `\"{할 일} 삭제\"`, 필터 버튼의 `aria-pressed`)을 기준으로 잡았습니다. 사이트의 이 이름이 바뀌면 테스트도 고쳐야 합니다.\n\n테스트가 확인하는 내용은 다음과 같습니다.\n1. **초기 상태**: 목록이 비어 있고, \"남은 할 일 0개\"가 보이며, \"전체\" 필터가 선택돼 있습니다.\n2. **추가**: 항목이 목록에 나타나고, 입력창이 비워지고, 남은 개수가 1, 2로 늘어납니다.\n3. **완료 체크**: 체크하면 남은 개수가 줄고, 체크를 해제하면 다시 늘고, 모두 체크하면 0개가 됩니다.\n4. **삭제**: 선택한 항목만 사라집니다. 완료된 항목을 지우면 남은 개수가 그대로고, 진행 중인 항목을 지우면 줄어듭니다.\n5. **필터**: \"진행 중\"은 미완료만, \"완료\"는 완료만, \"전체\"는 모두 보여주고, `aria-pressed`도 맞게 바뀝니다. 남은 개수는 필터와 관계없이 전체 기준입니다.\n6. **필터 중 체크**: \"진행 중\" 보기에서 항목을 체크하면 그 항목이 목록에서 바로 사라지고, \"완료\" 보기에서 나타납니다.\n\n테스트마다 시작 전에 `localStorage`를 비워서 서로 영향을 주지 않게 했습니다.\n\n처음 돌렸을 때 6번 테스트가 한 번 실패했습니다. 사이트 문제가 아니라, `check()`가 클릭 뒤에 체크 상태를 확인하려는데 그 항목이 필터에서 이미 사라져 있었기 때문입니다. 그래서 그 자리만 `click()`으로 바꿨습니다.\n\n`curl`로 HTML을 가져오는 첫 시도는 승인이 필요해서 진행되지 않았고, 대신 Chrome 도구로 같은 페이지를 열어 확인했습니다. 그 과정에서 사이트에 \"샘플\" 항목을 하나 추가했다가 완료 처리했습니다. 이 사이트에서 그 항목이 남아 있는지는 확인하지 않았지만, 테스트는 매번 `localStorage`를 비우고 시작해서 결과에는 영향이 없습니다.",
+    "usage": {
+      "input_tokens": 19,
+      "cache_creation_input_tokens": 15287,
+      "cache_read_input_tokens": 289945,
+      "output_tokens": 4832,
+      "output_tokens_details": {
+        "thinking_tokens": 491
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 15287,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1057,
+          "cache_read_input_tokens": 37843,
+          "cache_creation_input_tokens": 975,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 975
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 11,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "grade": {
+    "orig": true,
+    "killed": 4,
+    "killed_names": [
+      "추가(글자 잘림)",
+      "완료 개수",
+      "삭제(엉뚱한 항목)",
+      "필터"
+    ],
+    "detail": {
+      "정상1": {
+        "passed": true,
+        "tail": " tests using 1 worker\n\n[1/6] tests\\todo.spec.js:19:1 › 초기 상태: 빈 목록, 남은 할 일 0개, 전체 필터 선택\n[2/6] tests\\todo.spec.js:26:1 › 할 일 추가: 목록에 나타나고 남은 개수가 늘며 입력창이 비워진다\n[3/6] tests\\todo.spec.js:38:1 › 완료 체크/해제: 남은 개수 갱신\n[4/6] tests\\todo.spec.js:57:1 › 삭제: 해당 항목만 사라지고 남은 개수가 맞게 바뀐다\n[5/6] tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료\n[6/6] tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다\n  6 passed (2.4s)\n"
+      },
+      "정상2": {
+        "passed": true,
+        "tail": " tests using 1 worker\n\n[1/6] tests\\todo.spec.js:19:1 › 초기 상태: 빈 목록, 남은 할 일 0개, 전체 필터 선택\n[2/6] tests\\todo.spec.js:26:1 › 할 일 추가: 목록에 나타나고 남은 개수가 늘며 입력창이 비워진다\n[3/6] tests\\todo.spec.js:38:1 › 완료 체크/해제: 남은 개수 갱신\n[4/6] tests\\todo.spec.js:57:1 › 삭제: 해당 항목만 사라지고 남은 개수가 맞게 바뀐다\n[5/6] tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료\n[6/6] tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다\n  6 passed (2.7s)\n"
+      },
+      "추가(글자 잘림)": {
+        "passed": false,
+        "tail": "est-results\\tests-todo-필터-상태에서-체크하면-목록이-즉시-갱신된다\\error-context.md\n\n\n  3 failed\n    tests\\todo.spec.js:26:1 › 할 일 추가: 목록에 나타나고 남은 개수가 늘며 입력창이 비워진다 ─────────────────────────────────\n    tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다 ────────────────────────────────────────────\n  3 passed (19.1s)\n"
+      },
+      "완료 개수": {
+        "passed": false,
+        "tail": "38:1 › 완료 체크/해제: 남은 개수 갱신 ───────────────────────────────────────────────────\n    tests\\todo.spec.js:57:1 › 삭제: 해당 항목만 사라지고 남은 개수가 맞게 바뀐다 ────────────────────────────────────────\n    tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다 ────────────────────────────────────────────\n  2 passed (24.9s)\n"
+      },
+      "삭제(엉뚱한 항목)": {
+        "passed": false,
+        "tail": "플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r3_g4\\tests\\todo.spec.js:65:33\n\n    Error Context: ..\\..\\test-results\\tests-todo-삭제-해당-항목만-사라지고-남은-개수가-맞게-바뀐다\\error-context.md\n\n\n[5/6] tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료\n[6/6] tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다\n  1 failed\n    tests\\todo.spec.js:57:1 › 삭제: 해당 항목만 사라지고 남은 개수가 맞게 바뀐다 ────────────────────────────────────────\n  5 passed (8.4s)\n"
+      },
+      "필터": {
+        "passed": false,
+        "tail": "esktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r3_g5\\tests\\todo.spec.js:111:36\n\n    Error Context: ..\\..\\test-results\\tests-todo-필터-상태에서-체크하면-목록이-즉시-갱신된다\\error-context.md\n\n\n  2 failed\n    tests\\todo.spec.js:75:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:106:1 › 필터 상태에서 체크하면 목록이 즉시 갱신된다 ────────────────────────────────────────────\n  4 passed (13.2s)\n"
+      }
+    }
+  },
+  "tokens": {
+    "total_in": 305251,
+    "output": 4832
+  }
+}

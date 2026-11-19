@@ -1,0 +1,156 @@
+{
+  "condition": "gsd",
+  "rep": 3,
+  "turnA": {
+    "sec": 33.3,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\.claude\\gsd-core\\workflows\\quick.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\tests\\test_model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r3\\README.md"
+    ],
+    "writes": [],
+    "texts": [
+      "The GSD workflow file isn't installed, so I'll do this inline. First, the code.",
+      "Now the plan file, then a commit.",
+      "1단계까지 구현하고 커밋했습니다(`5ad913a`). pytest 6개가 모두 통과했습니다.\n\n`gsd-core/workflows/quick.md` 파일이 설치돼 있지 않아서, GSD의 플래너·실행기 에이전트는 쓰지 않고 직접 처리했습니다. 그래서 `STATE.md`의 \"Quick Tasks Completed\" 표는 갱신하지 못했습니다. 계획은 `.planning/quick/20261113-due-date/PLAN.md`에 저장했습니다.\n\n**전체 계획**\n1. 저장 형식에 마감일 추가와 기존 데이터 호환 (오늘 완료)\n2. 마감일 입력 검증(`YYYY-MM-DD`)과 `model`의 마감일 설정·해제 함수\n3. CLI: `add --due`, `due <id> <날짜>`, 목록에 마감일과 지연 표시\n4. 웹: POST `/api/items`에서 `due` 받기(잘못된 값은 400), 표에 마감일 열과 지연 강조\n5. 마감일순 정렬·필터, README 갱신\n\n**1단계에서 바꾼 것**\n- **`todo/storage.py`**: 저장 형식을 버전 3으로 올리고 항목에 `\"due\": \"YYYY-MM-DD\" | null`을 넣었습니다. `migrate()`가 v1 리스트, v2, v3를 차례로 올리며 기존 항목의 `due`는 `null`이 됩니다.\n- **`todo/model.py`**: `add_item(data, title, due=None)`로 바꿨습니다.\n- **테스트**: v1·v2 변환, v3 그대로 유지, 옛 파일을 읽고 저장했다가 다시 읽는 왕복 테스트를 추가했습니다. 기존 `test_v2_unchanged`는 v2가 이제 v3로 올라가므로 `test_v3_unchanged`로 바꿨습니다.\n\nCLI와 웹 화면은 아직 마감일을 보여주지 않고, 웹 POST도 `title`만 읽습니다. 3단계와 4단계에서 연결합니다."
+    ],
+    "denied": [],
+    "session": "5c82d874-f2e7-4bc6-ae4d-52e58b9c23af",
+    "result": "1단계까지 구현하고 커밋했습니다(`5ad913a`). pytest 6개가 모두 통과했습니다.\n\n`gsd-core/workflows/quick.md` 파일이 설치돼 있지 않아서, GSD의 플래너·실행기 에이전트는 쓰지 않고 직접 처리했습니다. 그래서 `STATE.md`의 \"Quick Tasks Completed\" 표는 갱신하지 못했습니다. 계획은 `.planning/quick/20261113-due-date/PLAN.md`에 저장했습니다.\n\n**전체 계획**\n1. 저장 형식에 마감일 추가와 기존 데이터 호환 (오늘 완료)\n2. 마감일 입력 검증(`YYYY-MM-DD`)과 `model`의 마감일 설정·해제 함수\n3. CLI: `add --due`, `due <id> <날짜>`, 목록에 마감일과 지연 표시\n4. 웹: POST `/api/items`에서 `due` 받기(잘못된 값은 400), 표에 마감일 열과 지연 강조\n5. 마감일순 정렬·필터, README 갱신\n\n**1단계에서 바꾼 것**\n- **`todo/storage.py`**: 저장 형식을 버전 3으로 올리고 항목에 `\"due\": \"YYYY-MM-DD\" | null`을 넣었습니다. `migrate()`가 v1 리스트, v2, v3를 차례로 올리며 기존 항목의 `due`는 `null`이 됩니다.\n- **`todo/model.py`**: `add_item(data, title, due=None)`로 바꿨습니다.\n- **테스트**: v1·v2 변환, v3 그대로 유지, 옛 파일을 읽고 저장했다가 다시 읽는 왕복 테스트를 추가했습니다. 기존 `test_v2_unchanged`는 v2가 이제 v3로 올라가므로 `test_v3_unchanged`로 바꿨습니다.\n\nCLI와 웹 화면은 아직 마감일을 보여주지 않고, 웹 POST도 `title`만 읽습니다. 3단계와 4단계에서 연결합니다.",
+    "usage": {
+      "input_tokens": 9,
+      "cache_creation_input_tokens": 28647,
+      "cache_read_input_tokens": 231811,
+      "output_tokens": 4047,
+      "output_tokens_details": {
+        "thinking_tokens": 258
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 28647,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 758,
+          "cache_read_input_tokens": 54554,
+          "cache_creation_input_tokens": 835,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 835
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 12,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "turnB": {
+    "sec": 32.0,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "Next step is step 2: validation plus `set_due`/`clear_due`. Let me check existing tests.",
+      "Output file is correct. Committing.",
+      "마감일 작업의 2단계(입력 검증과 `set_due`/`clear_due`)를 끝냈습니다. `python -m pytest`로 17개 테스트가 모두 통과했습니다. 변경은 `35c27a4`로 커밋했습니다.\n\n- **`model.parse_due`**: `YYYY-MM-DD` 형식만 받고, `None`은 마감일 없음으로 처리합니다. `2026-02-30`이나 `20261201` 같은 값은 `ValueError`를 냅니다.\n- **`add_item`**: 마감일을 검증하고, 잘못된 값이면 항목을 추가하지 않습니다.\n- **`set_due` / `clear_due`**: `set_due`는 값을 검증한 뒤 반영하고, `clear_due`는 마감일을 지웁니다. 잘못된 값이면 기존 마감일을 그대로 둡니다. 없는 id는 `KeyError`를 냅니다.\n- **테스트**: `tests/test_model.py`에 11개를 추가했습니다.\n- **계획 파일**: `.planning/quick/20261113-due-date/PLAN.md`에서 2단계를 완료로 표시했습니다. 3단계(CLI)와 4단계(웹)에서는 이 `ValueError`를 오류 메시지나 400 응답으로 바꿔 처리해야 한다는 메모도 남겼습니다.\n\nGSD의 `resume-project.md` 워크플로 파일이 이 PC에 없어서, 계획 파일(`PLAN.md`)과 git 기록으로 이어갈 단계를 정했습니다.\n\n다음은 3단계(CLI의 `add --due`, `due <id> <날짜>`, 목록 표시)입니다."
+    ],
+    "denied": [],
+    "session": "bacca740-47de-4015-a2cd-4d3ecedc2347",
+    "result": "마감일 작업의 2단계(입력 검증과 `set_due`/`clear_due`)를 끝냈습니다. `python -m pytest`로 17개 테스트가 모두 통과했습니다. 변경은 `35c27a4`로 커밋했습니다.\n\n- **`model.parse_due`**: `YYYY-MM-DD` 형식만 받고, `None`은 마감일 없음으로 처리합니다. `2026-02-30`이나 `20261201` 같은 값은 `ValueError`를 냅니다.\n- **`add_item`**: 마감일을 검증하고, 잘못된 값이면 항목을 추가하지 않습니다.\n- **`set_due` / `clear_due`**: `set_due`는 값을 검증한 뒤 반영하고, `clear_due`는 마감일을 지웁니다. 잘못된 값이면 기존 마감일을 그대로 둡니다. 없는 id는 `KeyError`를 냅니다.\n- **테스트**: `tests/test_model.py`에 11개를 추가했습니다.\n- **계획 파일**: `.planning/quick/20261113-due-date/PLAN.md`에서 2단계를 완료로 표시했습니다. 3단계(CLI)와 4단계(웹)에서는 이 `ValueError`를 오류 메시지나 400 응답으로 바꿔 처리해야 한다는 메모도 남겼습니다.\n\nGSD의 `resume-project.md` 워크플로 파일이 이 PC에 없어서, 계획 파일(`PLAN.md`)과 git 기록으로 이어갈 단계를 정했습니다.\n\n다음은 3단계(CLI의 `add --due`, `due <id> <날짜>`, 목록 표시)입니다.",
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 22282,
+      "cache_read_input_tokens": 364308,
+      "output_tokens": 2590,
+      "output_tokens_details": {
+        "thinking_tokens": 110
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 22282,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 606,
+          "cache_read_input_tokens": 50470,
+          "cache_creation_input_tokens": 176,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 176
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 8,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "a_tests": true,
+  "b_tests": true,
+  "a_log": "......                                                                   [100%]\n6 passed in 0.03s\n",
+  "b_log": ".................                                                        [100%]\n17 passed in 0.04s\n",
+  "due_after_a": true,
+  "overdue_after_b": false,
+  "b_changed_code": true,
+  "b_knew_done": true,
+  "plan_files": [
+    "./.planning/"
+  ],
+  "tokens": {
+    "A": {
+      "total_in": 260467,
+      "output": 4047,
+      "turns": 12,
+      "sec": 33.3
+    },
+    "B": {
+      "total_in": 386606,
+      "output": 2590,
+      "turns": 8,
+      "sec": 32.0
+    }
+  }
+}

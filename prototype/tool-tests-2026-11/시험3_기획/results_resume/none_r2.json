@@ -1,0 +1,157 @@
+{
+  "condition": "none",
+  "rep": 2,
+  "turnA": {
+    "sec": 26.4,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\tests\\test_model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\README.md"
+    ],
+    "writes": [],
+    "texts": [
+      "1단계를 구현했고 테스트 6개가 모두 통과했습니다. 커밋은 하지 않았습니다.\n\n## 전체 계획\n\n| 단계 | 내용 | 상태 |\n|---|---|---|\n| 1 | 저장 형식에 `due` 추가 (버전 3), v1/v2 데이터 호환 | 완료 |\n| 2 | 모델: `add_item(data, title, due=None)`, `set_due`, `YYYY-MM-DD` 검증 | 다음 |\n| 3 | CLI: `add --due 2026-12-01`, 마감일 변경 명령, `list`에 마감일 표시, 기한 초과 표시 | 다음 |\n| 4 | 웹: `row_html`에 마감일 열, POST `/api/items`에서 `due` 받기, 잘못된 값은 400 응답 | 다음 |\n| 5 | 정렬·필터(임박순, 기한 초과만 보기), README 갱신 | 다음 |\n\n## 1단계에서 바꾼 것\n\n- **`todo/storage.py`**: 버전을 3으로 올리고 항목에 `\"due\": \"YYYY-MM-DD\" | null`을 추가했습니다. `migrate()`는 v1, v2 데이터를 한 번에 v3로 바꾸고, 기존 항목의 `due`는 `None`으로 채웁니다. 이미 v3인 데이터는 그대로 두며, `migrate()`를 두 번 불러도 결과가 같습니다. 설명 문서도 갱신했습니다.\n- **`todo/model.py`**: 새 항목에 `\"due\": None`을 넣어, 새로 만든 항목도 v3 형식과 맞게 했습니다. 마감일을 받는 인자는 2단계에서 추가합니다.\n- **테스트**: v1 목록, v1 딕셔너리, v2에서 v3로의 변환, v3 그대로 유지, 반복 변환을 확인하는 테스트를 추가하거나 수정했습니다. 기존 `test_v2_unchanged`는 v2가 v3로 올라가는 게 맞는 동작이라 `test_migrate_v2_adds_due`로 바꿨습니다.\n\n## 참고\n\n- 기존 `todo.json` 파일은 `load()`할 때 메모리에서만 변환되고, 다음 `save()`에서 v3로 저장됩니다.\n- CLI와 웹은 `due` 키를 쓰지 않아서 이번 단계에서는 수정하지 않았습니다."
+    ],
+    "denied": [],
+    "session": "f18736e5-b3ff-46f5-a46f-e91786cd0bbf",
+    "result": "1단계를 구현했고 테스트 6개가 모두 통과했습니다. 커밋은 하지 않았습니다.\n\n## 전체 계획\n\n| 단계 | 내용 | 상태 |\n|---|---|---|\n| 1 | 저장 형식에 `due` 추가 (버전 3), v1/v2 데이터 호환 | 완료 |\n| 2 | 모델: `add_item(data, title, due=None)`, `set_due`, `YYYY-MM-DD` 검증 | 다음 |\n| 3 | CLI: `add --due 2026-12-01`, 마감일 변경 명령, `list`에 마감일 표시, 기한 초과 표시 | 다음 |\n| 4 | 웹: `row_html`에 마감일 열, POST `/api/items`에서 `due` 받기, 잘못된 값은 400 응답 | 다음 |\n| 5 | 정렬·필터(임박순, 기한 초과만 보기), README 갱신 | 다음 |\n\n## 1단계에서 바꾼 것\n\n- **`todo/storage.py`**: 버전을 3으로 올리고 항목에 `\"due\": \"YYYY-MM-DD\" | null`을 추가했습니다. `migrate()`는 v1, v2 데이터를 한 번에 v3로 바꾸고, 기존 항목의 `due`는 `None`으로 채웁니다. 이미 v3인 데이터는 그대로 두며, `migrate()`를 두 번 불러도 결과가 같습니다. 설명 문서도 갱신했습니다.\n- **`todo/model.py`**: 새 항목에 `\"due\": None`을 넣어, 새로 만든 항목도 v3 형식과 맞게 했습니다. 마감일을 받는 인자는 2단계에서 추가합니다.\n- **테스트**: v1 목록, v1 딕셔너리, v2에서 v3로의 변환, v3 그대로 유지, 반복 변환을 확인하는 테스트를 추가하거나 수정했습니다. 기존 `test_v2_unchanged`는 v2가 v3로 올라가는 게 맞는 동작이라 `test_migrate_v2_adds_due`로 바꿨습니다.\n\n## 참고\n\n- 기존 `todo.json` 파일은 `load()`할 때 메모리에서만 변환되고, 다음 `save()`에서 v3로 저장됩니다.\n- CLI와 웹은 `due` 키를 쓰지 않아서 이번 단계에서는 수정하지 않았습니다.",
+    "usage": {
+      "input_tokens": 7,
+      "cache_creation_input_tokens": 13052,
+      "cache_read_input_tokens": 135003,
+      "output_tokens": 3269,
+      "output_tokens_details": {
+        "thinking_tokens": 316
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 13052,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 874,
+          "cache_read_input_tokens": 38445,
+          "cache_creation_input_tokens": 1882,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1882
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 11,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "turnB": {
+    "sec": 27.8,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\tests\\test_model.py"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r2\\tests\\test_model.py"
+    ],
+    "texts": [
+      "먼저 현재 작업 상태를 확인하겠습니다.",
+      "셸 명령이 거부돼서 Edit 도구로 바꿔 진행합니다.",
+      "마감일 작업의 다음 단계인 모델 기능을 구현했고, 테스트 9개가 모두 통과했습니다. 새로 넣은 3개를 포함한 수치입니다.\n\n**이번에 한 일** (`todo/model.py`)\n- `parse_due(due)`를 추가했습니다. `YYYY-MM-DD` 형식인지 검증하고, 형식이 틀리면 `ValueError`를 냅니다. `None`은 그대로 `None`입니다.\n- `add_item(data, title, due=None)`이 마감일을 받도록 바꿨습니다. 잘못된 날짜면 항목을 추가하지 않고 오류를 냅니다.\n- `set_due(data, item_id, due)`를 추가했습니다. 마감일을 지정하고, `None`을 넘기면 지웁니다.\n- 테스트 3개를 추가했습니다. 마감일과 함께 추가하는 경우, 지정하고 지우는 경우, 잘못된 형식을 거부하는 경우입니다.\n\n**남은 단계**\n1. CLI: `add --due`, 마감일 변경 명령, `list`에 마감일 표시 (`todo/cli.py`)\n2. 웹: 표에 마감일 열 추가, `POST /api/items`에서 `due` 받기 (`todo/web.py`)\n3. README에 사용법 반영\n\n이 목록은 어제 작업 계획을 직접 확인한 게 아니라 코드 상태를 보고 정리한 것입니다. 계획이 따로 있었다면 순서가 다를 수 있습니다. 변경 사항은 커밋하지 않았습니다."
+    ],
+    "denied": [
+      "Bash"
+    ],
+    "session": "13bb4f21-0115-4254-a1d5-9298ed023516",
+    "result": "마감일 작업의 다음 단계인 모델 기능을 구현했고, 테스트 9개가 모두 통과했습니다. 새로 넣은 3개를 포함한 수치입니다.\n\n**이번에 한 일** (`todo/model.py`)\n- `parse_due(due)`를 추가했습니다. `YYYY-MM-DD` 형식인지 검증하고, 형식이 틀리면 `ValueError`를 냅니다. `None`은 그대로 `None`입니다.\n- `add_item(data, title, due=None)`이 마감일을 받도록 바꿨습니다. 잘못된 날짜면 항목을 추가하지 않고 오류를 냅니다.\n- `set_due(data, item_id, due)`를 추가했습니다. 마감일을 지정하고, `None`을 넘기면 지웁니다.\n- 테스트 3개를 추가했습니다. 마감일과 함께 추가하는 경우, 지정하고 지우는 경우, 잘못된 형식을 거부하는 경우입니다.\n\n**남은 단계**\n1. CLI: `add --due`, 마감일 변경 명령, `list`에 마감일 표시 (`todo/cli.py`)\n2. 웹: 표에 마감일 열 추가, `POST /api/items`에서 `due` 받기 (`todo/web.py`)\n3. README에 사용법 반영\n\n이 목록은 어제 작업 계획을 직접 확인한 게 아니라 코드 상태를 보고 정리한 것입니다. 계획이 따로 있었다면 순서가 다를 수 있습니다. 변경 사항은 커밋하지 않았습니다.",
+    "usage": {
+      "input_tokens": 11,
+      "cache_creation_input_tokens": 11637,
+      "cache_read_input_tokens": 214617,
+      "output_tokens": 3235,
+      "output_tokens_details": {
+        "thinking_tokens": 308
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 11637,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 571,
+          "cache_read_input_tokens": 39641,
+          "cache_creation_input_tokens": 891,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 891
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 9,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "a_tests": true,
+  "b_tests": true,
+  "a_log": "......                                                                   [100%]\n6 passed in 0.01s\n",
+  "b_log": ".........                                                                [100%]\n9 passed in 0.01s\n",
+  "due_after_a": true,
+  "overdue_after_b": false,
+  "b_changed_code": true,
+  "b_knew_done": false,
+  "plan_files": [],
+  "tokens": {
+    "A": {
+      "total_in": 148062,
+      "output": 3269,
+      "turns": 11,
+      "sec": 26.4
+    },
+    "B": {
+      "total_in": 226265,
+      "output": 3235,
+      "turns": 9,
+      "sec": 27.8
+    }
+  }
+}
