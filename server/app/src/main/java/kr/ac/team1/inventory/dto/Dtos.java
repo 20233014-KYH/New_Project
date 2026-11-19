@@ -59,14 +59,28 @@ public final class Dtos {
                           String blocked, String verdict, String date) {
     }
 
-    public record RecommendResult(List<JudgeItem> pairs, List<RemoveItem> remove, List<AddItem> add, int unknownCount) {
+    public record RecommendResult(List<JudgeItem> pairs, List<RemoveItem> remove, List<AddItem> add, int unknownCount,
+                                  SituationCard situation) {
+    }
+
+    /** 상황 질문의 선택지 하나 */
+    public record SituationDto(String id, Integer category, String label) {
+    }
+
+    /** 추천 도구 하나. inBox = 이미 도구함에 담겨 있는지 */
+    public record ToolRef(String id, String name, boolean inBox) {
+    }
+
+    /** 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신 */
+    public record SituationCard(String id, Integer category, String label, String base, List<ToolRef> tools,
+                                String better, String cost, String evidence, String source, String review) {
     }
 
     public record JudgeRequest(List<String> ids) {
     }
 
     /** 질문에 대한 답. work = bugfix/feature/빈칸, shell = bash/powershell/빈칸, logs = big_logs/small/빈칸 */
-    public record Answers(String work, String shell, String logs) {
+    public record Answers(String work, String shell, String logs, String situation) {
     }
 
     public record RecommendRequest(List<String> ids, Answers answers) {

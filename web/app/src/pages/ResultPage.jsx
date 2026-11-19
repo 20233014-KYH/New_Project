@@ -47,7 +47,7 @@ export default function ResultPage() {
 
   if (!result) return <main><div className="c"><Steps current={3} /><p className="mute">계산 중…</p></div></main>
 
-  const { pairs, remove, add, unknownCount } = result
+  const { pairs, remove, add, unknownCount, situation } = result
   const judgedCount = pairs.length - unknownCount
 
   return (
@@ -63,6 +63,9 @@ export default function ResultPage() {
           <dt>담은 도구</dt>
           <dd>{box.map(id => byId[id]?.name || id).join(', ')}</dd>
           <dd><Link to="/box">바꾸기</Link></dd>
+          <dt>상황</dt>
+          <dd>{situation?.label || '고르지 않음'}</dd>
+          <dd><Link to="/ask/situation">바꾸기</Link></dd>
           <dt>주로 하는 일</dt>
           <dd>{WORK_LABEL[answers.work] || '—'}</dd>
           <dd><Link to="/ask/1">바꾸기</Link></dd>
@@ -70,6 +73,38 @@ export default function ResultPage() {
           <dd>{SHELL_LABEL[answers.shell] || '—'}</dd>
           <dd><Link to="/ask/2">바꾸기</Link></dd>
         </dl>
+
+        {situation && (
+          <section className="panel" style={{ marginTop: 'var(--s8)' }} aria-labelledby="sit-h">
+            <h2 id="sit-h" style={{ marginTop: 0 }}>이 상황이라면: {situation.label}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--s4)' }}>
+              <div>
+                <h3>기본 기능으로도</h3>
+                <p>{situation.base}</p>
+              </div>
+              <div>
+                <h3>이럴 땐 깔면 더 좋아요</h3>
+                <p>
+                  {situation.tools.map((t, i) => (
+                    <span key={t.id}>
+                      {i > 0 && ' 또는 '}
+                      <Link to={`/tool/${t.id}`}><b>{t.name}</b></Link>
+                      {t.inBox && <span className="mute"> (이미 도구함에 있어요)</span>}
+                    </span>
+                  ))}
+                </p>
+                <p>{situation.better}</p>
+              </div>
+              <div>
+                <h3>대신</h3>
+                <p>{situation.cost}</p>
+              </div>
+            </div>
+            <p className="mute" style={{ fontSize: 13.5, marginBottom: 0 }}>
+              근거: {situation.review?.startsWith(situation.evidence) ? situation.review : `${situation.evidence}${situation.review ? ` · ${situation.review}` : ''}`}{situation.source ? ` · ${situation.source}` : ''}
+            </p>
+          </section>
+        )}
 
         <div className="split" style={{ marginTop: 'var(--s8)' }}>
           <div className="reco">

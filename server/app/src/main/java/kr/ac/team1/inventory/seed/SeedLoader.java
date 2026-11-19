@@ -7,10 +7,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import kr.ac.team1.inventory.domain.Category;
+import kr.ac.team1.inventory.domain.SituationRule;
 import kr.ac.team1.inventory.domain.TestedTool;
 import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.repo.CategoryRepository;
+import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
 import kr.ac.team1.inventory.repo.ToolRepository;
@@ -38,19 +40,25 @@ public class SeedLoader implements ApplicationRunner {
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
     private final TestedToolRepository tested;
+    private final SituationRuleRepository rules;
 
     public SeedLoader(ObjectMapper mapper, CategoryRepository categories, ToolRepository tools,
-                      ToolPairRepository pairs, TestedToolRepository tested) {
+                      ToolPairRepository pairs, TestedToolRepository tested, SituationRuleRepository rules) {
         this.mapper = mapper;
         this.categories = categories;
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
+        this.rules = rules;
     }
 
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws IOException {
+        // 상황별 추천 규칙은 도구 데이터와 따로 넣는다(이미 도구가 들어 있는 MySQL에도 규칙만 새로 들어가게)
+        if (rules.count() == 0) {
+            loadSituationRules();
+        }
         if (tools.count() > 0) {
             log.info("DB에 데이터가 이미 있어 처음 데이터 넣기를 건너뜀 (도구 {}개)", tools.count());
             return;
@@ -99,6 +107,49 @@ public class SeedLoader implements ApplicationRunner {
         }
         log.info("처음 데이터 넣기 끝: 분야 {}개, 도구 {}개, 판정 {}쌍, 시험한 도구 {}개",
                 categories.count(), tools.count(), pairs.count(), tested.count());
+    }
+
+    /** situation_rules.csv → 규칙 표. 첫 줄은 칸 이름. 따옴표로 감싼 칸(쉼표 포함)도 읽는다. */
+    private void loadSituationRules() throws IOException {
+        String csv;
+        try (InputStream in = new ClassPathResource("seed/situation_rules.csv").getInputStream()) {
+            csv = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).replace("﻿", "");
+        }
+        List<String> lines = csv.lines().filter(l -> !l.isBlank()).toList();
+        for (int i = 1; i < lines.size(); i++) {
+            List<String> c = splitCsv(lines.get(i));
+            rules.save(new SituationRule(c.get(0), Integer.parseInt(c.get(1)), c.get(2), c.get(3), c.get(4), c.get(5),
+                    c.get(6), c.get(7), c.get(8), c.get(9), c.get(10), i));
+        }
+        log.info("상황별 추천 규칙 {}개 넣음", rules.count());
+    }
+
+    static List<String> splitCsv(String line) {
+        List<String> out = new ArrayList<>();
+        StringBuilder cur = new StringBuilder();
+        boolean quoted = false;
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (quoted) {
+                if (ch == '"' && i + 1 < line.length() && line.charAt(i + 1) == '"') {
+                    cur.append('"');
+                    i++;
+                } else if (ch == '"') {
+                    quoted = false;
+                } else {
+                    cur.append(ch);
+                }
+            } else if (ch == '"') {
+                quoted = true;
+            } else if (ch == ',') {
+                out.add(cur.toString());
+                cur.setLength(0);
+            } else {
+                cur.append(ch);
+            }
+        }
+        out.add(cur.toString());
+        return out;
     }
 
     private JsonNode read(String name) throws IOException {

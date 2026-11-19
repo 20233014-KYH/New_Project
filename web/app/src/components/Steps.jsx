@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 const STEPS = [
   { label: '도구 담기', href: '/box' },
-  { label: '조건 답하기', href: '/ask/1' },
+  { label: '조건 답하기', href: '/ask/situation' },
   { label: '결과 보기', href: '/result' },
 ]
 

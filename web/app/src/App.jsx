@@ -6,6 +6,7 @@ import BrowsePage from './pages/BrowsePage'
 import FindPage from './pages/FindPage'
 import ToolPage from './pages/ToolPage'
 import BoxPage from './pages/BoxPage'
+import AskSituationPage from './pages/AskSituationPage'
 import Ask1Page from './pages/Ask1Page'
 import Ask2Page from './pages/Ask2Page'
 import ResultPage from './pages/ResultPage'
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/find" element={<FindPage />} />
         <Route path="/tool/:id" element={<ToolPage />} />
         <Route path="/box" element={<BoxPage />} />
+        <Route path="/ask/situation" element={<AskSituationPage />} />
         <Route path="/ask/1" element={<Ask1Page />} />
         <Route path="/ask/2" element={<Ask2Page />} />
         <Route path="/result" element={<ResultPage />} />

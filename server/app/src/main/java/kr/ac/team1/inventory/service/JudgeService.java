@@ -17,6 +17,11 @@ import kr.ac.team1.inventory.dto.Dtos.Answers;
 import kr.ac.team1.inventory.dto.Dtos.JudgeItem;
 import kr.ac.team1.inventory.dto.Dtos.RecommendResult;
 import kr.ac.team1.inventory.dto.Dtos.RemoveItem;
+import kr.ac.team1.inventory.dto.Dtos.SituationCard;
+import kr.ac.team1.inventory.dto.Dtos.SituationDto;
+import kr.ac.team1.inventory.dto.Dtos.ToolRef;
+import kr.ac.team1.inventory.domain.SituationRule;
+import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
 import kr.ac.team1.inventory.repo.ToolRepository;
@@ -39,12 +44,15 @@ public class JudgeService {
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
     private final TestedToolRepository tested;
+    private final SituationRuleRepository rules;
     private final ToolService toolService;
 
-    public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService) {
+    public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService,
+                        SituationRuleRepository rules) {
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
+        this.rules = rules;
         this.toolService = toolService;
     }
 
@@ -76,7 +84,7 @@ public class JudgeService {
 
     public RecommendResult recommend(List<String> rawIds, Answers answers) {
         List<String> ids = clean(rawIds);
-        Answers ans = answers == null ? new Answers("", "", "") : answers;
+        Answers ans = answers == null ? new Answers("", "", "", null) : answers;
         List<JudgeItem> js = judge(ids);
         Map<String, Tool> byId = tools.findAll().stream().collect(Collectors.toMap(Tool::getId, Function.identity()));
         Map<String, ToolPair> pairMap = pairMap();
@@ -128,7 +136,27 @@ public class JudgeService {
             add.add(new AddItem(t.getTool(), t.getEffect(), t.getCaution(), warnings, unknown, blocked, verdict, t.getTestedOn()));
         }
         int unknownCount = (int) js.stream().filter(p -> "no_info".equals(p.state())).count();
-        return new RecommendResult(js, remove, add, unknownCount);
+        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ids, byId));
+    }
+
+    /** 상황 질문의 선택지 (CSV 순서) */
+    public List<SituationDto> situations() {
+        return rules.findAll().stream().sorted(Comparator.comparing(SituationRule::getPosition))
+                .map(r -> new SituationDto(r.getSituationId(), r.getCategory(), r.getLabel())).toList();
+    }
+
+    /** 고른 상황의 3칸 카드. 상황을 안 골랐거나 없는 상황이면 null */
+    private SituationCard situationCard(String situationId, List<String> ids, Map<String, Tool> byId) {
+        if (situationId == null || situationId.isBlank()) {
+            return null;
+        }
+        return rules.findAll().stream().filter(r -> situationId.equals(r.getSituationId())).findFirst()
+                .map(r -> new SituationCard(r.getSituationId(), r.getCategory(), r.getLabel(), r.getBase(),
+                        java.util.Arrays.stream(r.getTools().split(java.util.regex.Pattern.quote("|"))).map(String::trim).filter(t -> !t.isEmpty())
+                                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t))).toList(),
+                        r.getBetter(), r.getCost(), "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
+                        r.getSource(), r.getReview()))
+                .orElse(null);
     }
 
     /** 빈 값·중복을 빼고 순서는 지킨다. 없는 도구나 너무 많은 도구는 거절한다. */

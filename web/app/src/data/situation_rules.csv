@@ -1,0 +1,10 @@
+규칙ID,분야,상황ID,상황(쉬운 말),기본 기능으로도,추천 도구,이럴 땐 깔면 더 좋아요,대신,근거 종류,출처,출처 검수 상태
+S1-01,1,plan-new,새 프로젝트 계획을 세우고 싶어요,계획을 잘 세워요 (95점),gstack,/office-hours로 놓친 위험까지 더 짚어요 (98점),토큰 3~9배,tested,prototype/tool-tests-2026-11/시험3_기획/결과_v3.md,직접 시험 (2026-11-08)
+S1-02,1,idea-vague,막연한 아이디어를 다듬고 싶어요,대안·수요 확인까지 짚어요,gstack,질문을 하나씩 받으며 생각을 정리하고 싶을 때,토큰 3~6배,tested,prototype/tool-tests-2026-11/시험5_재설계/결과.md (R4·R4b),직접 시험 (2026-11-13)
+S1-03,1,prd,제품 기획서(PRD)를 쓰고 싶어요,빠짐없이 써요 (만점),pm-skills,더 빠르고 토큰도 적게 들어요,점수는 조금 낮음 (22/24),tested,prototype/tool-tests-2026-11/시험3_기획/결과_v4_남은도구.md,직접 시험 (2026-11-08)
+S1-04,1,resume,끊긴 작업을 이어서 하고 싶어요,파일을 읽고 이어서 해요,gsd-core|planning-with-files,다음 할 일을 바로 짚어 줘요,토큰은 줄지 않음,tested,prototype/tool-tests-2026-11/시험3_기획/code/run_resume_test.py,직접 시험 (2026-11-08)
+S1-05,1,multi-day,여러 날에 걸쳐 작업해요,정한 규칙을 대부분 지켜요 (3번 중 2번 만점),superpowers,3번 모두 만점으로 가장 안정적이에요,토큰 약 1.3배,tested,prototype/tool-tests-2026-11/시험5_재설계/결과.md (R5),직접 시험 (2026-11-13)
+S6-01,6,site-debug,배포된 사이트의 고장 원인을 찾고 싶어요,코드가 있으면 읽고 찾아요,playwright-mcp|chrome-devtools-mcp,코드 없는 사이트를 직접 눌러 확인해요 (도구 없이 0/3 → 3/3),시간·토큰 약 2배,tested,prototype/tool-tests-2026-11/시험4_보안리뷰/결과.md (4-2),직접 시험 (2026-11-13)
+S6-02,6,e2e-test,화면 테스트를 만들고 싶어요,코드가 보이면 잘 만들어요 (11/12),playwright-mcp,압축된 배포 사이트에서 더 정확해요 (12/12),추가 비용 없음,tested,prototype/tool-tests-2026-11/시험5_재설계/결과.md (R3·R3b),직접 시험 (2026-11-13)
+S6-03,6,security,보안 구멍을 찾고 싶어요,기본 /security-review로 모두 찾아요,claude-code-security-review,팀의 모든 PR을 자동으로 검사하고 싶을 때,API 키·설정 필요,doc,anthropics/claude-code-security-review README,제작자 설명 (시험 전)
+S6-04,6,variant,버그 하나를 찾은 뒤 같은 버그를 더 찾고 싶어요,772개 파일 큰 코드에서도 모두 찾아요,trailofbits-skills,C/C++·스마트 계약처럼 특정 분야를 깊게 감사할 때,토큰 1.5~2배,doc,trailofbits/skills README · 허준서 비교 표(#17),제작자 설명 (시험 전)

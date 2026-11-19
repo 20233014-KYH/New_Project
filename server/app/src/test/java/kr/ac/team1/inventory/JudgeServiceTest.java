@@ -30,7 +30,7 @@ class JudgeServiceTest {
     @Autowired
     ToolService tools;
 
-    private static final Answers NONE = new Answers("", "", "");
+    private static final Answers NONE = new Answers("", "", "", null);
 
     @Test
     void 처음_데이터가_DB에_다_들어감() {
@@ -54,7 +54,7 @@ class JudgeServiceTest {
 
     @Test
     void 파워셸이면_rtk_카드에_주의와_효과없음() {
-        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", ""));
+        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null));
         AddItem rtk = rec.add().stream().filter(a -> a.tool().equals("rtk")).findFirst().orElseThrow();
         assertThat(rtk.verdict()).isEqualTo("지금 환경에서는 효과가 없어요");
         assertThat(rtk.warnings()).isNotEmpty();
@@ -111,5 +111,36 @@ class JudgeServiceTest {
     @Test
     void 같은_도구를_두_번_담아도_한_번만() {
         assertThat(judge.judge(List.of("superpowers", "superpowers", "ecc"))).hasSize(1);
+    }
+
+    @Test
+    void 상황_질문_선택지는_규칙_9개() {
+        assertThat(judge.situations()).hasSize(9);
+        assertThat(judge.situations().get(0).id()).isEqualTo("plan-new");
+    }
+
+    @Test
+    void 상황을_고르면_기본으로_되는_것_깔면_좋은_도구_비용_카드() {
+        var card = judge.recommend(List.of("superpowers"), new Answers("", "", "", "e2e-test")).situation();
+        assertThat(card.base()).contains("11/12");
+        assertThat(card.tools()).extracting(t -> t.id()).containsExactly("playwright-mcp");
+        assertThat(card.tools().get(0).inBox()).isFalse();
+        assertThat(card.cost()).isEqualTo("추가 비용 없음");
+        assertThat(card.evidence()).isEqualTo("직접 시험");
+    }
+
+    @Test
+    void 이미_담은_도구는_inBox로_표시하고_시험_전_근거는_제작자_설명() {
+        var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug")).situation();
+        assertThat(debug.tools()).hasSize(2);
+        assertThat(debug.tools().get(0).inBox()).isTrue();
+        var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security")).situation();
+        assertThat(sec.evidence()).isEqualTo("제작자 설명");
+    }
+
+    @Test
+    void 상황을_안_고르거나_없는_상황이면_카드_없음() {
+        assertThat(judge.recommend(List.of("superpowers"), NONE).situation()).isNull();
+        assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황")).situation()).isNull();
     }
 }

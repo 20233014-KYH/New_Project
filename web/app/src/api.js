@@ -7,6 +7,7 @@ import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
+import situationCsv from './data/situation_rules.csv?raw'
 
 // 서버 모드: VITE_API_BASE=http://localhost:8080/api (server/app, Spring). 같은 데이터·같은 규칙이라 결과 모양이 같다.
 const BASE = import.meta.env.VITE_API_BASE || ''
@@ -117,7 +118,8 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
       date: t.date,
     })
   })
-  return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length }
+  return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length,
+    situation: situationCard(answers?.situation, ids, byId) }
 }
 
 // --- API 함수 6개 (api-draft.md 2장) ---
@@ -201,6 +203,56 @@ export async function getRecommend(ids, answers) {
 }
 
 // 6. 도구 검색 (홈 검색)
+// --- 상황별 추천 규칙 (data/situation_rules.csv, 서버와 같은 파일) ---
+function splitCsv(line) {
+  const out = []; let cur = ''; let q = false
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (q) {
+      if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++ }
+      else if (ch === '"') q = false
+      else cur += ch
+    } else if (ch === '"') q = true
+    else if (ch === ',') { out.push(cur); cur = '' }
+    else cur += ch
+  }
+  out.push(cur)
+  return out
+}
+let _rules = null
+function getRules() {
+  if (!_rules) {
+    const lines = situationCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _rules = lines.slice(1).map(l => {
+      const c = splitCsv(l)
+      return { ruleId: c[0], category: Number(c[1]), id: c[2], label: c[3], base: c[4], tools: c[5], better: c[6],
+        cost: c[7], evidenceType: c[8], source: c[9], review: c[10] }
+    })
+  }
+  return _rules
+}
+// 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신. 안 골랐거나 없는 상황이면 null
+function situationCard(situationId, ids, byId) {
+  if (!situationId) return null
+  const r = getRules().find(x => x.id === situationId)
+  if (!r) return null
+  return {
+    id: r.id, category: r.category, label: r.label, base: r.base,
+    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => ({ id: t, name: byId[t]?.name || t, inBox: ids.includes(t) })),
+    better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
+    source: r.source, review: r.review,
+  }
+}
+
+// 상황 질문의 선택지
+export async function getSituations() {
+  if (BASE) {
+    const res = await fetch(`${BASE}/situations`)
+    return res.json()
+  }
+  return getRules().map(r => ({ id: r.id, category: r.category, label: r.label }))
+}
+
 export async function searchTools(q) {
   return getTools({ q })
 }
