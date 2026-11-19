@@ -1,6 +1,6 @@
 # 추천 규칙 v0 (김용현 초안, 팀 검토 전)
 
-작성: 김용현 · 작성일: 2026-11-07 · 고친 날: 2026-11-18 (10장 기준 A·B·C·D·E, 허준서 님 비교표·#14 리뷰 반영) · 상태: **초안**
+작성: 김용현 · 작성일: 2026-11-07 · 고친 날: 2026-11-19 (10장 기준 A·B·C·D·E, 허준서 님 비교표·#14 리뷰 반영) · 상태: **초안**
 
 이 문서는 "어떤 상황이면 어떤 도구(또는 Claude 기본 기능)를 추천할지"를 정한 **규칙**과, 그 규칙에 필요한 **질문**을 설명합니다.
 기획안 6-5장의 원칙 "추천은 규칙으로 후보를 뽑고, AI는 이유만 설명한다"를 실제 규칙으로 옮긴 첫 버전입니다.
@@ -290,7 +290,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 - **백엔드 분야 추천이 한동안 빌 수 있어요.** 6개 모두 외부 환경(DB·쿠버네티스·계정)이 필요해서 시험 순서 맨 뒤예요(10-C ⑥).
 - **"답변을 짧게" + 새 기능 만들기**: 기준 E로 R2-01이 새 기능 만들기에는 안 나오게 됐어요. 이때 "caveman은 이 작업에서 토큰이 오히려 늘었어요"라고 이유를 보여 주는 규칙은 아직 없어서 R0-14의 일반 문구로 나가요. 필요하면 R2-03을 넓히는 규칙을 더해요.
 - **다른 분야끼리의 쌍**은 판정이 없어요(90쌍은 같은 분야 안의 쌍). 예외로 시험에서 본 caveman×superpowers만 주의로 넣었어요.
-- 이 규칙이 쓰는 파일 중 `pairs_90.csv` 검수본(PR #4), `situational_38.csv`(PR #9), `builtin_pairs.csv`(PR #11)는 **아직 main에 합쳐지지 않았어요.** 그 PR들이 바뀌면 규칙의 출처 번호와 문장도 맞춰야 해요.
+- 이 규칙이 쓰는 `pairs_90.csv` 검수본(PR #4), `situational_38.csv`(PR #9), `builtin_pairs.csv`(PR #11)는 2026-11-08에 main에 합쳐졌어요(이 브랜치에는 2026-11-19에 main을 합침). `builtin_pairs.csv` #20 이름 수정(PR #19)은 아직 열려 있어요.
 
 ---
 
@@ -304,7 +304,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 | 판정·규칙 저장소: "JSON으로 시작, 필요하면 DB"(기획안 9장은 아직 미정) vs "서버가 CSV를 읽어 MySQL에 넣음" | CLAUDE.md·기획안 9장 vs 형원 님 PR #14 답(11-08) | 서버는 형원 님 담당이라 그 결정을 따름. 기획안 9장·CLAUDE.md 기록은 따로 맞춰야 함 |
 | "셋 다 ~지침이라" (두 도구 쌍인데 셋이라고 씀) | `situational_38.csv` #46 | PR #9에서 고칠 거리 |
 | pm-skills "103개 스킬" | `pairs_90.csv` #5 이유 | `entries.json` 기준은 스킬 69개·명령 103개 |
-| "사람이 봐야 하는" 분야: 분야 4·6 vs 디자인(4)·기획서(1) | `axes_v0.md` "아직 정하지 않은 것"(main, PR #13) vs 10-E E-4(2026-11-16) | E-4를 따름. QA(6)는 심어 둔 버그로 채점해요(10-C ③). `axes_v0.md`는 이 브랜치에 없어서 따로 고쳐야 함 |
+| "사람이 봐야 하는" 분야: 분야 4·6 vs 디자인(4)·기획서(1) | `axes_v0.md` "아직 정하지 않은 것"(main, PR #13) vs 10-E E-4(2026-11-16) | E-4를 따름. QA(6)는 심어 둔 버그로 채점해요(10-C ③). `axes_v0.md`도 E-4에 맞게 고침(2026-11-19, main을 합친 뒤) |
 | 훅 개수: claude-mem 17개(9가지 시점), impeccable 2개인데 버전은 cli-v4.6.0, gstack 0개 | `server/sample-data/entries.json`(2026-10-18) vs 원문(2026-11-18 확인, 준서 님 #14 리뷰) | 원문을 따름. claude-mem은 플러그인 10개(17개는 다른 제품 cowork 7개 포함), impeccable 2개는 측정한 4.0.4 기준(4.6.0은 3개), gstack은 스킬 파일 안 훅 16개(R2-11·R4-03·R1-06). `entries.json`은 형원 님 파일이라 따로 고쳐야 함 |
 
 ---
@@ -635,7 +635,7 @@ R1-05에서 ECC를 후보에서 뺀 이유: 시험 1에서 같은 과제·같은
 - 기획안 `docs/proposal-ROH.md` 6-5(추천), 6-6(판정축), 6-7(토큰), 6-9(내장 기능)
 - Claude Code 공식 문서 commands 페이지(https://code.claude.com/docs/en/commands, 2026-11-07 확인), ccusage·claude-code-security-review·open-code-review 저장소 README(2026-11-07 확인)
 - Claude Code 공식 문서 tools-reference(https://code.claude.com/docs/en/tools-reference)·sub-agents(https://code.claude.com/docs/en/sub-agents) 페이지 (2026-11-08 확인, 10장 기준 D)
-- 비교 축 초안: `judgment/recommendation/axes_v0.md` (PR #13)
+- 비교 축 초안: `judgment/recommendation/axes_v0.md` (PR #13, 2026-11-19에 기준 A·B·E-4에 맞춤)
 - 도구 36개 비교표: `data/compare_axes_v0.csv`·`data/compare_axes_v0.md` (허준서 님, PR #17, 2026-11-09, 사람 확인 전)
 - 시험 3(기획 도구 상황별): `prototype/planning-test-2026-11-08/` (노형원 님, PR #16, 2026-11-08, 상황마다 1번·사람 확인 전)
 - 기준 A 표 초안: `judgment/recommendation/axis_values_v0.csv`(도구별 보기 값 60칸)·`option_axes_v0.csv`(선택지 26개) (2026-11-12 만듦, 11-16에 비교표 PR #17 `ba03054` 판으로 다시 만듦, 사람 확인 전)
