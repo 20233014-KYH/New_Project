@@ -9,6 +9,8 @@ final class Labels {
             "overlap", "겹침", "situational", "상황따라", "complement", "보완", "none", "관계 없음");
     static final Map<String, String> REVIEW = Map.of(
             "tested", "직접 시험", "human_review", "사람 검토", "ai_estimate", "AI 추정");
+    static final Map<String, String> PRIORITY = Map.of(
+            "accurate", "틀리지 않는 것", "save", "토큰·한도 아끼기", "simple", "설치·관리가 간단한 것", "safe", "실수로 망가뜨리지 않는 것");
     static final String NO_INFO = "확인된 정보 없음";
 
     private Labels() {

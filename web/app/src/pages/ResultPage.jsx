@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getTools, getRecommend, fmt } from '../api.js'
+import { getTools, getRecommend, fmt, PRIORITY_LABEL } from '../api.js'
 import Steps from '../components/Steps.jsx'
 import Reason from '../components/Reason.jsx'
 
@@ -66,6 +66,11 @@ export default function ResultPage() {
           <dt>상황</dt>
           <dd>{situation?.label || '고르지 않음'}</dd>
           <dd><Link to="/ask/situation">바꾸기</Link></dd>
+          {situation && <>
+            <dt>중요한 것</dt>
+            <dd>{PRIORITY_LABEL[answers.priority] || '상관없음'}</dd>
+            <dd><Link to="/ask/priority">바꾸기</Link></dd>
+          </>}
           <dt>주로 하는 일</dt>
           <dd>{WORK_LABEL[answers.work] || '—'}</dd>
           <dd><Link to="/ask/1">바꾸기</Link></dd>
@@ -77,6 +82,22 @@ export default function ResultPage() {
         {situation && (
           <section className="panel" style={{ marginTop: 'var(--s8)' }} aria-labelledby="sit-h">
             <h2 id="sit-h" style={{ marginTop: 0 }}>이 상황이라면: {situation.label}</h2>
+            {situation.pick && (
+              <div className="banner" role="status" style={{ marginBottom: 'var(--s4)' }}>
+                <b>{situation.pick.label}이 중요하다면 → </b>
+                {situation.pick.base
+                  ? <b>기본 기능으로 충분해요</b>
+                  : situation.pick.tools.map((t, i) => (
+                      <span key={t.id}>{i > 0 && ' 또는 '}<Link to={`/tool/${t.id}`}><b>{t.name}</b></Link>{t.inBox && <span className="mute"> (이미 도구함에 있어요)</span>}</span>
+                    ))}
+                <br />{situation.pick.reason}
+              </div>
+            )}
+            {!situation.pick && PRIORITY_LABEL[answers.priority] && (
+              <p className="mute" style={{ marginTop: 0 }}>
+                '{PRIORITY_LABEL[answers.priority]}' 기준으로는 시험에서 도구 사이 차이를 확인하지 못했어요. 아래 세 칸을 보고 골라 주세요.
+              </p>
+            )}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--s4)' }}>
               <div>
                 <h3>기본 기능으로도</h3>

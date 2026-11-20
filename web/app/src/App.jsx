@@ -8,6 +8,7 @@ import FindPage from './pages/FindPage'
 import ToolPage from './pages/ToolPage'
 import BoxPage from './pages/BoxPage'
 import AskSituationPage from './pages/AskSituationPage'
+import AskPriorityPage from './pages/AskPriorityPage'
 import Ask1Page from './pages/Ask1Page'
 import Ask2Page from './pages/Ask2Page'
 import ResultPage from './pages/ResultPage'
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/tool/:id" element={<ToolPage />} />
         <Route path="/box" element={<BoxPage />} />
         <Route path="/ask/situation" element={<AskSituationPage />} />
+        <Route path="/ask/priority" element={<AskPriorityPage />} />
         <Route path="/ask/1" element={<Ask1Page />} />
         <Route path="/ask/2" element={<Ask2Page />} />
         <Route path="/result" element={<ResultPage />} />

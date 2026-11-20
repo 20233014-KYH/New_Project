@@ -20,6 +20,10 @@ const ANSWERS = [
   { work: '', shell: '', logs: '', situation: 'security' },
   { work: '', shell: '', logs: '', situation: 'code-find' },
   { work: '', shell: '', logs: '', situation: 'multi-day' },
+  { work: '', shell: '', logs: '', situation: 'big-tool-output', priority: 'accurate' },
+  { work: '', shell: '', logs: '', situation: 'db-ask', priority: 'safe' },
+  { work: '', shell: '', logs: '', situation: 'code-find', priority: 'save' },
+  { work: '', shell: '', logs: '', situation: 'usage-view', priority: 'simple' },
   { work: '', shell: '', logs: '', situation: 'no-such-situation' },
 ]
 
@@ -42,7 +46,7 @@ describe.skipIf(!SERVER)('서버 = 로컬 모드', () => {
     for (const t of await local.getTools()) expect(strip(await get(`/tools/${t.id}`))).toEqual(strip(await local.getTool(t.id)))
   })
 
-  it('도구함 판정·추천: 분야별 묶음 + 36개 전부(630쌍) × 답 9가지(상황·겹침 경고 포함)', async () => {
+  it('도구함 판정·추천: 분야별 묶음 + 36개 전부(630쌍) × 답 13가지(상황·중요한 것·겹침 경고 포함)', async () => {
     const all = (await local.getTools()).map(t => t.id)
     const boxes = [['superpowers', 'ecc', 'caveman'], ['caveman', 'graphify'], ['serena', 'gsd-core'], all]
     for (const c of [1, 2, 3, 4, 5, 6]) boxes.push((await local.getTools({ categoryId: c })).map(t => t.id))

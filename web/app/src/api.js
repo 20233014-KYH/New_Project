@@ -8,6 +8,7 @@ import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
 import situationCsv from './data/situation_rules.csv?raw'
+import priorityCsv from './data/situation_priority.csv?raw'
 
 // 서버 모드: VITE_API_BASE=http://localhost:8080/api (server/app, Spring). 같은 데이터·같은 규칙이라 결과 모양이 같다.
 const BASE = import.meta.env.VITE_API_BASE || ''
@@ -119,7 +120,7 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     })
   })
   return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length,
-    situation: situationCard(answers?.situation, ids, byId, pairMap) }
+    situation: situationCard(answers?.situation, answers?.priority, ids, byId, pairMap) }
 }
 
 // 서버 모드에서 서버가 꺼져 있거나 오류면 화면 위에 안내 띠를 띄운다(components/ServerBanner.jsx가 이 이벤트를 받음)
@@ -244,22 +245,48 @@ function getRules() {
   }
   return _rules
 }
+// 상황 + 중요한 것 → 고를 도구 (data/situation_priority.csv, 서버와 같은 파일). 시험에서 차이가 확인된 조합만 있다
+export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것' }
+let _picks = null
+function getPicks() {
+  if (!_picks) {
+    const lines = priorityCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _picks = Object.fromEntries(lines.slice(1).map(l => {
+      const c = splitCsv(l)
+      return [`${c[0]}|${c[1]}`, { tools: c[2], reason: c[3] }]
+    }))
+  }
+  return _picks
+}
+function toolRef(t, ids, byId, pairMap) {
+  return { id: t, name: byId[t]?.name || t, inBox: ids.includes(t),
+    overlapWith: clashWith(t, ids, pairMap, 'overlap'), similarTo: clashWith(t, ids, pairMap, 'situational') }
+}
+// 안 골랐거나 시험에서 차이를 확인 못 한 조합이면 null. base = 기본 기능으로 충분
+function pick(situationId, priority, ids, byId, pairMap) {
+  if (!priority) return null
+  const p = getPicks()[`${situationId}|${priority}`]
+  if (!p) return null
+  const base = p.tools === 'base'
+  return { priority, label: PRIORITY_LABEL[priority], base,
+    tools: base ? [] : p.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap)),
+    reason: p.reason }
+}
 // 추천 도구가 도구함의 도구와 겹침(overlap)·상황따라(situational) 판정이면 그 도구 id를 모은다. 이미 담은 도구는 빈 목록
 function clashWith(t, ids, pairMap, relation) {
   if (ids.includes(t)) return []
   return ids.filter(id => pairMap[pairKey(id, t)]?.relation === relation)
 }
 // 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신. 안 골랐거나 없는 상황이면 null
-function situationCard(situationId, ids, byId, pairMap) {
+function situationCard(situationId, priority, ids, byId, pairMap) {
   if (!situationId) return null
   const r = getRules().find(x => x.id === situationId)
   if (!r) return null
   return {
     id: r.id, category: r.category, label: r.label, base: r.base,
-    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => ({ id: t, name: byId[t]?.name || t, inBox: ids.includes(t),
-      overlapWith: clashWith(t, ids, pairMap, 'overlap'), similarTo: clashWith(t, ids, pairMap, 'situational') })),
+    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap)),
     better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
-    source: r.source, review: r.review,
+    source: r.source, review: r.review, pick: pick(r.id, priority, ids, byId, pairMap),
   }
 }
 

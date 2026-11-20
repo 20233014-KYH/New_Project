@@ -25,7 +25,7 @@ export default function AskSituationPage() {
   function handleSubmit(e) {
     e.preventDefault()
     saveAns({ ...getAns(), situation: selected })
-    navigate('/ask/1')
+    navigate(selected ? '/ask/priority' : '/ask/1')
   }
 
   const groups = [...new Set(situations.map(s => s.category))].sort((a, b) => a - b)  // 분야 번호 순서(규칙 파일 순서와 상관없이)
@@ -36,7 +36,7 @@ export default function AskSituationPage() {
         <Steps current={2} />
         <div className="qwrap">
           <Link className="back" to="/box">← 뒤로</Link>
-          <p className="qcount">질문 1 / 3</p>
+          <p className="qcount">질문 1 / 4</p>
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>
               <legend><h1 tabIndex={-1}>어떤 상황에서 도구를 찾고 있나요?</h1></legend>

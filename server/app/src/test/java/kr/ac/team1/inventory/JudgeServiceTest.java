@@ -30,7 +30,7 @@ class JudgeServiceTest {
     @Autowired
     ToolService tools;
 
-    private static final Answers NONE = new Answers("", "", "", null);
+    private static final Answers NONE = new Answers("", "", "", null, null);
 
     @Test
     void 처음_데이터가_DB에_다_들어감() {
@@ -54,7 +54,7 @@ class JudgeServiceTest {
 
     @Test
     void 파워셸이면_rtk_카드에_주의와_효과없음() {
-        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null));
+        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null, null));
         AddItem rtk = rec.add().stream().filter(a -> a.tool().equals("rtk")).findFirst().orElseThrow();
         assertThat(rtk.verdict()).isEqualTo("지금 환경에서는 효과가 없어요");
         assertThat(rtk.warnings()).isNotEmpty();
@@ -121,7 +121,7 @@ class JudgeServiceTest {
 
     @Test
     void 상황을_고르면_기본으로_되는_것_깔면_좋은_도구_비용_카드() {
-        var card = judge.recommend(List.of("superpowers"), new Answers("", "", "", "e2e-test")).situation();
+        var card = judge.recommend(List.of("superpowers"), new Answers("", "", "", "e2e-test", null)).situation();
         assertThat(card.base()).contains("11/12");
         assertThat(card.tools()).extracting(t -> t.id()).containsExactly("playwright-mcp");
         assertThat(card.tools().get(0).inBox()).isFalse();
@@ -130,11 +130,29 @@ class JudgeServiceTest {
     }
 
     @Test
+    void 중요한_것을_고르면_시험_결과로_도구를_하나_고른다() {
+        var acc = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "accurate")).situation().pick();
+        assertThat(acc.base()).isFalse();
+        assertThat(acc.tools()).extracting(t -> t.id()).containsExactly("headroom");
+        assertThat(acc.label()).isEqualTo("틀리지 않는 것");
+        var save = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "save")).situation().pick();
+        assertThat(save.tools()).extracting(t -> t.id()).containsExactly("caveman");
+        var safe = judge.recommend(List.of(), new Answers("", "", "", "db-ask", "safe")).situation().pick();
+        assertThat(safe.tools()).extracting(t -> t.id()).containsExactly("dbhub");
+        var base = judge.recommend(List.of(), new Answers("", "", "", "code-find", "save")).situation().pick();
+        assertThat(base.base()).isTrue();
+        assertThat(base.tools()).isEmpty();
+        // 시험에서 차이를 확인 못 한 조합·중요한 것을 안 고름 → null
+        assertThat(judge.recommend(List.of(), new Answers("", "", "", "usage-view", "accurate")).situation().pick()).isNull();
+        assertThat(judge.recommend(List.of(), new Answers("", "", "", "db-ask", null)).situation().pick()).isNull();
+    }
+
+    @Test
     void 추천_도구가_도구함_도구와_겹치거나_비슷하면_카드에_알린다() {
         // gsd-core(도구함) ↔ superpowers(추천) = 겹침, serena(도구함) ↔ codegraph(추천) = 상황따라
-        var multi = judge.recommend(List.of("gsd-core"), new Answers("", "", "", "multi-day")).situation();
+        var multi = judge.recommend(List.of("gsd-core"), new Answers("", "", "", "multi-day", null)).situation();
         assertThat(multi.tools().get(0).overlapWith()).containsExactly("gsd-core");
-        var find = judge.recommend(List.of("serena"), new Answers("", "", "", "code-find")).situation();
+        var find = judge.recommend(List.of("serena"), new Answers("", "", "", "code-find", null)).situation();
         var codegraph = find.tools().stream().filter(t -> t.id().equals("codegraph")).findFirst().orElseThrow();
         assertThat(codegraph.similarTo()).containsExactly("serena");
         assertThat(codegraph.overlapWith()).isEmpty();
@@ -145,16 +163,16 @@ class JudgeServiceTest {
 
     @Test
     void 이미_담은_도구는_inBox로_표시하고_시험_전_근거는_제작자_설명() {
-        var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug")).situation();
+        var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug", null)).situation();
         assertThat(debug.tools()).hasSize(2);
         assertThat(debug.tools().get(0).inBox()).isTrue();
-        var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security")).situation();
+        var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security", null)).situation();
         assertThat(sec.evidence()).isEqualTo("제작자 설명");
     }
 
     @Test
     void 상황을_안_고르거나_없는_상황이면_카드_없음() {
         assertThat(judge.recommend(List.of("superpowers"), NONE).situation()).isNull();
-        assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황")).situation()).isNull();
+        assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황", null)).situation()).isNull();
     }
 }

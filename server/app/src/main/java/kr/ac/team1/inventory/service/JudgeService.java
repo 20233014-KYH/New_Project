@@ -15,12 +15,14 @@ import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.dto.Dtos.AddItem;
 import kr.ac.team1.inventory.dto.Dtos.Answers;
 import kr.ac.team1.inventory.dto.Dtos.JudgeItem;
+import kr.ac.team1.inventory.dto.Dtos.Pick;
 import kr.ac.team1.inventory.dto.Dtos.RecommendResult;
 import kr.ac.team1.inventory.dto.Dtos.RemoveItem;
 import kr.ac.team1.inventory.dto.Dtos.SituationCard;
 import kr.ac.team1.inventory.dto.Dtos.SituationDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolRef;
 import kr.ac.team1.inventory.domain.SituationRule;
+import kr.ac.team1.inventory.repo.SituationPickRepository;
 import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
@@ -45,14 +47,16 @@ public class JudgeService {
     private final ToolPairRepository pairs;
     private final TestedToolRepository tested;
     private final SituationRuleRepository rules;
+    private final SituationPickRepository picks;
     private final ToolService toolService;
 
     public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService,
-                        SituationRuleRepository rules) {
+                        SituationRuleRepository rules, SituationPickRepository picks) {
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
         this.rules = rules;
+        this.picks = picks;
         this.toolService = toolService;
     }
 
@@ -84,7 +88,7 @@ public class JudgeService {
 
     public RecommendResult recommend(List<String> rawIds, Answers answers) {
         List<String> ids = clean(rawIds);
-        Answers ans = answers == null ? new Answers("", "", "", null) : answers;
+        Answers ans = answers == null ? new Answers("", "", "", null, null) : answers;
         List<JudgeItem> js = judge(ids);
         Map<String, Tool> byId = tools.findAll().stream().collect(Collectors.toMap(Tool::getId, Function.identity()));
         Map<String, ToolPair> pairMap = pairMap();
@@ -136,7 +140,7 @@ public class JudgeService {
             add.add(new AddItem(t.getTool(), t.getEffect(), t.getCaution(), warnings, unknown, blocked, verdict, t.getTestedOn()));
         }
         int unknownCount = (int) js.stream().filter(p -> "no_info".equals(p.state())).count();
-        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ids, byId, pairMap));
+        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ans.priority(), ids, byId, pairMap));
     }
 
     /** 상황 질문의 선택지 (CSV 순서) */
@@ -157,7 +161,7 @@ public class JudgeService {
         }).toList();
     }
 
-    private SituationCard situationCard(String situationId, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
+    private SituationCard situationCard(String situationId, String priority, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
         if (situationId == null || situationId.isBlank()) {
             return null;
         }
@@ -167,8 +171,24 @@ public class JudgeService {
                                 .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
                                         clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList(),
                         r.getBetter(), r.getCost(), "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
-                        r.getSource(), r.getReview()))
+                        r.getSource(), r.getReview(), pick(situationId, priority, ids, byId, pairMap)))
                 .orElse(null);
+    }
+
+    /** 상황 + 중요한 것으로 고른 도구. 안 골랐거나 시험에서 차이를 확인 못 한 조합이면 null */
+    private Pick pick(String situationId, String priority, List<String> ids, Map<String, Tool> byId,
+                           Map<String, ToolPair> pairMap) {
+        if (priority == null || priority.isBlank()) {
+            return null;
+        }
+        return picks.findById(situationId + "|" + priority).map(p -> {
+            boolean base = "base".equals(p.getTools());
+            List<ToolRef> refs = base ? List.of() : java.util.Arrays.stream(p.getTools().split(java.util.regex.Pattern.quote("|")))
+                    .map(String::trim).filter(t -> !t.isEmpty())
+                    .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
+                            clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList();
+            return new Pick(priority, Labels.PRIORITY.get(priority), base, refs, p.getReason());
+        }).orElse(null);
     }
 
     /** 빈 값·중복을 빼고 순서는 지킨다. 없는 도구나 너무 많은 도구는 거절한다. */

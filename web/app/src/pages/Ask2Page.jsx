@@ -35,7 +35,7 @@ export default function Ask2Page() {
         <Steps current={2} />
         <div className="qwrap">
           <Link className="back" to="/ask/1">← 뒤로</Link>
-          <p className="qcount">질문 3 / 3</p>
+          <p className="qcount">질문 4 / 4</p>
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>
               <legend><h1 tabIndex={-1}>Claude Code가 명령을 실행할 때 어떤 곳을 써요?</h1></legend>

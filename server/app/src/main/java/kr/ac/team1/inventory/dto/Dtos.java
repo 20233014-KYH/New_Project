@@ -73,14 +73,19 @@ public final class Dtos {
 
     /** 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신 */
     public record SituationCard(String id, Integer category, String label, String base, List<ToolRef> tools,
-                                String better, String cost, String evidence, String source, String review) {
+                                String better, String cost, String evidence, String source, String review, Pick pick) {
+    }
+
+    /** 중요한 것에 따라 고른 도구. base = 기본 기능으로 충분(tools는 빈 목록) */
+    public record Pick(String priority, String label, boolean base, List<ToolRef> tools, String reason) {
     }
 
     public record JudgeRequest(List<String> ids) {
     }
 
-    /** 질문에 대한 답. work = bugfix/feature/빈칸, shell = bash/powershell/빈칸, logs = big_logs/small/빈칸 */
-    public record Answers(String work, String shell, String logs, String situation) {
+    /** 질문에 대한 답. work = bugfix/feature/빈칸, shell = bash/powershell/빈칸, logs = big_logs/small/빈칸,
+     *  priority = accurate/save/simple/safe/빈칸 */
+    public record Answers(String work, String shell, String logs, String situation, String priority) {
     }
 
     public record RecommendRequest(List<String> ids, Answers answers) {
