@@ -69,6 +69,11 @@ public class ApiController {
     }
 
     /** 추천(빼기·더하기). answers = 질문에 대한 답 */
+    @GetMapping("/goals")
+    public List<kr.ac.team1.inventory.dto.Dtos.GoalDto> goals() {
+        return judgeService.goals();
+    }
+
     @PostMapping("/recommend")
     public RecommendResult recommend(@RequestBody RecommendRequest req) {
         return judgeService.recommend(req.ids(), req.answers());

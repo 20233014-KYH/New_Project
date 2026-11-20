@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Steps from '../components/Steps.jsx'
-import { getSituations, getCategories } from '../api.js'
+import { getSituations, getCategories, getGoals } from '../api.js'
 
 function getAns() {
   try { return JSON.parse(sessionStorage.getItem('inv-ans') || '{}') } catch { return {} }
@@ -14,17 +14,21 @@ function saveAns(ans) {
 export default function AskSituationPage() {
   const [situations, setSituations] = useState([])
   const [catName, setCatName] = useState({})
-  const [selected, setSelected] = useState(getAns().situation ?? '')
+  const [goals, setGoals] = useState([])
+  // 목적은 'goal:아이디', 상황은 상황 아이디로 같은 라디오 묶음에 담는다
+  const [selected, setSelected] = useState(getAns().goal ? `goal:${getAns().goal}` : (getAns().situation ?? ''))
   const navigate = useNavigate()
 
   useEffect(() => {
     getSituations().then(setSituations)
+    getGoals().then(setGoals)
     getCategories().then(cats => setCatName(Object.fromEntries(cats.map(c => [c.id, c.name]))))
   }, [])
 
   function handleSubmit(e) {
     e.preventDefault()
-    saveAns({ ...getAns(), situation: selected })
+    const isGoal = selected.startsWith('goal:')
+    saveAns({ ...getAns(), goal: isGoal ? selected.slice(5) : '', situation: isGoal ? '' : selected })
     navigate(selected ? '/ask/priority' : '/ask/1')
   }
 
@@ -39,7 +43,17 @@ export default function AskSituationPage() {
           <p className="qcount">질문 1 / 4</p>
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>
-              <legend><h1 tabIndex={-1}>어떤 상황에서 도구를 찾고 있나요?</h1></legend>
+              <legend><h1 tabIndex={-1}>무엇을 하려고 도구를 찾고 있나요?</h1></legend>
+              <p className="mute" style={{ margin: 'var(--s4) 0 var(--s2)' }}>목적으로 고르기 · 지금 도구함에서 더할 것·꺼도 되는 것을 한 번에 알려 드려요</p>
+              <div className="radios">
+                {goals.map(g => (
+                  <label key={g.id} className="radio">
+                    <input type="radio" name="s" value={`goal:${g.id}`} checked={selected === `goal:${g.id}`} onChange={() => setSelected(`goal:${g.id}`)} />
+                    <div><b>{g.label}</b><span>{g.desc}</span></div>
+                  </label>
+                ))}
+              </div>
+              <p style={{ margin: 'var(--s8) 0 0', fontWeight: 600 }}>또는 구체적인 상황 하나 고르기</p>
               {groups.map(cat => (
                 <div key={cat} style={{ marginTop: 'var(--s4)' }}>
                   <p className="mute" style={{ margin: '0 0 var(--s2)' }}>{catName[cat] || ''}</p>

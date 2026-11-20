@@ -40,7 +40,7 @@ processResources {
 		into 'seed'
 	}
 	from('../../web/app/src/data') {
-		include 'tested.json', 'desc_en.json', 'cards_ko.json', 'situation_rules.csv', 'situation_priority.csv'
+		include 'tested.json', 'desc_en.json', 'cards_ko.json', 'situation_rules.csv', 'situation_priority.csv', 'situation_goals.csv'
 		into 'seed'
 	}
 }

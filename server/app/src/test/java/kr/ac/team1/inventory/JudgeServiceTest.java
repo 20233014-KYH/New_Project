@@ -30,7 +30,7 @@ class JudgeServiceTest {
     @Autowired
     ToolService tools;
 
-    private static final Answers NONE = new Answers("", "", "", null, null);
+    private static final Answers NONE = new Answers("", "", "", null, null, null);
 
     @Test
     void 처음_데이터가_DB에_다_들어감() {
@@ -54,7 +54,7 @@ class JudgeServiceTest {
 
     @Test
     void 파워셸이면_rtk_카드에_주의와_효과없음() {
-        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null, null));
+        RecommendResult rec = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null, null, null));
         AddItem rtk = rec.add().stream().filter(a -> a.tool().equals("rtk")).findFirst().orElseThrow();
         assertThat(rtk.verdict()).isEqualTo("지금 환경에서는 효과가 없어요");
         assertThat(rtk.warnings()).isNotEmpty();
@@ -126,7 +126,7 @@ class JudgeServiceTest {
 
     @Test
     void 상황을_고르면_기본으로_되는_것_깔면_좋은_도구_비용_카드() {
-        var card = judge.recommend(List.of("superpowers"), new Answers("", "", "", "e2e-test", null)).situation();
+        var card = judge.recommend(List.of("superpowers"), new Answers("", "", "", "e2e-test", null, null)).situation();
         assertThat(card.base()).contains("11/12");
         assertThat(card.tools()).extracting(t -> t.id()).containsExactly("playwright-mcp");
         assertThat(card.tools().get(0).inBox()).isFalse();
@@ -145,29 +145,55 @@ class JudgeServiceTest {
     }
 
     @Test
+    void 목적을_고르면_더하기_꺼도_되는_것_그대로를_정한다() {
+        var hack = judge.recommend(List.of("caveman"), new Answers("", "", "", null, "accurate", "hackathon")).goal();
+        assertThat(hack.situations()).hasSize(6);
+        assertThat(hack.add()).extracting(x -> x.tool()).containsExactly("gstack", "playwright-mcp", "headroom");
+        assertThat(hack.add().get(2).warnings()).anyMatch(w -> w.contains("caveman"));
+        assertThat(hack.keep()).isEmpty();
+
+        // 토큰이 중요하고, 시험에서 '기본 기능으로 충분'이던 상황의 도구가 도구함에 있으면 꺼도 되는 것
+        var lp = judge.recommend(List.of("graphify"), new Answers("", "", "", null, "save", "long-project")).goal();
+        assertThat(lp.turnOff()).extracting(x -> x.tool()).containsExactly("graphify");
+        assertThat(lp.turnOff().get(0).situations()).containsExactly("큰 코드에서 함수나 기능이 어디 있는지 찾고 싶어요");
+
+        // 이미 있는 도구는 그대로, 시험 주의(PowerShell에선 rtk가 안 됨)는 경고로
+        var save = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null, "save", "save-limit")).goal();
+        assertThat(save.keep()).extracting(x -> x.tool()).containsExactly("caveman");
+        var rtk = save.add().stream().filter(x -> x.tool().equals("rtk")).findFirst().orElseThrow();
+        assertThat(rtk.warnings()).anyMatch(w -> w.contains("PowerShell"));
+
+        // 중요한 것을 안 고르면 상황 카드만
+        var none = judge.recommend(List.of("caveman"), new Answers("", "", "", null, null, "hackathon")).goal();
+        assertThat(none.add()).isEmpty();
+        assertThat(none.situations()).hasSize(6);
+        assertThat(judge.goals()).hasSize(6);
+    }
+
+    @Test
     void 중요한_것을_고르면_시험_결과로_도구를_하나_고른다() {
-        var acc = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "accurate")).situation().pick();
+        var acc = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "accurate", null)).situation().pick();
         assertThat(acc.base()).isFalse();
         assertThat(acc.tools()).extracting(t -> t.id()).containsExactly("headroom");
         assertThat(acc.label()).isEqualTo("틀리지 않는 것");
-        var save = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "save")).situation().pick();
+        var save = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "save", null)).situation().pick();
         assertThat(save.tools()).extracting(t -> t.id()).containsExactly("caveman");
-        var safe = judge.recommend(List.of(), new Answers("", "", "", "db-ask", "safe")).situation().pick();
+        var safe = judge.recommend(List.of(), new Answers("", "", "", "db-ask", "safe", null)).situation().pick();
         assertThat(safe.tools()).extracting(t -> t.id()).containsExactly("dbhub");
-        var base = judge.recommend(List.of(), new Answers("", "", "", "code-find", "save")).situation().pick();
+        var base = judge.recommend(List.of(), new Answers("", "", "", "code-find", "save", null)).situation().pick();
         assertThat(base.base()).isTrue();
         assertThat(base.tools()).isEmpty();
         // 시험에서 차이를 확인 못 한 조합·중요한 것을 안 고름 → null
-        assertThat(judge.recommend(List.of(), new Answers("", "", "", "usage-view", "accurate")).situation().pick()).isNull();
-        assertThat(judge.recommend(List.of(), new Answers("", "", "", "db-ask", null)).situation().pick()).isNull();
+        assertThat(judge.recommend(List.of(), new Answers("", "", "", "usage-view", "accurate", null)).situation().pick()).isNull();
+        assertThat(judge.recommend(List.of(), new Answers("", "", "", "db-ask", null, null)).situation().pick()).isNull();
     }
 
     @Test
     void 추천_도구가_도구함_도구와_겹치거나_비슷하면_카드에_알린다() {
         // gsd-core(도구함) ↔ superpowers(추천) = 겹침, serena(도구함) ↔ codegraph(추천) = 상황따라
-        var multi = judge.recommend(List.of("gsd-core"), new Answers("", "", "", "multi-day", null)).situation();
+        var multi = judge.recommend(List.of("gsd-core"), new Answers("", "", "", "multi-day", null, null)).situation();
         assertThat(multi.tools().get(0).overlapWith()).containsExactly("gsd-core");
-        var find = judge.recommend(List.of("serena"), new Answers("", "", "", "code-find", null)).situation();
+        var find = judge.recommend(List.of("serena"), new Answers("", "", "", "code-find", null, null)).situation();
         var codegraph = find.tools().stream().filter(t -> t.id().equals("codegraph")).findFirst().orElseThrow();
         assertThat(codegraph.similarTo()).containsExactly("serena");
         assertThat(codegraph.overlapWith()).isEmpty();
@@ -178,16 +204,16 @@ class JudgeServiceTest {
 
     @Test
     void 이미_담은_도구는_inBox로_표시하고_시험_전_근거는_제작자_설명() {
-        var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug", null)).situation();
+        var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug", null, null)).situation();
         assertThat(debug.tools()).hasSize(2);
         assertThat(debug.tools().get(0).inBox()).isTrue();
-        var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security", null)).situation();
+        var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security", null, null)).situation();
         assertThat(sec.evidence()).isEqualTo("제작자 설명");
     }
 
     @Test
     void 상황을_안_고르거나_없는_상황이면_카드_없음() {
         assertThat(judge.recommend(List.of("superpowers"), NONE).situation()).isNull();
-        assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황", null)).situation()).isNull();
+        assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황", null, null)).situation()).isNull();
     }
 }

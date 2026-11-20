@@ -9,6 +9,7 @@ import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
 import situationCsv from './data/situation_rules.csv?raw'
 import priorityCsv from './data/situation_priority.csv?raw'
+import goalsCsv from './data/situation_goals.csv?raw'
 
 // 서버 모드: VITE_API_BASE=http://localhost:8080/api (server/app, Spring). 같은 데이터·같은 규칙이라 결과 모양이 같다.
 const BASE = import.meta.env.VITE_API_BASE || ''
@@ -120,7 +121,8 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     })
   })
   return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length,
-    situation: situationCard(answers?.situation, answers?.priority, ids, byId, pairMap) }
+    situation: situationCard(answers?.situation, answers?.priority, ids, byId, pairMap),
+    goal: goalPlan(answers || {}, ids, byId, pairMap, testedMap) }
 }
 
 // 서버 모드에서 서버가 꺼져 있거나 오류면 화면 위에 안내 띠를 띄운다(components/ServerBanner.jsx가 이 이벤트를 받음)
@@ -304,6 +306,56 @@ function situationCard(situationId, priority, ids, byId, pairMap) {
     better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
     source: r.source, review: r.review, pick: pick(r.id, priority, ids, byId, pairMap),
   }
+}
+
+// 목적 → 상황 여러 개 (data/situation_goals.csv, 서버와 같은 파일)
+let _goals = null
+function getGoalRows() {
+  if (!_goals) {
+    const lines = goalsCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _goals = lines.slice(1).map(l => { const c = splitCsv(l); return { id: c[0], label: c[1], desc: c[2], situations: c[3] } })
+  }
+  return _goals
+}
+export async function getGoals() {
+  if (BASE) {
+    const res = await apiFetch(`${BASE}/goals`)
+    return res.json()
+  }
+  return getGoalRows().map(g => ({ id: g.id, label: g.label, desc: g.desc }))
+}
+// 같은 도구가 여러 상황에서 나오면 한 줄로 합친다
+function mergePlan(m, t, situation, reason, warnings) {
+  const old = m.get(t.id)
+  if (!old) { m.set(t.id, { tool: t.id, name: t.name, situations: [situation], reasons: [reason], warnings: [...warnings] }); return }
+  old.situations.push(situation)
+  old.reasons.push(reason)
+  warnings.forEach(w => { if (!old.warnings.includes(w)) old.warnings.push(w) })
+}
+// 목적 → 더하기 / 꺼도 되는 것 / 그대로 + 상황별 카드 (서버 JudgeService.goalPlan과 같은 규칙)
+function goalPlan(ans, ids, byId, pairMap, testedMap) {
+  if (!ans.goal) return null
+  const g = getGoalRows().find(x => x.id === ans.goal)
+  if (!g) return null
+  const cards = splitTools(g.situations).map(s => situationCard(s, ans.priority, ids, byId, pairMap)).filter(Boolean)
+  const add = new Map(), off = new Map(), keep = new Map()
+  const costMatters = ['save', 'fast', 'simple'].includes(ans.priority)
+  for (const c of cards) {
+    const p = c.pick
+    if (!p) continue
+    if (p.base) {
+      if (costMatters) c.tools.filter(t => t.inBox).forEach(t => mergePlan(off, t, c.label, p.reason, []))
+      continue
+    }
+    for (const t of p.tools) {
+      if (t.inBox) { mergePlan(keep, t, c.label, p.reason, []); continue }
+      const warnings = [...t.overlapWith.map(o => `도구함의 ${o}와 겹쳐요`), ...t.similarTo.map(o => `도구함의 ${o}와 비슷한 역할이에요(상황따라)`)]
+      const tt = testedMap[t.id]
+      if (tt && ((tt.caution_work && tt.caution_work === ans.work) || (tt.caution_shell && tt.caution_shell === ans.shell))) warnings.push(tt.caution)
+      mergePlan(add, t, c.label, p.reason, warnings)
+    }
+  }
+  return { id: g.id, label: g.label, desc: g.desc, add: [...add.values()], turnOff: [...off.values()], keep: [...keep.values()], situations: cards }
 }
 
 // 상황 질문의 선택지

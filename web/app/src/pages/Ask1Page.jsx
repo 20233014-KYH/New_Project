@@ -34,7 +34,7 @@ export default function Ask1Page() {
       <div className="c">
         <Steps current={2} />
         <div className="qwrap">
-          <Link className="back" to={saved.situation ? '/ask/priority' : '/ask/situation'}>← 뒤로</Link>
+          <Link className="back" to={saved.situation || saved.goal ? '/ask/priority' : '/ask/situation'}>← 뒤로</Link>
           <p className="qcount">질문 3 / 4</p>
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>

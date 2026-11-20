@@ -7,12 +7,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import kr.ac.team1.inventory.domain.Category;
+import kr.ac.team1.inventory.domain.SituationGoal;
 import kr.ac.team1.inventory.domain.SituationPick;
 import kr.ac.team1.inventory.domain.SituationRule;
 import kr.ac.team1.inventory.domain.TestedTool;
 import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.repo.CategoryRepository;
+import kr.ac.team1.inventory.repo.SituationGoalRepository;
 import kr.ac.team1.inventory.repo.SituationPickRepository;
 import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
@@ -44,10 +46,11 @@ public class SeedLoader implements ApplicationRunner {
     private final TestedToolRepository tested;
     private final SituationRuleRepository rules;
     private final SituationPickRepository picks;
+    private final SituationGoalRepository goals;
 
     public SeedLoader(ObjectMapper mapper, CategoryRepository categories, ToolRepository tools,
                       ToolPairRepository pairs, TestedToolRepository tested, SituationRuleRepository rules,
-                      SituationPickRepository picks) {
+                      SituationPickRepository picks, SituationGoalRepository goals) {
         this.mapper = mapper;
         this.categories = categories;
         this.tools = tools;
@@ -55,6 +58,7 @@ public class SeedLoader implements ApplicationRunner {
         this.tested = tested;
         this.rules = rules;
         this.picks = picks;
+        this.goals = goals;
     }
 
     @Override
@@ -66,6 +70,12 @@ public class SeedLoader implements ApplicationRunner {
         }
         if (picks.count() == 0) {
             loadSituationPicks();
+        }
+        if (goals.count() == 0) {
+            for (List<String> c : readCsv("seed/situation_goals.csv")) {
+                goals.save(new SituationGoal(c.get(0), c.get(1), c.get(2), c.get(3), (int) goals.count()));
+            }
+            log.info("목적 {}개 넣음", goals.count());
         }
         if (tools.count() > 0) {
             log.info("DB에 데이터가 이미 있어 처음 데이터 넣기를 건너뜀 (도구 {}개)", tools.count());
@@ -144,6 +154,15 @@ public class SeedLoader implements ApplicationRunner {
             picks.save(new SituationPick(c.get(0), c.get(1), c.get(2), c.get(3)));
         }
         log.info("상황별 고르기 규칙 {}개 넣음", picks.count());
+    }
+
+    /** CSV 파일을 줄마다 칸 목록으로(첫 줄 칸 이름은 뺌) */
+    private List<List<String>> readCsv(String path) throws IOException {
+        String csv;
+        try (InputStream in = new ClassPathResource(path).getInputStream()) {
+            csv = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).replace("﻿", "");
+        }
+        return csv.lines().filter(l -> !l.isBlank()).skip(1).map(SeedLoader::splitCsv).toList();
     }
 
     static List<String> splitCsv(String line) {

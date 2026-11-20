@@ -14,14 +14,19 @@ import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.dto.Dtos.AddItem;
 import kr.ac.team1.inventory.dto.Dtos.Answers;
+import kr.ac.team1.inventory.dto.Dtos.GoalDto;
+import kr.ac.team1.inventory.dto.Dtos.GoalPlan;
 import kr.ac.team1.inventory.dto.Dtos.JudgeItem;
+import kr.ac.team1.inventory.dto.Dtos.PlanItem;
 import kr.ac.team1.inventory.dto.Dtos.Pick;
 import kr.ac.team1.inventory.dto.Dtos.RecommendResult;
 import kr.ac.team1.inventory.dto.Dtos.RemoveItem;
 import kr.ac.team1.inventory.dto.Dtos.SituationCard;
 import kr.ac.team1.inventory.dto.Dtos.SituationDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolRef;
+import kr.ac.team1.inventory.domain.SituationGoal;
 import kr.ac.team1.inventory.domain.SituationRule;
+import kr.ac.team1.inventory.repo.SituationGoalRepository;
 import kr.ac.team1.inventory.repo.SituationPickRepository;
 import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
@@ -48,15 +53,18 @@ public class JudgeService {
     private final TestedToolRepository tested;
     private final SituationRuleRepository rules;
     private final SituationPickRepository picks;
+    private final SituationGoalRepository goals;
     private final ToolService toolService;
 
     public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService,
-                        SituationRuleRepository rules, SituationPickRepository picks) {
+                        SituationRuleRepository rules, SituationPickRepository picks,
+                        SituationGoalRepository goals) {
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
         this.rules = rules;
         this.picks = picks;
+        this.goals = goals;
         this.toolService = toolService;
     }
 
@@ -88,7 +96,7 @@ public class JudgeService {
 
     public RecommendResult recommend(List<String> rawIds, Answers answers) {
         List<String> ids = clean(rawIds);
-        Answers ans = answers == null ? new Answers("", "", "", null, null) : answers;
+        Answers ans = answers == null ? new Answers("", "", "", null, null, null) : answers;
         List<JudgeItem> js = judge(ids);
         Map<String, Tool> byId = tools.findAll().stream().collect(Collectors.toMap(Tool::getId, Function.identity()));
         Map<String, ToolPair> pairMap = pairMap();
@@ -140,7 +148,80 @@ public class JudgeService {
             add.add(new AddItem(t.getTool(), t.getEffect(), t.getCaution(), warnings, unknown, blocked, verdict, t.getTestedOn()));
         }
         int unknownCount = (int) js.stream().filter(p -> "no_info".equals(p.state())).count();
-        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ans.priority(), ids, byId, pairMap));
+        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ans.priority(), ids, byId, pairMap),
+                goalPlan(ans, ids, byId, pairMap));
+    }
+
+    /** 목적 선택지 (CSV 순서) */
+    public List<GoalDto> goals() {
+        return goals.findAll().stream().sorted(Comparator.comparing(SituationGoal::getPosition))
+                .map(g -> new GoalDto(g.getGoalId(), g.getLabel(), g.getDescription())).toList();
+    }
+
+    /**
+     * 목적 → 상황 여러 개의 카드를 모아 도구함을 바꿀 것을 정한다.
+     * 더하기: 중요한 것으로 고른 도구 중 도구함에 없는 것 / 그대로: 고른 도구가 이미 도구함에 있음 /
+     * 꺼도 되는 것: 토큰·속도·간단함이 중요한데 시험에서 '기본 기능으로 충분'이었던 상황의 추천 도구가 도구함에 있음.
+     * 중요한 것을 안 골랐으면 상황 카드만 준다(고를 근거가 없어서).
+     */
+    private GoalPlan goalPlan(Answers ans, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
+        if (ans.goal() == null || ans.goal().isBlank()) {
+            return null;
+        }
+        Map<String, TestedTool> testedMap = tested.findAll().stream().collect(Collectors.toMap(TestedTool::getTool, Function.identity()));
+        return goals.findById(ans.goal()).map(g -> {
+            List<SituationCard> cards = ToolService.splitTools(g.getSituations()).stream()
+                    .map(s -> situationCard(s, ans.priority(), ids, byId, pairMap)).filter(Objects::nonNull).toList();
+            Map<String, PlanItem> add = new java.util.LinkedHashMap<>();
+            Map<String, PlanItem> off = new java.util.LinkedHashMap<>();
+            Map<String, PlanItem> keep = new java.util.LinkedHashMap<>();
+            boolean costMatters = ans.priority() != null && List.of("save", "fast", "simple").contains(ans.priority());
+            for (SituationCard c : cards) {
+                Pick p = c.pick();
+                if (p == null) {
+                    continue;
+                }
+                if (p.base()) {
+                    if (costMatters) {
+                        c.tools().stream().filter(ToolRef::inBox).forEach(t -> merge(off, t, c.label(), p.reason(), List.of()));
+                    }
+                    continue;
+                }
+                for (ToolRef t : p.tools()) {
+                    if (t.inBox()) {
+                        merge(keep, t, c.label(), p.reason(), List.of());
+                        continue;
+                    }
+                    List<String> warnings = new ArrayList<>();
+                    t.overlapWith().forEach(o -> warnings.add("도구함의 " + o + "와 겹쳐요"));
+                    t.similarTo().forEach(o -> warnings.add("도구함의 " + o + "와 비슷한 역할이에요(상황따라)"));
+                    TestedTool tt = testedMap.get(t.id());
+                    if (tt != null && ((tt.getCautionWork() != null && tt.getCautionWork().equals(ans.work()))
+                            || (tt.getCautionShell() != null && tt.getCautionShell().equals(ans.shell())))) {
+                        warnings.add(tt.getCaution());
+                    }
+                    merge(add, t, c.label(), p.reason(), warnings);
+                }
+            }
+            return new GoalPlan(g.getGoalId(), g.getLabel(), g.getDescription(), List.copyOf(add.values()),
+                    List.copyOf(off.values()), List.copyOf(keep.values()), cards);
+        }).orElse(null);
+    }
+
+    /** 같은 도구가 여러 상황에서 나오면 한 줄로 합치고 상황 이름·이유·주의를 이어 붙인다 */
+    private static void merge(Map<String, PlanItem> m, ToolRef t, String situation, String reason, List<String> warnings) {
+        PlanItem old = m.get(t.id());
+        if (old == null) {
+            m.put(t.id(), new PlanItem(t.id(), t.name(), List.of(situation), List.of(reason), List.copyOf(warnings)));
+            return;
+        }
+        List<String> s = new ArrayList<>(old.situations());
+        List<String> r = new ArrayList<>(old.reasons());
+        s.add(situation);
+        r.add(reason);
+        List<String> w = new ArrayList<>(old.warnings());
+        warnings.stream().filter(x -> !w.contains(x)).forEach(w::add);
+        m.put(t.id(), new PlanItem(t.id(), t.name(), s, r, w));
     }
 
     /** 상황 질문의 선택지 (CSV 순서) */

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Steps from '../components/Steps.jsx'
-import { getSituations } from '../api.js'
+import { getSituations, getGoals } from '../api.js'
 
 // 선택지 순서·문장은 조사 결과(사람들이 도구를 고를 때 따지는 것: 토큰·한도, 정확도, 설치 수고, 안전)를 따른다.
 // '빨리 끝내기'는 조사에선 덜 언급됐지만 해커톤 같은 목적에서 필요해서 넣음(시험에서 속도 차이가 확인된 상황만 고름)
@@ -28,8 +28,9 @@ export default function AskPriorityPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!saved.situation) { navigate('/ask/1', { replace: true }); return }
-    getSituations().then(list => setLabel(list.find(s => s.id === saved.situation)?.label || ''))
+    if (!saved.situation && !saved.goal) { navigate('/ask/1', { replace: true }); return }
+    if (saved.goal) getGoals().then(list => setLabel(list.find(g => g.id === saved.goal)?.label || ''))
+    else getSituations().then(list => setLabel(list.find(s => s.id === saved.situation)?.label || ''))
   }, [])
 
   function handleSubmit(e) {
@@ -48,7 +49,7 @@ export default function AskPriorityPage() {
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>
               <legend><h1 tabIndex={-1}>이 일을 할 때 무엇이 제일 중요해요?</h1></legend>
-              {label && <p className="mute" style={{ margin: '0 0 var(--s4)' }}>고른 상황: {label}</p>}
+              {label && <p className="mute" style={{ margin: '0 0 var(--s4)' }}>{saved.goal ? '고른 목적' : '고른 상황'}: {label}</p>}
               <div className="radios">
                 {OPTS.map(([v, l, hint]) => (
                   <label key={v} className="radio">

@@ -69,7 +69,20 @@ public final class Dtos {
     }
 
     public record RecommendResult(List<JudgeItem> pairs, List<RemoveItem> remove, List<AddItem> add, int unknownCount,
-                                  SituationCard situation) {
+                                  SituationCard situation, GoalPlan goal) {
+    }
+
+    /** 목적 선택지 하나 */
+    public record GoalDto(String id, String label, String desc) {
+    }
+
+    /** 목적에 맞춰 도구함을 바꿀 것: 더하기 / 꺼도 되는 것 / 그대로 + 상황별 카드 */
+    public record GoalPlan(String id, String label, String desc, List<PlanItem> add, List<PlanItem> turnOff,
+                           List<PlanItem> keep, List<SituationCard> situations) {
+    }
+
+    /** 바꿀 것 한 줄. situations·reasons = 이 판단이 나온 상황 이름과 그 이유(같은 순서), warnings = 답에 걸리는 시험 주의·겹침 */
+    public record PlanItem(String tool, String name, List<String> situations, List<String> reasons, List<String> warnings) {
     }
 
     /** 상황 질문의 선택지 하나 */
@@ -93,8 +106,8 @@ public final class Dtos {
     }
 
     /** 질문에 대한 답. work = bugfix/feature/빈칸, shell = bash/powershell/빈칸, logs = big_logs/small/빈칸,
-     *  priority = accurate/save/simple/safe/빈칸 */
-    public record Answers(String work, String shell, String logs, String situation, String priority) {
+     *  priority = accurate/save/fast/simple/safe/빈칸, goal = 목적ID/빈칸(목적을 고르면 situation은 비움) */
+    public record Answers(String work, String shell, String logs, String situation, String priority, String goal) {
     }
 
     public record RecommendRequest(List<String> ids, Answers answers) {
