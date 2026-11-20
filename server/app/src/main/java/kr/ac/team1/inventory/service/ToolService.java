@@ -112,7 +112,8 @@ public class ToolService {
     ToolDto toDto(Tool t) {
         return new ToolDto(t.getId(), t.getName(), t.getRepo(), t.getCategory(), t.getDescEn(), t.getSummaryKo(),
                 t.getWhenKo(), t.getVersion(), t.getLicense(), t.getStars(), t.getPushedAt(), t.getTokens(),
-                t.getScopeJson() == null ? null : mapper.readTree(t.getScopeJson()), t.getTokenNote(), t.getCheckedAt());
+                t.getScopeJson() == null ? null : mapper.readTree(t.getScopeJson()), t.getTokenNote(), t.getCheckedAt(),
+                t.getLatestRelease(), t.getRefreshedAt());
     }
 
     private static boolean contains(String s, String lq) {

@@ -170,7 +170,10 @@ export default function ToolPage() {
 
             <dl style={{ marginTop: 'var(--s6)' }}>
               <dt>저장소</dt><dd>{tool.repo}</dd>
-              <dt>버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              <dt>잰 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              {tool.latest_release && tool.latest_release !== tool.version && <>
+                <dt>최신 릴리스</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(잰 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
+              </>}
               <dt>라이선스</dt><dd>{tool.license || '확인 안 됨'}</dd>
               <dt>별</dt><dd className="n">{fmt(tool.stars)}</dd>
               <dt>최근 업데이트</dt><dd className="n">{tool.pushed_at ? tool.pushed_at.slice(0, 10) : '—'}</dd>

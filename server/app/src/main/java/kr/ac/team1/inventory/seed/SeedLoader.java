@@ -94,14 +94,16 @@ public class SeedLoader implements ApplicationRunner {
             JsonNode auto = e.path("auto");
             String pushed = text(auto, "pushed_at");
             JsonNode card = cards.path(id);
-            tools.save(new Tool(id, text(e, "name"), text(e, "repo"), e.path("category").asInt(),
+            Tool tool = new Tool(id, text(e, "name"), text(e, "repo"), e.path("category").asInt(),
                     text(desc, id), text(card, "summary_ko"), text(card, "when_ko"),
                     text(e, "version"), text(auto, "license"),
                     auto.hasNonNull("stars") ? auto.path("stars").asLong() : null,
                     pushed != null && pushed.length() >= 10 ? pushed.substring(0, 10) : pushed,
                     e.hasNonNull("always_on_tokens_est") ? e.path("always_on_tokens_est").asInt() : null,
                     e.hasNonNull("scope") ? mapper.writeValueAsString(e.path("scope")) : null,
-                    text(e, "token_note"), text(e, "checked_at"), order++));
+                    text(e, "token_note"), text(e, "checked_at"), order++);
+            tool.setLatest(text(auto, "latest_release"), text(auto, "refreshed_at"));
+            tools.save(tool);
         }
 
         for (JsonNode p : read("compat.json").path("pairs")) {

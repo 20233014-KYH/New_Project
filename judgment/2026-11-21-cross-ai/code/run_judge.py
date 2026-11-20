@@ -38,6 +38,9 @@ def run_codex(p):
     r = subprocess.run(["codex", "exec", "--skip-git-repo-check", "-s", "read-only", "-o", out, "-"],
                        input=p, cwd=WORK, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=1200, shell=True)
     m = re.search(r"tokens used\s*\n?\s*([\d,]+)", r.stdout + r.stderr)
+    if not os.path.exists(out):   # 사용 한도 등으로 답을 못 받음 → 마지막 오류 줄을 그대로 알려 줌
+        errs = [l for l in (r.stdout + r.stderr).splitlines() if l.startswith("ERROR:")]
+        raise RuntimeError("Codex 답 없음: " + (errs[-1] if errs else f"종료 코드 {r.returncode}"))
     return open(out, encoding="utf-8").read(), {"total": int(m.group(1).replace(",", "")) if m else None}
 
 def job(judge, name):

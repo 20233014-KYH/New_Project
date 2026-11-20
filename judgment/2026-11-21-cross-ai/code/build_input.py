@@ -7,7 +7,14 @@ import json, math, os, re, itertools
 from collections import Counter
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NP = os.path.join(os.path.dirname(HERE), "New_Project")
+def _find_root(d):
+    # 저장소 뿌리(web/app/src/data가 있는 곳)를 위로 올라가며 찾는다(저장소 안·밖 어디서 돌려도 되게)
+    while d and not os.path.isdir(os.path.join(d, "web", "app", "src", "data")):
+        if os.path.isdir(os.path.join(d, "New_Project", "web")):
+            return os.path.join(d, "New_Project")
+        d = os.path.dirname(d) if os.path.dirname(d) != d else None
+    return d
+NP = _find_root(HERE)
 D = os.path.join(NP, "web", "app", "src", "data")
 entries = json.load(open(os.path.join(D, "entries.json"), encoding="utf-8"))["entries"]
 desc = json.load(open(os.path.join(D, "desc_en.json"), encoding="utf-8"))["desc"]
@@ -43,20 +50,21 @@ def profile(e):
             "한국어 소개": c.get("summary_ko"), "이럴 때": c.get("when_ko"),
             "역할 범위": e.get("scope"), "처음 읽는 양(토큰)": e.get("always_on_tokens_est"), "기능 목록": flist}
 
-by_cat = {}
-for e in entries:
-    by_cat.setdefault(e["category"], []).append(e)
-total = 0
-for ci, cj in itertools.combinations(sorted(by_cat), 2):
-    pairs = []
-    for x in by_cat[ci]:
-        for y in by_cat[cj]:
-            fx, fy = feats[x["id"]], feats[y["id"]]
-            m = sorted(((cos(V[(x["id"], a)], V[(y["id"], b)]), a, b) for a in fx for b in fy), reverse=True)[:3]
-            pairs.append({"a": x["id"], "b": y["id"],
-                          "비슷한 기능 후보": " | ".join(f"{a} ~ {b} ({s:.2f})" for s, a, b in m if s > 0.1) or "없음"})
-    tools = [profile(e) for e in by_cat[ci] + by_cat[cj]]
-    json.dump({"batch": f"c{ci}_{cj}", "tools": tools, "pairs": pairs},
-              open(os.path.join(HERE, "batches", f"c{ci}_{cj}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    total += len(pairs)
-print("쌍", total, "묶음", len(list(itertools.combinations(sorted(by_cat), 2))))
+if __name__ == "__main__":
+    by_cat = {}
+    for e in entries:
+        by_cat.setdefault(e["category"], []).append(e)
+    total = 0
+    for ci, cj in itertools.combinations(sorted(by_cat), 2):
+        pairs = []
+        for x in by_cat[ci]:
+            for y in by_cat[cj]:
+                fx, fy = feats[x["id"]], feats[y["id"]]
+                m = sorted(((cos(V[(x["id"], a)], V[(y["id"], b)]), a, b) for a in fx for b in fy), reverse=True)[:3]
+                pairs.append({"a": x["id"], "b": y["id"],
+                              "비슷한 기능 후보": " | ".join(f"{a} ~ {b} ({s:.2f})" for s, a, b in m if s > 0.1) or "없음"})
+        tools = [profile(e) for e in by_cat[ci] + by_cat[cj]]
+        json.dump({"batch": f"c{ci}_{cj}", "tools": tools, "pairs": pairs},
+                  open(os.path.join(HERE, "batches", f"c{ci}_{cj}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        total += len(pairs)
+    print("쌍", total, "묶음", len(list(itertools.combinations(sorted(by_cat), 2))))

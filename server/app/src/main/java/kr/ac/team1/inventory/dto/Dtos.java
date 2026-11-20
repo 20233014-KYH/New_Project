@@ -27,7 +27,9 @@ public final class Dtos {
             @JsonProperty("pushed_at") String pushedAt,
             Integer tokens, JsonNode scope,
             @JsonProperty("token_note") String tokenNote,
-            @JsonProperty("checked_at") String checkedAt) {
+            @JsonProperty("checked_at") String checkedAt,
+            @JsonProperty("latest_release") String latestRelease,
+            @JsonProperty("refreshed_at") String refreshedAt) {
     }
 
     /** 도구 상세에 붙는 판정 한 건 */

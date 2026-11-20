@@ -10,7 +10,14 @@ import csv, glob, json, os, sys
 from collections import Counter
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NP = os.path.join(os.path.dirname(HERE), "New_Project")
+def _find_root(d):
+    # 저장소 뿌리(web/app/src/data가 있는 곳)를 위로 올라가며 찾는다(저장소 안·밖 어디서 돌려도 되게)
+    while d and not os.path.isdir(os.path.join(d, "web", "app", "src", "data")):
+        if os.path.isdir(os.path.join(d, "New_Project", "web")):
+            return os.path.join(d, "New_Project")
+        d = os.path.dirname(d) if os.path.dirname(d) != d else None
+    return d
+NP = _find_root(HERE)
 COMPATS = [os.path.join(NP, "web", "app", "src", "data", "compat.json"), os.path.join(NP, "server", "sample-data", "compat.json")]
 DATE = "2026-11-21"
 KO = {"overlap": "겹침", "situational": "상황따라", "complement": "보완", "none": "관계 없음"}

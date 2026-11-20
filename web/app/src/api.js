@@ -32,6 +32,8 @@ function normalizeEntry(e) {
     scope: e.scope || null,
     token_note: e.token_note || null,
     checked_at: e.checked_at || null,
+    latest_release: e.auto?.latest_release || null,
+    refreshed_at: e.auto?.refreshed_at || null,
   }
 }
 
