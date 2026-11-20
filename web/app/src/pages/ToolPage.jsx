@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getTool, getCategories, fmt } from '../api.js'
+import { getTool, getTools, getCategories, fmt } from '../api.js'
 import Reason from '../components/Reason.jsx'
 
 const KO = { overlap: 'ov', situational: 'si', complement: 'co', none: 'no', no_info: 'no' }
@@ -18,9 +18,11 @@ export default function ToolPage() {
   const [tool, setTool] = useState(null)
   const [catName, setCatName] = useState({})
   const [box, setBox] = useState(getBox)
+  const [catOf, setCatOf] = useState({})
 
   useEffect(() => {
     getTool(id).then(setTool)
+    getTools().then(ts => setCatOf(Object.fromEntries(ts.map(t => [t.id, t.category]))))
     getCategories().then(cats => {
       const map = {}
       cats.forEach(c => { map[c.id] = c.name })
@@ -47,6 +49,9 @@ export default function ToolPage() {
   ]
   const pm = Math.max(1, ...parts.map(p => p[1] || 0))
 
+  const samePairs = (tool.pairs || []).filter(p => !catOf[p.otherId] || catOf[p.otherId] === tool.category)
+  const otherPairs = (tool.pairs || []).filter(p => catOf[p.otherId] && catOf[p.otherId] !== tool.category)
+  const otherNone = otherPairs.filter(p => p.relation === 'none').length
   const clashes = (tool.pairs || []).filter(p => p.relation === 'overlap' && box.includes(p.otherId))
 
   return (
@@ -88,7 +93,7 @@ export default function ToolPage() {
         <div className="split">
           <div>
             <h2>같은 분야 도구와 같이 켜면</h2>
-            {(tool.pairs || []).map(p => (
+            {samePairs.map(p => (
               <div key={p.otherId} className="pair">
                 <div>
                   <Link to={`/tool/${p.otherId}`}>{p.otherId}</Link>
@@ -98,8 +103,20 @@ export default function ToolPage() {
                 <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
               </div>
             ))}
+            <h2 style={{ marginTop: 'var(--s8)' }}>다른 분야 도구와 같이 켜면</h2>
+            {otherPairs.filter(p => p.relation !== 'none').map(p => (
+              <div key={p.otherId} className="pair">
+                <div>
+                  <Link to={`/tool/${p.otherId}`}>{p.otherId}</Link>
+                  <small>{catName[catOf[p.otherId]] || ''} · {p.review}{p.judged_at ? ` · 확인 ${p.judged_at}` : ''}</small>
+                  <Reason p={p} />
+                </div>
+                <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
+              </div>
+            ))}
+            {otherNone > 0 && <p className="mute">나머지 다른 분야 도구 {otherNone}개와는 관계 없음으로 판정했어요.</p>}
             <p className="note">
-              다른 분야 도구와는 아직 판정하지 않았어요. 판정이 없다는 건 안전하다는 뜻이 아니에요.{' '}
+              다른 분야 짝은 AI 두 개(Claude·Codex)가 도구 설명을 읽고 따로 판정해 맞춰 본 추정이에요(직접 시험 아님). 두 AI 의견이 다르면 이유에 둘 다 적었어요.{' '}
               <Link to="/help">판정 낱말 풀이</Link>
             </p>
 

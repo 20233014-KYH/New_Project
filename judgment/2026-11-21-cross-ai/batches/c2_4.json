@@ -1,0 +1,542 @@
+{
+ "batch": "c2_4",
+ "tools": [
+  {
+   "id": "caveman",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+   "한국어 소개": "원시인처럼 짧게 말하게 해서 토큰을 줄이는 스킬(과 프록시)이에요. 제작자는 토큰 65% 감소를 주장해요.",
+   "이럴 때": "설명이 긴 답변이 부담되고, 디버깅 절차를 꼭 지키지 않아도 되는 일상 작업에서 답변을 짧게 받고 싶을 때",
+   "역할 범위": {
+    "skills": 22,
+    "agents": 3,
+    "commands": 23,
+    "mcp": 0,
+    "hooks_total": 4,
+    "hook_events": {
+     "SessionStart": 1,
+     "SubagentStart": 1,
+     "UserPromptSubmit": 1,
+     "SessionEnd": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 2643,
+   "기능 목록": [
+    "cavecrew: When to delegate to `cavecrew-investigator` (locate code), `cavecrew-builder` (1-2 file ed",
+    "caveman: Activate caveman mode (off | status)",
+    "caveman-compress: Compress a markdown/text file into caveman format to save tokens",
+    "caveman-stats: Show available session usage without estimating savings",
+    "megacave: Activate megacave mode (caveman in Classical Chinese)",
+    "ultracave: Activate ultracave mode (caveman at maximum compression)",
+    "caveman-commit: Generate a terse caveman-style commit message for staged changes",
+    "caveman-discover: Find and label every LLM workflow in the repository so Caveman Cloud groups spend by workf",
+    "caveman-evidence-review: Read-only review of Caveman Cloud evidence: cost, Cave Score, workflows, traces, latency, ",
+    "caveman-explore: Read-only repository explorer for cold-start orientation, broad cross-file localization, o",
+    "caveman-help: Quick reference card for caveman modes, slash commands, and triggers",
+    "caveman-learn: Act on a Caveman learn report - review the ranked token sinks, apply cost-lowering fixes w",
+    "caveman-manage: Inspect Caveman Cloud's experiment lifecycle and block unsafe execution. Use when asked to",
+    "caveman-optimize: Turn a Caveman optimization observation into an operator-chosen candidate with a paired ba",
+    "caveman-review: Caveman-style code review — one-line findings with severity",
+    "caveman-setup: Wire a repository through the Caveman Cloud gateway so every LLM request is measured, with",
+    "investigate-first: Diagnose ambiguous failures before editing. Use for unknown causes, intermittent behavior,",
+    "lean-build: Build feature work with high overbuilding risk. Use for new behavior, product slices, or i",
+    "migration: Implement reversible compatibility-safe transitions. Use for schema, data, API, protocol, ",
+    "safe-refactor: Restructure code while preserving behavior. Use for extraction, consolidation, ownership m",
+    "surgical-patch: Fix bugs and small behavior changes at the narrowest responsible layer. Use when regressio",
+    "verify-and-stop: Prove existing work meets acceptance conditions without expanding scope. Use for validatio",
+    "caveman-init: Drop the always-on caveman activation rule into the current repo for every IDE agent"
+   ]
+  },
+  {
+   "id": "rtk",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies",
+   "한국어 소개": "자주 쓰는 개발 명령의 출력을 줄여 Claude가 읽는 토큰을 줄이는 명령줄 도구예요. 제작자는 60~90% 감소를 주장해요.",
+   "이럴 때": "테스트 로그·git diff처럼 출력이 큰 명령을 자주 돌리는 작업에서 Claude가 읽는 양을 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 1,
+    "hook_events": {
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 17,
+   "기능 목록": []
+  },
+  {
+   "id": "headroom",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95% fewer tokens for JSON, same answers. Library, proxy, MCP server.",
+   "한국어 소개": "도구 출력·로그·파일·검색 결과를 Claude에게 넘기기 전에 압축해 주는 도구예요. 제작자는 같은 답에 토큰 20%(JSON은 60~95%) 감소를 주장해요.",
+   "이럴 때": "긴 로그·JSON·파일을 많이 읽는 긴 세션에서, 실행 방식을 바꿔서라도 입력을 크게 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "SessionStart": 1,
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 24,
+   "기능 목록": []
+  },
+  {
+   "id": "claude-mem",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+   "한국어 소개": "세션 동안 한 일을 기록하고 AI로 요약해 두었다가, 다음 세션에 필요한 내용을 다시 넣어 주는 기억 도구예요.",
+   "이럴 때": "같은 프로젝트를 여러 날 이어서 할 때, 지난 세션에서 한 일과 결정을 다음 세션이 자동으로 알게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 30,
+    "agents": 0,
+    "commands": 30,
+    "mcp": 0,
+    "hooks_total": 17,
+    "hook_events": {
+     "Setup": 1,
+     "SessionStart": 4,
+     "UserPromptSubmit": 2,
+     "PostToolUse": 2,
+     "PostToolUseFailure": 1,
+     "PreToolUse": 2,
+     "Stop": 2,
+     "SessionEnd": 2,
+     "SubagentStop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 1075,
+   "기능 목록": [
+    "Agent Cost Report: Believable agent cost report for any period, default the last 7 full days PT, not counting",
+    "babysit: Watch a pull request or review cycle until it is ready to merge. Use when asked to babysit",
+    "build: Fully automate a coding task with make-plan, do, and babysit.",
+    "build-and-release: Fully automate building and releasing a coding task.",
+    "ccs-align: Run the CCS Align seat's hourly breathing cycle — prove the local claude-mem worker is hea",
+    "childhood: Babysit a shipped release after merge, publication, or deployment. Verify published packag",
+    "cloud-sync: Set up or check claude-mem cloud sync with cmem.ai Pro. Use when the user says \"set up clo",
+    "design-is: Audit a design against Dieter Rams' ten \"Good design is...\" principles, then hand off a /m",
+    "do: Execute a phased implementation plan using subagents. Use when asked to execute, run, or c",
+    "handoff: Generate a HANDOFF.md that captures goal, current state, files touched, failed attempts, a",
+    "how-it-works: Explain how claude-mem captures observations, when memory injection kicks in, and where da",
+    "knowledge-agent: Build and query AI-powered knowledge bases from claude-mem observations. Use when users wa",
+    "learn-codebase: Prime a codebase by reading every source file in full. Use when starting work on a new or ",
+    "make-plan: Create a detailed, phased implementation plan with documentation discovery. Use when asked",
+    "mem-search: This skill should be used when the user asks to \"search memory\", \"what do you remember abo",
+    "mode-creator: Interactively create, install, activate, and verify custom claude-mem modes, including dom",
+    "oh-my-issues: Cluster a GitHub issue backlog by root cause into a small set of plan-master issues, redir",
+    "pathfinder: Map a codebase into feature-grouped flowcharts, identify duplicated concerns across featur",
+    "release: Fully automate a release with version-bump and childhood.",
+    "screenpipe: Search screen and audio history recorded by Screenpipe and optionally save selected contex",
+    "smart-explore: Token-optimized structural code search using tree-sitter AST parsing. Use instead of readi",
+    "standup: Facilitate a read-only standup across git worktrees, branches, or PRs to compare changes a",
+    "timeline-report: Generate a \"Journey Into [Project]\" narrative report analyzing a project's entire developm",
+    "version-bump: Automated semantic versioning and release workflow for Claude Code plugins. Handles versio",
+    "weekly-digests: Generate a serial week-by-week narrative digest of a project's full claude-mem timeline. S",
+    "what-the: What the? Use when the user wants a plain-English breakdown of something technical — the w",
+    "wowerpoint: Turn one document into a kawaii NotebookLM slide deck. Use for \"wowerpoint this\", \"make a ",
+    "mem-setup: This skill should be used when the user asks to \"set up claude-mem\", \"pair claude-mem\", \"c"
+   ]
+  },
+  {
+   "id": "claude-hud",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "A Claude Code plugin that shows what's happening - context usage, active tools, running agents, and todo progress",
+   "한국어 소개": "컨텍스트 사용량, 쓰는 중인 도구, 돌아가는 에이전트, 할 일 진행 상황을 화면에 보여 주는 플러그인이에요.",
+   "이럴 때": "작업 중에 컨텍스트가 얼마나 찼는지, 사용 한도가 얼마나 남았는지 계속 보면서 일하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 78,
+   "기능 목록": [
+    "configure: Configure HUD display options (layout, language, presets, display elements) while preservi",
+    "setup: Configure claude-hud as your statusline"
+   ]
+  },
+  {
+   "id": "ccusage",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "npx ccusage",
+   "한국어 소개": "Claude Code 사용 기록을 읽어 토큰과 비용을 날짜·세션별로 보여 주는 명령줄 도구예요(npx ccusage로 실행).",
+   "이럴 때": "지난 한 달 동안 어느 날·어느 세션·어느 모델에 토큰과 돈이 얼마나 들었는지 따져 보고 싶을 때",
+   "역할 범위": null,
+   "처음 읽는 양(토큰)": null,
+   "기능 목록": []
+  },
+  {
+   "id": "ui-ux-pro-max-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+   "한국어 소개": "여러 플랫폼의 화면(UI/UX)을 만들 때 디자인 지식을 주는 스킬이에요.",
+   "이럴 때": "만들 서비스의 업종이 분명하고, 그 업종에 어울리는 색·글꼴·화면 구조를 빠르게 정하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 751,
+   "기능 목록": [
+    "banner-design: Design banners for social media, ads, website heroes, creative assets, and print. Multiple",
+    "brand: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. A",
+    "design: Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55",
+    "design-system: Token architecture, component specifications, and slide generation. Three-layer tokens (pr",
+    "slides: Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copy",
+    "ui-styling: Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI "
+   ]
+  },
+  {
+   "id": "taste-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
+   "한국어 소개": "흔한 AI 페이지 대신 분위기 잡기·참고 이미지·브라우저 확인으로 화면에 개성을 주는 스킬이에요.",
+   "이럴 때": "새 랜딩 페이지·브랜드 사이트를 남과 다른 분위기로 처음부터 만들고 싶을 때",
+   "역할 범위": {
+    "skills": 14,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 957,
+   "기능 목록": [
+    "brandkit: Premium brand-kit image generation skill for creating high-end brand-guidelines boards, lo",
+    "industrial-brutalist-ui: Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics",
+    "gpt-taste: Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for",
+    "image-to-code: Elite website image-to-code skill for Codex. For visually important web tasks, it must fir",
+    "imagegen-frontend-mobile: Elite mobile app image-generation skill for creating premium, app-native screen concepts a",
+    "imagegen-frontend-web: Elite frontend image-direction skill for generating premium, conversion-aware website desi",
+    "minimalist-ui: Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bent",
+    "full-output-enforcement: Overrides default LLM truncation behavior. Enforces complete code generation, bans placeho",
+    "redesign-existing-projects: Upgrades existing websites and apps to premium quality. Audits current design, identifies ",
+    "high-end-visual-design: Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows",
+    "stitch-design-taste: Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files t",
+    "design-taste-frontend: tasteskill v2, the anti-slop frontend skill. Art direction for websites, distilled from a ",
+    "design-taste-frontend-v1: The original v1 taste-skill, preserved for projects depending on its exact behavior. The c",
+    "design-taste-frontend-v2-experimental: Old v2 (experimental) of taste-skill, the single-file dial-driven version, preserved for p"
+   ]
+  },
+  {
+   "id": "impeccable",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "The design language that makes your AI harness better at design.",
+   "한국어 소개": "Claude가 디자인을 더 잘하게 해 주는 디자인 규칙 모음이에요.",
+   "이럴 때": "이미 만든 화면의 간격·접근성·AI 티 나는 패턴을 하나씩 점검하고 다듬고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 4,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "Stop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 463,
+   "기능 목록": [
+    "impeccable: Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, dist"
+   ]
+  },
+  {
+   "id": "figma-context-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+   "한국어 소개": "Figma 화면의 배치 정보를 AI 코딩 도구에 넘겨 주는 MCP 서버예요.",
+   "이럴 때": "Figma 시안을 보고 코드로 옮기기만 하면 될 때(디자인을 고칠 필요는 없을 때)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 2,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 58,
+   "기능 목록": [
+    "mcp:download_figma_images: ",
+    "mcp:get_figma_data: "
+   ]
+  },
+  {
+   "id": "cursor-talk-to-figma-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+   "한국어 소개": "AI가 Figma 디자인을 읽고 직접 고칠 수도 있게 연결해 주는 MCP 서버예요.",
+   "이럴 때": "반복적인 Figma 작업(여러 화면의 글자 바꾸기, 컴포넌트 일괄 수정)을 Claude에게 시키고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 6,
+    "mcp": 40,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 651,
+   "기능 목록": [
+    "mcp:clone_node: ",
+    "mcp:create_component_instance: ",
+    "mcp:create_connections: ",
+    "mcp:create_frame: ",
+    "mcp:create_rectangle: ",
+    "mcp:create_text: ",
+    "mcp:delete_multiple_nodes: ",
+    "mcp:delete_node: ",
+    "mcp:export_node_as_image: ",
+    "mcp:get_annotations: ",
+    "mcp:get_document_info: ",
+    "mcp:get_instance_overrides: ",
+    "mcp:get_local_components: ",
+    "mcp:get_node_info: ",
+    "mcp:get_nodes_info: ",
+    "mcp:get_reactions: ",
+    "mcp:get_selection: ",
+    "mcp:get_styles: ",
+    "mcp:join_channel: ",
+    "mcp:move_node: ",
+    "mcp:read_my_design: ",
+    "mcp:resize_node: ",
+    "mcp:scan_nodes_by_types: ",
+    "mcp:scan_text_nodes: ",
+    "mcp:set_annotation: ",
+    "mcp:set_axis_align: ",
+    "mcp:set_corner_radius: ",
+    "mcp:set_default_connector: ",
+    "mcp:set_fill_color: ",
+    "mcp:set_focus: ",
+    "mcp:set_instance_overrides: ",
+    "mcp:set_item_spacing: ",
+    "mcp:set_layout_mode: ",
+    "mcp:set_layout_sizing: ",
+    "mcp:set_multiple_annotations: ",
+    "mcp:set_multiple_text_contents: ",
+    "mcp:set_padding: ",
+    "mcp:set_selections: ",
+    "mcp:set_stroke_color: ",
+    "mcp:set_text_content: "
+   ]
+  },
+  {
+   "id": "shadcn-ui-mcp-server",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "A mcp server to allow LLMS gain context about shadcn ui component structure,usage and installation,compaitable with react,svelte 5,vue & React Native",
+   "한국어 소개": "shadcn/ui 컴포넌트의 구조·사용법·설치 방법을 AI에게 알려 주는 MCP 서버예요.",
+   "이럴 때": "shadcn/ui로 화면을 만들 때 Claude가 컴포넌트 코드를 기억으로 쓰지 않고 최신 원문을 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 5,
+    "mcp": 10,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 186,
+   "기능 목록": [
+    "mcp:apply_theme: ",
+    "mcp:get_block: ",
+    "mcp:get_component: ",
+    "mcp:get_component_demo: ",
+    "mcp:get_component_metadata: ",
+    "mcp:get_directory_structure: ",
+    "mcp:get_theme: ",
+    "mcp:list_blocks: ",
+    "mcp:list_components: ",
+    "mcp:list_themes: "
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "caveman",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "caveman-compress ~ imagegen-frontend-web (0.12) | caveman-init ~ imagegen-frontend-web (0.12) | surgical-patch ~ design-taste-frontend-v1 (0.11)"
+  },
+  {
+   "a": "caveman",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "caveman-compress ~ mcp:create_text (0.20) | caveman ~ mcp:set_layout_mode (0.17) | caveman-compress ~ mcp:set_text_content (0.15)"
+  },
+  {
+   "a": "caveman",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "caveman-manage ~ mcp:get_block (0.19)"
+  },
+  {
+   "a": "rtk",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "wowerpoint ~ slides (0.16)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "impeccable",
+   "비슷한 기능 후보": "design-is ~ impeccable (0.13)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "design-is ~ mcp:read_my_design (0.17) | standup ~ mcp:read_my_design (0.16) | wowerpoint ~ mcp:get_document_info (0.16)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "weekly-digests ~ mcp:get_block (0.11) | smart-explore ~ mcp:get_directory_structure (0.10)"
+  },
+  {
+   "a": "claude-hud",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "configure ~ mcp:get_instance_overrides (0.16) | configure ~ mcp:set_instance_overrides (0.16) | configure ~ mcp:set_layout_mode (0.16)"
+  },
+  {
+   "a": "claude-hud",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  }
+ ]
+}

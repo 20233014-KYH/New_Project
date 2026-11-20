@@ -61,14 +61,18 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 판정_없는_쌍은_확인된_정보_없음() {
+    void 다른_분야_쌍도_AI_추정_판정이_있다() {
+        // 2026-11-21 다른 분야 540쌍을 Claude·Codex 교차 판정으로 채움 → 카탈로그 36개끼리는 판정 없는 쌍이 없음
         List<JudgeItem> pairs = judge.judge(List.of("caveman", "graphify"));
         assertThat(pairs).singleElement().satisfies(p -> {
-            assertThat(p.state()).isEqualTo("no_info");
-            assertThat(p.label()).isEqualTo("확인된 정보 없음");
-            assertThat(p.review()).isEqualTo("다른 분야");
+            assertThat(p.state()).isEqualTo("saved");
+            assertThat(p.review()).isEqualTo("AI 추정");
         });
-        assertThatThrownBy(() -> judge.judgment("caveman", "graphify")).isInstanceOf(NotFoundException.class);
+        assertThat(judge.judge(tools.list(null, null).stream().map(t -> t.id()).toList()))
+                .noneMatch(p -> "no_info".equals(p.state()));
+        // 직접 시험 기록이 있는 다른 분야 쌍은 시험 결과로
+        assertThat(judge.judge(List.of("superpowers", "caveman"))).singleElement()
+                .satisfies(p -> assertThat(p.review()).isEqualTo("직접 시험"));
     }
 
     @Test
@@ -81,7 +85,7 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 검수_상태가_그대로_사람검토_87_직접시험_3() {
+    void 검수_상태가_그대로_사람검토_87_직접시험_4_AI추정_539() {
         Map<String, String> seen = new HashMap<>();
         for (ToolDto t : tools.list(null, null)) {
             for (ToolPairDto p : tools.detail(t.id()).pairs()) {
@@ -89,7 +93,8 @@ class JudgeServiceTest {
             }
         }
         assertThat(seen.values().stream().filter("사람 검토"::equals).count()).isEqualTo(87);
-        assertThat(seen.values().stream().filter("직접 시험"::equals).count()).isEqualTo(3);
+        assertThat(seen.values().stream().filter("직접 시험"::equals).count()).isEqualTo(4);
+        assertThat(seen.values().stream().filter("AI 추정"::equals).count()).isEqualTo(539);
     }
 
     @Test

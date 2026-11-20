@@ -1,0 +1,510 @@
+{
+ "batch": "c2_5",
+ "tools": [
+  {
+   "id": "caveman",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+   "한국어 소개": "원시인처럼 짧게 말하게 해서 토큰을 줄이는 스킬(과 프록시)이에요. 제작자는 토큰 65% 감소를 주장해요.",
+   "이럴 때": "설명이 긴 답변이 부담되고, 디버깅 절차를 꼭 지키지 않아도 되는 일상 작업에서 답변을 짧게 받고 싶을 때",
+   "역할 범위": {
+    "skills": 22,
+    "agents": 3,
+    "commands": 23,
+    "mcp": 0,
+    "hooks_total": 4,
+    "hook_events": {
+     "SessionStart": 1,
+     "SubagentStart": 1,
+     "UserPromptSubmit": 1,
+     "SessionEnd": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 2643,
+   "기능 목록": [
+    "cavecrew: When to delegate to `cavecrew-investigator` (locate code), `cavecrew-builder` (1-2 file ed",
+    "caveman: Activate caveman mode (off | status)",
+    "caveman-compress: Compress a markdown/text file into caveman format to save tokens",
+    "caveman-stats: Show available session usage without estimating savings",
+    "megacave: Activate megacave mode (caveman in Classical Chinese)",
+    "ultracave: Activate ultracave mode (caveman at maximum compression)",
+    "caveman-commit: Generate a terse caveman-style commit message for staged changes",
+    "caveman-discover: Find and label every LLM workflow in the repository so Caveman Cloud groups spend by workf",
+    "caveman-evidence-review: Read-only review of Caveman Cloud evidence: cost, Cave Score, workflows, traces, latency, ",
+    "caveman-explore: Read-only repository explorer for cold-start orientation, broad cross-file localization, o",
+    "caveman-help: Quick reference card for caveman modes, slash commands, and triggers",
+    "caveman-learn: Act on a Caveman learn report - review the ranked token sinks, apply cost-lowering fixes w",
+    "caveman-manage: Inspect Caveman Cloud's experiment lifecycle and block unsafe execution. Use when asked to",
+    "caveman-optimize: Turn a Caveman optimization observation into an operator-chosen candidate with a paired ba",
+    "caveman-review: Caveman-style code review — one-line findings with severity",
+    "caveman-setup: Wire a repository through the Caveman Cloud gateway so every LLM request is measured, with",
+    "investigate-first: Diagnose ambiguous failures before editing. Use for unknown causes, intermittent behavior,",
+    "lean-build: Build feature work with high overbuilding risk. Use for new behavior, product slices, or i",
+    "migration: Implement reversible compatibility-safe transitions. Use for schema, data, API, protocol, ",
+    "safe-refactor: Restructure code while preserving behavior. Use for extraction, consolidation, ownership m",
+    "surgical-patch: Fix bugs and small behavior changes at the narrowest responsible layer. Use when regressio",
+    "verify-and-stop: Prove existing work meets acceptance conditions without expanding scope. Use for validatio",
+    "caveman-init: Drop the always-on caveman activation rule into the current repo for every IDE agent"
+   ]
+  },
+  {
+   "id": "rtk",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies",
+   "한국어 소개": "자주 쓰는 개발 명령의 출력을 줄여 Claude가 읽는 토큰을 줄이는 명령줄 도구예요. 제작자는 60~90% 감소를 주장해요.",
+   "이럴 때": "테스트 로그·git diff처럼 출력이 큰 명령을 자주 돌리는 작업에서 Claude가 읽는 양을 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 1,
+    "hook_events": {
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 17,
+   "기능 목록": []
+  },
+  {
+   "id": "headroom",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95% fewer tokens for JSON, same answers. Library, proxy, MCP server.",
+   "한국어 소개": "도구 출력·로그·파일·검색 결과를 Claude에게 넘기기 전에 압축해 주는 도구예요. 제작자는 같은 답에 토큰 20%(JSON은 60~95%) 감소를 주장해요.",
+   "이럴 때": "긴 로그·JSON·파일을 많이 읽는 긴 세션에서, 실행 방식을 바꿔서라도 입력을 크게 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "SessionStart": 1,
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 24,
+   "기능 목록": []
+  },
+  {
+   "id": "claude-mem",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+   "한국어 소개": "세션 동안 한 일을 기록하고 AI로 요약해 두었다가, 다음 세션에 필요한 내용을 다시 넣어 주는 기억 도구예요.",
+   "이럴 때": "같은 프로젝트를 여러 날 이어서 할 때, 지난 세션에서 한 일과 결정을 다음 세션이 자동으로 알게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 30,
+    "agents": 0,
+    "commands": 30,
+    "mcp": 0,
+    "hooks_total": 17,
+    "hook_events": {
+     "Setup": 1,
+     "SessionStart": 4,
+     "UserPromptSubmit": 2,
+     "PostToolUse": 2,
+     "PostToolUseFailure": 1,
+     "PreToolUse": 2,
+     "Stop": 2,
+     "SessionEnd": 2,
+     "SubagentStop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 1075,
+   "기능 목록": [
+    "Agent Cost Report: Believable agent cost report for any period, default the last 7 full days PT, not counting",
+    "babysit: Watch a pull request or review cycle until it is ready to merge. Use when asked to babysit",
+    "build: Fully automate a coding task with make-plan, do, and babysit.",
+    "build-and-release: Fully automate building and releasing a coding task.",
+    "ccs-align: Run the CCS Align seat's hourly breathing cycle — prove the local claude-mem worker is hea",
+    "childhood: Babysit a shipped release after merge, publication, or deployment. Verify published packag",
+    "cloud-sync: Set up or check claude-mem cloud sync with cmem.ai Pro. Use when the user says \"set up clo",
+    "design-is: Audit a design against Dieter Rams' ten \"Good design is...\" principles, then hand off a /m",
+    "do: Execute a phased implementation plan using subagents. Use when asked to execute, run, or c",
+    "handoff: Generate a HANDOFF.md that captures goal, current state, files touched, failed attempts, a",
+    "how-it-works: Explain how claude-mem captures observations, when memory injection kicks in, and where da",
+    "knowledge-agent: Build and query AI-powered knowledge bases from claude-mem observations. Use when users wa",
+    "learn-codebase: Prime a codebase by reading every source file in full. Use when starting work on a new or ",
+    "make-plan: Create a detailed, phased implementation plan with documentation discovery. Use when asked",
+    "mem-search: This skill should be used when the user asks to \"search memory\", \"what do you remember abo",
+    "mode-creator: Interactively create, install, activate, and verify custom claude-mem modes, including dom",
+    "oh-my-issues: Cluster a GitHub issue backlog by root cause into a small set of plan-master issues, redir",
+    "pathfinder: Map a codebase into feature-grouped flowcharts, identify duplicated concerns across featur",
+    "release: Fully automate a release with version-bump and childhood.",
+    "screenpipe: Search screen and audio history recorded by Screenpipe and optionally save selected contex",
+    "smart-explore: Token-optimized structural code search using tree-sitter AST parsing. Use instead of readi",
+    "standup: Facilitate a read-only standup across git worktrees, branches, or PRs to compare changes a",
+    "timeline-report: Generate a \"Journey Into [Project]\" narrative report analyzing a project's entire developm",
+    "version-bump: Automated semantic versioning and release workflow for Claude Code plugins. Handles versio",
+    "weekly-digests: Generate a serial week-by-week narrative digest of a project's full claude-mem timeline. S",
+    "what-the: What the? Use when the user wants a plain-English breakdown of something technical — the w",
+    "wowerpoint: Turn one document into a kawaii NotebookLM slide deck. Use for \"wowerpoint this\", \"make a ",
+    "mem-setup: This skill should be used when the user asks to \"set up claude-mem\", \"pair claude-mem\", \"c"
+   ]
+  },
+  {
+   "id": "claude-hud",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "A Claude Code plugin that shows what's happening - context usage, active tools, running agents, and todo progress",
+   "한국어 소개": "컨텍스트 사용량, 쓰는 중인 도구, 돌아가는 에이전트, 할 일 진행 상황을 화면에 보여 주는 플러그인이에요.",
+   "이럴 때": "작업 중에 컨텍스트가 얼마나 찼는지, 사용 한도가 얼마나 남았는지 계속 보면서 일하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 78,
+   "기능 목록": [
+    "configure: Configure HUD display options (layout, language, presets, display elements) while preservi",
+    "setup: Configure claude-hud as your statusline"
+   ]
+  },
+  {
+   "id": "ccusage",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "npx ccusage",
+   "한국어 소개": "Claude Code 사용 기록을 읽어 토큰과 비용을 날짜·세션별로 보여 주는 명령줄 도구예요(npx ccusage로 실행).",
+   "이럴 때": "지난 한 달 동안 어느 날·어느 세션·어느 모델에 토큰과 돈이 얼마나 들었는지 따져 보고 싶을 때",
+   "역할 범위": null,
+   "처음 읽는 양(토큰)": null,
+   "기능 목록": []
+  },
+  {
+   "id": "dbhub",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Token conscious database MCP server for Postgres, MySQL, SQL Server, Oracle, MariaDB, SQLite.",
+   "한국어 소개": "Postgres·MySQL·SQL Server 등 여러 DB를 Claude에 연결하는 MCP 서버예요. 제작자는 토큰을 아끼게 만들었다고 소개해요.",
+   "이럴 때": "내 PostgreSQL·MySQL 같은 DB 하나에 Claude를 붙여 표 구조를 보고 SQL을 돌려 보고 싶을 때(플러그인이면 읽기 전용으로)",
+   "역할 범위": {
+    "skills": 2,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 87,
+   "기능 목록": [
+    "explore: Explore a database schema token-efficiently via the DBHub tools; use before writing SQL ag",
+    "setup: Connect DBHub to a database or fix a failing connection; also covers changing the DSN, wri"
+   ]
+  },
+  {
+   "id": "mcp-toolbox",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "MCP Toolbox for Databases is an open source MCP server for databases.",
+   "한국어 소개": "Google이 만든 데이터베이스용 MCP 서버예요.",
+   "이럴 때": "BigQuery·Spanner·Cloud SQL 같은 Google Cloud DB를 쓰거나, 운영 에이전트에 '정해 둔 쿼리만' 허용하고 싶을 때",
+   "역할 범위": null,
+   "처음 읽는 양(토큰)": null,
+   "기능 목록": []
+  },
+  {
+   "id": "supabase-mcp",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Connect Supabase to your AI assistants",
+   "한국어 소개": "Supabase를 AI 도구에 연결해 주는 MCP 서버예요.",
+   "이럴 때": "Supabase로 백엔드를 만들고 있고, DB 조회부터 Edge Function 배포까지 Claude에게 맡기고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 19,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 571,
+   "기능 목록": [
+    "mcp:confirm_cost: ",
+    "mcp:execute_sql: ",
+    "mcp:generate_typescript_types: ",
+    "mcp:get_advisors: ",
+    "mcp:get_cost: ",
+    "mcp:get_edge_function: ",
+    "mcp:get_organization: ",
+    "mcp:get_project: ",
+    "mcp:get_project_url: ",
+    "mcp:get_publishable_keys: ",
+    "mcp:list_branches: ",
+    "mcp:list_edge_functions: ",
+    "mcp:list_extensions: ",
+    "mcp:list_migrations: ",
+    "mcp:list_organizations: ",
+    "mcp:list_projects: ",
+    "mcp:list_tables: ",
+    "mcp:query_logs: ",
+    "mcp:search_docs: "
+   ]
+  },
+  {
+   "id": "kubernetes-mcp-server",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Model Context Protocol (MCP) server for Kubernetes and OpenShift",
+   "한국어 소개": "Kubernetes와 OpenShift를 다루게 해 주는 MCP 서버예요.",
+   "이럴 때": "kubectl을 따로 깔지 않고 여러 클러스터(또는 OpenShift)를 다루며, 필요한 도구 묶음만 켜서 컨텍스트를 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 23,
+   "기능 목록": []
+  },
+  {
+   "id": "mcp-server-kubernetes",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "MCP Server for kubernetes management commands",
+   "한국어 소개": "Kubernetes 관리 명령을 Claude가 쓰게 해 주는 MCP 서버예요.",
+   "이럴 때": "이미 kubectl·Helm을 쓰고 있고, 그 환경 그대로 Claude에게 클러스터 조회·배포를 맡기고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 23,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 278,
+   "기능 목록": [
+    "mcp:cleanup: ",
+    "mcp:exec_in_pod: ",
+    "mcp:explain_resource: ",
+    "mcp:install_helm_chart: ",
+    "mcp:kubectl_apply: ",
+    "mcp:kubectl_context: ",
+    "mcp:kubectl_create: ",
+    "mcp:kubectl_delete: ",
+    "mcp:kubectl_describe: ",
+    "mcp:kubectl_generic: ",
+    "mcp:kubectl_get: ",
+    "mcp:kubectl_logs: ",
+    "mcp:kubectl_patch: ",
+    "mcp:kubectl_reconnect: ",
+    "mcp:kubectl_rollout: ",
+    "mcp:kubectl_scale: ",
+    "mcp:list_api_resources: ",
+    "mcp:node_management: ",
+    "mcp:ping: ",
+    "mcp:port_forward: ",
+    "mcp:stop_port_forward: ",
+    "mcp:uninstall_helm_chart: ",
+    "mcp:upgrade_helm_chart: "
+   ]
+  },
+  {
+   "id": "terraform-mcp-server",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.",
+   "한국어 소개": "Terraform 생태계와 연결해 인프라 코드 작업을 돕는 MCP 서버예요.",
+   "이럴 때": "Terraform 코드를 짤 때 Claude가 오래된 프로바이더 문법 대신 Registry의 최신 문서를 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 9,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 672,
+   "기능 목록": [
+    "mcp:get_latest_module_version: ",
+    "mcp:get_latest_provider_version: ",
+    "mcp:get_module_details: ",
+    "mcp:get_policy_details: ",
+    "mcp:get_provider_capabilities: ",
+    "mcp:get_provider_details: ",
+    "mcp:search_modules: ",
+    "mcp:search_policies: ",
+    "mcp:search_providers: "
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "caveman",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "migration ~ mcp:list_migrations (0.20) | caveman-learn ~ mcp:get_cost (0.17) | caveman-evidence-review ~ mcp:get_cost (0.13)"
+  },
+  {
+   "a": "caveman",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "safe-refactor ~ mcp:cleanup (0.25) | surgical-patch ~ mcp:kubectl_patch (0.17) | caveman-learn ~ mcp:kubectl_apply (0.10)"
+  },
+  {
+   "a": "caveman",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "dbhub",
+   "비슷한 기능 후보": "smart-explore ~ explore (0.28) | mem-setup ~ setup (0.11)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "do ~ mcp:execute_sql (0.30) | standup ~ mcp:list_branches (0.20) | learn-codebase ~ mcp:get_project (0.20)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "how-it-works ~ mcp:explain_resource (0.16) | make-plan ~ mcp:kubectl_create (0.10)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "mem-search ~ mcp:search_modules (0.16) | mem-search ~ mcp:search_policies (0.16) | release ~ mcp:get_latest_provider_version (0.15)"
+  },
+  {
+   "a": "claude-hud",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  }
+ ]
+}
