@@ -34,8 +34,8 @@ export default function Ask1Page() {
       <div className="c">
         <Steps current={2} />
         <div className="qwrap">
-          <Link className="back" to="/box">← 뒤로</Link>
-          <p className="qcount">질문 1 / 2</p>
+          <Link className="back" to={saved.situation || saved.goal ? '/ask/priority' : '/ask/situation'}>← 뒤로</Link>
+          <p className="qcount">질문 3 / 4</p>
           <form id="qform" onSubmit={handleSubmit} noValidate>
             <fieldset>
               <legend><h1 tabIndex={-1}>Claude Code로 주로 어떤 일을 하나요?</h1></legend>

@@ -1,0 +1,499 @@
+{
+ "batch": "c3_4",
+ "tools": [
+  {
+   "id": "graphify",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+   "한국어 소개": "코드와 문서·SQL 구조·설정·PDF를 하나의 지식 그래프로 만들어 물어볼 수 있게 해 주는 /graphify 스킬이에요.",
+   "이럴 때": "내 코드 말고 설계 문서·PDF·이미지까지 같이 연결해서 찾아야 할 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 572,
+   "기능 목록": [
+    "graphify: Use for any question about a codebase, its architecture, file relationships, or project co"
+   ]
+  },
+  {
+   "id": "codegraph",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local",
+   "한국어 소개": "코드 구조를 미리 그래프로 색인하고, 코드가 바뀌면 자동으로 맞춰 주는 도구예요.",
+   "이럴 때": "큰 코드베이스에서 'X가 어떻게 Y까지 가는지' 같은 구조 질문을 파일을 하나씩 열지 않고 답하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 1,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 839,
+   "기능 목록": [
+    "mcp:codegraph_explore: "
+   ]
+  },
+  {
+   "id": "claude-context",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "Code search MCP for Claude Code. Make entire codebase the context for any coding agent.",
+   "한국어 소개": "코드베이스 전체를 검색할 수 있게 해 주는 코드 검색 MCP 서버예요.",
+   "이럴 때": "함수 이름을 몰라도 '결제 실패를 다시 시도하는 코드'처럼 뜻으로 찾아야 하는 아주 큰 코드베이스일 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 4,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 71,
+   "기능 목록": [
+    "mcp:clear_index: ",
+    "mcp:get_indexing_status: ",
+    "mcp:index_codebase: ",
+    "mcp:search_code: "
+   ]
+  },
+  {
+   "id": "context7",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "Context7 Platform -- Up-to-date docs for AI agents",
+   "한국어 소개": "라이브러리의 최신 문서를 Claude에게 가져다주는 도구예요.",
+   "이럴 때": "새 버전 라이브러리(예: Next.js 최신)를 쓰는데 Claude가 옛 API를 쓰거나 없는 함수를 지어낼 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 14,
+   "기능 목록": []
+  },
+  {
+   "id": "serena",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "A powerful MCP toolkit for coding, providing semantic retrieval and editing capabilities  - the IDE for your agent",
+   "한국어 소개": "코드의 뜻을 이해해서 찾고 고치게 해 주는 MCP 도구 모음이에요. 제작자는 '에이전트를 위한 IDE'라고 소개해요.",
+   "이럴 때": "여러 파일에 걸친 이름 바꾸기·옮기기처럼 IDE 수준의 정확한 리팩터링을 Claude에게 맡기고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 3,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 149,
+   "기능 목록": [
+    "mcp:activate_project: ",
+    "mcp:initial_instructions: ",
+    "mcp:serena_repl: "
+   ]
+  },
+  {
+   "id": "understand-anything",
+   "분야": "코드 이해·검색",
+   "설명(원문)": "Graphs that teach > graphs that impress. Turn any code into an interactive knowledge graph you can explore, search, and ask questions about. Works with Claude Code, Codex, Cursor, Copilot, Gemini CLI, and more.",
+   "한국어 소개": "코드를 둘러보고 검색하고 질문할 수 있는 대화형 지식 그래프로 바꿔 주는 도구예요.",
+   "이럴 때": "처음 맡은 큰 코드베이스를 사람이 직접 그래프로 둘러보며 구조와 업무 흐름을 익히고 싶을 때",
+   "역할 범위": {
+    "skills": 9,
+    "agents": 10,
+    "commands": 9,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "SessionStart": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 893,
+   "기능 목록": [
+    "understand: Analyze a codebase to produce an interactive knowledge graph for understanding architectur",
+    "understand-chat: Use when you need to ask questions about a codebase or understand code using a knowledge g",
+    "understand-dashboard: Launch the interactive web dashboard to visualize a codebase's knowledge graph",
+    "understand-diff: Use when you need to analyze git diffs or pull requests to understand what changed, affect",
+    "understand-domain: Extract business domain knowledge from a codebase and generate an interactive domain flow ",
+    "understand-explain: Use when you need a deep-dive explanation of a specific file, function, or module in the c",
+    "understand-figma: Analyze a Figma file via the Figma REST API and generate an interactive design knowledge g",
+    "understand-knowledge: Analyze a Karpathy-pattern LLM wiki knowledge base and generate an interactive knowledge g",
+    "understand-onboard: Use when you need to generate an onboarding guide for new team members joining a project"
+   ]
+  },
+  {
+   "id": "ui-ux-pro-max-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+   "한국어 소개": "여러 플랫폼의 화면(UI/UX)을 만들 때 디자인 지식을 주는 스킬이에요.",
+   "이럴 때": "만들 서비스의 업종이 분명하고, 그 업종에 어울리는 색·글꼴·화면 구조를 빠르게 정하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 751,
+   "기능 목록": [
+    "banner-design: Design banners for social media, ads, website heroes, creative assets, and print. Multiple",
+    "brand: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. A",
+    "design: Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55",
+    "design-system: Token architecture, component specifications, and slide generation. Three-layer tokens (pr",
+    "slides: Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copy",
+    "ui-styling: Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI "
+   ]
+  },
+  {
+   "id": "taste-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
+   "한국어 소개": "흔한 AI 페이지 대신 분위기 잡기·참고 이미지·브라우저 확인으로 화면에 개성을 주는 스킬이에요.",
+   "이럴 때": "새 랜딩 페이지·브랜드 사이트를 남과 다른 분위기로 처음부터 만들고 싶을 때",
+   "역할 범위": {
+    "skills": 14,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 957,
+   "기능 목록": [
+    "brandkit: Premium brand-kit image generation skill for creating high-end brand-guidelines boards, lo",
+    "industrial-brutalist-ui: Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics",
+    "gpt-taste: Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for",
+    "image-to-code: Elite website image-to-code skill for Codex. For visually important web tasks, it must fir",
+    "imagegen-frontend-mobile: Elite mobile app image-generation skill for creating premium, app-native screen concepts a",
+    "imagegen-frontend-web: Elite frontend image-direction skill for generating premium, conversion-aware website desi",
+    "minimalist-ui: Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bent",
+    "full-output-enforcement: Overrides default LLM truncation behavior. Enforces complete code generation, bans placeho",
+    "redesign-existing-projects: Upgrades existing websites and apps to premium quality. Audits current design, identifies ",
+    "high-end-visual-design: Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows",
+    "stitch-design-taste: Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files t",
+    "design-taste-frontend: tasteskill v2, the anti-slop frontend skill. Art direction for websites, distilled from a ",
+    "design-taste-frontend-v1: The original v1 taste-skill, preserved for projects depending on its exact behavior. The c",
+    "design-taste-frontend-v2-experimental: Old v2 (experimental) of taste-skill, the single-file dial-driven version, preserved for p"
+   ]
+  },
+  {
+   "id": "impeccable",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "The design language that makes your AI harness better at design.",
+   "한국어 소개": "Claude가 디자인을 더 잘하게 해 주는 디자인 규칙 모음이에요.",
+   "이럴 때": "이미 만든 화면의 간격·접근성·AI 티 나는 패턴을 하나씩 점검하고 다듬고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 4,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "Stop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 463,
+   "기능 목록": [
+    "impeccable: Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, dist"
+   ]
+  },
+  {
+   "id": "figma-context-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+   "한국어 소개": "Figma 화면의 배치 정보를 AI 코딩 도구에 넘겨 주는 MCP 서버예요.",
+   "이럴 때": "Figma 시안을 보고 코드로 옮기기만 하면 될 때(디자인을 고칠 필요는 없을 때)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 2,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 58,
+   "기능 목록": [
+    "mcp:download_figma_images: ",
+    "mcp:get_figma_data: "
+   ]
+  },
+  {
+   "id": "cursor-talk-to-figma-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+   "한국어 소개": "AI가 Figma 디자인을 읽고 직접 고칠 수도 있게 연결해 주는 MCP 서버예요.",
+   "이럴 때": "반복적인 Figma 작업(여러 화면의 글자 바꾸기, 컴포넌트 일괄 수정)을 Claude에게 시키고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 6,
+    "mcp": 40,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 651,
+   "기능 목록": [
+    "mcp:clone_node: ",
+    "mcp:create_component_instance: ",
+    "mcp:create_connections: ",
+    "mcp:create_frame: ",
+    "mcp:create_rectangle: ",
+    "mcp:create_text: ",
+    "mcp:delete_multiple_nodes: ",
+    "mcp:delete_node: ",
+    "mcp:export_node_as_image: ",
+    "mcp:get_annotations: ",
+    "mcp:get_document_info: ",
+    "mcp:get_instance_overrides: ",
+    "mcp:get_local_components: ",
+    "mcp:get_node_info: ",
+    "mcp:get_nodes_info: ",
+    "mcp:get_reactions: ",
+    "mcp:get_selection: ",
+    "mcp:get_styles: ",
+    "mcp:join_channel: ",
+    "mcp:move_node: ",
+    "mcp:read_my_design: ",
+    "mcp:resize_node: ",
+    "mcp:scan_nodes_by_types: ",
+    "mcp:scan_text_nodes: ",
+    "mcp:set_annotation: ",
+    "mcp:set_axis_align: ",
+    "mcp:set_corner_radius: ",
+    "mcp:set_default_connector: ",
+    "mcp:set_fill_color: ",
+    "mcp:set_focus: ",
+    "mcp:set_instance_overrides: ",
+    "mcp:set_item_spacing: ",
+    "mcp:set_layout_mode: ",
+    "mcp:set_layout_sizing: ",
+    "mcp:set_multiple_annotations: ",
+    "mcp:set_multiple_text_contents: ",
+    "mcp:set_padding: ",
+    "mcp:set_selections: ",
+    "mcp:set_stroke_color: ",
+    "mcp:set_text_content: "
+   ]
+  },
+  {
+   "id": "shadcn-ui-mcp-server",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "A mcp server to allow LLMS gain context about shadcn ui component structure,usage and installation,compaitable with react,svelte 5,vue & React Native",
+   "한국어 소개": "shadcn/ui 컴포넌트의 구조·사용법·설치 방법을 AI에게 알려 주는 MCP 서버예요.",
+   "이럴 때": "shadcn/ui로 화면을 만들 때 Claude가 컴포넌트 코드를 기억으로 쓰지 않고 최신 원문을 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 5,
+    "mcp": 10,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 186,
+   "기능 목록": [
+    "mcp:apply_theme: ",
+    "mcp:get_block: ",
+    "mcp:get_component: ",
+    "mcp:get_component_demo: ",
+    "mcp:get_component_metadata: ",
+    "mcp:get_directory_structure: ",
+    "mcp:get_theme: ",
+    "mcp:list_blocks: ",
+    "mcp:list_components: ",
+    "mcp:list_themes: "
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "graphify",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "graphify",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "graphify",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "graphify",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "graphify",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "graphify",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "codegraph",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-context",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-context",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-context",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-context",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "mcp:get_indexing_status ~ mcp:get_figma_data (0.20)"
+  },
+  {
+   "a": "claude-context",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "mcp:get_indexing_status ~ mcp:get_styles (0.24) | mcp:get_indexing_status ~ mcp:get_selection (0.24) | mcp:get_indexing_status ~ mcp:get_local_components (0.22)"
+  },
+  {
+   "a": "claude-context",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "mcp:get_indexing_status ~ mcp:get_component (0.26) | mcp:get_indexing_status ~ mcp:get_block (0.24) | mcp:get_indexing_status ~ mcp:get_theme (0.23)"
+  },
+  {
+   "a": "context7",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "context7",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "context7",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "context7",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "context7",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "context7",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "serena",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "mcp:activate_project ~ brand (0.18)"
+  },
+  {
+   "a": "serena",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "serena",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "serena",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "serena",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "serena",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "understand-anything",
+   "b": "ui-ux-pro-max-skill",
+   "비슷한 기능 후보": "understand-figma ~ design-system (0.16)"
+  },
+  {
+   "a": "understand-anything",
+   "b": "taste-skill",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "understand-anything",
+   "b": "impeccable",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "understand-anything",
+   "b": "figma-context-mcp",
+   "비슷한 기능 후보": "understand-figma ~ mcp:get_figma_data (0.40) | understand-figma ~ mcp:download_figma_images (0.29)"
+  },
+  {
+   "a": "understand-anything",
+   "b": "cursor-talk-to-figma-mcp",
+   "비슷한 기능 후보": "understand ~ mcp:get_local_components (0.19) | understand-diff ~ mcp:get_local_components (0.16) | understand-figma ~ mcp:read_my_design (0.15)"
+  },
+  {
+   "a": "understand-anything",
+   "b": "shadcn-ui-mcp-server",
+   "비슷한 기능 후보": "understand ~ mcp:list_components (0.22) | understand-diff ~ mcp:list_components (0.18) | understand-figma ~ mcp:get_component (0.15)"
+  }
+ ]
+}

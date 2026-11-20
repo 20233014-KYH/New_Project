@@ -6,6 +6,7 @@ import kr.ac.team1.inventory.dto.Dtos.JudgeItem;
 import kr.ac.team1.inventory.dto.Dtos.JudgeRequest;
 import kr.ac.team1.inventory.dto.Dtos.RecommendRequest;
 import kr.ac.team1.inventory.dto.Dtos.RecommendResult;
+import kr.ac.team1.inventory.dto.Dtos.SituationDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolDetailDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolDto;
 import kr.ac.team1.inventory.service.JudgeService;
@@ -61,7 +62,18 @@ public class ApiController {
         return judgeService.judge(req.ids());
     }
 
+    /** 상황 질문의 선택지 (상황별 추천 규칙에서) */
+    @GetMapping("/situations")
+    public List<SituationDto> situations() {
+        return judgeService.situations();
+    }
+
     /** 추천(빼기·더하기). answers = 질문에 대한 답 */
+    @GetMapping("/goals")
+    public List<kr.ac.team1.inventory.dto.Dtos.GoalDto> goals() {
+        return judgeService.goals();
+    }
+
     @PostMapping("/recommend")
     public RecommendResult recommend(@RequestBody RecommendRequest req) {
         return judgeService.recommend(req.ids(), req.answers());

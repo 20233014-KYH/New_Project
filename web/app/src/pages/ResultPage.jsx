@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getTools, getRecommend, fmt } from '../api.js'
+import { getTools, getRecommend, fmt, PRIORITY_LABEL } from '../api.js'
 import Steps from '../components/Steps.jsx'
 import Reason from '../components/Reason.jsx'
 
@@ -12,6 +12,66 @@ function getBox() {
 }
 function getAns() {
   try { return JSON.parse(sessionStorage.getItem('inv-ans') || '{}') } catch { return {} }
+}
+
+// 상황 하나의 카드: (중요한 것으로 고른 도구) + 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신
+function SituationCardView({ s, priority }) {
+  return (
+    <>
+    {s.pick && (
+      <div className="banner" role="status" style={{ marginBottom: 'var(--s4)' }}>
+        <b>{s.pick.label}이 중요하다면 → </b>
+        {s.pick.base
+          ? <b>기본 기능으로 충분해요</b>
+          : s.pick.tools.map((t, i) => (
+              <span key={t.id}>{i > 0 && ' 또는 '}<Link to={`/tool/${t.id}`}><b>{t.name}</b></Link>{t.inBox && <span className="mute"> (이미 도구함에 있어요)</span>}</span>
+            ))}
+        <br />{s.pick.reason}
+      </div>
+    )}
+    {!s.pick && PRIORITY_LABEL[priority] && (
+      <p className="mute" style={{ marginTop: 0 }}>
+        '{PRIORITY_LABEL[priority]}' 기준으로는 시험에서 도구 사이 차이를 확인하지 못했어요. 아래 세 칸을 보고 골라 주세요.
+      </p>
+    )}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--s4)' }}>
+      <div>
+        <h3>기본 기능으로도</h3>
+        <p>{s.base}</p>
+      </div>
+      <div>
+        <h3>이럴 땐 깔면 더 좋아요</h3>
+        <p>
+          {s.tools.map((t, i) => (
+            <span key={t.id}>
+              {i > 0 && ' 또는 '}
+              <Link to={`/tool/${t.id}`}><b>{t.name}</b></Link>
+              {t.inBox && <span className="mute"> (이미 도구함에 있어요)</span>}
+            </span>
+          ))}
+        </p>
+        <p>{s.better}</p>
+        {s.tools.filter(t => t.overlapWith?.length).map(t => (
+          <p key={`ov-${t.id}`} className="banner" role="status" style={{ margin: 'var(--s2) 0 0' }}>
+            <b>{t.name} · 도구함의 {t.overlapWith.join(', ')}와 겹쳐요.</b> 같이 켜면 비슷한 설명을 둘 다 읽어서 토큰만 늘 수 있어요.
+          </p>
+        ))}
+        {s.tools.filter(t => t.similarTo?.length).map(t => (
+          <p key={`si-${t.id}`} className="mute" style={{ margin: 'var(--s2) 0 0' }}>
+            {t.name} · 도구함의 {t.similarTo.join(', ')}와 비슷한 역할이에요(상황따라). 더 깔기 전에 이미 있는 도구로 되는지 먼저 확인해 보세요.
+          </p>
+        ))}
+      </div>
+      <div>
+        <h3>대신</h3>
+        <p>{s.cost}</p>
+      </div>
+    </div>
+    <p className="mute" style={{ fontSize: 13.5, marginBottom: 0 }}>
+      근거: {s.review?.startsWith(s.evidence) ? s.review : `${s.evidence}${s.review ? ` · ${s.review}` : ''}`}{s.source ? ` · ${s.source}` : ''}
+    </p>
+    </>
+  )
 }
 
 export default function ResultPage() {
@@ -47,7 +107,7 @@ export default function ResultPage() {
 
   if (!result) return <main><div className="c"><Steps current={3} /><p className="mute">계산 중…</p></div></main>
 
-  const { pairs, remove, add, unknownCount } = result
+  const { pairs, remove, add, unknownCount, situation, goal } = result
   const judgedCount = pairs.length - unknownCount
 
   return (
@@ -63,6 +123,14 @@ export default function ResultPage() {
           <dt>담은 도구</dt>
           <dd>{box.map(id => byId[id]?.name || id).join(', ')}</dd>
           <dd><Link to="/box">바꾸기</Link></dd>
+          <dt>{goal ? '목적' : '상황'}</dt>
+          <dd>{goal?.label || situation?.label || '고르지 않음'}</dd>
+          <dd><Link to="/ask/situation">바꾸기</Link></dd>
+          {(situation || goal) && <>
+            <dt>중요한 것</dt>
+            <dd>{PRIORITY_LABEL[answers.priority] || '상관없음'}</dd>
+            <dd><Link to="/ask/priority">바꾸기</Link></dd>
+          </>}
           <dt>주로 하는 일</dt>
           <dd>{WORK_LABEL[answers.work] || '—'}</dd>
           <dd><Link to="/ask/1">바꾸기</Link></dd>
@@ -70,6 +138,50 @@ export default function ResultPage() {
           <dd>{SHELL_LABEL[answers.shell] || '—'}</dd>
           <dd><Link to="/ask/2">바꾸기</Link></dd>
         </dl>
+
+        {situation && (
+          <section className="panel" style={{ marginTop: 'var(--s8)' }} aria-labelledby="sit-h">
+            <h2 id="sit-h" style={{ marginTop: 0 }}>이 상황이라면: {situation.label}</h2>
+            <SituationCardView s={situation} priority={answers.priority} />
+          </section>
+        )}
+
+        {goal && (
+          <section className="panel" style={{ marginTop: 'var(--s8)' }} aria-labelledby="goal-h">
+            <h2 id="goal-h" style={{ marginTop: 0 }}>이 목적이라면: {goal.label}</h2>
+            <p className="mute" style={{ marginTop: 0 }}>{goal.desc} · 시험한 상황 {goal.situations.length}개를 모아 봤어요.</p>
+            {!PRIORITY_LABEL[answers.priority] && (
+              <p className="banner" role="status">무엇이 제일 중요한지 고르면 시험 결과로 더할 것·꺼도 되는 것을 골라 드려요. <Link to="/ask/priority">중요한 것 고르기</Link></p>
+            )}
+            {PRIORITY_LABEL[answers.priority] && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 'var(--s4)' }}>
+                {[['더하기', goal.add, '이 목적에서 고른 기준으로 더 나았던 도구가 없어요.'],
+                  ['꺼도 되는 것', goal.turnOff, '시험상 꺼도 되는 도구가 도구함에 없어요.'],
+                  ['그대로', goal.keep, '이미 있는 도구 중 고른 도구가 없어요.']].map(([title, items, empty]) => (
+                  <div key={title}>
+                    <h3>{title}</h3>
+                    {items.length === 0 && <p className="mute">{empty}</p>}
+                    {items.map(x => (
+                      <div key={x.tool} style={{ marginBottom: 'var(--s3)' }}>
+                        <Link to={`/tool/${x.tool}`}><b>{x.name}</b></Link>
+                        {x.situations.map((sl, i) => <p key={i} style={{ margin: '2px 0', fontSize: 14 }}>{sl}: {x.reasons[i]}</p>)}
+                        {x.warnings.map((w, i) => <p key={`w${i}`} className="warn" style={{ margin: '2px 0' }}>{w}</p>)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+            <h3 style={{ marginTop: 'var(--s6)' }}>상황별로 보기</h3>
+            {goal.situations.map(c => (
+              <details key={c.id} style={{ marginBottom: 'var(--s3)' }}>
+                <summary><b>{c.label}</b>{c.pick ? ` → ${c.pick.base ? '기본 기능으로 충분' : c.pick.tools.map(t => t.name).join(' 또는 ')}` : ''}</summary>
+                <div style={{ padding: 'var(--s3) 0 0' }}><SituationCardView s={c} priority={answers.priority} /></div>
+              </details>
+            ))}
+            <p className="mute" style={{ fontSize: 13.5, marginBottom: 0 }}>목적별 상황 묶음은 우리 팀이 정한 것이고, 각 상황의 판단은 직접 시험 결과예요.</p>
+          </section>
+        )}
 
         <div className="split" style={{ marginTop: 'var(--s8)' }}>
           <div className="reco">
@@ -90,7 +202,9 @@ export default function ResultPage() {
             }
 
             <h2 style={{ marginTop: 'var(--s8)' }}>더해 볼 만한 것</h2>
-            {add.length
+            {(situation || goal) && <div className="empty">위 {goal ? '목적' : '상황'} 카드에서 직접 시험 결과로 골랐어요.</div>}
+            {!(situation || goal) && <p className="mute">목적이나 상황을 고르면 시험 결과로 더할 도구를 골라 드려요. <Link to="/ask/situation">고르러 가기</Link> · 아래는 토큰 줄이기 도구 첫 시험(2026-10-18) 결과예요.</p>}
+            {(situation || goal) ? null : add.length
               ? add.map(x => (
                   <div key={x.tool} className="panel">
                     <h3>{byId[x.tool]?.name || x.tool}</h3>

@@ -1,0 +1,638 @@
+{
+ "batch": "c4_6",
+ "tools": [
+  {
+   "id": "ui-ux-pro-max-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+   "한국어 소개": "여러 플랫폼의 화면(UI/UX)을 만들 때 디자인 지식을 주는 스킬이에요.",
+   "이럴 때": "만들 서비스의 업종이 분명하고, 그 업종에 어울리는 색·글꼴·화면 구조를 빠르게 정하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 751,
+   "기능 목록": [
+    "banner-design: Design banners for social media, ads, website heroes, creative assets, and print. Multiple",
+    "brand: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. A",
+    "design: Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55",
+    "design-system: Token architecture, component specifications, and slide generation. Three-layer tokens (pr",
+    "slides: Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copy",
+    "ui-styling: Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI "
+   ]
+  },
+  {
+   "id": "taste-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
+   "한국어 소개": "흔한 AI 페이지 대신 분위기 잡기·참고 이미지·브라우저 확인으로 화면에 개성을 주는 스킬이에요.",
+   "이럴 때": "새 랜딩 페이지·브랜드 사이트를 남과 다른 분위기로 처음부터 만들고 싶을 때",
+   "역할 범위": {
+    "skills": 14,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 957,
+   "기능 목록": [
+    "brandkit: Premium brand-kit image generation skill for creating high-end brand-guidelines boards, lo",
+    "industrial-brutalist-ui: Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics",
+    "gpt-taste: Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for",
+    "image-to-code: Elite website image-to-code skill for Codex. For visually important web tasks, it must fir",
+    "imagegen-frontend-mobile: Elite mobile app image-generation skill for creating premium, app-native screen concepts a",
+    "imagegen-frontend-web: Elite frontend image-direction skill for generating premium, conversion-aware website desi",
+    "minimalist-ui: Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bent",
+    "full-output-enforcement: Overrides default LLM truncation behavior. Enforces complete code generation, bans placeho",
+    "redesign-existing-projects: Upgrades existing websites and apps to premium quality. Audits current design, identifies ",
+    "high-end-visual-design: Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows",
+    "stitch-design-taste: Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files t",
+    "design-taste-frontend: tasteskill v2, the anti-slop frontend skill. Art direction for websites, distilled from a ",
+    "design-taste-frontend-v1: The original v1 taste-skill, preserved for projects depending on its exact behavior. The c",
+    "design-taste-frontend-v2-experimental: Old v2 (experimental) of taste-skill, the single-file dial-driven version, preserved for p"
+   ]
+  },
+  {
+   "id": "impeccable",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "The design language that makes your AI harness better at design.",
+   "한국어 소개": "Claude가 디자인을 더 잘하게 해 주는 디자인 규칙 모음이에요.",
+   "이럴 때": "이미 만든 화면의 간격·접근성·AI 티 나는 패턴을 하나씩 점검하고 다듬고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 4,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "Stop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 463,
+   "기능 목록": [
+    "impeccable: Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, dist"
+   ]
+  },
+  {
+   "id": "figma-context-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+   "한국어 소개": "Figma 화면의 배치 정보를 AI 코딩 도구에 넘겨 주는 MCP 서버예요.",
+   "이럴 때": "Figma 시안을 보고 코드로 옮기기만 하면 될 때(디자인을 고칠 필요는 없을 때)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 2,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 58,
+   "기능 목록": [
+    "mcp:download_figma_images: ",
+    "mcp:get_figma_data: "
+   ]
+  },
+  {
+   "id": "cursor-talk-to-figma-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+   "한국어 소개": "AI가 Figma 디자인을 읽고 직접 고칠 수도 있게 연결해 주는 MCP 서버예요.",
+   "이럴 때": "반복적인 Figma 작업(여러 화면의 글자 바꾸기, 컴포넌트 일괄 수정)을 Claude에게 시키고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 6,
+    "mcp": 40,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 651,
+   "기능 목록": [
+    "mcp:clone_node: ",
+    "mcp:create_component_instance: ",
+    "mcp:create_connections: ",
+    "mcp:create_frame: ",
+    "mcp:create_rectangle: ",
+    "mcp:create_text: ",
+    "mcp:delete_multiple_nodes: ",
+    "mcp:delete_node: ",
+    "mcp:export_node_as_image: ",
+    "mcp:get_annotations: ",
+    "mcp:get_document_info: ",
+    "mcp:get_instance_overrides: ",
+    "mcp:get_local_components: ",
+    "mcp:get_node_info: ",
+    "mcp:get_nodes_info: ",
+    "mcp:get_reactions: ",
+    "mcp:get_selection: ",
+    "mcp:get_styles: ",
+    "mcp:join_channel: ",
+    "mcp:move_node: ",
+    "mcp:read_my_design: ",
+    "mcp:resize_node: ",
+    "mcp:scan_nodes_by_types: ",
+    "mcp:scan_text_nodes: ",
+    "mcp:set_annotation: ",
+    "mcp:set_axis_align: ",
+    "mcp:set_corner_radius: ",
+    "mcp:set_default_connector: ",
+    "mcp:set_fill_color: ",
+    "mcp:set_focus: ",
+    "mcp:set_instance_overrides: ",
+    "mcp:set_item_spacing: ",
+    "mcp:set_layout_mode: ",
+    "mcp:set_layout_sizing: ",
+    "mcp:set_multiple_annotations: ",
+    "mcp:set_multiple_text_contents: ",
+    "mcp:set_padding: ",
+    "mcp:set_selections: ",
+    "mcp:set_stroke_color: ",
+    "mcp:set_text_content: "
+   ]
+  },
+  {
+   "id": "shadcn-ui-mcp-server",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "A mcp server to allow LLMS gain context about shadcn ui component structure,usage and installation,compaitable with react,svelte 5,vue & React Native",
+   "한국어 소개": "shadcn/ui 컴포넌트의 구조·사용법·설치 방법을 AI에게 알려 주는 MCP 서버예요.",
+   "이럴 때": "shadcn/ui로 화면을 만들 때 Claude가 컴포넌트 코드를 기억으로 쓰지 않고 최신 원문을 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 5,
+    "mcp": 10,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 186,
+   "기능 목록": [
+    "mcp:apply_theme: ",
+    "mcp:get_block: ",
+    "mcp:get_component: ",
+    "mcp:get_component_demo: ",
+    "mcp:get_component_metadata: ",
+    "mcp:get_directory_structure: ",
+    "mcp:get_theme: ",
+    "mcp:list_blocks: ",
+    "mcp:list_components: ",
+    "mcp:list_themes: "
+   ]
+  },
+  {
+   "id": "playwright-mcp",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Playwright MCP server",
+   "한국어 소개": "Claude가 Playwright로 실제 브라우저를 열고 누르고 확인하게 해 주는 MCP 서버예요.",
+   "이럴 때": "웹 앱의 로그인·결제 같은 흐름을 Claude가 실제 브라우저로 따라가며 확인하게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 25,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 273,
+   "기능 목록": [
+    "mcp:browser_click: ",
+    "mcp:browser_close: ",
+    "mcp:browser_console_messages: ",
+    "mcp:browser_drag: ",
+    "mcp:browser_drop: ",
+    "mcp:browser_emulate_media: ",
+    "mcp:browser_evaluate: ",
+    "mcp:browser_file_upload: ",
+    "mcp:browser_fill_form: ",
+    "mcp:browser_find: ",
+    "mcp:browser_handle_dialog: ",
+    "mcp:browser_hover: ",
+    "mcp:browser_navigate: ",
+    "mcp:browser_navigate_back: ",
+    "mcp:browser_network_request: ",
+    "mcp:browser_network_requests: ",
+    "mcp:browser_press_key: ",
+    "mcp:browser_resize: ",
+    "mcp:browser_run_code_unsafe: ",
+    "mcp:browser_select_option: ",
+    "mcp:browser_snapshot: ",
+    "mcp:browser_tabs: ",
+    "mcp:browser_take_screenshot: ",
+    "mcp:browser_type: ",
+    "mcp:browser_wait_for: "
+   ]
+  },
+  {
+   "id": "chrome-devtools-mcp",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Chrome DevTools for coding agents",
+   "한국어 소개": "Chrome 개발자 도구를 AI 코딩 도구가 쓰게 해 주는 MCP 서버예요.",
+   "이럴 때": "페이지가 왜 느린지, 어떤 요청이 실패하는지 Chrome 개발자 도구 수준으로 Claude가 분석하게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 32,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 939,
+   "기능 목록": [
+    "a11y-debugging: Uses Chrome DevTools MCP for accessibility (a11y) debugging and auditing based on web.dev ",
+    "chrome-devtools: Uses Chrome DevTools via MCP for efficient debugging, troubleshooting and browser automati",
+    "chrome-devtools-cli: Use this skill to write shell scripts or run shell commands to automate tasks in the brows",
+    "cookie-debugging: Uses Chrome DevTools MCP for inspecting, debugging, and testing cookies, session state, au",
+    "debug-optimize-lcp: Guides debugging and optimizing Largest Contentful Paint (LCP) using Chrome DevTools MCP t",
+    "memory-leak-debugging: Diagnoses and resolves memory leaks in JavaScript/Node.js applications. Use when a user re",
+    "troubleshooting: Uses Chrome DevTools MCP and documentation to troubleshoot connection and target issues. T",
+    "mcp:click: ",
+    "mcp:close_page: ",
+    "mcp:drag: ",
+    "mcp:emulate: ",
+    "mcp:evaluate_script: ",
+    "mcp:fill: ",
+    "mcp:fill_form: ",
+    "mcp:get_console_message: ",
+    "mcp:get_css_styles: ",
+    "mcp:get_network_request: ",
+    "mcp:handle_dialog: ",
+    "mcp:hover: ",
+    "mcp:lighthouse_audit: ",
+    "mcp:list_console_messages: ",
+    "mcp:list_network_requests: ",
+    "mcp:list_pages: ",
+    "mcp:navigate_page: ",
+    "mcp:new_page: ",
+    "mcp:performance_analyze_insight: ",
+    "mcp:performance_start_trace: ",
+    "mcp:performance_stop_trace: ",
+    "mcp:press_key: ",
+    "mcp:resize_page: ",
+    "mcp:screencast_start: ",
+    "mcp:screencast_stop: ",
+    "mcp:select_page: ",
+    "mcp:take_heapsnapshot: ",
+    "mcp:take_screenshot: ",
+    "mcp:take_snapshot: ",
+    "mcp:type_text: ",
+    "mcp:upload_file: ",
+    "mcp:wait_for: "
+   ]
+  },
+  {
+   "id": "open-code-review",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+   "한국어 소개": "정해진 검사 단계와 AI를 섞어 줄 단위로 리뷰 의견을 다는 코드 리뷰 도구예요. 알리바바에서 쓰는 방식이라고 소개해요.",
+   "이럴 때": "큰 PR에서 Claude가 파일을 빼먹거나 줄 번호가 어긋나는 리뷰 문제를 겪고, 별도 리뷰 도구로 돌리고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 84,
+   "기능 목록": [
+    "delegate-review: Run OCR in delegation mode — OCR handles file selection and rules, the host agent performs",
+    "review: Run OpenCodeReview (OCR) to review code changes and autonomously apply fixes."
+   ]
+  },
+  {
+   "id": "tdd-guard",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Automated TDD enforcement for Claude Code",
+   "한국어 소개": "Claude Code가 테스트 먼저 쓰기(TDD)를 지키도록 자동으로 막아 주는 도구예요.",
+   "이럴 때": "Claude가 테스트를 건너뛰고 구현부터 하는 걸 지시가 아니라 규칙으로 막고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 3,
+    "hook_events": {
+     "PreToolUse": 1,
+     "UserPromptSubmit": 1,
+     "SessionStart": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 14,
+   "기능 목록": [
+    "setup: Set up or update TDD Guard for the current project. Detects the test framework, installs o"
+   ]
+  },
+  {
+   "id": "trailofbits-skills",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Trail of Bits skills for security research, vulnerability detection, and audit workflows",
+   "한국어 소개": "보안 회사 Trail of Bits가 만든 보안 연구·취약점 찾기·감사용 스킬 모음이에요.",
+   "이럴 때": "스마트 계약, C/C++·Rust 메모리 안전, 의존성 공급망처럼 특정 분야를 보안 전문가 방식으로 깊게 감사하고 싶을 때",
+   "역할 범위": {
+    "skills": 84,
+    "agents": 30,
+    "commands": 91,
+    "mcp": 0,
+    "hooks_total": 8,
+    "hook_events": {
+     "SessionStart": 3,
+     "PreToolUse": 2,
+     "SessionEnd": 1,
+     "Stop": 1,
+     "SubagentStop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 3466,
+   "기능 목록": [
+    "audit-context-building",
+    "algorand-vulnerability-scanner",
+    "audit-prep-assistant",
+    "cairo-vulnerability-scanner",
+    "code-maturity-assessor",
+    "cosmos-vulnerability-scanner",
+    "guidelines-advisor",
+    "secure-workflow-guide",
+    "solana-vulnerability-scanner",
+    "substrate-vulnerability-scanner",
+    "token-integration-analyzer",
+    "ton-vulnerability-scanner",
+    "burpsuite-project-parser",
+    "burp-search",
+    "chrome-mcp-troubleshooting",
+    "constant-time-analysis",
+    "ct-check",
+    "interpreting-culture-index",
+    "devcontainer-setup",
+    "differential-review",
+    "diff-review",
+    "firebase-apk-scanner",
+    "scan-apk",
+    "gh-cli",
+    "dwarf-expert",
+    "entry-point-analyzer",
+    "entry-points",
+    "mutation-testing",
+    "post-patch-validation",
+    "property-based-testing",
+    "semgrep-rule-creator",
+    "semgrep-rule",
+    "semgrep-rule-variant-creator",
+    "sharp-edges",
+    "codeql",
+    "sarif-parsing",
+    "semgrep",
+    "spec-to-code-compliance",
+    "address-sanitizer",
+    "aflpp",
+    "atheris",
+    "cargo-fuzz",
+    "constant-time-testing",
+    "coverage-analysis",
+    "fuzzing-dictionary",
+    "fuzzing-obstacles",
+    "harness-writing",
+    "libafl",
+    "libfuzzer",
+    "ossfuzz",
+    "ruzzy",
+    "testing-handbook-generator",
+    "wycheproof",
+    "audit-augmentation",
+    "crypto-protocol-diagram",
+    "diagramming-code",
+    "genotoxic",
+    "graph-evolution",
+    "mermaid-to-proverif",
+    "slicing-code-context",
+    "trailmark",
+    "trailmark-finding-triage",
+    "trailmark-review-gate",
+    "trailmark-structural",
+    "trailmark-summary",
+    "trailmark-variant-neighborhood",
+    "vector-forge",
+    "variant-analysis",
+    "c-review",
+    "rust-review",
+    "modern-python",
+    "audit",
+    "review-walkthrough",
+    "second-opinion",
+    "yara-rule-authoring",
+    "git-cleanup",
+    "goal-prompt",
+    "supply-chain-risk-auditor",
+    "zeroize-audit",
+    "let-fate-decide",
+    "... 외 13개"
+   ]
+  },
+  {
+   "id": "claude-code-security-review",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "An AI-powered security review GitHub Action using Claude to analyze code changes for security vulnerabilities.",
+   "한국어 소개": "Claude로 코드 변경의 보안 문제를 검사하는 GitHub Action이에요(Claude Code용 명령 파일도 함께 있어요).",
+   "이럴 때": "팀 저장소의 모든 PR에 보안 리뷰 코멘트를 자동으로 달고 싶을 때(Claude Code 명령만 필요하면 기본 /security-review로 충분)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 45,
+   "기능 목록": [
+    "security-review: Complete a security review of the pending changes on the current branch"
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "design ~ mcp:get_css_styles (0.18) | design-system ~ mcp:get_css_styles (0.11) | design ~ mcp:take_screenshot (0.10)"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "design-taste-frontend ~ mcp:browser_type (0.15) | industrial-brutalist-ui ~ mcp:browser_type (0.11)"
+  },
+  {
+   "a": "taste-skill",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "redesign-existing-projects ~ mcp:get_css_styles (0.20)"
+  },
+  {
+   "a": "taste-skill",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "imagegen-frontend-mobile ~ firebase-apk-scanner (0.10)"
+  },
+  {
+   "a": "taste-skill",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "impeccable ~ mcp:list_pages (0.10)"
+  },
+  {
+   "a": "impeccable",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "mcp:get_figma_data ~ mcp:get_network_request (0.24) | mcp:get_figma_data ~ mcp:get_console_message (0.20) | mcp:get_figma_data ~ mcp:get_css_styles (0.20)"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "mcp:resize_node ~ mcp:browser_resize (0.68) | mcp:set_fill_color ~ mcp:browser_fill_form (0.42)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "mcp:get_styles ~ mcp:get_css_styles (0.78) | mcp:resize_node ~ mcp:resize_page (0.64) | mcp:set_fill_color ~ mcp:fill (0.63)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "mcp:get_selection ~ delegate-review (0.23) | mcp:set_layout_mode ~ delegate-review (0.10)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "mcp:create_frame ~ substrate-vulnerability-scanner (0.18) | mcp:scan_text_nodes ~ scan-apk (0.18) | mcp:scan_nodes_by_types ~ scan-apk (0.18)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "mcp:list_components ~ mcp:list_pages (0.42) | mcp:list_blocks ~ mcp:list_pages (0.38) | mcp:list_components ~ mcp:list_network_requests (0.35)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "mcp:apply_theme ~ review (0.22)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "mcp:list_blocks ~ rust-review (0.13) | mcp:list_blocks ~ address-sanitizer (0.11) | mcp:get_directory_structure ~ code-improver (0.11)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  }
+ ]
+}

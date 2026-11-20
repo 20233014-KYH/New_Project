@@ -7,6 +7,9 @@ import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
+import situationCsv from './data/situation_rules.csv?raw'
+import priorityCsv from './data/situation_priority.csv?raw'
+import goalsCsv from './data/situation_goals.csv?raw'
 
 // 서버 모드: VITE_API_BASE=http://localhost:8080/api (server/app, Spring). 같은 데이터·같은 규칙이라 결과 모양이 같다.
 const BASE = import.meta.env.VITE_API_BASE || ''
@@ -29,6 +32,8 @@ function normalizeEntry(e) {
     scope: e.scope || null,
     token_note: e.token_note || null,
     checked_at: e.checked_at || null,
+    latest_release: e.auto?.latest_release || null,
+    refreshed_at: e.auto?.refreshed_at || null,
   }
 }
 
@@ -117,7 +122,22 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
       date: t.date,
     })
   })
-  return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length }
+  return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length,
+    situation: situationCard(answers?.situation, answers?.priority, ids, byId, pairMap),
+    goal: goalPlan(answers || {}, ids, byId, pairMap, testedMap) }
+}
+
+// 서버 모드에서 서버가 꺼져 있거나 오류면 화면 위에 안내 띠를 띄운다(components/ServerBanner.jsx가 이 이벤트를 받음)
+async function apiFetch(url, opts) {
+  try {
+    const res = await fetch(url, opts)
+    if (!res.ok && res.status >= 500) throw new Error(`서버 오류 ${res.status}`)
+    window.dispatchEvent(new CustomEvent('inv-server', { detail: { ok: true } }))
+    return res
+  } catch (e) {
+    window.dispatchEvent(new CustomEvent('inv-server', { detail: { ok: false, url } }))
+    throw e
+  }
 }
 
 // --- API 함수 6개 (api-draft.md 2장) ---
@@ -125,7 +145,7 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
 // 1. 카테고리 목록
 export async function getCategories() {
   if (BASE) {
-    const res = await fetch(`${BASE}/categories`)
+    const res = await apiFetch(`${BASE}/categories`)
     return res.json()
   }
   // 로컬: data.js와 같은 카테고리 목록
@@ -145,7 +165,7 @@ export async function getTools({ categoryId, q } = {}) {
     const params = new URLSearchParams()
     if (categoryId) params.set('category', categoryId)
     if (q) params.set('q', q)
-    const res = await fetch(`${BASE}/tools?${params}`)
+    const res = await apiFetch(`${BASE}/tools?${params}`)
     return res.json()
   }
   const { tools } = getLocalData()
@@ -162,7 +182,7 @@ export async function getTools({ categoryId, q } = {}) {
 // 3. 도구 상세
 export async function getTool(id) {
   if (BASE) {
-    const res = await fetch(`${BASE}/tools/${id}`)
+    const res = await apiFetch(`${BASE}/tools/${id}`)
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -174,13 +194,13 @@ export async function getTool(id) {
     label: KO[p.relation],
     review: RS[p.review_state],
   }))
-  return { ...tool, pairs: relatedPairs }
+  return { ...tool, pairs: relatedPairs, situations: toolSituations(id, tools) }
 }
 
 // 4. 도구함 쌍 판정 (저장된 판정만, no_info 포함)
 export async function judgeBox(ids) {
   if (BASE) {
-    const res = await fetch(`${BASE}/judge`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids }) })
+    const res = await apiFetch(`${BASE}/judge`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids }) })
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -192,7 +212,7 @@ export async function judgeBox(ids) {
 // answers: { work: 'bugfix'|'feature'|'unknown', shell: 'bash'|'powershell'|'unknown', logs: 'big_logs'|'small'|'unknown' }
 export async function getRecommend(ids, answers) {
   if (BASE) {
-    const res = await fetch(`${BASE}/recommend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, answers }) })
+    const res = await apiFetch(`${BASE}/recommend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, answers }) })
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -201,6 +221,154 @@ export async function getRecommend(ids, answers) {
 }
 
 // 6. 도구 검색 (홈 검색)
+// --- 상황별 추천 규칙 (data/situation_rules.csv, 서버와 같은 파일) ---
+function splitCsv(line) {
+  const out = []; let cur = ''; let q = false
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (q) {
+      if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++ }
+      else if (ch === '"') q = false
+      else cur += ch
+    } else if (ch === '"') q = true
+    else if (ch === ',') { out.push(cur); cur = '' }
+    else cur += ch
+  }
+  out.push(cur)
+  return out
+}
+let _rules = null
+function getRules() {
+  if (!_rules) {
+    const lines = situationCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _rules = lines.slice(1).map(l => {
+      const c = splitCsv(l)
+      return { ruleId: c[0], category: Number(c[1]), id: c[2], label: c[3], base: c[4], tools: c[5], better: c[6],
+        cost: c[7], evidenceType: c[8], source: c[9], review: c[10] }
+    })
+  }
+  return _rules
+}
+// 상황 + 중요한 것 → 고를 도구 (data/situation_priority.csv, 서버와 같은 파일). 시험에서 차이가 확인된 조합만 있다
+export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
+const PRIORITY_ORDER = ['accurate', 'save', 'fast', 'simple', 'safe']
+let _picks = null
+function getPicks() {
+  if (!_picks) {
+    const lines = priorityCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _picks = Object.fromEntries(lines.slice(1).map(l => {
+      const c = splitCsv(l)
+      return [`${c[0]}|${c[1]}`, { tools: c[2], reason: c[3] }]
+    }))
+  }
+  return _picks
+}
+function toolRef(t, ids, byId, pairMap) {
+  return { id: t, name: byId[t]?.name || t, inBox: ids.includes(t),
+    overlapWith: clashWith(t, ids, pairMap, 'overlap'), similarTo: clashWith(t, ids, pairMap, 'situational') }
+}
+// 안 골랐거나 시험에서 차이를 확인 못 한 조합이면 null. base = 기본 기능으로 충분
+function pick(situationId, priority, ids, byId, pairMap) {
+  if (!priority) return null
+  const p = getPicks()[`${situationId}|${priority}`]
+  if (!p) return null
+  const base = p.tools === 'base'
+  return { priority, label: PRIORITY_LABEL[priority], base,
+    tools: base ? [] : p.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap)),
+    reason: p.reason }
+}
+// 추천 도구가 도구함의 도구와 겹침(overlap)·상황따라(situational) 판정이면 그 도구 id를 모은다. 이미 담은 도구는 빈 목록
+function clashWith(t, ids, pairMap, relation) {
+  if (ids.includes(t)) return []
+  return ids.filter(id => pairMap[pairKey(id, t)]?.relation === relation)
+}
+// 도구 상세: 이 도구가 추천 도구로 들어간 상황(규칙 파일 순서)과 그 상황의 중요한 것별 고르기
+const splitTools = s => s.split('|').map(t => t.trim()).filter(Boolean)
+function toolSituations(id, tools) {
+  const names = Object.fromEntries(tools.map(t => [t.id, t.name]))
+  const picks = getPicks()
+  return getRules().filter(r => splitTools(r.tools).includes(id)).map(r => ({
+    id: r.id, label: r.label, base: r.base, better: r.better, cost: r.cost,
+    evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
+    picks: PRIORITY_ORDER.filter(pr => picks[`${r.id}|${pr}`]).map(pr => {
+      const p = picks[`${r.id}|${pr}`]
+      return { priority: pr, label: PRIORITY_LABEL[pr],
+        chosen: p.tools === 'base' ? '기본 기능' : splitTools(p.tools).map(t => names[t] || t).join(' 또는 '), reason: p.reason }
+    }),
+  }))
+}
+// 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신. 안 골랐거나 없는 상황이면 null
+function situationCard(situationId, priority, ids, byId, pairMap) {
+  if (!situationId) return null
+  const r = getRules().find(x => x.id === situationId)
+  if (!r) return null
+  return {
+    id: r.id, category: r.category, label: r.label, base: r.base,
+    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap)),
+    better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
+    source: r.source, review: r.review, pick: pick(r.id, priority, ids, byId, pairMap),
+  }
+}
+
+// 목적 → 상황 여러 개 (data/situation_goals.csv, 서버와 같은 파일)
+let _goals = null
+function getGoalRows() {
+  if (!_goals) {
+    const lines = goalsCsv.replace(/\uFEFF/g, '').split(/\r?\n/).filter(l => l.trim())
+    _goals = lines.slice(1).map(l => { const c = splitCsv(l); return { id: c[0], label: c[1], desc: c[2], situations: c[3] } })
+  }
+  return _goals
+}
+export async function getGoals() {
+  if (BASE) {
+    const res = await apiFetch(`${BASE}/goals`)
+    return res.json()
+  }
+  return getGoalRows().map(g => ({ id: g.id, label: g.label, desc: g.desc }))
+}
+// 같은 도구가 여러 상황에서 나오면 한 줄로 합친다
+function mergePlan(m, t, situation, reason, warnings) {
+  const old = m.get(t.id)
+  if (!old) { m.set(t.id, { tool: t.id, name: t.name, situations: [situation], reasons: [reason], warnings: [...warnings] }); return }
+  old.situations.push(situation)
+  old.reasons.push(reason)
+  warnings.forEach(w => { if (!old.warnings.includes(w)) old.warnings.push(w) })
+}
+// 목적 → 더하기 / 꺼도 되는 것 / 그대로 + 상황별 카드 (서버 JudgeService.goalPlan과 같은 규칙)
+function goalPlan(ans, ids, byId, pairMap, testedMap) {
+  if (!ans.goal) return null
+  const g = getGoalRows().find(x => x.id === ans.goal)
+  if (!g) return null
+  const cards = splitTools(g.situations).map(s => situationCard(s, ans.priority, ids, byId, pairMap)).filter(Boolean)
+  const add = new Map(), off = new Map(), keep = new Map()
+  const costMatters = ['save', 'fast', 'simple'].includes(ans.priority)
+  for (const c of cards) {
+    const p = c.pick
+    if (!p) continue
+    if (p.base) {
+      if (costMatters) c.tools.filter(t => t.inBox).forEach(t => mergePlan(off, t, c.label, p.reason, []))
+      continue
+    }
+    for (const t of p.tools) {
+      if (t.inBox) { mergePlan(keep, t, c.label, p.reason, []); continue }
+      const warnings = [...t.overlapWith.map(o => `도구함의 ${o}와 겹쳐요`), ...t.similarTo.map(o => `도구함의 ${o}와 비슷한 역할이에요(상황따라)`)]
+      const tt = testedMap[t.id]
+      if (tt && ((tt.caution_work && tt.caution_work === ans.work) || (tt.caution_shell && tt.caution_shell === ans.shell))) warnings.push(tt.caution)
+      mergePlan(add, t, c.label, p.reason, warnings)
+    }
+  }
+  return { id: g.id, label: g.label, desc: g.desc, add: [...add.values()], turnOff: [...off.values()], keep: [...keep.values()], situations: cards }
+}
+
+// 상황 질문의 선택지
+export async function getSituations() {
+  if (BASE) {
+    const res = await apiFetch(`${BASE}/situations`)
+    return res.json()
+  }
+  return getRules().map(r => ({ id: r.id, category: r.category, label: r.label }))
+}
+
 export async function searchTools(q) {
   return getTools({ q })
 }

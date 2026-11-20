@@ -55,7 +55,24 @@ public class Tool {
     /** entries.json의 순서(목록을 화면과 같은 순서로 보여 주려고) */
     private Integer position;
 
+    /** GitHub 최신 릴리스(카탈로그 최신화 data/update/refresh.py가 채움)와 그걸 읽은 날 */
+    private String latestRelease;
+    private String refreshedAt;
+
     protected Tool() {
+    }
+
+    public void setLatest(String latestRelease, String refreshedAt) {
+        this.latestRelease = latestRelease;
+        this.refreshedAt = refreshedAt;
+    }
+
+    public String getLatestRelease() {
+        return latestRelease;
+    }
+
+    public String getRefreshedAt() {
+        return refreshedAt;
     }
 
     public Tool(String id, String name, String repo, Integer category, String descEn, String summaryKo, String whenKo,

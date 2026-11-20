@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getTool, getCategories, fmt } from '../api.js'
+import { getTool, getTools, getCategories, fmt } from '../api.js'
 import Reason from '../components/Reason.jsx'
 
 const KO = { overlap: 'ov', situational: 'si', complement: 'co', none: 'no', no_info: 'no' }
@@ -18,9 +18,11 @@ export default function ToolPage() {
   const [tool, setTool] = useState(null)
   const [catName, setCatName] = useState({})
   const [box, setBox] = useState(getBox)
+  const [catOf, setCatOf] = useState({})
 
   useEffect(() => {
     getTool(id).then(setTool)
+    getTools().then(ts => setCatOf(Object.fromEntries(ts.map(t => [t.id, t.category]))))
     getCategories().then(cats => {
       const map = {}
       cats.forEach(c => { map[c.id] = c.name })
@@ -47,6 +49,9 @@ export default function ToolPage() {
   ]
   const pm = Math.max(1, ...parts.map(p => p[1] || 0))
 
+  const samePairs = (tool.pairs || []).filter(p => !catOf[p.otherId] || catOf[p.otherId] === tool.category)
+  const otherPairs = (tool.pairs || []).filter(p => catOf[p.otherId] && catOf[p.otherId] !== tool.category)
+  const otherNone = otherPairs.filter(p => p.relation === 'none').length
   const clashes = (tool.pairs || []).filter(p => p.relation === 'overlap' && box.includes(p.otherId))
 
   return (
@@ -64,7 +69,7 @@ export default function ToolPage() {
                   <p className="lead" style={{ marginTop: 'var(--s2)' }}>{tool.summary_ko}</p>
                   {tool.when_ko && <p style={{ margin: 'var(--s1) 0 0' }}><b>이럴 때 쓰세요</b> · {tool.when_ko}</p>}
                   <p className="mute" lang="en" style={{ fontSize: 13, margin: 'var(--s1) 0 0' }}>저장소 원문: {tool.desc_en}</p>
-                  <p className="mute" style={{ fontSize: 13, margin: 0 }}>한국어 소개는 원문을 옮긴 것이고 팀원 확인 전이에요.</p>
+                  <p className="mute" style={{ fontSize: 13, margin: 0 }}>한국어 소개는 저장소 원문을 쉬운 말로 옮긴 것이에요(팀원 확인 완료).</p>
                 </>
               : <>
                   <p className="lead" lang="en" style={{ marginTop: 'var(--s2)' }}>{tool.desc_en}</p>
@@ -88,7 +93,7 @@ export default function ToolPage() {
         <div className="split">
           <div>
             <h2>같은 분야 도구와 같이 켜면</h2>
-            {(tool.pairs || []).map(p => (
+            {samePairs.map(p => (
               <div key={p.otherId} className="pair">
                 <div>
                   <Link to={`/tool/${p.otherId}`}>{p.otherId}</Link>
@@ -98,13 +103,46 @@ export default function ToolPage() {
                 <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
               </div>
             ))}
+            <h2 style={{ marginTop: 'var(--s8)' }}>다른 분야 도구와 같이 켜면</h2>
+            {otherPairs.filter(p => p.relation !== 'none').map(p => (
+              <div key={p.otherId} className="pair">
+                <div>
+                  <Link to={`/tool/${p.otherId}`}>{p.otherId}</Link>
+                  <small>{catName[catOf[p.otherId]] || ''} · {p.review}{p.judged_at ? ` · 확인 ${p.judged_at}` : ''}</small>
+                  <Reason p={p} />
+                </div>
+                <span className={`tag ${KO[p.relation] || 'no'}`}>{KO_LABEL[p.relation] || p.label}</span>
+              </div>
+            ))}
+            {otherNone > 0 && <p className="mute">나머지 다른 분야 도구 {otherNone}개와는 관계 없음으로 판정했어요.</p>}
             <p className="note">
-              다른 분야 도구와는 아직 판정하지 않았어요. 판정이 없다는 건 안전하다는 뜻이 아니에요.{' '}
+              다른 분야 짝은 AI 두 개(Claude·Codex)가 도구 설명을 읽고 따로 판정해 맞춰 본 추정이에요(직접 시험 아님). 두 AI 의견이 다르면 이유에 둘 다 적었어요.{' '}
               <Link to="/help">판정 낱말 풀이</Link>
             </p>
 
-            <h2 style={{ marginTop: 'var(--s12)' }}>설치와 내장 기능</h2>
-            <div className="panel">설치 방법과 Claude 기본 기능과의 비교는 아직 확인하지 않았어요.</div>
+            <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>
+            {(tool.situations || []).length === 0 && (
+              <div className="panel">이 도구는 아직 기본 기능과 비교해 시험하지 않았어요.</div>
+            )}
+            {(tool.situations || []).map(s => (
+              <div key={s.id} className="panel" style={{ marginBottom: 'var(--s4)' }}>
+                <h3 style={{ marginTop: 0 }}>{s.label}</h3>
+                <dl>
+                  <dt style={{ fontWeight: 600 }}>기본 기능으로도</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.base}</dd>
+                  <dt style={{ fontWeight: 600 }}>이 도구를 깔면 더 좋은 때</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.better}</dd>
+                  <dt style={{ fontWeight: 600 }}>대신</dt><dd style={{ margin: 0 }}>{s.cost}</dd>
+                </dl>
+                {s.picks.length > 0 && (
+                  <ul style={{ margin: 'var(--s2) 0 0', paddingLeft: '1.2em' }}>
+                    {s.picks.map(p => (
+                      <li key={p.priority}><b>{p.label}</b>이 중요하면 → {p.chosen === tool.name ? <b>{p.chosen}</b> : p.chosen} · {p.reason}</li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mute" style={{ fontSize: 13, margin: 'var(--s2) 0 0' }}>근거: {s.evidence}</p>
+              </div>
+            ))}
+            <p className="mute" style={{ fontSize: 13 }}>설치 방법은 저장소({tool.repo}) README를 따라 주세요.</p>
           </div>
 
           <aside className="spec panel">
@@ -132,7 +170,10 @@ export default function ToolPage() {
 
             <dl style={{ marginTop: 'var(--s6)' }}>
               <dt>저장소</dt><dd>{tool.repo}</dd>
-              <dt>버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              <dt>잰 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              {tool.latest_release && tool.latest_release !== tool.version && <>
+                <dt>최신 릴리스</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(잰 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
+              </>}
               <dt>라이선스</dt><dd>{tool.license || '확인 안 됨'}</dd>
               <dt>별</dt><dd className="n">{fmt(tool.stars)}</dd>
               <dt>최근 업데이트</dt><dd className="n">{tool.pushed_at ? tool.pushed_at.slice(0, 10) : '—'}</dd>

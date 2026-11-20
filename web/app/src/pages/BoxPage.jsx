@@ -147,7 +147,7 @@ export default function BoxPage() {
         </div>
 
         <div className="row-actions">
-          <Link className="btn btn-p" to="/ask/1">다음: 조건 두 가지 →</Link>
+          <Link className="btn btn-p" to="/ask/situation">다음: 질문 세 가지 →</Link>
           <button className="btn" onClick={clearBox}>도구함 비우기</button>
         </div>
       </div>

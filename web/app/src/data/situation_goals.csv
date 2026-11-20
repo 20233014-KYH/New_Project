@@ -1,0 +1,7 @@
+목적ID,목적(쉬운 말),설명,상황ID들
+hackathon,해커톤처럼 짧은 시간에 만들어요,아이디어부터 화면 확인까지 며칠 안에 끝내요,idea-vague|plan-new|lib-new|e2e-test|big-tool-output|usage-view
+long-project,몇 주 이상 이어지는 프로젝트를 해요,여러 날에 걸쳐 같은 코드를 키워 가요,multi-day|resume|memory|code-find|code-flow
+legacy,남이 만든 큰 코드를 고쳐요,낯선 코드에서 위치를 찾고 흐름을 이해해야 해요,code-find|code-flow|site-debug|variant
+backend,서버·DB·인프라를 다뤄요,DB를 조회하고 인프라 설정을 써요,db-ask|terraform|lib-new
+save-limit,사용 한도가 자꾸 바닥나요,같은 일을 토큰을 덜 쓰고 하고 싶어요,long-output|big-tool-output|usage-view|code-find
+release,출시 전에 점검해요,보안 구멍과 화면 동작을 확인해요,security|e2e-test|variant|site-debug

@@ -33,8 +33,8 @@ export default function HelpPage() {
           <dt><span className="tag no">확인된 정보 없음</span></dt>
           <dd>아직 판정하지 않은 쌍이에요. 안전하다는 뜻이 아니에요.</dd>
 
-          <dt>직접 시험 / 사람 검토</dt>
-          <dd>직접 시험은 같은 과제를 여러 번 돌려 잰 것, 사람 검토는 팀원이 기능을 읽고 판정한 것이에요.</dd>
+          <dt>직접 시험 / 사람 검토 / AI 추정</dt>
+          <dd>직접 시험은 같은 과제를 여러 번 돌려 잰 것, 사람 검토는 팀원이 기능을 읽고 판정한 것, AI 추정은 AI 두 개(Claude·Codex)가 도구 설명을 읽고 따로 판정해 맞춰 본 것이에요. AI 추정은 아직 사람이 확인하지 않았어요.</dd>
         </dl>
 
         <h2 style={{ marginTop: 'var(--s12)' }}>자주 묻는 질문</h2>

@@ -1,0 +1,523 @@
+{
+ "batch": "c4_5",
+ "tools": [
+  {
+   "id": "ui-ux-pro-max-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+   "한국어 소개": "여러 플랫폼의 화면(UI/UX)을 만들 때 디자인 지식을 주는 스킬이에요.",
+   "이럴 때": "만들 서비스의 업종이 분명하고, 그 업종에 어울리는 색·글꼴·화면 구조를 빠르게 정하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 751,
+   "기능 목록": [
+    "banner-design: Design banners for social media, ads, website heroes, creative assets, and print. Multiple",
+    "brand: Brand voice, visual identity, messaging frameworks, asset management, brand consistency. A",
+    "design: Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55",
+    "design-system: Token architecture, component specifications, and slide generation. Three-layer tokens (pr",
+    "slides: Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copy",
+    "ui-styling: Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI "
+   ]
+  },
+  {
+   "id": "taste-skill",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
+   "한국어 소개": "흔한 AI 페이지 대신 분위기 잡기·참고 이미지·브라우저 확인으로 화면에 개성을 주는 스킬이에요.",
+   "이럴 때": "새 랜딩 페이지·브랜드 사이트를 남과 다른 분위기로 처음부터 만들고 싶을 때",
+   "역할 범위": {
+    "skills": 14,
+    "agents": 0,
+    "commands": 14,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 957,
+   "기능 목록": [
+    "brandkit: Premium brand-kit image generation skill for creating high-end brand-guidelines boards, lo",
+    "industrial-brutalist-ui: Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics",
+    "gpt-taste: Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for",
+    "image-to-code: Elite website image-to-code skill for Codex. For visually important web tasks, it must fir",
+    "imagegen-frontend-mobile: Elite mobile app image-generation skill for creating premium, app-native screen concepts a",
+    "imagegen-frontend-web: Elite frontend image-direction skill for generating premium, conversion-aware website desi",
+    "minimalist-ui: Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bent",
+    "full-output-enforcement: Overrides default LLM truncation behavior. Enforces complete code generation, bans placeho",
+    "redesign-existing-projects: Upgrades existing websites and apps to premium quality. Audits current design, identifies ",
+    "high-end-visual-design: Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows",
+    "stitch-design-taste: Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files t",
+    "design-taste-frontend: tasteskill v2, the anti-slop frontend skill. Art direction for websites, distilled from a ",
+    "design-taste-frontend-v1: The original v1 taste-skill, preserved for projects depending on its exact behavior. The c",
+    "design-taste-frontend-v2-experimental: Old v2 (experimental) of taste-skill, the single-file dial-driven version, preserved for p"
+   ]
+  },
+  {
+   "id": "impeccable",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "The design language that makes your AI harness better at design.",
+   "한국어 소개": "Claude가 디자인을 더 잘하게 해 주는 디자인 규칙 모음이에요.",
+   "이럴 때": "이미 만든 화면의 간격·접근성·AI 티 나는 패턴을 하나씩 점검하고 다듬고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 4,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "PostToolUse": 1,
+     "Stop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 463,
+   "기능 목록": [
+    "impeccable: Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, dist"
+   ]
+  },
+  {
+   "id": "figma-context-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+   "한국어 소개": "Figma 화면의 배치 정보를 AI 코딩 도구에 넘겨 주는 MCP 서버예요.",
+   "이럴 때": "Figma 시안을 보고 코드로 옮기기만 하면 될 때(디자인을 고칠 필요는 없을 때)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 2,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 58,
+   "기능 목록": [
+    "mcp:download_figma_images: ",
+    "mcp:get_figma_data: "
+   ]
+  },
+  {
+   "id": "cursor-talk-to-figma-mcp",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+   "한국어 소개": "AI가 Figma 디자인을 읽고 직접 고칠 수도 있게 연결해 주는 MCP 서버예요.",
+   "이럴 때": "반복적인 Figma 작업(여러 화면의 글자 바꾸기, 컴포넌트 일괄 수정)을 Claude에게 시키고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 6,
+    "mcp": 40,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 651,
+   "기능 목록": [
+    "mcp:clone_node: ",
+    "mcp:create_component_instance: ",
+    "mcp:create_connections: ",
+    "mcp:create_frame: ",
+    "mcp:create_rectangle: ",
+    "mcp:create_text: ",
+    "mcp:delete_multiple_nodes: ",
+    "mcp:delete_node: ",
+    "mcp:export_node_as_image: ",
+    "mcp:get_annotations: ",
+    "mcp:get_document_info: ",
+    "mcp:get_instance_overrides: ",
+    "mcp:get_local_components: ",
+    "mcp:get_node_info: ",
+    "mcp:get_nodes_info: ",
+    "mcp:get_reactions: ",
+    "mcp:get_selection: ",
+    "mcp:get_styles: ",
+    "mcp:join_channel: ",
+    "mcp:move_node: ",
+    "mcp:read_my_design: ",
+    "mcp:resize_node: ",
+    "mcp:scan_nodes_by_types: ",
+    "mcp:scan_text_nodes: ",
+    "mcp:set_annotation: ",
+    "mcp:set_axis_align: ",
+    "mcp:set_corner_radius: ",
+    "mcp:set_default_connector: ",
+    "mcp:set_fill_color: ",
+    "mcp:set_focus: ",
+    "mcp:set_instance_overrides: ",
+    "mcp:set_item_spacing: ",
+    "mcp:set_layout_mode: ",
+    "mcp:set_layout_sizing: ",
+    "mcp:set_multiple_annotations: ",
+    "mcp:set_multiple_text_contents: ",
+    "mcp:set_padding: ",
+    "mcp:set_selections: ",
+    "mcp:set_stroke_color: ",
+    "mcp:set_text_content: "
+   ]
+  },
+  {
+   "id": "shadcn-ui-mcp-server",
+   "분야": "디자인·프론트엔드",
+   "설명(원문)": "A mcp server to allow LLMS gain context about shadcn ui component structure,usage and installation,compaitable with react,svelte 5,vue & React Native",
+   "한국어 소개": "shadcn/ui 컴포넌트의 구조·사용법·설치 방법을 AI에게 알려 주는 MCP 서버예요.",
+   "이럴 때": "shadcn/ui로 화면을 만들 때 Claude가 컴포넌트 코드를 기억으로 쓰지 않고 최신 원문을 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 5,
+    "mcp": 10,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 186,
+   "기능 목록": [
+    "mcp:apply_theme: ",
+    "mcp:get_block: ",
+    "mcp:get_component: ",
+    "mcp:get_component_demo: ",
+    "mcp:get_component_metadata: ",
+    "mcp:get_directory_structure: ",
+    "mcp:get_theme: ",
+    "mcp:list_blocks: ",
+    "mcp:list_components: ",
+    "mcp:list_themes: "
+   ]
+  },
+  {
+   "id": "dbhub",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Token conscious database MCP server for Postgres, MySQL, SQL Server, Oracle, MariaDB, SQLite.",
+   "한국어 소개": "Postgres·MySQL·SQL Server 등 여러 DB를 Claude에 연결하는 MCP 서버예요. 제작자는 토큰을 아끼게 만들었다고 소개해요.",
+   "이럴 때": "내 PostgreSQL·MySQL 같은 DB 하나에 Claude를 붙여 표 구조를 보고 SQL을 돌려 보고 싶을 때(플러그인이면 읽기 전용으로)",
+   "역할 범위": {
+    "skills": 2,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 87,
+   "기능 목록": [
+    "explore: Explore a database schema token-efficiently via the DBHub tools; use before writing SQL ag",
+    "setup: Connect DBHub to a database or fix a failing connection; also covers changing the DSN, wri"
+   ]
+  },
+  {
+   "id": "mcp-toolbox",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "MCP Toolbox for Databases is an open source MCP server for databases.",
+   "한국어 소개": "Google이 만든 데이터베이스용 MCP 서버예요.",
+   "이럴 때": "BigQuery·Spanner·Cloud SQL 같은 Google Cloud DB를 쓰거나, 운영 에이전트에 '정해 둔 쿼리만' 허용하고 싶을 때",
+   "역할 범위": null,
+   "처음 읽는 양(토큰)": null,
+   "기능 목록": []
+  },
+  {
+   "id": "supabase-mcp",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Connect Supabase to your AI assistants",
+   "한국어 소개": "Supabase를 AI 도구에 연결해 주는 MCP 서버예요.",
+   "이럴 때": "Supabase로 백엔드를 만들고 있고, DB 조회부터 Edge Function 배포까지 Claude에게 맡기고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 19,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 571,
+   "기능 목록": [
+    "mcp:confirm_cost: ",
+    "mcp:execute_sql: ",
+    "mcp:generate_typescript_types: ",
+    "mcp:get_advisors: ",
+    "mcp:get_cost: ",
+    "mcp:get_edge_function: ",
+    "mcp:get_organization: ",
+    "mcp:get_project: ",
+    "mcp:get_project_url: ",
+    "mcp:get_publishable_keys: ",
+    "mcp:list_branches: ",
+    "mcp:list_edge_functions: ",
+    "mcp:list_extensions: ",
+    "mcp:list_migrations: ",
+    "mcp:list_organizations: ",
+    "mcp:list_projects: ",
+    "mcp:list_tables: ",
+    "mcp:query_logs: ",
+    "mcp:search_docs: "
+   ]
+  },
+  {
+   "id": "kubernetes-mcp-server",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "Model Context Protocol (MCP) server for Kubernetes and OpenShift",
+   "한국어 소개": "Kubernetes와 OpenShift를 다루게 해 주는 MCP 서버예요.",
+   "이럴 때": "kubectl을 따로 깔지 않고 여러 클러스터(또는 OpenShift)를 다루며, 필요한 도구 묶음만 켜서 컨텍스트를 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 23,
+   "기능 목록": []
+  },
+  {
+   "id": "mcp-server-kubernetes",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "MCP Server for kubernetes management commands",
+   "한국어 소개": "Kubernetes 관리 명령을 Claude가 쓰게 해 주는 MCP 서버예요.",
+   "이럴 때": "이미 kubectl·Helm을 쓰고 있고, 그 환경 그대로 Claude에게 클러스터 조회·배포를 맡기고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 23,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 278,
+   "기능 목록": [
+    "mcp:cleanup: ",
+    "mcp:exec_in_pod: ",
+    "mcp:explain_resource: ",
+    "mcp:install_helm_chart: ",
+    "mcp:kubectl_apply: ",
+    "mcp:kubectl_context: ",
+    "mcp:kubectl_create: ",
+    "mcp:kubectl_delete: ",
+    "mcp:kubectl_describe: ",
+    "mcp:kubectl_generic: ",
+    "mcp:kubectl_get: ",
+    "mcp:kubectl_logs: ",
+    "mcp:kubectl_patch: ",
+    "mcp:kubectl_reconnect: ",
+    "mcp:kubectl_rollout: ",
+    "mcp:kubectl_scale: ",
+    "mcp:list_api_resources: ",
+    "mcp:node_management: ",
+    "mcp:ping: ",
+    "mcp:port_forward: ",
+    "mcp:stop_port_forward: ",
+    "mcp:uninstall_helm_chart: ",
+    "mcp:upgrade_helm_chart: "
+   ]
+  },
+  {
+   "id": "terraform-mcp-server",
+   "분야": "백엔드·인프라",
+   "설명(원문)": "The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.",
+   "한국어 소개": "Terraform 생태계와 연결해 인프라 코드 작업을 돕는 MCP 서버예요.",
+   "이럴 때": "Terraform 코드를 짤 때 Claude가 오래된 프로바이더 문법 대신 Registry의 최신 문서를 보게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 9,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 672,
+   "기능 목록": [
+    "mcp:get_latest_module_version: ",
+    "mcp:get_latest_provider_version: ",
+    "mcp:get_module_details: ",
+    "mcp:get_policy_details: ",
+    "mcp:get_provider_capabilities: ",
+    "mcp:get_provider_details: ",
+    "mcp:search_modules: ",
+    "mcp:search_policies: ",
+    "mcp:search_providers: "
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "ui-styling ~ mcp:list_tables (0.13)"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "slides ~ mcp:install_helm_chart (0.16) | slides ~ mcp:upgrade_helm_chart (0.14) | slides ~ mcp:uninstall_helm_chart (0.14)"
+  },
+  {
+   "a": "ui-ux-pro-max-skill",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "design-taste-frontend-v1 ~ mcp:list_projects (0.11) | redesign-existing-projects ~ mcp:list_projects (0.11)"
+  },
+  {
+   "a": "taste-skill",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "taste-skill",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "redesign-existing-projects ~ mcp:kubectl_generic (0.14) | full-output-enforcement ~ mcp:kubectl_apply (0.12) | stitch-design-taste ~ mcp:kubectl_generic (0.12)"
+  },
+  {
+   "a": "taste-skill",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "impeccable",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "mcp:get_figma_data ~ mcp:get_project (0.35) | mcp:get_figma_data ~ mcp:get_cost (0.29) | mcp:get_figma_data ~ mcp:get_organization (0.24)"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "mcp:get_figma_data ~ mcp:kubectl_get (0.28)"
+  },
+  {
+   "a": "figma-context-mcp",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "mcp:get_figma_data ~ mcp:get_provider_details (0.20) | mcp:get_figma_data ~ mcp:get_module_details (0.20) | mcp:get_figma_data ~ mcp:get_provider_capabilities (0.19)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "dbhub",
+   "비슷한 기능 후보": "mcp:set_multiple_annotations ~ setup (0.11) | mcp:delete_multiple_nodes ~ setup (0.11)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "mcp:get_styles ~ mcp:get_project (0.41) | mcp:get_selection ~ mcp:get_project (0.41) | mcp:get_local_components ~ mcp:get_project (0.39)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "mcp:delete_node ~ mcp:kubectl_delete (0.63) | mcp:delete_multiple_nodes ~ mcp:kubectl_delete (0.54) | mcp:resize_node ~ mcp:node_management (0.47)"
+  },
+  {
+   "a": "cursor-talk-to-figma-mcp",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "mcp:get_styles ~ mcp:get_provider_details (0.23) | mcp:get_styles ~ mcp:get_module_details (0.23) | mcp:get_selection ~ mcp:get_provider_details (0.23)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "dbhub",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "mcp-toolbox",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "supabase-mcp",
+   "비슷한 기능 후보": "mcp:list_components ~ mcp:list_projects (0.45) | mcp:get_component ~ mcp:get_project (0.45) | mcp:get_block ~ mcp:get_project (0.41)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "kubernetes-mcp-server",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "mcp-server-kubernetes",
+   "비슷한 기능 후보": "mcp:apply_theme ~ mcp:kubectl_apply (0.45) | mcp:get_component ~ mcp:kubectl_get (0.36) | mcp:get_block ~ mcp:kubectl_get (0.33)"
+  },
+  {
+   "a": "shadcn-ui-mcp-server",
+   "b": "terraform-mcp-server",
+   "비슷한 기능 후보": "mcp:get_component ~ mcp:get_provider_details (0.25) | mcp:get_component ~ mcp:get_module_details (0.25) | mcp:get_component ~ mcp:get_provider_capabilities (0.25)"
+  }
+ ]
+}

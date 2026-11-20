@@ -29,10 +29,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 304883,
-    "pushed_at": "2026-10-23T03:48:57Z",
+    "stars": 322785,
+    "pushed_at": "2026-11-03T23:24:58Z",
     "license": "MIT",
-    "open_issues": 363
+    "open_issues": 358,
+    "archived": false,
+    "latest_release": "v7.0.2",
+    "latest_release_at": "2026-11-03",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -70,10 +74,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 288551,
-    "pushed_at": "2026-10-20T23:08:28Z",
+    "stars": 307796,
+    "pushed_at": "2026-11-20T01:13:45Z",
     "license": "MIT",
-    "open_issues": 309
+    "open_issues": 146,
+    "archived": false,
+    "latest_release": "v2.2.3",
+    "latest_release_at": "2026-10-01",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -102,10 +110,14 @@
    "cautions": "setup 스크립트가 하는 스킬 등록을 프로젝트 범위로 재현(브라우저 바이너리 빌드는 안 함)",
    "reviews": [],
    "auto": {
-    "stars": 137644,
-    "pushed_at": "2026-10-25T15:31:24Z",
+    "stars": 142213,
+    "pushed_at": "2026-11-20T21:46:05Z",
     "license": "MIT",
-    "open_issues": 63
+    "open_issues": 118,
+    "archived": false,
+    "latest_release": "v1.102.1.0",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -142,10 +154,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 10847,
-    "pushed_at": "2026-10-25T15:30:29Z",
+    "stars": 11731,
+    "pushed_at": "2026-11-20T20:49:44Z",
     "license": "MIT",
-    "open_issues": 253
+    "open_issues": 419,
+    "archived": false,
+    "latest_release": "v1.22.0",
+    "latest_release_at": "2026-11-19",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -181,10 +197,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 27635,
-    "pushed_at": "2026-10-24T17:24:38Z",
+    "stars": 28160,
+    "pushed_at": "2026-11-20T20:07:31Z",
     "license": "MIT",
-    "open_issues": 10
+    "open_issues": 9,
+    "archived": false,
+    "latest_release": "v3.29.0",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -213,10 +233,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 27363,
-    "pushed_at": "2026-10-16T12:28:37Z",
+    "stars": 28201,
+    "pushed_at": "2026-11-08T23:10:04Z",
     "license": "MIT",
-    "open_issues": 48
+    "open_issues": 52,
+    "archived": false,
+    "latest_release": "v2.3.0",
+    "latest_release_at": "2026-11-08",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -250,10 +274,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 114956,
-    "pushed_at": "2026-10-25T09:24:33Z",
+    "stars": 121777,
+    "pushed_at": "2026-11-20T07:32:16Z",
     "license": "Apache-2.0",
-    "open_issues": 103
+    "open_issues": 108,
+    "archived": false,
+    "latest_release": "v4.1.0",
+    "latest_release_at": "2026-11-08",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -284,10 +312,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 84512,
-    "pushed_at": "2026-10-25T14:18:13Z",
+    "stars": 87296,
+    "pushed_at": "2026-11-20T17:11:29Z",
     "license": "Apache-2.0",
-    "open_issues": 1623
+    "open_issues": 1689,
+    "archived": false,
+    "latest_release": "v1.2.1",
+    "latest_release_at": "2026-11-19",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -319,10 +351,14 @@
    "cautions": "주 기능은 프록시(세션 밖). 여기서는 플러그인 2개만 잼",
    "reviews": [],
    "auto": {
-    "stars": 77791,
-    "pushed_at": "2026-10-24T19:15:37Z",
+    "stars": 80214,
+    "pushed_at": "2026-11-20T15:35:42Z",
     "license": "Apache-2.0",
-    "open_issues": 548
+    "open_issues": 319,
+    "archived": false,
+    "latest_release": "v0.44.0",
+    "latest_release_at": "2026-11-10",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -361,10 +397,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 103016,
-    "pushed_at": "2026-10-25T12:33:40Z",
+    "stars": 118622,
+    "pushed_at": "2026-11-20T19:20:08Z",
     "license": "Apache-2.0",
-    "open_issues": 98
+    "open_issues": 71,
+    "archived": false,
+    "latest_release": "v16.0.2",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -393,10 +433,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 28861,
-    "pushed_at": "2026-10-24T08:41:07Z",
+    "stars": 29276,
+    "pushed_at": "2026-11-20T11:25:15Z",
     "license": "MIT",
-    "open_issues": 1
+    "open_issues": 6,
+    "archived": false,
+    "latest_release": "v0.15.0",
+    "latest_release_at": "2026-11-02",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -418,10 +462,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 19175,
-    "pushed_at": "2026-10-25T03:36:22Z",
-    "license": "NOASSERTION",
-    "open_issues": 4
+    "stars": 19526,
+    "pushed_at": "2026-11-20T21:51:06Z",
+    "license": "MIT",
+    "open_issues": 61,
+    "archived": false,
+    "latest_release": "v20.0.51",
+    "latest_release_at": "2026-11-14",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -450,10 +498,14 @@
    "cautions": "graphify install --project 결과로 잼",
    "reviews": [],
    "auto": {
-    "stars": 134869,
-    "pushed_at": "2026-10-23T17:59:28Z",
+    "stars": 151141,
+    "pushed_at": "2026-11-20T21:42:23Z",
     "license": "Apache-2.0",
-    "open_issues": 1631
+    "open_issues": 1686,
+    "archived": false,
+    "latest_release": "v0.9.114",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -482,10 +534,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 75284,
-    "pushed_at": "2026-10-24T02:16:34Z",
+    "stars": 78240,
+    "pushed_at": "2026-11-20T15:08:39Z",
     "license": "MIT",
-    "open_issues": 529
+    "open_issues": 222,
+    "archived": false,
+    "latest_release": "v1.6.4",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -514,10 +570,14 @@
    "cautions": "키 가짜 값",
    "reviews": [],
    "auto": {
-    "stars": 12646,
-    "pushed_at": "2026-07-14T12:00:38Z",
+    "stars": 12713,
+    "pushed_at": "2026-11-12T09:17:58Z",
     "license": "MIT",
-    "open_issues": 147
+    "open_issues": 147,
+    "archived": false,
+    "latest_release": "v0.1.17-rc.0",
+    "latest_release_at": null,
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -546,10 +606,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 63648,
-    "pushed_at": "2026-10-23T13:48:26Z",
+    "stars": 65189,
+    "pushed_at": "2026-11-20T13:34:14Z",
     "license": "MIT",
-    "open_issues": 45
+    "open_issues": 58,
+    "archived": false,
+    "latest_release": "@upstash/context7-opencode@0.2.2",
+    "latest_release_at": "2026-11-17",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -578,10 +642,14 @@
    "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
    "reviews": [],
    "auto": {
-    "stars": 30700,
-    "pushed_at": "2026-10-20T08:47:27Z",
+    "stars": 31556,
+    "pushed_at": "2026-11-19T20:37:51Z",
     "license": "NOASSERTION",
-    "open_issues": 122
+    "open_issues": 147,
+    "archived": false,
+    "latest_release": "v2.1.0",
+    "latest_release_at": "2026-10-19",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -613,10 +681,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 88191,
-    "pushed_at": "2026-10-22T16:12:04Z",
+    "stars": 93438,
+    "pushed_at": "2026-11-18T08:31:20Z",
     "license": "MIT",
-    "open_issues": 336
+    "open_issues": 371,
+    "archived": false,
+    "latest_release": "v2.9.8",
+    "latest_release_at": "2026-11-15",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -645,10 +717,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 140233,
-    "pushed_at": "2026-10-23T10:06:31Z",
+    "stars": 152130,
+    "pushed_at": "2026-11-19T01:04:54Z",
     "license": "MIT",
-    "open_issues": 90
+    "open_issues": 84,
+    "archived": false,
+    "latest_release": "v2.15.0",
+    "latest_release_at": "2026-08-13",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -677,10 +753,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 102303,
-    "pushed_at": "2026-10-25T14:31:58Z",
+    "stars": 119294,
+    "pushed_at": "2026-11-08T21:51:50Z",
     "license": "MIT",
-    "open_issues": 3
+    "open_issues": 14,
+    "archived": false,
+    "latest_release": "v2.5.1",
+    "latest_release_at": "2026-11-07",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -712,10 +792,14 @@
    "cautions": "이 컴퓨터에 설치된 4.0.4",
    "reviews": [],
    "auto": {
-    "stars": 87231,
-    "pushed_at": "2026-10-25T15:02:18Z",
+    "stars": 113994,
+    "pushed_at": "2026-11-20T20:55:26Z",
     "license": "Apache-2.0",
-    "open_issues": 40
+    "open_issues": 71,
+    "archived": false,
+    "latest_release": "engine-v0.1.28",
+    "latest_release_at": "2026-11-19",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -744,10 +828,14 @@
    "cautions": "키 가짜 값",
    "reviews": [],
    "auto": {
-    "stars": 16069,
-    "pushed_at": "2026-10-24T04:14:11Z",
+    "stars": 16266,
+    "pushed_at": "2026-11-15T22:22:42Z",
     "license": "MIT",
-    "open_issues": 28
+    "open_issues": 30,
+    "archived": false,
+    "latest_release": "v0.13.2",
+    "latest_release_at": "2026-06-18",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -776,10 +864,14 @@
    "cautions": "bun 대신 node로 실행",
    "reviews": [],
    "auto": {
-    "stars": 7069,
+    "stars": 7123,
     "pushed_at": "2026-07-26T07:14:26Z",
     "license": "MIT",
-    "open_issues": 93
+    "open_issues": 97,
+    "archived": false,
+    "latest_release": null,
+    "latest_release_at": null,
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -808,10 +900,14 @@
    "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
    "reviews": [],
    "auto": {
-    "stars": 3070,
+    "stars": 3098,
     "pushed_at": "2026-10-03T15:17:41Z",
     "license": "MIT",
-    "open_issues": 7
+    "open_issues": 7,
+    "archived": false,
+    "latest_release": "v3.0.0",
+    "latest_release_at": "2026-10-03",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -840,10 +936,14 @@
    "cautions": "DSN 없음",
    "reviews": [],
    "auto": {
-    "stars": 3717,
-    "pushed_at": "2026-10-21T04:19:56Z",
+    "stars": 3887,
+    "pushed_at": "2026-11-20T18:31:40Z",
     "license": "MIT",
-    "open_issues": 2
+    "open_issues": 2,
+    "archived": false,
+    "latest_release": "v2.0.1",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -865,10 +965,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 16721,
-    "pushed_at": "2026-10-23T20:48:56Z",
+    "stars": 16920,
+    "pushed_at": "2026-11-20T21:36:13Z",
     "license": "Apache-2.0",
-    "open_issues": 406
+    "open_issues": 409,
+    "archived": false,
+    "latest_release": "v1.17.0",
+    "latest_release_at": "2026-11-13",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -897,10 +1001,14 @@
    "cautions": "토큰 가짜 값",
    "reviews": [],
    "auto": {
-    "stars": 2969,
-    "pushed_at": "2026-10-25T06:20:52Z",
+    "stars": 3021,
+    "pushed_at": "2026-11-20T20:23:18Z",
     "license": "Apache-2.0",
-    "open_issues": 132
+    "open_issues": 133,
+    "archived": false,
+    "latest_release": "mcp-server-supabase-v0.19.0",
+    "latest_release_at": "2026-11-20",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -929,10 +1037,14 @@
    "cautions": "kubeconfig 없음",
    "reviews": [],
    "auto": {
-    "stars": 2180,
-    "pushed_at": "2026-10-23T20:04:55Z",
+    "stars": 2269,
+    "pushed_at": "2026-11-20T21:34:48Z",
     "license": "Apache-2.0",
-    "open_issues": 127
+    "open_issues": 146,
+    "archived": false,
+    "latest_release": "v0.1.3",
+    "latest_release_at": "2026-11-13",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -961,10 +1073,14 @@
    "cautions": "kubeconfig 없음; MCP 리소스 읽기 도구 3개가 함께 붙음; 1·2회차 차이 큼",
    "reviews": [],
    "auto": {
-    "stars": 1607,
-    "pushed_at": "2026-10-21T20:57:49Z",
+    "stars": 1614,
+    "pushed_at": "2026-11-18T05:52:03Z",
     "license": "MIT",
-    "open_issues": 13
+    "open_issues": 9,
+    "archived": false,
+    "latest_release": "v4.2.3",
+    "latest_release_at": "2026-11-13",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -993,10 +1109,14 @@
    "cautions": "MCP 리소스 읽기 도구 3개가 함께 붙음",
    "reviews": [],
    "auto": {
-    "stars": 1553,
-    "pushed_at": "2026-10-23T21:46:33Z",
+    "stars": 1561,
+    "pushed_at": "2026-11-20T17:06:07Z",
     "license": "MPL-2.0",
-    "open_issues": 50
+    "open_issues": 44,
+    "archived": false,
+    "latest_release": "v1.4.1",
+    "latest_release_at": "2026-10-23",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1025,10 +1145,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 38612,
-    "pushed_at": "2026-10-22T17:43:26Z",
+    "stars": 39940,
+    "pushed_at": "2026-11-18T18:50:37Z",
     "license": "Apache-2.0",
-    "open_issues": 2
+    "open_issues": 0,
+    "archived": false,
+    "latest_release": "v0.0.86",
+    "latest_release_at": "2026-11-18",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1057,10 +1181,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 54113,
-    "pushed_at": "2026-10-25T00:06:53Z",
+    "stars": 58519,
+    "pushed_at": "2026-11-20T16:53:17Z",
     "license": "Apache-2.0",
-    "open_issues": 111
+    "open_issues": 135,
+    "archived": false,
+    "latest_release": "chrome-devtools-mcp-v1.13.0",
+    "latest_release_at": "2026-11-11",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1089,10 +1217,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 48251,
-    "pushed_at": "2026-10-22T04:24:26Z",
+    "stars": 54742,
+    "pushed_at": "2026-11-20T14:59:55Z",
     "license": "Apache-2.0",
-    "open_issues": 351
+    "open_issues": 339,
+    "archived": false,
+    "latest_release": "v1.13.13",
+    "latest_release_at": "2026-11-19",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1125,10 +1257,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 2367,
-    "pushed_at": "2026-10-12T07:53:21Z",
+    "stars": 2384,
+    "pushed_at": "2026-11-03T19:34:03Z",
     "license": "MIT",
-    "open_issues": 20
+    "open_issues": 21,
+    "archived": false,
+    "latest_release": "v1.7.0",
+    "latest_release_at": "2026-06-23",
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1163,10 +1299,14 @@
    "cautions": null,
    "reviews": [],
    "auto": {
-    "stars": 7795,
-    "pushed_at": "2026-10-24T01:53:03Z",
+    "stars": 8319,
+    "pushed_at": "2026-11-20T09:52:08Z",
     "license": "CC-BY-SA-4.0",
-    "open_issues": 141
+    "open_issues": 168,
+    "archived": false,
+    "latest_release": null,
+    "latest_release_at": null,
+    "refreshed_at": "2026-11-21"
    }
   },
   {
@@ -1195,10 +1335,14 @@
    "cautions": "주 기능은 GitHub Action. 여기서는 명령 파일만 잼",
    "reviews": [],
    "auto": {
-    "stars": 6539,
+    "stars": 7041,
     "pushed_at": "2026-02-11T18:01:23Z",
     "license": "MIT",
-    "open_issues": 102
+    "open_issues": 101,
+    "archived": false,
+    "latest_release": null,
+    "latest_release_at": null,
+    "refreshed_at": "2026-11-21"
    }
   }
  ]
