@@ -119,7 +119,7 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     })
   })
   return { pairs: js, remove, add, unknownCount: js.filter(p => p.state === 'no_info').length,
-    situation: situationCard(answers?.situation, ids, byId) }
+    situation: situationCard(answers?.situation, ids, byId, pairMap) }
 }
 
 // 서버 모드에서 서버가 꺼져 있거나 오류면 화면 위에 안내 띠를 띄운다(components/ServerBanner.jsx가 이 이벤트를 받음)
@@ -244,14 +244,20 @@ function getRules() {
   }
   return _rules
 }
+// 추천 도구가 도구함의 도구와 겹침(overlap)·상황따라(situational) 판정이면 그 도구 id를 모은다. 이미 담은 도구는 빈 목록
+function clashWith(t, ids, pairMap, relation) {
+  if (ids.includes(t)) return []
+  return ids.filter(id => pairMap[pairKey(id, t)]?.relation === relation)
+}
 // 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신. 안 골랐거나 없는 상황이면 null
-function situationCard(situationId, ids, byId) {
+function situationCard(situationId, ids, byId, pairMap) {
   if (!situationId) return null
   const r = getRules().find(x => x.id === situationId)
   if (!r) return null
   return {
     id: r.id, category: r.category, label: r.label, base: r.base,
-    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => ({ id: t, name: byId[t]?.name || t, inBox: ids.includes(t) })),
+    tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => ({ id: t, name: byId[t]?.name || t, inBox: ids.includes(t),
+      overlapWith: clashWith(t, ids, pairMap, 'overlap'), similarTo: clashWith(t, ids, pairMap, 'situational') })),
     better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
     source: r.source, review: r.review,
   }

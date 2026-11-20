@@ -130,6 +130,20 @@ class JudgeServiceTest {
     }
 
     @Test
+    void 추천_도구가_도구함_도구와_겹치거나_비슷하면_카드에_알린다() {
+        // gsd-core(도구함) ↔ superpowers(추천) = 겹침, serena(도구함) ↔ codegraph(추천) = 상황따라
+        var multi = judge.recommend(List.of("gsd-core"), new Answers("", "", "", "multi-day")).situation();
+        assertThat(multi.tools().get(0).overlapWith()).containsExactly("gsd-core");
+        var find = judge.recommend(List.of("serena"), new Answers("", "", "", "code-find")).situation();
+        var codegraph = find.tools().stream().filter(t -> t.id().equals("codegraph")).findFirst().orElseThrow();
+        assertThat(codegraph.similarTo()).containsExactly("serena");
+        assertThat(codegraph.overlapWith()).isEmpty();
+        var serena = find.tools().stream().filter(t -> t.id().equals("serena")).findFirst().orElseThrow();
+        assertThat(serena.inBox()).isTrue();
+        assertThat(serena.similarTo()).isEmpty();
+    }
+
+    @Test
     void 이미_담은_도구는_inBox로_표시하고_시험_전_근거는_제작자_설명() {
         var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug")).situation();
         assertThat(debug.tools()).hasSize(2);

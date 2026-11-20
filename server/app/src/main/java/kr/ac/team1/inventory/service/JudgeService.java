@@ -136,7 +136,7 @@ public class JudgeService {
             add.add(new AddItem(t.getTool(), t.getEffect(), t.getCaution(), warnings, unknown, blocked, verdict, t.getTestedOn()));
         }
         int unknownCount = (int) js.stream().filter(p -> "no_info".equals(p.state())).count();
-        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ids, byId));
+        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ids, byId, pairMap));
     }
 
     /** 상황 질문의 선택지 (CSV 순서) */
@@ -146,14 +146,26 @@ public class JudgeService {
     }
 
     /** 고른 상황의 3칸 카드. 상황을 안 골랐거나 없는 상황이면 null */
-    private SituationCard situationCard(String situationId, List<String> ids, Map<String, Tool> byId) {
+    /** 추천 도구 t와 도구함의 도구 사이 판정이 relation이면 그 도구 id를 모은다. 이미 담은 도구는 빈 목록 */
+    private static List<String> clashWith(String t, List<String> ids, Map<String, ToolPair> pairMap, String relation) {
+        if (ids.contains(t)) {
+            return List.of();
+        }
+        return ids.stream().filter(id -> {
+            ToolPair p = pairMap.get(PairKeys.of(id, t));
+            return p != null && relation.equals(p.getRelation());
+        }).toList();
+    }
+
+    private SituationCard situationCard(String situationId, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
         if (situationId == null || situationId.isBlank()) {
             return null;
         }
         return rules.findAll().stream().filter(r -> situationId.equals(r.getSituationId())).findFirst()
                 .map(r -> new SituationCard(r.getSituationId(), r.getCategory(), r.getLabel(), r.getBase(),
                         java.util.Arrays.stream(r.getTools().split(java.util.regex.Pattern.quote("|"))).map(String::trim).filter(t -> !t.isEmpty())
-                                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t))).toList(),
+                                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
+                                        clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList(),
                         r.getBetter(), r.getCost(), "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
                         r.getSource(), r.getReview()))
                 .orElse(null);

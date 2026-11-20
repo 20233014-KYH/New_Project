@@ -67,8 +67,8 @@ public final class Dtos {
     public record SituationDto(String id, Integer category, String label) {
     }
 
-    /** 추천 도구 하나. inBox = 이미 도구함에 담겨 있는지 */
-    public record ToolRef(String id, String name, boolean inBox) {
+    /** 추천 도구 하나. inBox = 이미 도구함에 담겨 있는지, overlapWith/similarTo = 도구함에서 겹침/상황따라 판정인 도구 */
+    public record ToolRef(String id, String name, boolean inBox, List<String> overlapWith, List<String> similarTo) {
     }
 
     /** 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신 */

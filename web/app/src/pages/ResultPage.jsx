@@ -94,6 +94,16 @@ export default function ResultPage() {
                   ))}
                 </p>
                 <p>{situation.better}</p>
+                {situation.tools.filter(t => t.overlapWith?.length).map(t => (
+                  <p key={`ov-${t.id}`} className="banner" role="status" style={{ margin: 'var(--s2) 0 0' }}>
+                    <b>{t.name} · 도구함의 {t.overlapWith.join(', ')}와 겹쳐요.</b> 같이 켜면 비슷한 설명을 둘 다 읽어서 토큰만 늘 수 있어요.
+                  </p>
+                ))}
+                {situation.tools.filter(t => t.similarTo?.length).map(t => (
+                  <p key={`si-${t.id}`} className="mute" style={{ margin: 'var(--s2) 0 0' }}>
+                    {t.name} · 도구함의 {t.similarTo.join(', ')}와 비슷한 역할이에요(상황따라). 더 깔기 전에 이미 있는 도구로 되는지 먼저 확인해 보세요.
+                  </p>
+                ))}
               </div>
               <div>
                 <h3>대신</h3>
