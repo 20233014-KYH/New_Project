@@ -10921,13 +10921,19 @@
    "a": "superpowers",
    "b": "caveman",
    "relation": "situational",
-   "reason_ko": "[직접 시험 2026-10-18] 같이 켜고 버그를 고치게 했더니 superpowers 디버깅 절차를 3번 중 3번 건너뛰었어요(caveman 없이는 3번 다 불렀어요). 건너뛴 이유는 확인하지 않았어요.",
+   "reason_ko": "[직접 시험 2026-10-18 · 다시 시험 2026-11-21] 10/18(caveman 4.0.1 + superpowers 6.x)엔 같이 켜고 버그를 고치게 했더니 superpowers 디버깅 절차를 3번 중 3번 건너뛰었어요. 11/21 최신판(caveman 4.1.0 + superpowers 7.0.2)으로 원인이 두 군데인 버그를 고치게 하니 3번 모두 디버깅 절차를 불렀고 숨은 테스트도 12/12로 같았어요(superpowers만: 12/12). caveman을 더하면 전체 토큰 -21%·출력 -18%·시간 -17%(가격 가중치로는 -7%). 버그가 30초 안에 풀릴 만큼 쉬웠다는 한계가 있어요.",
    "evidence": [
     {
-     "claim": "[직접 시험 2026-10-18] 같이 켜고 버그를 고치게 했더니 superpowers 디버깅 절차를 3번 중 3번 건너뛰었어요(caveman 없이는 3번 다 불렀어요). 건너뛴 이유는 확인하지 않았어요.",
+     "claim": "[직접 시험 2026-10-18 · 다시 시험 2026-11-21] 10/18(caveman 4.0.1 + superpowers 6.x)엔 같이 켜고 버그를 고치게 했더니 superpowers 디버깅 절차를 3번 중 3번 건너뛰었어요. 11/21 최신판(caveman 4.1.0 + superpowers 7.0.2)으로 원인이 두 군데인 버그를 고치게 하니 3번 모두 디버깅 절차를 불렀고 숨은 테스트도 12/12로 같았어요(superpowers만: 12/12). caveman을 더하면 전체 토큰 -21%·출력 -18%·시간 -17%(가격 가중치로는 -7%). 버그가 30초 안에 풀릴 만큼 쉬웠다는 한계가 있어요.",
+     "type": "tested",
+     "source": "judgment/experiments/2026-11-21-superpowers-caveman",
+     "checked_at": "2026-11-21"
+    },
+    {
+     "claim": "10/18 시험",
      "type": "tested",
      "source": "judgment/experiments/2026-10-18-statusline-caveman-rtk",
-     "checked_at": "2026-11-21"
+     "checked_at": "2026-10-18"
     }
    ],
    "a_version": "v7.0.0",

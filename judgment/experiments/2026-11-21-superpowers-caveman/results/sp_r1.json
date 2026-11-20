@@ -1,0 +1,31 @@
+{
+ "cond": "sp",
+ "rep": 1,
+ "sec": 30,
+ "rc": 0,
+ "plugins": [
+  "superpowers",
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [
+  "superpowers:systematic-debugging"
+ ],
+ "debug_skill": true,
+ "turns": 15,
+ "tests_passed": 18,
+ "tests_failed": 0,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 20776,
+  "cache_read_input_tokens": 293690,
+  "output_tokens": 3132
+ },
+ "total_tokens": 317614,
+ "price_weighted": 71015,
+ "stderr_tail": "",
+ "hidden_passed": 12,
+ "hidden_failed": 0
+}
