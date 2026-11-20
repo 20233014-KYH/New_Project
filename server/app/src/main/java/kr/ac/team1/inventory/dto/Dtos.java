@@ -39,8 +39,17 @@ public final class Dtos {
             String otherId, String label, String review) {
     }
 
-    /** 도구 카드(펼쳐서) + pairs */
-    public record ToolDetailDto(@JsonUnwrapped ToolDto tool, List<ToolPairDto> pairs) {
+    /** 도구 카드(펼쳐서) + pairs + 이 도구를 직접 시험한 상황(기본 기능과 비교) */
+    public record ToolDetailDto(@JsonUnwrapped ToolDto tool, List<ToolPairDto> pairs, List<ToolSituation> situations) {
+    }
+
+    /** 이 도구가 추천 도구로 들어간 상황 규칙 한 줄 + 그 상황의 중요한 것별 고르기 */
+    public record ToolSituation(String id, String label, String base, String better, String cost, String evidence,
+                                List<PickNote> picks) {
+    }
+
+    /** 중요한 것별 고르기 한 줄. chosen = 고른 도구 이름들(" 또는 ") 또는 "기본 기능" */
+    public record PickNote(String priority, String label, String chosen, String reason) {
     }
 
     /** 도구함 판정 한 쌍. state = saved(저장된 판정) / no_info(확인된 정보 없음) */

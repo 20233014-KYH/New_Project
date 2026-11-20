@@ -135,6 +135,16 @@ class JudgeServiceTest {
     }
 
     @Test
+    void 도구_상세에_기본_기능과_비교한_시험_상황이_붙는다() {
+        var sits = tools.detail("headroom").situations();
+        assertThat(sits).extracting(x -> x.id()).containsExactly("big-tool-output");
+        assertThat(sits.get(0).picks()).extracting(x -> x.priority()).containsExactly("accurate", "save", "simple");
+        assertThat(sits.get(0).picks().get(2).chosen()).isEqualTo("기본 기능");
+        assertThat(tools.detail("codegraph").situations()).extracting(x -> x.id()).containsExactly("code-find", "code-flow");
+        assertThat(tools.detail("tdd-guard").situations()).isEmpty();
+    }
+
+    @Test
     void 중요한_것을_고르면_시험_결과로_도구를_하나_고른다() {
         var acc = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "accurate")).situation().pick();
         assertThat(acc.base()).isFalse();

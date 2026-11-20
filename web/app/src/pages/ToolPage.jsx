@@ -120,8 +120,29 @@ export default function ToolPage() {
               <Link to="/help">판정 낱말 풀이</Link>
             </p>
 
-            <h2 style={{ marginTop: 'var(--s12)' }}>설치와 내장 기능</h2>
-            <div className="panel">설치 방법과 Claude 기본 기능과의 비교는 아직 확인하지 않았어요.</div>
+            <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>
+            {(tool.situations || []).length === 0 && (
+              <div className="panel">이 도구는 아직 기본 기능과 비교해 시험하지 않았어요.</div>
+            )}
+            {(tool.situations || []).map(s => (
+              <div key={s.id} className="panel" style={{ marginBottom: 'var(--s4)' }}>
+                <h3 style={{ marginTop: 0 }}>{s.label}</h3>
+                <dl>
+                  <dt style={{ fontWeight: 600 }}>기본 기능으로도</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.base}</dd>
+                  <dt style={{ fontWeight: 600 }}>이 도구를 깔면 더 좋은 때</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.better}</dd>
+                  <dt style={{ fontWeight: 600 }}>대신</dt><dd style={{ margin: 0 }}>{s.cost}</dd>
+                </dl>
+                {s.picks.length > 0 && (
+                  <ul style={{ margin: 'var(--s2) 0 0', paddingLeft: '1.2em' }}>
+                    {s.picks.map(p => (
+                      <li key={p.priority}><b>{p.label}</b>이 중요하면 → {p.chosen === tool.name ? <b>{p.chosen}</b> : p.chosen} · {p.reason}</li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mute" style={{ fontSize: 13, margin: 'var(--s2) 0 0' }}>근거: {s.evidence}</p>
+              </div>
+            ))}
+            <p className="mute" style={{ fontSize: 13 }}>설치 방법은 저장소({tool.repo}) README를 따라 주세요.</p>
           </div>
 
           <aside className="spec panel">

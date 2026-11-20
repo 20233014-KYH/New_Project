@@ -5,11 +5,17 @@ import java.util.List;
 import java.util.Locale;
 import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
+import kr.ac.team1.inventory.domain.SituationPick;
+import kr.ac.team1.inventory.domain.SituationRule;
 import kr.ac.team1.inventory.dto.Dtos.CategoryDto;
+import kr.ac.team1.inventory.dto.Dtos.PickNote;
+import kr.ac.team1.inventory.dto.Dtos.ToolSituation;
 import kr.ac.team1.inventory.dto.Dtos.ToolDetailDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolDto;
 import kr.ac.team1.inventory.dto.Dtos.ToolPairDto;
 import kr.ac.team1.inventory.repo.CategoryRepository;
+import kr.ac.team1.inventory.repo.SituationPickRepository;
+import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
 import kr.ac.team1.inventory.repo.ToolRepository;
 import org.springframework.stereotype.Service;
@@ -26,12 +32,17 @@ public class ToolService {
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
     private final ObjectMapper mapper;
+    private final SituationRuleRepository rules;
+    private final SituationPickRepository picks;
 
-    public ToolService(CategoryRepository categories, ToolRepository tools, ToolPairRepository pairs, ObjectMapper mapper) {
+    public ToolService(CategoryRepository categories, ToolRepository tools, ToolPairRepository pairs, ObjectMapper mapper,
+                       SituationRuleRepository rules, SituationPickRepository picks) {
         this.categories = categories;
         this.tools = tools;
         this.pairs = pairs;
         this.mapper = mapper;
+        this.rules = rules;
+        this.picks = picks;
     }
 
     public List<CategoryDto> categories() {
@@ -60,7 +71,30 @@ public class ToolService {
                         sources(p), p.getJudgedAt(), p.getA().equals(id) ? p.getB() : p.getA(),
                         Labels.RELATION.get(p.getRelation()), Labels.REVIEW.get(p.getReviewState())))
                 .toList();
-        return new ToolDetailDto(toDto(tool), related);
+        return new ToolDetailDto(toDto(tool), related, situations(id));
+    }
+
+    static List<String> splitTools(String s) {
+        return java.util.Arrays.stream(s.split(java.util.regex.Pattern.quote("|"))).map(String::trim).filter(t -> !t.isEmpty()).toList();
+    }
+
+    /** 이 도구가 추천 도구로 들어간 상황(규칙 파일 순서)과, 그 상황의 중요한 것별 고르기 */
+    List<ToolSituation> situations(String id) {
+        java.util.Map<String, String> names = new java.util.HashMap<>();
+        tools.findAll().forEach(t -> names.put(t.getId(), t.getName()));
+        List<SituationPick> allPicks = picks.findAll();
+        return rules.findAll().stream().sorted(Comparator.comparing(SituationRule::getPosition))
+                .filter(r -> splitTools(r.getTools()).contains(id))
+                .map(r -> new ToolSituation(r.getSituationId(), r.getLabel(), r.getBase(), r.getBetter(), r.getCost(),
+                        "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
+                        allPicks.stream().filter(p -> p.getSituationId().equals(r.getSituationId()))
+                                .sorted(Comparator.comparing(p -> Labels.PRIORITY_ORDER.indexOf(p.getPriority())))
+                                .map(p -> new PickNote(p.getPriority(), Labels.PRIORITY.get(p.getPriority()),
+                                        "base".equals(p.getTools()) ? "기본 기능"
+                                                : String.join(" 또는 ", splitTools(p.getTools()).stream().map(t -> names.getOrDefault(t, t)).toList()),
+                                        p.getReason()))
+                                .toList()))
+                .toList();
     }
 
     List<Tool> ordered() {

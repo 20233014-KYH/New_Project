@@ -28,3 +28,7 @@ terraform,save,base,도구를 쓰면 토큰이 약 20% 더 들어요 (대신 옛
 memory,accurate,base,규칙이 코드에 남는 일이면 기본 기능도 6세션 내내 지켜요 (3/3)
 memory,save,base,claude-mem은 기억 정리 모델이 토큰을 약 60% 더 써요
 memory,simple,base,claude-mem은 bun·uv를 따로 설치하고 PATH를 바꿔요
+code-flow,fast,codegraph,정확도는 같고 15~30% 빨라요 (파일을 거의 안 열어요)
+code-find,fast,codegraph,시작점 없이 찾는 과제에서 더 빨랐어요 (73초·기본 90초)
+prd,fast,pm-skills,더 빠르고 토큰도 적게 들어요 (점수는 22/24)
+site-debug,fast,base,코드가 있다면 기본 기능으로 찾는 게 빨라요 (도구를 쓰면 시간 약 2배)
