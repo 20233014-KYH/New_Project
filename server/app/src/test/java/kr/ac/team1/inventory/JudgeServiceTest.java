@@ -114,8 +114,8 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 상황_질문_선택지는_규칙_17개() {
-        assertThat(judge.situations()).hasSize(17);
+    void 상황_질문_선택지는_규칙_18개() {
+        assertThat(judge.situations()).hasSize(18);
         assertThat(judge.situations().get(0).id()).isEqualTo("plan-new");
     }
 

@@ -28,7 +28,7 @@ export default function AskSituationPage() {
     navigate('/ask/1')
   }
 
-  const groups = [...new Set(situations.map(s => s.category))]
+  const groups = [...new Set(situations.map(s => s.category))].sort((a, b) => a - b)  // 분야 번호 순서(규칙 파일 순서와 상관없이)
 
   return (
     <main>

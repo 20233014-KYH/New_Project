@@ -122,12 +122,25 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     situation: situationCard(answers?.situation, ids, byId) }
 }
 
+// 서버 모드에서 서버가 꺼져 있거나 오류면 화면 위에 안내 띠를 띄운다(components/ServerBanner.jsx가 이 이벤트를 받음)
+async function apiFetch(url, opts) {
+  try {
+    const res = await fetch(url, opts)
+    if (!res.ok && res.status >= 500) throw new Error(`서버 오류 ${res.status}`)
+    window.dispatchEvent(new CustomEvent('inv-server', { detail: { ok: true } }))
+    return res
+  } catch (e) {
+    window.dispatchEvent(new CustomEvent('inv-server', { detail: { ok: false, url } }))
+    throw e
+  }
+}
+
 // --- API 함수 6개 (api-draft.md 2장) ---
 
 // 1. 카테고리 목록
 export async function getCategories() {
   if (BASE) {
-    const res = await fetch(`${BASE}/categories`)
+    const res = await apiFetch(`${BASE}/categories`)
     return res.json()
   }
   // 로컬: data.js와 같은 카테고리 목록
@@ -147,7 +160,7 @@ export async function getTools({ categoryId, q } = {}) {
     const params = new URLSearchParams()
     if (categoryId) params.set('category', categoryId)
     if (q) params.set('q', q)
-    const res = await fetch(`${BASE}/tools?${params}`)
+    const res = await apiFetch(`${BASE}/tools?${params}`)
     return res.json()
   }
   const { tools } = getLocalData()
@@ -164,7 +177,7 @@ export async function getTools({ categoryId, q } = {}) {
 // 3. 도구 상세
 export async function getTool(id) {
   if (BASE) {
-    const res = await fetch(`${BASE}/tools/${id}`)
+    const res = await apiFetch(`${BASE}/tools/${id}`)
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -182,7 +195,7 @@ export async function getTool(id) {
 // 4. 도구함 쌍 판정 (저장된 판정만, no_info 포함)
 export async function judgeBox(ids) {
   if (BASE) {
-    const res = await fetch(`${BASE}/judge`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids }) })
+    const res = await apiFetch(`${BASE}/judge`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids }) })
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -194,7 +207,7 @@ export async function judgeBox(ids) {
 // answers: { work: 'bugfix'|'feature'|'unknown', shell: 'bash'|'powershell'|'unknown', logs: 'big_logs'|'small'|'unknown' }
 export async function getRecommend(ids, answers) {
   if (BASE) {
-    const res = await fetch(`${BASE}/recommend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, answers }) })
+    const res = await apiFetch(`${BASE}/recommend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids, answers }) })
     return res.json()
   }
   const { tools, pairs } = getLocalData()
@@ -247,7 +260,7 @@ function situationCard(situationId, ids, byId) {
 // 상황 질문의 선택지
 export async function getSituations() {
   if (BASE) {
-    const res = await fetch(`${BASE}/situations`)
+    const res = await apiFetch(`${BASE}/situations`)
     return res.json()
   }
   return getRules().map(r => ({ id: r.id, category: r.category, label: r.label }))

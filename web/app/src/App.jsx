@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Nav from './components/Nav'
+import ServerBanner from './components/ServerBanner'
 import HomePage from './pages/HomePage'
 import StartPage from './pages/StartPage'
 import BrowsePage from './pages/BrowsePage'
@@ -15,6 +16,7 @@ import HelpPage from './pages/HelpPage'
 export default function App() {
   return (
     <BrowserRouter>
+      <ServerBanner />
       <Nav />
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />

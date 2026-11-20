@@ -64,7 +64,7 @@ export default function ToolPage() {
                   <p className="lead" style={{ marginTop: 'var(--s2)' }}>{tool.summary_ko}</p>
                   {tool.when_ko && <p style={{ margin: 'var(--s1) 0 0' }}><b>이럴 때 쓰세요</b> · {tool.when_ko}</p>}
                   <p className="mute" lang="en" style={{ fontSize: 13, margin: 'var(--s1) 0 0' }}>저장소 원문: {tool.desc_en}</p>
-                  <p className="mute" style={{ fontSize: 13, margin: 0 }}>한국어 소개는 원문을 옮긴 것이고 팀원 확인 전이에요.</p>
+                  <p className="mute" style={{ fontSize: 13, margin: 0 }}>한국어 소개는 저장소 원문을 쉬운 말로 옮긴 것이에요(팀원 확인 완료).</p>
                 </>
               : <>
                   <p className="lead" lang="en" style={{ marginTop: 'var(--s2)' }}>{tool.desc_en}</p>
