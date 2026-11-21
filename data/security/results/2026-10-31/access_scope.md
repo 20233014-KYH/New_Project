@@ -24,7 +24,7 @@
     - 참고: 원격 실행 형태 1건은 다른 도구 설치 안내 데이터 등으로 보여 사실에서 뺌(사람 확인 전)
 - **밖으로 보내기** [검사 전]
 - **DB·외부 서비스** [찾음]
-    - (설치) 저장소 루트 .mcp.json에 chrome-devtools-mcp@1.10.1 설정이 있으나 plugin.json의 mcpServers는 비어 있음. 플러그인 설치 시 등록되는지는 실측 필요 — 코드 확인
+    - (설치) 저장소 루트 .mcp.json에 chrome-devtools-mcp@1.10.1 설정이 있으나 plugin.json의 mcpServers는 비어 있음. 플러그인 설치 시 등록되는지는 실측 필요 — AI가 코드를 읽음(사람 확인 전)
     - 참고: MCP 도구 2개는 모두 자기 데이터 조회(memory_read, skill 등) · 외부 DB·서비스 연결 도구는 찾지 못함
 - **브라우저** [검사에서 찾지 못함]
 
@@ -76,7 +76,7 @@
 - **DB·외부 서비스** [찾음]
     - (사용) MCP 도구 10개 추출, 기본 설정에서 10개 노출 (읽기·기타 7, 외부 서비스 조회(GitHub PR) 3) — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 기본 노출: 외부 서비스 조회(GitHub PR) — list_prs, get_pr_impact, triage_prs — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (사용) MCP 도구 list_prs 등은 사용자의 gh CLI 로그인으로 GitHub PR 정보를 읽음 — 코드 확인
+    - (사용) MCP 도구 list_prs 등은 사용자의 gh CLI 로그인으로 GitHub PR 정보를 읽음 — AI가 코드를 읽음(사람 확인 전)
 - **브라우저** [검사에서 찾지 못함]
 
 ### colbymchenry/codegraph  (확인: 01e0ac3 · 2026-10-28)
@@ -92,7 +92,7 @@
     - (설치) 설치 안내가 원격 스크립트를 내려받아 셸로 바로 실행 (raw.githubusercontent.com, 저장소 소유자 도메인) · 서로 다른 명령 5개, 신호 13건(코드/문서/설치 경로) — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 설치기가 settings.json에 등록한 훅이 이후 자동 실행 — 프로그램이 찾음(글자 패턴), 사람 확인 전 · 사람 확인 필요: 설치 경로에서 실제로 쓰는지
     - (업데이트) 업데이트 명령이 원격 설치 스크립트를 내려받아 셸로 바로 실행 (저장소 소유자 도메인) — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (업데이트) Windows 업데이트는 소스 안의 PowerShell 스크립트를 base64로 인코딩해 실행정책 우회(-ExecutionPolicy Bypass)로 실행. 인코딩은 따옴표 깨짐 회피용이라고 주석에 명시 — 코드 확인
+    - (업데이트) Windows 업데이트는 소스 안의 PowerShell 스크립트를 base64로 인코딩해 실행정책 우회(-ExecutionPolicy Bypass)로 실행. 인코딩은 따옴표 깨짐 회피용이라고 주석에 명시 — AI가 코드를 읽음(사람 확인 전)
 - **밖으로 보내기** [찾음]
     - (사용) 익명 사용 통계를 기본으로 보냄(설치기에서 기본 켜짐). 끄기: codegraph telemetry off, CODEGRAPH_TELEMETRY=0, DO_NOT_TRACK=1 — 문서
     - (사용) MCP 서버가 하루 한 번 GitHub에서 새 버전 확인(버전 번호만 받음). 끄기: CODEGRAPH_NO_UPDATE_CHECK=1 — 문서
@@ -123,7 +123,7 @@
     - (사용) .env 로드에 접근하는 코드 2곳 — 프로그램이 찾음(글자 패턴), 사람 확인 전 · 사람 확인 필요: 실제로 읽는지, 보호 목록인지
     - (사용) 토큰·키 환경변수를 읽음 (DBHUB_AUTH_TOKEN, DB_PASSWORD, SSH_PASSWORD) · 4곳 — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) SSH 키 경로에 접근하는 코드 8곳 — 프로그램이 찾음(글자 패턴), 사람 확인 전 · 사람 확인 필요: 실제로 읽는지, 보호 목록인지
-    - (사용) ~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만) — 코드 확인
+    - (사용) ~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만) — AI가 코드를 읽음(사람 확인 전)
     - 참고: 민감 경로 언급 1건은 차단·제외 목록으로 보여 사실에서 뺌(사람 확인 전)
 - **설정 바꾸기** [찾음]
     - (설치) MCP 서버 설정(~/.claude.json·.mcp.json) 수정 (프로젝트 설정) — 프로그램이 찾음(글자 패턴), 사람 확인 전 · 사람 확인 필요: 설치 경로에서 실제로 쓰는지
@@ -132,9 +132,9 @@
 - **DB·외부 서비스** [찾음]
     - (사용) MCP 도구 4개 추출, 기본 설정에서 4개 노출 (DB 구조·상태 읽기 3, 임의 SQL 실행 1) — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 기본 노출: 임의 SQL 실행 — execute_sql — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (사용) --readonly 플래그는 1.5.0에서 제거됨(쓰면 오류로 종료). 읽기 전용은 dbhub.toml의 [[tools]] readonly = true로 설정 — 코드 확인
-    - (설치) Claude Code 플러그인으로 설치하면 기본이 읽기 전용(readonly = true, 최대 1000행), 버전 1.5.0 고정 — 코드 확인
-    - (사용) 설정 파일 없이 연결 문자열만 주면 execute_sql이 읽기 전용이 아님(수정·삭제 가능) — 코드 확인
+    - (사용) --readonly 플래그는 1.5.0에서 제거됨(쓰면 오류로 종료). 읽기 전용은 dbhub.toml의 [[tools]] readonly = true로 설정 — AI가 코드를 읽음(사람 확인 전)
+    - (설치) Claude Code 플러그인으로 설치하면 기본이 읽기 전용(readonly = true, 최대 1000행), 버전 1.5.0 고정 — AI가 코드를 읽음(사람 확인 전)
+    - (사용) 설정 파일 없이 연결 문자열만 주면 execute_sql이 읽기 전용이 아님(수정·삭제 가능) — AI가 코드를 읽음(사람 확인 전)
 - **브라우저** [검사에서 찾지 못함]
 
 ### googleapis/mcp-toolbox  (확인: bfd4ffa · 2026-10-27)
@@ -150,10 +150,10 @@
 ### microsoft/playwright-mcp  (확인: 0c4107a · 2026-10-22)
 - **내 파일** [찾음]
     - (사용) MCP 도구로 내 파일을 페이지에 올리거나 결과를 파일로 저장 (browser_file_upload, browser_drop) — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (사용) 파일 접근은 기본적으로 작업 폴더 안으로 제한. --allow-unrestricted-file-access로 해제 — 코드 확인
+    - (사용) 파일 접근은 기본적으로 작업 폴더 안으로 제한. --allow-unrestricted-file-access로 해제 — AI가 코드를 읽음(사람 확인 전)
 - **설정 바꾸기** [검사에서 찾지 못함]
 - **명령 실행** [찾음]
-    - (사용) MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출) — 코드 확인
+    - (사용) MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출) — AI가 코드를 읽음(사람 확인 전)
 - **밖으로 보내기** [검사 전]
 - **DB·외부 서비스** [검사에서 찾지 못함]
 - **브라우저** [찾음]
@@ -161,8 +161,8 @@
     - (사용) 옵션을 켜야 노출: 네트워크 가로채기 4개 (--caps=network 필요) — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 기본 노출: 임의 코드 실행 — browser_evaluate, browser_run_code_unsafe — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 옵션을 켜야 노출: 쿠키·저장소 접근 17개 (--caps=storage 필요) — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (사용) browser_run_code_unsafe가 기본 노출. 제작자 설명: 'Playwright 서버 프로세스에서 임의 JavaScript 실행, 원격 코드 실행과 같음' — 코드 확인
-    - (사용) --extension을 쓰면 실행 중인 내 브라우저(로그인 상태 포함)에 연결. --allowed-origins는 제작자가 '보안 경계가 아님'이라고 명시 — 코드 확인
+    - (사용) browser_run_code_unsafe가 기본 노출. 제작자 설명: 'Playwright 서버 프로세스에서 임의 JavaScript 실행, 원격 코드 실행과 같음' — AI가 코드를 읽음(사람 확인 전)
+    - (사용) --extension을 쓰면 실행 중인 내 브라우저(로그인 상태 포함)에 연결. --allowed-origins는 제작자가 '보안 경계가 아님'이라고 명시 — AI가 코드를 읽음(사람 확인 전)
 
 ### ChromeDevTools/chrome-devtools-mcp  (확인: b701776 · 2026-10-28)
 - **내 파일** [찾음]
@@ -171,7 +171,7 @@
 - **설정 바꾸기** [검사에서 찾지 못함]
 - **명령 실행** [검사에서 찾지 못함]
 - **밖으로 보내기** [찾음]
-    - (사용) 사용 통계를 기본으로 Google에 보냄(usageStatistics 기본값 true). 끄기: --no-usage-statistics 또는 CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS — 코드 확인
+    - (사용) 사용 통계를 기본으로 Google에 보냄(usageStatistics 기본값 true). 끄기: --no-usage-statistics 또는 CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS — AI가 코드를 읽음(사람 확인 전)
 - **DB·외부 서비스** [검사에서 찾지 못함]
 - **브라우저** [찾음]
     - (사용) MCP 도구 44개 추출, 기본 설정에서 34개 노출 (브라우저 조작 14, 관찰(읽기) 14, 파일 올리기·저장 3, 페이지 제공 도구 실행 2, 임의 코드 실행 1) — 프로그램이 찾음(글자 패턴), 사람 확인 전
@@ -179,5 +179,5 @@
     - (사용) 옵션을 켜야 노출: 임의 코드 실행 1개 (--slim=true 필요) — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 기본 노출: 페이지 제공 도구 실행 — execute_3p_developer_tool, execute_webmcp_tool — 프로그램이 찾음(글자 패턴), 사람 확인 전
     - (사용) 옵션을 켜야 노출: 확장 프로그램 설치·실행 4개 (--categoryExtensions=true 필요) — 프로그램이 찾음(글자 패턴), 사람 확인 전
-    - (사용) evaluate_script(페이지 안 임의 JavaScript)가 기본 켜짐. --javascriptEvaluation=false로 끌 수 있으나 제작자는 '샌드박스가 아님'이라고 명시 — 코드 확인
+    - (사용) evaluate_script(페이지 안 임의 JavaScript)가 기본 켜짐. --javascriptEvaluation=false로 끌 수 있으나 제작자는 '샌드박스가 아님'이라고 명시 — AI가 코드를 읽음(사람 확인 전)
     - (사용) autoConnect·browserUrl로 이미 열린 브라우저에 연결 가능. 공식 문서는 로그인된 세션에 연결하면 사용자 대신 행동할 수 있다고 경고 — 문서

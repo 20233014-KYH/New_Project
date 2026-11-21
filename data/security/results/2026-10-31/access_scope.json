@@ -4,7 +4,7 @@
  "evidence_kinds": {
   "프로그램이 셈": "calc",
   "프로그램이 찾음(글자 패턴)": "pattern",
-  "코드 확인": "ai",
+  "AI가 코드를 읽음(사람 확인 전)": "ai",
   "문서": "doc",
   "실측(팀)": "tested"
  },
@@ -238,7 +238,7 @@
       {
        "text": "저장소 루트 .mcp.json에 chrome-devtools-mcp@1.10.1 설정이 있으나 plugin.json의 mcpServers는 비어 있음. 플러그인 설치 시 등록되는지는 실측 필요",
        "when": "설치",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -644,7 +644,7 @@
       {
        "text": "MCP 도구 list_prs 등은 사용자의 gh CLI 로그인으로 GitHub PR 정보를 읽음",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -769,7 +769,7 @@
       {
        "text": "Windows 업데이트는 소스 안의 PowerShell 스크립트를 base64로 인코딩해 실행정책 우회(-ExecutionPolicy Bypass)로 실행. 인코딩은 따옴표 깨짐 회피용이라고 주석에 명시",
        "when": "업데이트",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -977,7 +977,7 @@
       {
        "text": "~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만)",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1043,7 +1043,7 @@
       {
        "text": "--readonly 플래그는 1.5.0에서 제거됨(쓰면 오류로 종료). 읽기 전용은 dbhub.toml의 [[tools]] readonly = true로 설정",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1053,7 +1053,7 @@
       {
        "text": "Claude Code 플러그인으로 설치하면 기본이 읽기 전용(readonly = true, 최대 1000행), 버전 1.5.0 고정",
        "when": "설치",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1064,7 +1064,7 @@
       {
        "text": "설정 파일 없이 연결 문자열만 주면 execute_sql이 읽기 전용이 아님(수정·삭제 가능)",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1173,7 +1173,7 @@
       {
        "text": "파일 접근은 기본적으로 작업 폴더 안으로 제한. --allow-unrestricted-file-access로 해제",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1194,7 +1194,7 @@
       {
        "text": "MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출)",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1263,7 +1263,7 @@
       {
        "text": "browser_run_code_unsafe가 기본 노출. 제작자 설명: 'Playwright 서버 프로세스에서 임의 JavaScript 실행, 원격 코드 실행과 같음'",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1273,7 +1273,7 @@
       {
        "text": "--extension을 쓰면 실행 중인 내 브라우저(로그인 상태 포함)에 연결. --allowed-origins는 제작자가 '보안 경계가 아님'이라고 명시",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1340,7 +1340,7 @@
       {
        "text": "사용 통계를 기본으로 Google에 보냄(usageStatistics 기본값 true). 끄기: --no-usage-statistics 또는 CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
@@ -1415,7 +1415,7 @@
       {
        "text": "evaluate_script(페이지 안 임의 JavaScript)가 기본 켜짐. --javascriptEvaluation=false로 끌 수 있으나 제작자는 '샌드박스가 아님'이라고 명시",
        "when": "사용",
-       "evidence": "코드 확인",
+       "evidence": "AI가 코드를 읽음(사람 확인 전)",
        "evidence_code": "ai",
        "reviewed": false,
        "refs": [
