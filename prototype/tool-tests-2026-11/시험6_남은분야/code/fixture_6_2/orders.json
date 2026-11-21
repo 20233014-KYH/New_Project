@@ -1,0 +1,7 @@
+{"shop": "밤가이", "orders": [
+  {"id": 1, "customer": "kim", "status": "paid", "items": [{"sku": "A1", "qty": 2, "price": 12000}, {"sku": "B2", "qty": 1, "price": 30000}]},
+  {"id": 2, "customer": "lee", "status": "cancelled", "items": [{"sku": "A1", "qty": 5, "price": 12000}]},
+  {"id": 3, "customer": "park", "status": "paid", "items": [{"sku": "C3", "qty": 3, "price": 8000}]},
+  {"id": 4, "customer": "kim", "status": "paid", "items": [{"sku": "B2", "qty": 2, "price": 28000}], "coupon": null},
+  {"id": 5, "customer": "choi", "status": "refunded", "items": [{"sku": "C3", "qty": 1, "price": 8000}]}
+]}

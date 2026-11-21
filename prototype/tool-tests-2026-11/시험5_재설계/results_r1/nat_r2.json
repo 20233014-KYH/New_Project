@@ -1,0 +1,113 @@
+{
+  "condition": "nat",
+  "rep": 2,
+  "turn": {
+    "sec": 86.3,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\db.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\sqlutil.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\admin\\export.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\admin\\maintenance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\notices\\board.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\fees\\payments.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\fees\\report.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\members\\profile.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\members\\search.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\events\\attendance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\events\\calendar.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\api\\routes.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\clubapp\\auth\\login.py"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r2\\rules\\sqli.yaml"
+    ],
+    "texts": [
+      "Need to read the candidates in full.",
+      "Use Read instead.",
+      "Semgrep으로 규칙을 검증하는 중입니다. 파이프 없이 다시 실행합니다.",
+      "`find_user` 말고도 같은 원인의 취약점이 8곳 더 있었고, 코드는 고치지 않았습니다. 규칙은 `rules/sqli.yaml`에 만들었습니다. 이 저장소에 돌리면 `find_user`를 포함한 모든 취약 지점이 잡히고, 안전한 함수에서는 오탐이 나지 않았습니다.\n\n**취약한 곳**\n- `admin/maintenance.py:delete_old`: `days`를 `int()`로 바꾸지 않고 f-string에 넣습니다. 로그에도 그대로 찍힙니다.\n- `notices/board.py:search_notices`: 검색 조건의 열 이름(`key`)과 값(`value`)을 모두 문자열에 붙입니다. 열 이름까지 사용자 입력이라 가장 위험합니다.\n- `fees/payments.py:find_payments`: `sqlutil.eq`로 만든 조건을 `WHERE`에 이어 붙입니다.\n- `fees/report.py:monthly_report`: `month`를 `'` + `month` + `'` 형태로 이어 붙입니다.\n- `members/profile.py:update_nickname`: `'%s' % nickname`으로 넣습니다. `id`는 `int()`로 막혀 있지만 `nickname`은 막혀 있지 않습니다.\n- `members/search.py:search_members`: `sqlutil.like`가 `'%{term}%'`를 만들고 그대로 실행합니다.\n- `events/calendar.py:event_by_title`: `'{}'.format(title)`로 넣습니다.\n- `events/attendance.py:by_member`: `member = '{name}'`을 `_q`에 넘기고, `_q`가 그대로 실행합니다.\n- `sqlutil.py:eq`와 `sqlutil.py:like`: 값을 따옴표 안에 그대로 넣는 헬퍼입니다. 위 `find_payments`와 `search_members`가 이 함수들 때문에 뚫립니다. 이 둘은 호출부가 아니라 원인이라 따로 넣었습니다.\n\n**안전하다고 판단한 곳**\n- `get_profile`과 `by_event`는 `int()`로 막혀 있습니다.\n- `export_table`은 허용 목록으로 검사합니다.\n- `sort_report`와 `order_by`는 고정된 열 이름 중에서만 고릅니다.\n- `list_by_ids`는 `?` 자리표시자만 만듭니다.\n- `count_members`는 설정 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `post_notice`, `record_payment`는 파라미터 바인딩을 씁니다.\n\n**규칙 설명**\n- **taint 규칙:** 함수 인자가 `run`/`run_write`/`execute` 첫 인자까지 이어지면 잡습니다. `int()`, `order_by`, `in_list`, \"허용 목록에 없으면 raise\" 검사는 안전한 처리로 인정합니다.\n- **패턴 규칙:** 따옴표 안에 값을 끼운 SQL 문자열(f-string, `%`, `.format`, `+`)을 잡습니다. 함수를 건너가는 `by_member`, `board.py`, `sqlutil` 같은 경우를 이 규칙이 잡습니다.\n- **인코딩:** 규칙 파일은 영문으로만 썼습니다. 한글을 넣으면 Windows의 semgrep이 cp949로 읽다가 오류를 냅니다.\n- **제외 경로:** `db.py`는 taint 규칙에서 제외했습니다. `run`/`run_write`가 받은 SQL을 그대로 실행하는 곳이라 오탐이 났기 때문입니다.\n- **실행 방법:** `semgrep --config rules/sqli.yaml clubapp`\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/notices/board.py:search_notices\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like"
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "15fa82d6-2247-4981-a5f8-7e3238be3c2f",
+    "result": "`find_user` 말고도 같은 원인의 취약점이 8곳 더 있었고, 코드는 고치지 않았습니다. 규칙은 `rules/sqli.yaml`에 만들었습니다. 이 저장소에 돌리면 `find_user`를 포함한 모든 취약 지점이 잡히고, 안전한 함수에서는 오탐이 나지 않았습니다.\n\n**취약한 곳**\n- `admin/maintenance.py:delete_old`: `days`를 `int()`로 바꾸지 않고 f-string에 넣습니다. 로그에도 그대로 찍힙니다.\n- `notices/board.py:search_notices`: 검색 조건의 열 이름(`key`)과 값(`value`)을 모두 문자열에 붙입니다. 열 이름까지 사용자 입력이라 가장 위험합니다.\n- `fees/payments.py:find_payments`: `sqlutil.eq`로 만든 조건을 `WHERE`에 이어 붙입니다.\n- `fees/report.py:monthly_report`: `month`를 `'` + `month` + `'` 형태로 이어 붙입니다.\n- `members/profile.py:update_nickname`: `'%s' % nickname`으로 넣습니다. `id`는 `int()`로 막혀 있지만 `nickname`은 막혀 있지 않습니다.\n- `members/search.py:search_members`: `sqlutil.like`가 `'%{term}%'`를 만들고 그대로 실행합니다.\n- `events/calendar.py:event_by_title`: `'{}'.format(title)`로 넣습니다.\n- `events/attendance.py:by_member`: `member = '{name}'`을 `_q`에 넘기고, `_q`가 그대로 실행합니다.\n- `sqlutil.py:eq`와 `sqlutil.py:like`: 값을 따옴표 안에 그대로 넣는 헬퍼입니다. 위 `find_payments`와 `search_members`가 이 함수들 때문에 뚫립니다. 이 둘은 호출부가 아니라 원인이라 따로 넣었습니다.\n\n**안전하다고 판단한 곳**\n- `get_profile`과 `by_event`는 `int()`로 막혀 있습니다.\n- `export_table`은 허용 목록으로 검사합니다.\n- `sort_report`와 `order_by`는 고정된 열 이름 중에서만 고릅니다.\n- `list_by_ids`는 `?` 자리표시자만 만듭니다.\n- `count_members`는 설정 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `post_notice`, `record_payment`는 파라미터 바인딩을 씁니다.\n\n**규칙 설명**\n- **taint 규칙:** 함수 인자가 `run`/`run_write`/`execute` 첫 인자까지 이어지면 잡습니다. `int()`, `order_by`, `in_list`, \"허용 목록에 없으면 raise\" 검사는 안전한 처리로 인정합니다.\n- **패턴 규칙:** 따옴표 안에 값을 끼운 SQL 문자열(f-string, `%`, `.format`, `+`)을 잡습니다. 함수를 건너가는 `by_member`, `board.py`, `sqlutil` 같은 경우를 이 규칙이 잡습니다.\n- **인코딩:** 규칙 파일은 영문으로만 썼습니다. 한글을 넣으면 Windows의 semgrep이 cp949로 읽다가 오류를 냅니다.\n- **제외 경로:** `db.py`는 taint 규칙에서 제외했습니다. `run`/`run_write`가 받은 SQL을 그대로 실행하는 곳이라 오탐이 났기 때문입니다.\n- **실행 방법:** `semgrep --config rules/sqli.yaml clubapp`\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/notices/board.py:search_notices\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like",
+    "usage": {
+      "input_tokens": 24,
+      "cache_creation_input_tokens": 27643,
+      "cache_read_input_tokens": 493445,
+      "output_tokens": 9777,
+      "output_tokens_details": {
+        "thinking_tokens": 2284
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 27643,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1547,
+          "cache_read_input_tokens": 48396,
+          "cache_creation_input_tokens": 2778,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 2778
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 29,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "rule_eval": {
+    "fixture": [
+      "by_member",
+      "delete_old",
+      "eq",
+      "event_by_title",
+      "find_payments",
+      "find_user",
+      "like",
+      "monthly_report",
+      "search_members",
+      "search_notices",
+      "update_nickname"
+    ],
+    "holdout": [
+      "hx_find_room",
+      "hx_rename_room",
+      "hx_room_by_owner",
+      "hx_rooms_sorted"
+    ],
+    "error": null
+  },
+  "tokens": {
+    "total_in": 521112,
+    "output": 9777
+  }
+}

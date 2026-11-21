@@ -1,0 +1,154 @@
+{
+  "condition": "gsd",
+  "rep": 1,
+  "turnA": {
+    "sec": 37.0,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "~/.claude/gsd-core/workflows/quick.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\tests\\test_model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\gsd_r1\\README.md"
+    ],
+    "writes": [],
+    "texts": [
+      "Small project, no `.planning/`. I'll read the code directly.",
+      "1단계는 끝났고 테스트 7개가 모두 통과했습니다. 커밋은 `ed9a5de`입니다.\n\nGSD 워크플로 파일(`~/.claude/gsd-core/workflows/quick.md`)이 없었습니다. 그래서 하위 에이전트 없이 직접 진행하고, 계획은 `.planning/quick/20261113-due-date-storage/PLAN.md`에 저장했습니다. `STATE.md`는 만들지 않았습니다.\n\n**전체 계획**\n1. 저장 형식 v3: 항목에 `due`를 추가하고 기존 데이터를 자동으로 옮깁니다. (오늘 완료)\n2. 날짜 형식(`YYYY-MM-DD`) 검증과 오류 처리\n3. CLI: `add --due`, 마감일 수정 명령, `list`에 마감일 표시\n4. 웹: POST에서 `due` 받기, 표에 열 추가, HTML 이스케이프 확인\n5. 마감 임박/지남 정렬·필터, README 문서 갱신\n\n**1단계에서 바꾼 것**\n- `todo/storage.py`\n  - `VERSION`을 3으로 올렸습니다.\n  - `migrate()`가 v1과 v2 데이터에 `due: None`을 넣어 v3으로 바꿉니다. 여러 번 돌려도 결과는 같습니다.\n  - 맨 위 형식 설명도 갱신했습니다.\n- `todo/model.py`: `add_item(data, title, due=None)`로 바꿔, 새 항목에도 `due` 키가 들어갑니다.\n- 테스트\n  - v1→v3, v2→v3, v3 그대로 유지, 반복 이전 시 결과 동일, 옛 파일을 읽고 저장하는 왕복 테스트를 추가했습니다.\n  - 기존 `test_v2_unchanged`는 v2가 이제 v3으로 바뀌므로 `test_v3_unchanged`로 바꿨습니다.\n\nCLI와 웹 화면은 일부러 건드리지 않았고, `due`는 아직 어디에도 표시되지 않습니다. 날짜 검증도 2단계로 남겨 뒀기 때문에 지금은 `add_item`에 아무 문자열이나 넣어도 저장됩니다. 다음 세션에서는 2단계부터 시작하면 됩니다."
+    ],
+    "denied": [],
+    "session": "26ae3ed1-9dec-43ad-bab5-bd1d14935f47",
+    "result": "1단계는 끝났고 테스트 7개가 모두 통과했습니다. 커밋은 `ed9a5de`입니다.\n\nGSD 워크플로 파일(`~/.claude/gsd-core/workflows/quick.md`)이 없었습니다. 그래서 하위 에이전트 없이 직접 진행하고, 계획은 `.planning/quick/20261113-due-date-storage/PLAN.md`에 저장했습니다. `STATE.md`는 만들지 않았습니다.\n\n**전체 계획**\n1. 저장 형식 v3: 항목에 `due`를 추가하고 기존 데이터를 자동으로 옮깁니다. (오늘 완료)\n2. 날짜 형식(`YYYY-MM-DD`) 검증과 오류 처리\n3. CLI: `add --due`, 마감일 수정 명령, `list`에 마감일 표시\n4. 웹: POST에서 `due` 받기, 표에 열 추가, HTML 이스케이프 확인\n5. 마감 임박/지남 정렬·필터, README 문서 갱신\n\n**1단계에서 바꾼 것**\n- `todo/storage.py`\n  - `VERSION`을 3으로 올렸습니다.\n  - `migrate()`가 v1과 v2 데이터에 `due: None`을 넣어 v3으로 바꿉니다. 여러 번 돌려도 결과는 같습니다.\n  - 맨 위 형식 설명도 갱신했습니다.\n- `todo/model.py`: `add_item(data, title, due=None)`로 바꿔, 새 항목에도 `due` 키가 들어갑니다.\n- 테스트\n  - v1→v3, v2→v3, v3 그대로 유지, 반복 이전 시 결과 동일, 옛 파일을 읽고 저장하는 왕복 테스트를 추가했습니다.\n  - 기존 `test_v2_unchanged`는 v2가 이제 v3으로 바뀌므로 `test_v3_unchanged`로 바꿨습니다.\n\nCLI와 웹 화면은 일부러 건드리지 않았고, `due`는 아직 어디에도 표시되지 않습니다. 날짜 검증도 2단계로 남겨 뒀기 때문에 지금은 `add_item`에 아무 문자열이나 넣어도 저장됩니다. 다음 세션에서는 2단계부터 시작하면 됩니다.",
+    "usage": {
+      "input_tokens": 9,
+      "cache_creation_input_tokens": 28795,
+      "cache_read_input_tokens": 232516,
+      "output_tokens": 4291,
+      "output_tokens_details": {
+        "thinking_tokens": 348
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 28795,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 841,
+          "cache_read_input_tokens": 55313,
+          "cache_creation_input_tokens": 224,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 224
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 12,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "turnB": {
+    "sec": 24.4,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "Step 1 is done, so the next step is step 2: validating the date format in the model.",
+      "마감일 작업의 2단계(입력 검증)를 끝냈고, 테스트 16개가 모두 통과합니다. 전에는 7개였습니다.\n\n**바뀐 것**\n- `todo/model.py`에 `parse_due()`를 추가했습니다.\n  - `None`이나 빈 문자열은 마감일 없음(`None`)으로 처리합니다.\n  - 앞뒤 공백은 제거합니다.\n  - 엄격하게 `YYYY-MM-DD` 형식만 받습니다. `2026-1-5`, `20261231`, `내일`은 `ValueError`입니다.\n  - `2026-02-30`처럼 없는 날짜도 `ValueError`입니다.\n- `add_item()`이 `due`를 `parse_due`로 먼저 검증하고, 잘못된 값이면 항목을 추가하지 않습니다.\n- `tests/test_model.py`에 정상값·빈값, 잘못된 형식 7가지, `add_item`이 잘못된 값을 거부하는 경우의 테스트를 추가했습니다.\n- `.planning/quick/20261113-due-date-storage/PLAN.md`의 2단계를 완료로 바꿨습니다.\n\n커밋은 하지 않았고, 변경 사항은 작업 트리에 남아 있습니다.\n\n다음은 3단계(CLI): `add --due`, 마감일 수정 명령, `list`에 마감일 표시입니다."
+    ],
+    "denied": [],
+    "session": "84f0d9cd-8fe8-498d-b240-94178422ee68",
+    "result": "마감일 작업의 2단계(입력 검증)를 끝냈고, 테스트 16개가 모두 통과합니다. 전에는 7개였습니다.\n\n**바뀐 것**\n- `todo/model.py`에 `parse_due()`를 추가했습니다.\n  - `None`이나 빈 문자열은 마감일 없음(`None`)으로 처리합니다.\n  - 앞뒤 공백은 제거합니다.\n  - 엄격하게 `YYYY-MM-DD` 형식만 받습니다. `2026-1-5`, `20261231`, `내일`은 `ValueError`입니다.\n  - `2026-02-30`처럼 없는 날짜도 `ValueError`입니다.\n- `add_item()`이 `due`를 `parse_due`로 먼저 검증하고, 잘못된 값이면 항목을 추가하지 않습니다.\n- `tests/test_model.py`에 정상값·빈값, 잘못된 형식 7가지, `add_item`이 잘못된 값을 거부하는 경우의 테스트를 추가했습니다.\n- `.planning/quick/20261113-due-date-storage/PLAN.md`의 2단계를 완료로 바꿨습니다.\n\n커밋은 하지 않았고, 변경 사항은 작업 트리에 남아 있습니다.\n\n다음은 3단계(CLI): `add --due`, 마감일 수정 명령, `list`에 마감일 표시입니다.",
+    "usage": {
+      "input_tokens": 14,
+      "cache_creation_input_tokens": 21557,
+      "cache_read_input_tokens": 312383,
+      "output_tokens": 2074,
+      "output_tokens_details": {
+        "thinking_tokens": 83
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 21557,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 503,
+          "cache_read_input_tokens": 49734,
+          "cache_creation_input_tokens": 187,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 187
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 7,
+    "plugins": [
+      "gsd-core",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 92
+  },
+  "a_tests": true,
+  "b_tests": true,
+  "a_log": ".......                                                                  [100%]\n7 passed in 0.07s\n",
+  "b_log": "................                                                         [100%]\n16 passed in 0.03s\n",
+  "due_after_a": true,
+  "overdue_after_b": false,
+  "b_changed_code": true,
+  "b_knew_done": true,
+  "plan_files": [
+    "./.planning/"
+  ],
+  "tokens": {
+    "A": {
+      "total_in": 261320,
+      "output": 4291,
+      "turns": 12,
+      "sec": 37.0
+    },
+    "B": {
+      "total_in": 333954,
+      "output": 2074,
+      "turns": 7,
+      "sec": 24.4
+    }
+  }
+}

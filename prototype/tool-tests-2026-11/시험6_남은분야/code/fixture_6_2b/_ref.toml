@@ -1,0 +1,21 @@
+[[sources]]
+id = "shop"
+dsn = "sqlite:///C:/Users/User/Desktop/오픈소스_팀플/시험6_남은분야/code/fixture_6_2b/shop.db"
+
+[[tools]]
+name = "execute_sql"
+source = "shop"
+readonly = true
+max_rows = 50
+
+[[tools]]
+name = "count_orders_by_status"
+description = "count orders"
+source = "shop"
+statement = "SELECT COUNT(*) AS n FROM orders WHERE status = ?"
+
+[[tools.parameters]]
+name = "status"
+type = "string"
+description = "order status"
+allowed_values = ["paid", "cancelled", "refunded"]

@@ -1,0 +1,119 @@
+{
+  "condition": "tob_named",
+  "rep": 2,
+  "turn": {
+    "sec": 35.3,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "variant-analysis:variant-analysis"
+    ],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\root-cause.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\searching.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py"
+    ],
+    "writes": [],
+    "texts": [
+      "진행 상황: 후보를 모두 확인했고, 마지막으로 `zoom_in`의 입력 경로가 어디서 오는지 따져 봤습니다. 코드는 수정하지 않았습니다.\n\n**방법**: 씨앗의 원인을 \"신뢰할 수 없는 문자열이 셸 해석을 거치는 명령 문자열에 보간된다\"로 잡았습니다. 이어서 `shell=True`, `os.system`, `os.popen`, `create_subprocess_shell`, `getoutput`을 저장소 전체에서 검색했습니다. 그다음 `subprocess.*`, `create_subprocess_exec`, `Popen` 호출을 전부 훑어 인자가 리스트인지 확인했습니다. 일반화 단계를 한 번에 하나씩 올렸고, 후보는 총 5곳 남았습니다.\n\n**발견한 내용**\n- **씨앗**: `extract_video_thumbnail`은 `video_path`와 `timestamp`를 f-string으로 이어 붙인 뒤 `shell=True`로 실행합니다. 값을 따옴표로 감싸지도 않습니다.\n- **변종**: `archive_flagged_media`(`gradio/flagging.py:351`)가 같은 원인입니다. `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`에서 `label`, `flag_dir`가 따옴표 없이 셸로 들어갑니다. 저장소 안에는 이 함수의 호출처가 없습니다. 그래서 실제 악용 여부는 라이브러리 사용자가 `label`에 무엇을 넘기느냐에 달려 있고, 구조상으로는 같은 취약점입니다.\n- **같은 패턴이지만 안전하다고 본 곳**: `zoom_in`(`gradio/screen_recording_utils.py:279-281`)은 `create_subprocess_shell`에 `\"{input_path}\"`를 보간합니다. 다만 `input_path`는 `routes.py:2011-2016`에서 서버가 `tempfile.NamedTemporaryFile`로 만든 경로이고, 업로드된 파일 이름은 쓰지 않습니다. 중간 산출물도 `mkstemp`로 만든 경로입니다. 지금은 공격자가 제어할 수 없습니다. 다만 같은 위험 패턴이라 리스트 인자 형태(`create_subprocess_exec`)로 바꾸는 편이 낫습니다.\n- **나머지**: `get_video_length`, `Video.get_video_duration_ffprobe`, CLI의 `build.py`, `install_component.py`, `deploy_space.py`는 모두 리스트 인자에 `shell=False`입니다. `_vendor/ffmpy`는 옵션을 `shlex.split`으로 나누고 셸을 쓰지 않습니다. `demo/text_analysis/run.py`의 `os.system`은 고정 문자열이라 입력이 없습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:zoom_in\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg\ndemo/text_analysis/run.py:<module>"
+    ],
+    "denied": [],
+    "session": "7db46e70-4c49-46f5-8272-e7c770ea254f",
+    "result": "진행 상황: 후보를 모두 확인했고, 마지막으로 `zoom_in`의 입력 경로가 어디서 오는지 따져 봤습니다. 코드는 수정하지 않았습니다.\n\n**방법**: 씨앗의 원인을 \"신뢰할 수 없는 문자열이 셸 해석을 거치는 명령 문자열에 보간된다\"로 잡았습니다. 이어서 `shell=True`, `os.system`, `os.popen`, `create_subprocess_shell`, `getoutput`을 저장소 전체에서 검색했습니다. 그다음 `subprocess.*`, `create_subprocess_exec`, `Popen` 호출을 전부 훑어 인자가 리스트인지 확인했습니다. 일반화 단계를 한 번에 하나씩 올렸고, 후보는 총 5곳 남았습니다.\n\n**발견한 내용**\n- **씨앗**: `extract_video_thumbnail`은 `video_path`와 `timestamp`를 f-string으로 이어 붙인 뒤 `shell=True`로 실행합니다. 값을 따옴표로 감싸지도 않습니다.\n- **변종**: `archive_flagged_media`(`gradio/flagging.py:351`)가 같은 원인입니다. `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`에서 `label`, `flag_dir`가 따옴표 없이 셸로 들어갑니다. 저장소 안에는 이 함수의 호출처가 없습니다. 그래서 실제 악용 여부는 라이브러리 사용자가 `label`에 무엇을 넘기느냐에 달려 있고, 구조상으로는 같은 취약점입니다.\n- **같은 패턴이지만 안전하다고 본 곳**: `zoom_in`(`gradio/screen_recording_utils.py:279-281`)은 `create_subprocess_shell`에 `\"{input_path}\"`를 보간합니다. 다만 `input_path`는 `routes.py:2011-2016`에서 서버가 `tempfile.NamedTemporaryFile`로 만든 경로이고, 업로드된 파일 이름은 쓰지 않습니다. 중간 산출물도 `mkstemp`로 만든 경로입니다. 지금은 공격자가 제어할 수 없습니다. 다만 같은 위험 패턴이라 리스트 인자 형태(`create_subprocess_exec`)로 바꾸는 편이 낫습니다.\n- **나머지**: `get_video_length`, `Video.get_video_duration_ffprobe`, CLI의 `build.py`, `install_component.py`, `deploy_space.py`는 모두 리스트 인자에 `shell=False`입니다. `_vendor/ffmpy`는 옵션을 `shlex.split`으로 나누고 셸을 쓰지 않습니다. `demo/text_analysis/run.py`의 `os.system`은 고정 문자열이라 입력이 없습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:zoom_in\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg\ndemo/text_analysis/run.py:<module>",
+    "usage": {
+      "input_tokens": 13,
+      "cache_creation_input_tokens": 31735,
+      "cache_read_input_tokens": 262009,
+      "output_tokens": 4144,
+      "output_tokens_details": {
+        "thinking_tokens": 679
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 31735,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1490,
+          "cache_read_input_tokens": 54835,
+          "cache_creation_input_tokens": 1762,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1762
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 17,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "tokens": {
+    "total_in": 293757,
+    "output": 4144
+  }
+}

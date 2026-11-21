@@ -1,0 +1,112 @@
+{
+  "condition": "cdt",
+  "rep": 2,
+  "turn": {
+    "sec": 85.5,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r2\\tests\\todo.spec.js",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r2\\tests\\todo.spec.js",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r2\\tests\\todo.spec.js"
+    ],
+    "texts": [
+      "사이트 코드가 없으니 먼저 실제 마크업을 확인하겠습니다.",
+      "curl이 승인되지 않아 브라우저 도구로 대신 확인해 보겠습니다.",
+      "항목 구조도 확인하기 위해 하나 추가해 보겠습니다.",
+      "부분 문자열 매칭으로 헷갈릴 수 있는 이름을 고치고 실행합니다.",
+      "Bash 대신 Edit으로 고칩니다.",
+      "`tests/todo.spec.js`를 만들었고, `npx playwright test`로 돌려 7개가 모두 통과했습니다. 주소는 `process.env.BASE_URL`을 쓰고, 없으면 `http://127.0.0.1:8948/`를 씁니다.\n\n사이트 코드가 없어서 페이지를 직접 열어 실제 마크업을 확인한 뒤 접근성 기준 선택자(label, role, aria 속성)로 작성했습니다. 확인하느라 항목을 하나 추가해 봤는데, 테스트는 매번 새 브라우저 컨텍스트에서 시작하므로 영향이 없습니다.\n\n테스트가 확인하는 내용:\n1. **초기 상태**: 목록이 비어 있고 \"남은 할 일 0개\"가 보입니다.\n2. **추가**: 항목이 목록에 나타나고 입력창이 비워지며, \"남은 할 일 N개\"가 늘어납니다.\n3. **완료 체크/해제**: 체크하면 남은 개수가 줄고, 해제하면 다시 늘어납니다.\n4. **삭제**: 해당 항목만 사라지고 남은 개수가 갱신됩니다.\n5. **완료 항목 삭제**: 이미 완료한 항목을 지워도 남은 개수는 그대로입니다.\n6. **보기 필터**: 전체, 진행 중, 완료를 눌렀을 때 각각 맞는 항목만 보이고 `aria-pressed`가 바뀝니다. 남은 개수는 필터와 상관없이 미완료 개수입니다.\n7. **필터 적용 중 변경**: '진행 중' 보기에서 항목을 완료하면 목록에서 사라지고, '완료' 보기에서 나타납니다.\n\n처음 돌렸을 때 7번이 실패했는데, 사이트 버그가 아니라 테스트 쪽 문제였습니다. 항목이 사라지는 보기에서 `.check()`가 클릭 후 상태를 재확인하느라 멈춰서 `.click()`으로 바꿨습니다.\n\n화면에 보이는 내용만 확인하므로 새로고침 후 데이터가 유지되는지는 다루지 않았습니다. 빈 입력 추가 같은 예외 동작도 포함하지 않았습니다."
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "3aca4d92-00ba-44d3-bca6-cededc78c161",
+    "result": "`tests/todo.spec.js`를 만들었고, `npx playwright test`로 돌려 7개가 모두 통과했습니다. 주소는 `process.env.BASE_URL`을 쓰고, 없으면 `http://127.0.0.1:8948/`를 씁니다.\n\n사이트 코드가 없어서 페이지를 직접 열어 실제 마크업을 확인한 뒤 접근성 기준 선택자(label, role, aria 속성)로 작성했습니다. 확인하느라 항목을 하나 추가해 봤는데, 테스트는 매번 새 브라우저 컨텍스트에서 시작하므로 영향이 없습니다.\n\n테스트가 확인하는 내용:\n1. **초기 상태**: 목록이 비어 있고 \"남은 할 일 0개\"가 보입니다.\n2. **추가**: 항목이 목록에 나타나고 입력창이 비워지며, \"남은 할 일 N개\"가 늘어납니다.\n3. **완료 체크/해제**: 체크하면 남은 개수가 줄고, 해제하면 다시 늘어납니다.\n4. **삭제**: 해당 항목만 사라지고 남은 개수가 갱신됩니다.\n5. **완료 항목 삭제**: 이미 완료한 항목을 지워도 남은 개수는 그대로입니다.\n6. **보기 필터**: 전체, 진행 중, 완료를 눌렀을 때 각각 맞는 항목만 보이고 `aria-pressed`가 바뀝니다. 남은 개수는 필터와 상관없이 미완료 개수입니다.\n7. **필터 적용 중 변경**: '진행 중' 보기에서 항목을 완료하면 목록에서 사라지고, '완료' 보기에서 나타납니다.\n\n처음 돌렸을 때 7번이 실패했는데, 사이트 버그가 아니라 테스트 쪽 문제였습니다. 항목이 사라지는 보기에서 `.check()`가 클릭 후 상태를 재확인하느라 멈춰서 `.click()`으로 바꿨습니다.\n\n화면에 보이는 내용만 확인하므로 새로고침 후 데이터가 유지되는지는 다루지 않았습니다. 빈 입력 추가 같은 예외 동작도 포함하지 않았습니다.",
+    "usage": {
+      "input_tokens": 23,
+      "cache_creation_input_tokens": 14544,
+      "cache_read_input_tokens": 367459,
+      "output_tokens": 5932,
+      "output_tokens_details": {
+        "thinking_tokens": 733
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 14544,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 814,
+          "cache_read_input_tokens": 39385,
+          "cache_creation_input_tokens": 1082,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1082
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 14,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "grade": {
+    "orig": true,
+    "killed": 3,
+    "killed_names": [
+      "추가(글자 잘림)",
+      "완료 개수",
+      "필터"
+    ],
+    "detail": {
+      "정상1": {
+        "passed": true,
+        "tail": " 상태: 목록이 비어 있고 남은 할 일 0개\n[2/7] tests\\todo.spec.js:27:1 › 할 일 추가: 목록에 나타나고 입력창이 비워지며 남은 개수가 늘어난다\n[3/7] tests\\todo.spec.js:38:1 › 완료 체크/해제: 남은 개수가 줄었다 늘어난다\n[4/7] tests\\todo.spec.js:53:1 › 삭제: 해당 항목만 사라지고 남은 개수가 갱신된다\n[5/7] tests\\todo.spec.js:64:1 › 완료된 항목을 삭제하면 남은 개수는 그대로다\n[6/7] tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료\n[7/7] tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다\n  7 passed (2.9s)\n"
+      },
+      "정상2": {
+        "passed": true,
+        "tail": " 상태: 목록이 비어 있고 남은 할 일 0개\n[2/7] tests\\todo.spec.js:27:1 › 할 일 추가: 목록에 나타나고 입력창이 비워지며 남은 개수가 늘어난다\n[3/7] tests\\todo.spec.js:38:1 › 완료 체크/해제: 남은 개수가 줄었다 늘어난다\n[4/7] tests\\todo.spec.js:53:1 › 삭제: 해당 항목만 사라지고 남은 개수가 갱신된다\n[5/7] tests\\todo.spec.js:64:1 › 완료된 항목을 삭제하면 남은 개수는 그대로다\n[6/7] tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료\n[7/7] tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다\n  7 passed (2.8s)\n"
+      },
+      "추가(글자 잘림)": {
+        "passed": false,
+        "tail": "53:1 › 삭제: 해당 항목만 사라지고 남은 개수가 갱신된다 ──────────────────────────────────────────\n    tests\\todo.spec.js:64:1 › 완료된 항목을 삭제하면 남은 개수는 그대로다 ─────────────────────────────────────────────\n    tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다 ─────────────────────────────────────────────\n  2 passed (30.7s)\n"
+      },
+      "완료 개수": {
+        "passed": false,
+        "tail": "38:1 › 완료 체크/해제: 남은 개수가 줄었다 늘어난다 ────────────────────────────────────────────\n    tests\\todo.spec.js:64:1 › 완료된 항목을 삭제하면 남은 개수는 그대로다 ─────────────────────────────────────────────\n    tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다 ─────────────────────────────────────────────\n  3 passed (24.5s)\n"
+      },
+      "삭제(엉뚱한 항목)": {
+        "passed": true,
+        "tail": " 상태: 목록이 비어 있고 남은 할 일 0개\n[2/7] tests\\todo.spec.js:27:1 › 할 일 추가: 목록에 나타나고 입력창이 비워지며 남은 개수가 늘어난다\n[3/7] tests\\todo.spec.js:38:1 › 완료 체크/해제: 남은 개수가 줄었다 늘어난다\n[4/7] tests\\todo.spec.js:53:1 › 삭제: 해당 항목만 사라지고 남은 개수가 갱신된다\n[5/7] tests\\todo.spec.js:64:1 › 완료된 항목을 삭제하면 남은 개수는 그대로다\n[6/7] tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료\n[7/7] tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다\n  7 passed (2.9s)\n"
+      },
+      "필터": {
+        "passed": false,
+        "tail": "Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r3\\b\\cdt_r2_g5\\tests\\todo.spec.js:126:44\n\n    Error Context: ..\\..\\test-results\\tests-todo-필터-적용-중-상태-변경이-목록에-반영된다\\error-context.md\n\n\n  2 failed\n    tests\\todo.spec.js:77:1 › 보기 필터: 전체 / 진행 중 / 완료 ────────────────────────────────────────────────\n    tests\\todo.spec.js:118:1 › 필터 적용 중 상태 변경이 목록에 반영된다 ─────────────────────────────────────────────\n  5 passed (13.2s)\n"
+      }
+    }
+  },
+  "tokens": {
+    "total_in": 382026,
+    "output": 5932
+  }
+}

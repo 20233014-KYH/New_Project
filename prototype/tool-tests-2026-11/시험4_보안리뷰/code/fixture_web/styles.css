@@ -1,0 +1,14 @@
+body { font-family: system-ui, sans-serif; margin: 0; background: #fafafa; }
+.wrap { max-width: 480px; margin: 40px auto; padding: 0 16px; }
+#add-form { display: flex; gap: 8px; }
+#title { flex: 1; padding: 8px; }
+#add-btn { padding: 8px 16px; cursor: pointer; }
+#list li { padding: 6px 0; border-bottom: 1px solid #eee; }
+
+/* 알림 메시지를 띄우는 층 */
+.toast-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+.toast { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 8px 14px; border-radius: 6px; }

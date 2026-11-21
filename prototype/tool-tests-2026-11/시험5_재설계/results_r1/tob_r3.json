@@ -1,0 +1,151 @@
+{
+  "condition": "tob",
+  "rep": 3,
+  "turn": {
+    "sec": 119.6,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\a029003f17459f2d\\5f8ab918-094e-41b7-b8a4-5f0886c5d779\\scratchpad\\out.json",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_r3\\rules\\sqli.yaml"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_r3\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_r3\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_r3\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_r3\\rules\\sqli.yaml"
+    ],
+    "texts": [
+      "규칙을 돌렸는데 결과가 비어 있어서, 오류인지 탐지 실패인지 확인하는 중입니다.",
+      "한글 주석 때문에 Windows(cp949)에서 semgrep이 규칙 파일을 못 읽습니다. 어느 환경에서나 돌도록 규칙 파일을 ASCII(영문)로 다시 쓰겠습니다.",
+      "YAML 문법 오류를 고쳤고, 다시 스캔해서 결과를 확인하는 중입니다.",
+      "Line 70 has a YAML problem: a value starting with `\"` and followed by more text. I'll quote those patterns.",
+      "`find_user`와 같은 원인(값을 SQL 문자열에 직접 붙임)의 문제가 9곳 더 있습니다. 코드는 고치지 않았고, 규칙 파일은 `rules/sqli.yaml`에 만들었습니다.\n\n**같은 원인인 곳**\n- `admin/maintenance.py` `delete_old`: `days`를 `date('now', '-{days} days')` 안에 f-string으로 넣어 `DELETE`를 실행합니다. 로그 출력 줄은 SQL이 아니라서 해당 없습니다.\n- `events/calendar.py` `event_by_title`: `\"... title = '{}'\".format(title)`로 만듭니다.\n- `events/attendance.py` `by_member`: `f\"member = '{name}'\"`을 `_q`에 넘겨 실행합니다. `_q`는 받은 조건을 그대로 붙이는 통로이고, 값을 넣는 쪽이 `by_member`라서 `by_member`를 목록에 넣었습니다.\n- `fees/report.py` `monthly_report`: `\"... month = '\" + month + \"' ...\"` 문자열 결합입니다.\n- `members/profile.py` `update_nickname`: `\"... nickname = '%s' ...\" % (nickname, ...)`로 만듭니다.\n- `notices/board.py` `search_notices`: 검색 조건의 열 이름(`key`)과 값(`value`)을 모두 그대로 붙입니다.\n- `sqlutil.py` `eq`, `like`: 값을 따옴표 안에 직접 넣은 SQL 조각을 돌려주는 도우미입니다. 이 문제가 `fees/payments.py` `find_payments`(`eq` 사용)와 `members/search.py` `search_members`(`like` 사용)로 퍼집니다.\n\n**안전하다고 판단한 곳**\n- `get_profile`, `by_event`: `int()`로 변환한 값만 씁니다.\n- `export_table`: 허용 목록(`ALLOWED_TABLES`)으로 표 이름을 검사합니다.\n- `sort_report`: `order_by`가 정해 둔 열 이름만 고릅니다.\n- `list_by_ids`: `?` 자리표시자를 씁니다.\n- `count_members`: 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `record_payment`, `post_notice`: 값을 `?`와 params로 넘깁니다.\n- `utils/text.py` `greeting`: SQL이 아니라 인사말 문자열입니다.\n\n**semgrep 규칙** (`semgrep` 1.185.0으로 `clubapp`을 스캔해 확인, 22건 검출)\n- `clubapp-sqli-dynamic-query`: 함수 인자나 `sqlutil.eq`/`like`의 결과가 `run`, `run_write`, `.execute`, `._q`로 흘러가면 잡습니다. `int()`, `float()`, `order_by`, `in_list`, \"허용 목록에 없으면 예외\" 검사는 안전한 것으로 처리합니다.\n- `clubapp-sqli-quoted-fragment-builder`: `= '…'`나 `LIKE '…'`처럼 값을 따옴표 안에 직접 넣은 SQL 조각을 만드는 코드를 잡습니다.\n- 위 목록의 10곳이 모두 검출됐고, 안전한 함수는 하나도 검출되지 않았습니다. 같은 지점이 두 규칙에 모두 걸려서 22건이 나왔습니다.\n- Windows에서는 규칙 파일에 한글이 있으면 semgrep이 cp949로 읽다가 실패해서, 파일을 영문(ASCII)으로만 썼습니다.\n- 모든 함수 인자를 사용자 입력으로 가정해서, 새 코드에서 정말 입력이 아닌 인자가 SQL에 들어가면 오탐이 날 수 있습니다. 이 저장소에서는 `routes.py`가 모든 인자를 요청 값으로 넘겨서 그렇게 가정했습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/fees/report.py:monthly_report\nclubapp/fees/payments.py:find_payments\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like"
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "5f8ab918-094e-41b7-b8a4-5f0886c5d779",
+    "result": "`find_user`와 같은 원인(값을 SQL 문자열에 직접 붙임)의 문제가 9곳 더 있습니다. 코드는 고치지 않았고, 규칙 파일은 `rules/sqli.yaml`에 만들었습니다.\n\n**같은 원인인 곳**\n- `admin/maintenance.py` `delete_old`: `days`를 `date('now', '-{days} days')` 안에 f-string으로 넣어 `DELETE`를 실행합니다. 로그 출력 줄은 SQL이 아니라서 해당 없습니다.\n- `events/calendar.py` `event_by_title`: `\"... title = '{}'\".format(title)`로 만듭니다.\n- `events/attendance.py` `by_member`: `f\"member = '{name}'\"`을 `_q`에 넘겨 실행합니다. `_q`는 받은 조건을 그대로 붙이는 통로이고, 값을 넣는 쪽이 `by_member`라서 `by_member`를 목록에 넣었습니다.\n- `fees/report.py` `monthly_report`: `\"... month = '\" + month + \"' ...\"` 문자열 결합입니다.\n- `members/profile.py` `update_nickname`: `\"... nickname = '%s' ...\" % (nickname, ...)`로 만듭니다.\n- `notices/board.py` `search_notices`: 검색 조건의 열 이름(`key`)과 값(`value`)을 모두 그대로 붙입니다.\n- `sqlutil.py` `eq`, `like`: 값을 따옴표 안에 직접 넣은 SQL 조각을 돌려주는 도우미입니다. 이 문제가 `fees/payments.py` `find_payments`(`eq` 사용)와 `members/search.py` `search_members`(`like` 사용)로 퍼집니다.\n\n**안전하다고 판단한 곳**\n- `get_profile`, `by_event`: `int()`로 변환한 값만 씁니다.\n- `export_table`: 허용 목록(`ALLOWED_TABLES`)으로 표 이름을 검사합니다.\n- `sort_report`: `order_by`가 정해 둔 열 이름만 고릅니다.\n- `list_by_ids`: `?` 자리표시자를 씁니다.\n- `count_members`: 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `record_payment`, `post_notice`: 값을 `?`와 params로 넘깁니다.\n- `utils/text.py` `greeting`: SQL이 아니라 인사말 문자열입니다.\n\n**semgrep 규칙** (`semgrep` 1.185.0으로 `clubapp`을 스캔해 확인, 22건 검출)\n- `clubapp-sqli-dynamic-query`: 함수 인자나 `sqlutil.eq`/`like`의 결과가 `run`, `run_write`, `.execute`, `._q`로 흘러가면 잡습니다. `int()`, `float()`, `order_by`, `in_list`, \"허용 목록에 없으면 예외\" 검사는 안전한 것으로 처리합니다.\n- `clubapp-sqli-quoted-fragment-builder`: `= '…'`나 `LIKE '…'`처럼 값을 따옴표 안에 직접 넣은 SQL 조각을 만드는 코드를 잡습니다.\n- 위 목록의 10곳이 모두 검출됐고, 안전한 함수는 하나도 검출되지 않았습니다. 같은 지점이 두 규칙에 모두 걸려서 22건이 나왔습니다.\n- Windows에서는 규칙 파일에 한글이 있으면 semgrep이 cp949로 읽다가 실패해서, 파일을 영문(ASCII)으로만 썼습니다.\n- 모든 함수 인자를 사용자 입력으로 가정해서, 새 코드에서 정말 입력이 아닌 인자가 SQL에 들어가면 오탐이 날 수 있습니다. 이 저장소에서는 `routes.py`가 모든 인자를 요청 값으로 넘겨서 그렇게 가정했습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/fees/report.py:monthly_report\nclubapp/fees/payments.py:find_payments\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like",
+    "usage": {
+      "input_tokens": 44,
+      "cache_creation_input_tokens": 38072,
+      "cache_read_input_tokens": 1208813,
+      "output_tokens": 10219,
+      "output_tokens_details": {
+        "thinking_tokens": 2584
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 38072,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1753,
+          "cache_read_input_tokens": 60751,
+          "cache_creation_input_tokens": 852,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 852
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 24,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "rule_eval": {
+    "fixture": [
+      "_q",
+      "by_member",
+      "delete_old",
+      "eq",
+      "event_by_title",
+      "find_payments",
+      "find_user",
+      "like",
+      "monthly_report",
+      "run",
+      "run_write",
+      "search_members",
+      "search_notices",
+      "update_nickname"
+    ],
+    "holdout": [
+      "hx_find_room",
+      "hx_rename_room",
+      "hx_room_by_owner",
+      "hx_rooms_sorted"
+    ],
+    "error": null
+  },
+  "tokens": {
+    "total_in": 1246929,
+    "output": 10219
+  }
+}
