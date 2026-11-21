@@ -5,7 +5,7 @@
 
 근거 종류
   검사       스캐너가 코드에서 찾음 (사람 라벨 전)
-  코드 확인   Claude가 해당 코드를 직접 읽고 확인 (파일:줄 첨부)
+  AI가 코드를 읽음   Claude가 해당 코드를 직접 읽고 확인 (파일:줄 첨부, 사람 확인 전)
   문서       제작자 문서
   실측(팀)    팀 실측 기록
 칸 상태
@@ -61,10 +61,13 @@ table = {f: {c: dict(status=None, facts=[], notes=[]) for c in COLS} for f in TO
 # 근거 종류. 저장소 CLAUDE.md의 calc/doc/tested/ai에 맞추되, 김용현 의견(PR #12)대로 calc는 "정확히 센 값"에만 씀.
 # - 프로그램이 셈: 설정 파일(JSON)을 읽어 정확히 센 값 (지금은 R2 훅만) → calc
 # - 프로그램이 찾음(글자 패턴): 정규식·이름 규칙으로 찾은 것. 놓치거나 잘못 잡을 수 있음 → pattern (사람 확인 전)
-# - 코드 확인: Claude가 코드를 읽고 확인 → 사람 검수 전까지 ai
+# - AI가 코드를 읽음: Claude가 코드를 읽고 확인 → 사람 검수 전까지 ai
 COUNT = "프로그램이 셈"
 PATTERN = "프로그램이 찾음(글자 패턴)"
-EVIDENCE_CODE = {COUNT: "calc", PATTERN: "pattern", "코드 확인": "ai", "문서": "doc", "실측(팀)": "tested"}
+# 2026-11-21: "코드 확인"은 사람이 확인한 것처럼 읽혀서 이름을 바꿈(PR #12 김용현). 사람이 같은 줄을 확인하면
+# 근거는 ai 그대로 두고 reviewed만 true로 바꾼다(근거 종류와 검수 상태는 따로 적음).
+CODE_READ = "AI가 코드를 읽음(사람 확인 전)"
+EVIDENCE_CODE = {COUNT: "calc", PATTERN: "pattern", CODE_READ: "ai", "문서": "doc", "실측(팀)": "tested"}
 
 
 def fact(folder, col, text, when, evidence, refs=(), confirm=None):
@@ -226,25 +229,25 @@ for folder, r in M.items():
 # 3) 코드·문서로 확인한 사실 (스캐너 밖, 파일:줄 근거)
 # ---------------------------------------------------------------------------
 MANUAL = [
-    ("colbymchenry_codegraph", "명령 실행", "Windows 업데이트는 소스 안의 PowerShell 스크립트를 base64로 인코딩해 실행정책 우회(-ExecutionPolicy Bypass)로 실행. 인코딩은 따옴표 깨짐 회피용이라고 주석에 명시", "업데이트", "코드 확인", ["src/upgrade/index.ts:829"]),
+    ("colbymchenry_codegraph", "명령 실행", "Windows 업데이트는 소스 안의 PowerShell 스크립트를 base64로 인코딩해 실행정책 우회(-ExecutionPolicy Bypass)로 실행. 인코딩은 따옴표 깨짐 회피용이라고 주석에 명시", "업데이트", CODE_READ, ["src/upgrade/index.ts:829"]),
     ("colbymchenry_codegraph", "밖으로 보내기", "익명 사용 통계를 기본으로 보냄(설치기에서 기본 켜짐). 끄기: codegraph telemetry off, CODEGRAPH_TELEMETRY=0, DO_NOT_TRACK=1", "사용", "문서", ["TELEMETRY.md"]),
     ("colbymchenry_codegraph", "밖으로 보내기", "MCP 서버가 하루 한 번 GitHub에서 새 버전 확인(버전 번호만 받음). 끄기: CODEGRAPH_NO_UPDATE_CHECK=1", "사용", "문서", ["TELEMETRY.md"]),
     ("colbymchenry_codegraph", "밖으로 보내기", "사용 기록 대기열 파일 생성 관찰", "사용", "실측(팀)", ["judgment/review/2026-10-18-measure36/side_effects.md"]),
-    ("bytebase_dbhub", "DB·외부 서비스", "--readonly 플래그는 1.5.0에서 제거됨(쓰면 오류로 종료). 읽기 전용은 dbhub.toml의 [[tools]] readonly = true로 설정", "사용", "코드 확인", ["src/config/env.ts:30"]),
-    ("bytebase_dbhub", "DB·외부 서비스", "Claude Code 플러그인으로 설치하면 기본이 읽기 전용(readonly = true, 최대 1000행), 버전 1.5.0 고정", "설치", "코드 확인", ["plugin/dbhub.toml", "plugin/.mcp.json"]),
-    ("bytebase_dbhub", "DB·외부 서비스", "설정 파일 없이 연결 문자열만 주면 execute_sql이 읽기 전용이 아님(수정·삭제 가능)", "사용", "코드 확인", ["src/utils/tool-metadata.ts:166", "src/utils/sql-access-policy.ts:74"]),
-    ("microsoft_playwright-mcp", "브라우저", "browser_run_code_unsafe가 기본 노출. 제작자 설명: 'Playwright 서버 프로세스에서 임의 JavaScript 실행, 원격 코드 실행과 같음'", "사용", "코드 확인", ["playwright-core 1.64.0-alpha lib/coreBundle.js:69192"]),
-    ("microsoft_playwright-mcp", "내 파일", "파일 접근은 기본적으로 작업 폴더 안으로 제한. --allow-unrestricted-file-access로 해제", "사용", "코드 확인", ["playwright-core lib/coreBundle.js:75566"]),
-    ("microsoft_playwright-mcp", "브라우저", "--extension을 쓰면 실행 중인 내 브라우저(로그인 상태 포함)에 연결. --allowed-origins는 제작자가 '보안 경계가 아님'이라고 명시", "사용", "코드 확인", ["playwright-core lib/coreBundle.js:75566"]),
-    ("ChromeDevTools_chrome-devtools-mcp", "밖으로 보내기", "사용 통계를 기본으로 Google에 보냄(usageStatistics 기본값 true). 끄기: --no-usage-statistics 또는 CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS", "사용", "코드 확인", ["src/config/mcp-options.ts:194"]),
-    ("ChromeDevTools_chrome-devtools-mcp", "브라우저", "evaluate_script(페이지 안 임의 JavaScript)가 기본 켜짐. --javascriptEvaluation=false로 끌 수 있으나 제작자는 '샌드박스가 아님'이라고 명시", "사용", "코드 확인", ["src/config/mcp-options.ts:200"]),
+    ("bytebase_dbhub", "DB·외부 서비스", "--readonly 플래그는 1.5.0에서 제거됨(쓰면 오류로 종료). 읽기 전용은 dbhub.toml의 [[tools]] readonly = true로 설정", "사용", CODE_READ, ["src/config/env.ts:30"]),
+    ("bytebase_dbhub", "DB·외부 서비스", "Claude Code 플러그인으로 설치하면 기본이 읽기 전용(readonly = true, 최대 1000행), 버전 1.5.0 고정", "설치", CODE_READ, ["plugin/dbhub.toml", "plugin/.mcp.json"]),
+    ("bytebase_dbhub", "DB·외부 서비스", "설정 파일 없이 연결 문자열만 주면 execute_sql이 읽기 전용이 아님(수정·삭제 가능)", "사용", CODE_READ, ["src/utils/tool-metadata.ts:166", "src/utils/sql-access-policy.ts:74"]),
+    ("microsoft_playwright-mcp", "브라우저", "browser_run_code_unsafe가 기본 노출. 제작자 설명: 'Playwright 서버 프로세스에서 임의 JavaScript 실행, 원격 코드 실행과 같음'", "사용", CODE_READ, ["playwright-core 1.64.0-alpha lib/coreBundle.js:69192"]),
+    ("microsoft_playwright-mcp", "내 파일", "파일 접근은 기본적으로 작업 폴더 안으로 제한. --allow-unrestricted-file-access로 해제", "사용", CODE_READ, ["playwright-core lib/coreBundle.js:75566"]),
+    ("microsoft_playwright-mcp", "브라우저", "--extension을 쓰면 실행 중인 내 브라우저(로그인 상태 포함)에 연결. --allowed-origins는 제작자가 '보안 경계가 아님'이라고 명시", "사용", CODE_READ, ["playwright-core lib/coreBundle.js:75566"]),
+    ("ChromeDevTools_chrome-devtools-mcp", "밖으로 보내기", "사용 통계를 기본으로 Google에 보냄(usageStatistics 기본값 true). 끄기: --no-usage-statistics 또는 CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS", "사용", CODE_READ, ["src/config/mcp-options.ts:194"]),
+    ("ChromeDevTools_chrome-devtools-mcp", "브라우저", "evaluate_script(페이지 안 임의 JavaScript)가 기본 켜짐. --javascriptEvaluation=false로 끌 수 있으나 제작자는 '샌드박스가 아님'이라고 명시", "사용", CODE_READ, ["src/config/mcp-options.ts:200"]),
     ("ChromeDevTools_chrome-devtools-mcp", "브라우저", "autoConnect·browserUrl로 이미 열린 브라우저에 연결 가능. 공식 문서는 로그인된 세션에 연결하면 사용자 대신 행동할 수 있다고 경고", "사용", "문서", ["developer.chrome.com/docs/devtools/agents/get-started"]),
     ("Graphify-Labs_graphify", "밖으로 보내기", "문서·논문·이미지는 Claude로 보내 개념 추출(코드는 로컬 처리)", "사용", "문서", ["claudelog.com/claude-code-mcps/graphify"]),
-    ("Graphify-Labs_graphify", "DB·외부 서비스", "MCP 도구 list_prs 등은 사용자의 gh CLI 로그인으로 GitHub PR 정보를 읽음", "사용", "코드 확인", ["graphify/prs.py:144"]),
-    ("affaan-m_ECC", "DB·외부 서비스", "저장소 루트 .mcp.json에 chrome-devtools-mcp@1.10.1 설정이 있으나 plugin.json의 mcpServers는 비어 있음. 플러그인 설치 시 등록되는지는 실측 필요", "설치", "코드 확인", [".mcp.json", ".claude-plugin/plugin.json:39"]),
+    ("Graphify-Labs_graphify", "DB·외부 서비스", "MCP 도구 list_prs 등은 사용자의 gh CLI 로그인으로 GitHub PR 정보를 읽음", "사용", CODE_READ, ["graphify/prs.py:144"]),
+    ("affaan-m_ECC", "DB·외부 서비스", "저장소 루트 .mcp.json에 chrome-devtools-mcp@1.10.1 설정이 있으나 plugin.json의 mcpServers는 비어 있음. 플러그인 설치 시 등록되는지는 실측 필요", "설치", CODE_READ, [".mcp.json", ".claude-plugin/plugin.json:39"]),
     ("JuliusBrussee_caveman", "밖으로 보내기", "범용 설치기는 기본으로 caveman-shrink MCP 프록시를 등록(--minimal로 생략). 프록시가 무엇을 어디로 보내는지는 검사 전", "설치", "문서", ["github.com/JuliusBrussee/caveman README"]),
-    ("bytebase_dbhub", "내 파일", "~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만)", "사용", "코드 확인", ["src/utils/ssh-config-parser.ts:15", "src/connectors/manager.ts:159"]),
-    ("microsoft_playwright-mcp", "명령 실행", "MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출)", "사용", "코드 확인", ["playwright-core 1.64.0-alpha lib/coreBundle.js:69192"]),
+    ("bytebase_dbhub", "내 파일", "~/.ssh/config와 기본 키 파일(id_rsa 등)을 읽는 이유는 DB 접속용 SSH 터널 기능(설정한 경우에만)", "사용", CODE_READ, ["src/utils/ssh-config-parser.ts:15", "src/connectors/manager.ts:159"]),
+    ("microsoft_playwright-mcp", "명령 실행", "MCP 도구 browser_run_code_unsafe로 내 컴퓨터의 Playwright 서버 프로세스에서 임의 코드를 실행할 수 있음(기본 노출)", "사용", CODE_READ, ["playwright-core 1.64.0-alpha lib/coreBundle.js:69192"]),
     ("rtk-ai_rtk", "명령 실행", "훅은 Bash 도구 호출에만 걸려 모든 셸 명령을 실행 전에 rtk 명령으로 바꿔 씀(Read·Grep·Glob 제외)", "사용", "문서", ["README.md"]),
     # --- 2026-11-09 추가 (36개 조사, README·코드 확인) ---
     ("obra_superpowers", "밖으로 보내기", "선택 기능(브레인스토밍 시각 화면)이 제작사 로고를 웹에서 불러오며 버전이 전달됨. 끄기: SUPERPOWERS_DISABLE_TELEMETRY", "사용", "문서", ["README.md:398-400"]),
@@ -265,7 +268,7 @@ MANUAL = [
     ("GLips_Figma-Context-MCP", "DB·외부 서비스", "Figma 개인 접근 토큰으로 Figma API에서 디자인 데이터·이미지를 읽음(쓰기 없음)", "사용", "문서", ["README.md:40-57"]),
     ("grab_cursor-talk-to-figma-mcp", "DB·외부 서비스", "로컬 WebSocket 서버와 Figma 플러그인을 거쳐 Figma 디자인을 읽고 수정함", "사용", "문서", ["README.md:3-33"]),
     ("Jpisnice_shadcn-ui-mcp-server", "DB·외부 서비스", "GitHub API로 shadcn/ui 저장소의 컴포넌트 원문을 읽음(GitHub 토큰 선택)", "사용", "문서", ["README.md:11-44"]),
-    ("supabase_mcp", "DB·외부 서비스", "Supabase 계정에 OAuth로 로그인해 DB·스토리지·Edge Functions·브랜치를 다룸. read_only 옵션은 서버 코드 기본값이 꺼짐", "사용", "코드 확인", ["packages/mcp-server-supabase/src/server.ts:82-85", "README.md:22"]),
+    ("supabase_mcp", "DB·외부 서비스", "Supabase 계정에 OAuth로 로그인해 DB·스토리지·Edge Functions·브랜치를 다룸. read_only 옵션은 서버 코드 기본값이 꺼짐", "사용", CODE_READ, ["packages/mcp-server-supabase/src/server.ts:82-85", "README.md:22"]),
     ("containers_kubernetes-mcp-server", "DB·외부 서비스", "kubeconfig로 클러스터에 연결해 자원 생성·수정·삭제, 파드 exec, 이미지 실행. read_only·disable_destructive 기본값 false", "사용", "문서", ["docs/configuration.md:600-601", "README.md:15-43"]),
     ("Flux159_mcp-server-kubernetes", "DB·외부 서비스", "현재 kubectl 컨텍스트로 클러스터에 연결해 kubectl·Helm 작업과 파드 exec. 읽기 전용·삭제 금지 모드는 환경변수로 켜야 함(기본 꺼짐)", "사용", "문서", ["README.md:109", "ADVANCED_README.md:149-208"]),
     ("hashicorp_terraform-mcp-server", "DB·외부 서비스", "기본은 Terraform Registry 조회. TFE_TOKEN을 주면 HCP Terraform 워크스페이스를 다루고, 승인이 필요한 작업 도구는 ENABLE_TF_OPERATIONS=true일 때만", "사용", "문서", ["README.md:105-135", "README.md:714-724"]),
