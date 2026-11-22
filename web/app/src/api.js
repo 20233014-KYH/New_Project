@@ -48,6 +48,7 @@ function normalizePair(p) {
     reason: p.reason_ko || null,
     sources: [...new Set((p.evidence || []).map(e => e.source).filter(Boolean))],
     judged_at: p.judged_at || null,
+    same_role: !!p.same_role,
   }
 }
 
@@ -70,6 +71,34 @@ const KO = { overlap: '겹침', situational: '상황따라', complement: '보완
 const RS = { tested: '직접 시험', human_review: '사람 검토', ai_estimate: 'AI 추정' }
 
 function pairKey(a, b) { return [a, b].sort().join('|') }
+
+// 겹침 기준(compat.json criteria): 빈 세션이 처음 읽는 양의 5%
+const OVERLAP_MIN = compatRaw.criteria?.overlap_min_tokens ?? 0
+const comma = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+// 도구함 안에서 서로 모두 '같은 일'(same_role)인 3개 이상 묶음(최대 클리크). 큰 묶음 먼저, 같으면 도구함 순서
+function roleGroups(ids, pairMap) {
+  const adj = id => ids.filter(o => o !== id && pairMap[pairKey(id, o)]?.same_role)
+  const out = []
+  const bk = (R, P, X) => {
+    if (!P.length && !X.length) {
+      if (R.length >= 3) out.push(ids.filter(i => R.includes(i)))
+      return
+    }
+    for (const v of [...P]) {
+      const n = adj(v)
+      bk([...R, v], P.filter(x => n.includes(x)), X.filter(x => n.includes(x)))
+      P = P.filter(x => x !== v)
+      X = [...X, v]
+    }
+  }
+  bk([], [...ids], [])
+  const lex = (a, b) => {
+    for (let i = 0; i < Math.min(a.length, b.length); i++) if (a[i] !== b[i]) return a[i] - b[i]
+    return a.length - b.length
+  }
+  return out.sort((a, b) => b.length - a.length || lex(a.map(x => ids.indexOf(x)), b.map(x => ids.indexOf(x))))
+}
 
 function buildIndex(tools, pairs) {
   const byId = Object.fromEntries(tools.map(t => [t.id, t]))
@@ -103,7 +132,24 @@ function recommendLocal(ids, answers, byId, pairMap, testedMap) {
     const keep = big === a ? b : a
     if (!remove.find(r => r.tool === big.id))
       remove.push({ tool: big.id, keep: keep.id, save: big.tokens || 0, review: p.review,
-        reason: p.reason, sources: p.sources, judged_at: p.judged_at })
+        reason: p.reason, sources: p.sources, judged_at: p.judged_at, group: null })
+  })
+  // 같은 일 묶음(3개 이상): 가장 큰 것을 남겨도 아끼는 양(합 - 최댓값)이 기준 이상이면 하나만 남긴다.
+  // 남길 도구 = 아직 안 뺀 것 중 처음 읽는 양이 가장 작은 것(같으면 도구함 앞쪽) — 빼기 규칙과 같은 임시 규칙
+  const tok = id => byId[id]?.tokens || 0
+  roleGroups(ids, pairMap).forEach(g => {
+    const saving = g.reduce((s, id) => s + tok(id), 0) - Math.max(...g.map(tok))
+    if (saving < OVERLAP_MIN) return
+    const free = g.filter(id => !remove.find(r => r.tool === id))
+    if (free.length < 2) return
+    const keep = free.reduce((k, id) => (tok(id) < tok(k) ? id : k))
+    const names = g.map(id => byId[id]?.name || id).join(', ')
+    free.filter(id => id !== keep).forEach(id => {
+      const p = pairMap[pairKey(id, keep)]
+      remove.push({ tool: id, keep, save: tok(id), review: RS[p.review_state],
+        reason: `같은 일을 하는 도구 ${g.length}개(${names})를 함께 켰어요. 가장 큰 것을 남겨도 ${comma(saving)}토큰을 아껴서(기준 ${comma(OVERLAP_MIN)}토큰) 하나만 남기기를 권해요.`,
+        sources: p.sources, judged_at: p.judged_at, group: g })
+    })
   })
   const add = []
   Object.values(testedMap).forEach(t => {

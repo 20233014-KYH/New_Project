@@ -22,6 +22,7 @@ import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
 import kr.ac.team1.inventory.repo.ToolRepository;
+import kr.ac.team1.inventory.service.OverlapCriteria;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,11 @@ public class AiJudgeService {
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
     private final String apiKey;
+    private final OverlapCriteria criteria;
 
-    public AiJudgeService(ToolRepository tools, ToolPairRepository pairs, @Value("${ANTHROPIC_API_KEY:}") String apiKey) {
+    public AiJudgeService(ToolRepository tools, ToolPairRepository pairs, @Value("${ANTHROPIC_API_KEY:}") String apiKey,
+                          OverlapCriteria criteria) {
+        this.criteria = criteria;
         this.tools = tools;
         this.pairs = pairs;
         this.apiKey = apiKey;
@@ -101,12 +105,15 @@ public class AiJudgeService {
             }
             String rel = j.relation();
             String reason = "[AI 추정·서버 AI 한 번 판정(교차 검수 전) " + today + "] " + j.reason_ko();
-            if ("overlap".equals(rel) && !(tokens(byId.get(p[0])) >= 1000 && tokens(byId.get(p[1])) >= 1000)) {
-                rel = "situational";   // 미리 한 판정과 같은 겹침 기준
-                reason += " [겹침 기준 적용: 한쪽이 처음 읽는 양 1,000토큰 미만이거나 아직 안 재서 상황따라로 낮춤]";
+            boolean sameRole = "overlap".equals(rel);
+            int min = criteria.minTokens();
+            if (sameRole && !(tokens(byId.get(p[0])) >= min && tokens(byId.get(p[1])) >= min)) {
+                rel = "situational";   // 미리 한 판정과 같은 겹침 기준(compat.json criteria)
+                reason += " [겹침 기준 적용: 한쪽이 처음 읽는 양 " + String.format(java.util.Locale.US, "%,d", min)
+                        + "토큰 미만이거나 아직 안 재서 상황따라로 낮춤(같은 일을 하는 도구라는 사실은 카드에 표시)]";
             }
             pairs.save(new ToolPair(p[0], p[1], rel, "ai_estimate", reason,
-                    "[\"judgment/2026-11-21-cross-ai/판정지시문.md (서버 AI " + MODEL + ")\"]", today));
+                    "[\"judgment/2026-11-21-cross-ai/판정지시문.md (서버 AI " + MODEL + ")\"]", today, sameRole));
             saved.add(new Judgment(p[0], p[1], rel, j.confidence(), reason));
         }
         return new Result(missing.size(), saved.size(), saved);

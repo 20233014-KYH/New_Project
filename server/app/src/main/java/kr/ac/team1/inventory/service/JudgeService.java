@@ -55,10 +55,12 @@ public class JudgeService {
     private final SituationPickRepository picks;
     private final SituationGoalRepository goals;
     private final ToolService toolService;
+    private final OverlapCriteria criteria;
 
     public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService,
                         SituationRuleRepository rules, SituationPickRepository picks,
-                        SituationGoalRepository goals) {
+                        SituationGoalRepository goals, OverlapCriteria criteria) {
+        this.criteria = criteria;
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
@@ -115,7 +117,39 @@ public class JudgeService {
             Tool big = tokens(a) >= tokens(b) ? a : b;
             Tool keep = big == a ? b : a;
             if (remove.stream().noneMatch(r -> r.tool().equals(big.getId()))) {
-                remove.add(new RemoveItem(big.getId(), keep.getId(), tokens(big), p.review(), p.reason(), p.sources(), p.judgedAt()));
+                remove.add(new RemoveItem(big.getId(), keep.getId(), tokens(big), p.review(), p.reason(), p.sources(), p.judgedAt(), null));
+            }
+        }
+
+        // 같은 일 묶음(3개 이상): 가장 큰 것을 남겨도 아끼는 양(합 - 최댓값)이 기준 이상이면 하나만 남긴다.
+        // 남길 도구 = 아직 안 뺀 것 중 처음 읽는 양이 가장 작은 것(같으면 도구함 앞쪽) — 빼기 규칙과 같은 임시 규칙
+        for (List<String> g : roleGroups(ids, pairMap)) {
+            int sum = g.stream().mapToInt(id -> tokens(byId.get(id))).sum();
+            int max = g.stream().mapToInt(id -> tokens(byId.get(id))).max().orElse(0);
+            int saving = sum - max;
+            if (saving < criteria.minTokens()) {
+                continue;
+            }
+            List<String> free = g.stream().filter(id -> remove.stream().noneMatch(r -> r.tool().equals(id))).toList();
+            if (free.size() < 2) {
+                continue;
+            }
+            String keep = free.get(0);
+            for (String id : free) {
+                if (tokens(byId.get(id)) < tokens(byId.get(keep))) {
+                    keep = id;
+                }
+            }
+            String names = g.stream().map(id -> byId.get(id).getName()).collect(Collectors.joining(", "));
+            for (String id : free) {
+                if (id.equals(keep)) {
+                    continue;
+                }
+                ToolPair p = pairMap.get(PairKeys.of(id, keep));
+                remove.add(new RemoveItem(id, keep, tokens(byId.get(id)), Labels.REVIEW.get(p.getReviewState()),
+                        "같은 일을 하는 도구 " + g.size() + "개(" + names + ")를 함께 켰어요. 가장 큰 것을 남겨도 "
+                                + comma(saving) + "토큰을 아껴서(기준 " + comma(criteria.minTokens()) + "토큰) 하나만 남기기를 권해요.",
+                        toolService.sources(p), p.getJudgedAt(), g));
             }
         }
 
@@ -299,6 +333,49 @@ public class JudgeService {
     }
 
     private static int tokens(Tool t) {
-        return t.getTokens() == null ? 0 : t.getTokens();
+        return t == null || t.getTokens() == null ? 0 : t.getTokens();
+    }
+
+    static String comma(int n) {
+        return String.format(java.util.Locale.US, "%,d", n);
+    }
+
+    /** 도구함 안에서 서로 모두 같은 일(sameRole)인 3개 이상 묶음(최대 클리크). 큰 묶음 먼저, 같으면 도구함 순서. api.js roleGroups와 같음 */
+    static List<List<String>> roleGroups(List<String> ids, Map<String, ToolPair> pairMap) {
+        List<List<String>> out = new ArrayList<>();
+        bronKerbosch(new ArrayList<>(), new ArrayList<>(ids), new ArrayList<>(), ids, pairMap, out);
+        Comparator<List<String>> bySize = Comparator.comparingInt(g -> -g.size());
+        out.sort(bySize.thenComparing((x, y) -> {
+            for (int i = 0; i < Math.min(x.size(), y.size()); i++) {
+                int d = ids.indexOf(x.get(i)) - ids.indexOf(y.get(i));
+                if (d != 0) {
+                    return d;
+                }
+            }
+            return x.size() - y.size();
+        }));
+        return out;
+    }
+
+    private static void bronKerbosch(List<String> r, List<String> p, List<String> x, List<String> ids,
+                                     Map<String, ToolPair> pairMap, List<List<String>> out) {
+        if (p.isEmpty() && x.isEmpty()) {
+            if (r.size() >= 3) {
+                out.add(ids.stream().filter(r::contains).toList());
+            }
+            return;
+        }
+        for (String v : new ArrayList<>(p)) {
+            List<String> n = ids.stream().filter(o -> !o.equals(v)).filter(o -> {
+                ToolPair tp = pairMap.get(PairKeys.of(v, o));
+                return tp != null && tp.isSameRole();
+            }).toList();
+            List<String> r2 = new ArrayList<>(r);
+            r2.add(v);
+            bronKerbosch(r2, p.stream().filter(n::contains).collect(Collectors.toCollection(ArrayList::new)),
+                    x.stream().filter(n::contains).collect(Collectors.toCollection(ArrayList::new)), ids, pairMap, out);
+            p.remove(v);
+            x.add(v);
+        }
     }
 }

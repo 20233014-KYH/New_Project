@@ -117,7 +117,8 @@ public class SeedLoader implements ApplicationRunner {
             String review = text(p, "review_state");
             pairs.save(new ToolPair(text(p, "a"), text(p, "b"), text(p, "relation"),
                     review != null ? review : "ai_estimate", text(p, "reason_ko"),
-                    mapper.writeValueAsString(new ArrayList<>(sources)), text(p, "judged_at")));
+                    mapper.writeValueAsString(new ArrayList<>(sources)), text(p, "judged_at"),
+                    p.path("same_role").isBoolean() && p.path("same_role").asBoolean()));
         }
 
         int i = 0;

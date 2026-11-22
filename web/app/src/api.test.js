@@ -11,7 +11,19 @@ describe('로컬 모드 판정', () => {
     const rec = await getRecommend(['superpowers', 'ecc', 'caveman'], { work: '', shell: '', logs: '' })
     expect(rec.remove).toHaveLength(1)
     expect(rec.remove[0].tool).toBe('ecc')
-    expect(rec.remove[0].save).toBe(9169)
+    expect(rec.remove[0].save).toBe(17491) // 2026-11-21 Claude Code 2.1.318로 다시 잰 값
+    expect(rec.remove[0].group).toBeNull()
+  })
+
+  it('같은 일 묶음 3개: 둘씩은 상황따라여도 합쳐서 기준(1,642)을 넘으면 가장 작은 것만 남긴다', async () => {
+    const box = ['graphify', 'codegraph', 'understand-anything'] // 795 · 1,109 · 1,355
+    expect((await judgeBox(box)).filter(p => p.relation === 'overlap')).toHaveLength(0)
+    const rec = await getRecommend(box, { work: '', shell: '', logs: '' })
+    expect(rec.remove.map(r => r.tool)).toEqual(['codegraph', 'understand-anything'])
+    expect(rec.remove.every(r => r.keep === 'graphify' && r.group.join() === box.join())).toBe(true)
+    expect(rec.remove[0].reason).toContain('1,904')
+    const two = await getRecommend(['graphify', 'codegraph'], { work: '', shell: '', logs: '' })
+    expect(two.remove).toHaveLength(0)
   })
 
   it('조건 shell=powershell → rtk 더하기 카드에 PowerShell 주의 문구, "지금 환경에서는 효과가 없어요"', async () => {

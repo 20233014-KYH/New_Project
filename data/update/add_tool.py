@@ -1,7 +1,7 @@
 """새 도구 넣기: 저장소 하나를 카탈로그에 넣을 준비를 하고, 기존 도구 전부와의 판정을 AI 두 개로 만든다.
 - GitHub에서 이름·설명·라이선스·별·최신 릴리스·README 앞부분을 읽는다(gh CLI, 읽기만).
 - 판정: judgment/2026-11-21-cross-ai의 같은 지시문으로 Claude(sonnet)·Codex가 따로 판정 → 같은 규칙으로 합침
-  (같으면 AI 추정, 다르면 보수적으로, 겹침은 처음 읽는 양 1,000토큰 기준인데 새 도구는 아직 안 재서 상황따라로 낮아짐)
+  (같으면 AI 추정, 다르면 보수적으로, 겹침은 처음 읽는 양 기준(compat.json criteria, 빈 세션의 5%)인데 새 도구는 아직 안 재서 상황따라로 낮아짐)
 - 기본은 미리보기: data/update/new_<id>/ 에 entry·판정·확인필요만 쓴다. --write를 붙여야 카탈로그(entries·desc_en·compat 두 벌)에 넣는다.
 - 한국어 소개·처음 읽는 양·역할 범위는 비워 둔다(화면은 영어 원문과 '측정 안 함'으로 보여 줌). 사람이 채운다.
 사용: python data/update/add_tool.py owner/repo 분야번호 [--id 아이디] [--write]
@@ -83,7 +83,8 @@ def main():
             rel = "situational" if {c["relation"], x["relation"]} & {"overlap", "situational"} else "none"
             reason = (f"[AI 추정·두 AI 의견 다름 {TODAY}: Claude {KO[c['relation']]} / Codex {KO[x['relation']]}] "
                       f"Claude: {c['reason_ko']} / Codex: {x['reason_ko']}")
-        if rel == "overlap":   # 새 도구는 처음 읽는 양을 아직 안 재서 겹침 기준(둘 다 1,000토큰 이상)을 확인할 수 없음
+        same_role = rel == "overlap"   # 같은 일을 한다는 판정은 남겨서 같은 일 묶음 계산·나중 기준 적용에 쓴다
+        if rel == "overlap":   # 새 도구는 처음 읽는 양을 아직 안 재서 겹침 기준(작은 쪽이 criteria 이상)을 확인할 수 없음
             rel = "situational"
             reason += " [겹침 기준 적용: 새 도구의 처음 읽는 양을 아직 안 재서 상황따라로 낮춤]"
         if c["relation"] != x["relation"] or "low" in (c.get("confidence"), x.get("confidence")) or "overlap" in (c["relation"], x["relation"]):
@@ -93,7 +94,7 @@ def main():
                       "evidence": [{"claim": reason, "type": "ai", "checked_at": TODAY,
                                     "source": "judgment/2026-11-21-cross-ai/판정지시문.md (Claude sonnet·Codex 교차, add_tool.py)"}],
                       "a_version": tag, "b_version": next(e.get("version") for e in others if e["id"] == k[1]),
-                      "judged_at": TODAY, "criteria_version": "v2-cross-ai-overlap-1000", "review_state": "ai_estimate"})
+                      "judged_at": TODAY, "criteria_version": "v3-overlap-5pct", "review_state": "ai_estimate", **({"same_role": True} if same_role else {})})
     save(os.path.join(out, "entry.json"), entry)
     save(os.path.join(out, "pairs.json"), pairs)
     save(os.path.join(out, "확인필요.json"), review)

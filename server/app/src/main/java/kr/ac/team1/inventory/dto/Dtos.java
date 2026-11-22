@@ -38,7 +38,8 @@ public final class Dtos {
             @JsonProperty("review_state") String reviewState,
             String reason, List<String> sources,
             @JsonProperty("judged_at") String judgedAt,
-            String otherId, String label, String review) {
+            String otherId, String label, String review,
+            @JsonProperty("same_role") boolean sameRole) {
     }
 
     /** 도구 카드(펼쳐서) + pairs + 이 도구를 직접 시험한 상황(기본 기능과 비교) */
@@ -62,8 +63,9 @@ public final class Dtos {
             @JsonProperty("judged_at") String judgedAt) {
     }
 
+    /** group = 같은 일 묶음(3개 이상)으로 뺄 때 그 묶음의 도구 id들, 둘씩 겹침으로 뺄 때는 null */
     public record RemoveItem(String tool, String keep, Integer save, String review, String reason,
-                             List<String> sources, @JsonProperty("judged_at") String judgedAt) {
+                             List<String> sources, @JsonProperty("judged_at") String judgedAt, List<String> group) {
     }
 
     public record AddItem(String tool, String effect, String caution, List<String> warnings, List<String> unknown,

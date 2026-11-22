@@ -69,7 +69,7 @@ public class ToolService {
                 .sorted(Comparator.comparing(ToolPair::getId))
                 .map(p -> new ToolPairDto(p.getA(), p.getB(), p.getRelation(), p.getReviewState(), p.getReason(),
                         sources(p), p.getJudgedAt(), p.getA().equals(id) ? p.getB() : p.getA(),
-                        Labels.RELATION.get(p.getRelation()), Labels.REVIEW.get(p.getReviewState())))
+                        Labels.RELATION.get(p.getRelation()), Labels.REVIEW.get(p.getReviewState()), p.isSameRole()))
                 .toList();
         return new ToolDetailDto(toDto(tool), related, situations(id));
     }

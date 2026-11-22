@@ -191,10 +191,16 @@ export default function ResultPage() {
                   <div key={x.tool} className="panel">
                     <h3>{byId[x.tool]?.name || x.tool} 빼기</h3>
                     <p>
-                      {byId[x.keep]?.name || x.keep}와 겹쳐요({x.review}{x.judged_at ? ` · 확인 ${x.judged_at}` : ''}).{' '}
+                      {x.group
+                        ? <>같은 일을 하는 {x.group.map(id => byId[id]?.name || id).join(', ')} 중 {byId[x.keep]?.name || x.keep}만 남겨요</>
+                        : <>{byId[x.keep]?.name || x.keep}와 겹쳐요</>}
+                      ({x.review}{x.judged_at ? ` · 확인 ${x.judged_at}` : ''}).{' '}
                       하나만 켰을 때 잰 값으로는 처음 읽는 양이 <b className="n">{fmt(x.save)}</b>토큰 줄어요(참고값, 같이 켠 상태에서 따로 재지 않음).
                     </p>
-                    <p className="mute" style={{ fontSize: 13.5 }}>지금은 토큰이 큰 쪽을 빼자고 하는 임시 규칙이에요. 상황에 맞는 쪽을 남기는 규칙은 다음 단계에서 붙여요.</p>
+                    <p className="mute" style={{ fontSize: 13.5 }}>
+                      {x.group ? '둘씩 보면 아끼는 양이 작지만, 같은 일을 하는 도구가 3개 이상 모여서 합치면 기준을 넘어요. ' : ''}
+                      지금은 처음 읽는 양이 가장 작은 것을 남기는 임시 규칙이에요. 상황에 맞는 쪽을 남기는 규칙은 다음 단계에서 붙여요.
+                    </p>
                     <Reason p={x} />
                   </div>
                 ))

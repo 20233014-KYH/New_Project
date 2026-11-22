@@ -49,7 +49,25 @@ class JudgeServiceTest {
         RecommendResult rec = judge.recommend(List.of("superpowers", "ecc", "caveman"), NONE);
         assertThat(rec.remove()).hasSize(1);
         assertThat(rec.remove().get(0).tool()).isEqualTo("ecc");
-        assertThat(rec.remove().get(0).save()).isEqualTo(9169);
+        assertThat(rec.remove().get(0).save()).isEqualTo(17491);   // 2026-11-21 Claude Code 2.1.318로 다시 잰 값
+        assertThat(rec.remove().get(0).group()).isNull();
+    }
+
+    @Test
+    void 같은_일_묶음_3개는_둘씩은_상황따라여도_합쳐서_기준을_넘으면_하나만_남긴다() {
+        // graphify 795 · codegraph 1,109 · understand-anything 1,355: 둘씩은 작은 쪽이 기준(1,642) 미만이라 상황따라
+        List<String> box = List.of("graphify", "codegraph", "understand-anything");
+        assertThat(judge.judge(box)).noneMatch(p -> "overlap".equals(p.relation()));
+        RecommendResult rec = judge.recommend(box, NONE);
+        // 가장 큰 것을 남겨도 795 + 1,109 = 1,904 ≥ 1,642 → 가장 작은 graphify만 남김
+        assertThat(rec.remove()).extracting(r -> r.tool()).containsExactly("codegraph", "understand-anything");
+        assertThat(rec.remove()).allMatch(r -> r.keep().equals("graphify") && r.group().equals(box));
+        assertThat(rec.remove().get(0).reason()).contains("1,904").contains("1,642");
+    }
+
+    @Test
+    void 같은_일_둘만_있으면_묶음_빼기는_없다() {
+        assertThat(judge.recommend(List.of("graphify", "codegraph"), NONE).remove()).isEmpty();
     }
 
     @Test

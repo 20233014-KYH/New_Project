@@ -56,7 +56,9 @@ describe.skipIf(!SERVER)('서버 = 로컬 모드', () => {
 
   it('도구함 판정·추천: 분야별 묶음 + 36개 전부(630쌍) × 답 17가지(목적·상황·중요한 것·겹침 경고 포함)', async () => {
     const all = (await local.getTools()).map(t => t.id)
-    const boxes = [['superpowers', 'ecc', 'caveman'], ['caveman', 'graphify'], ['serena', 'gsd-core'], all]
+    const boxes = [['superpowers', 'ecc', 'caveman'], ['caveman', 'graphify'], ['serena', 'gsd-core'], all,
+      ['graphify', 'codegraph', 'understand-anything', 'claude-context', 'serena'],   // 같은 일 묶음 여러 개
+      ['ui-ux-pro-max-skill', 'taste-skill', 'impeccable'], ['superpowers', 'ecc', 'gsd-core', 'gstack']]
     for (const c of [1, 2, 3, 4, 5, 6]) boxes.push((await local.getTools({ categoryId: c })).map(t => t.id))
     for (const ids of boxes) {
       expect(strip(await post('/judge', { ids }))).toEqual(strip(await local.judgeBox(ids)))

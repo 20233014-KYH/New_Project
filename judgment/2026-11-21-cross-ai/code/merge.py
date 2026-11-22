@@ -1,7 +1,8 @@
 """두 AI(Claude sonnet·Codex) 판정을 합쳐 compat.json(화면·서버 두 벌)에 다른 분야 540쌍을 더한다.
 - 둘이 같으면 그 판정(AI 추정)
 - 둘이 다르면: 한쪽이라도 겹침·상황따라면 '상황따라'(빼기 추천은 하지 않되 알려 줌), 아니면 '관계 없음'(보완은 둘 다 동의할 때만)
-- 겹침은 같은 분야 때와 같은 기준: 두 도구 모두 처음 읽는 양 1,000토큰 이상일 때만, 아니면 상황따라로 낮춤
+- 겹침은 같은 분야 때와 같은 기준: 두 도구 모두 처음 읽는 양이 compat.json criteria(빈 세션의 5%) 이상일 때만, 아니면 상황따라로 낮춤
+  (2026-11-21 기준을 1,000 → 빈 세션의 5%로 바꿈. 처음 돌렸을 때는 1,000이었음)
 - 직접 시험 기록이 있는 쌍(caveman × superpowers)은 시험 결과로 넣음
 - 확인필요.csv: 두 AI 의견이 다르거나 한쪽이라도 확신 낮음
 사용: python merge.py [--write]   (--write 없으면 통계·확인필요.csv만)
@@ -20,6 +21,7 @@ def _find_root(d):
 NP = _find_root(HERE)
 COMPATS = [os.path.join(NP, "web", "app", "src", "data", "compat.json"), os.path.join(NP, "server", "sample-data", "compat.json")]
 DATE = "2026-11-21"
+LIMIT = json.load(open(COMPATS[0], encoding="utf-8")).get("criteria", {}).get("overlap_min_tokens", 1000)
 KO = {"overlap": "겹침", "situational": "상황따라", "complement": "보완", "none": "관계 없음"}
 entries = {e["id"]: e for e in json.load(open(os.path.join(NP, "web", "app", "src", "data", "entries.json"), encoding="utf-8"))["entries"]}
 
@@ -61,9 +63,9 @@ for k in keys:
             stat["다름"] += 1
         if rel == "overlap":
             ta, tb = entries[a].get("always_on_tokens_est"), entries[b].get("always_on_tokens_est")
-            if not (isinstance(ta, int) and isinstance(tb, int) and ta >= 1000 and tb >= 1000):
+            if not (isinstance(ta, int) and isinstance(tb, int) and ta >= LIMIT and tb >= LIMIT):
                 rel = "situational"
-                reason += f" [겹침 기준 적용: 처음 읽는 양 {a} {ta}, {b} {tb} 토큰] → 한쪽이 1,000토큰 미만(또는 모름)이라 상황따라로 낮춤"
+                reason += f" [겹침 기준 적용: 처음 읽는 양 {a} {ta}, {b} {tb} 토큰] → 한쪽이 {LIMIT:,}토큰 미만(또는 모름)이라 상황따라로 낮춤"
         if c["relation"] != x["relation"] or "low" in (c.get("confidence"), x.get("confidence")):
             review.append([a, b, KO[c["relation"]], c.get("confidence"), KO[x["relation"]], x.get("confidence"), KO[rel], c["reason_ko"], x["reason_ko"]])
     stat[KO[rel]] += 1
