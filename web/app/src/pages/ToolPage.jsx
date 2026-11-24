@@ -120,8 +120,22 @@ export default function ToolPage() {
               <Link to="/help">판정 낱말 풀이</Link>
             </p>
 
-            <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>
-            {(tool.situations || []).length === 0 && (
+            {tool.traits && (
+              <>
+                <h2 style={{ marginTop: 'var(--s12)' }}>직접 써 본 특징</h2>
+                <div className="panel" style={{ marginBottom: 'var(--s4)' }}>
+                  <p style={{ marginTop: 0 }}><b>쓰는 법</b> · {tool.traits.how}</p>
+                  <ul style={{ paddingLeft: '1.2em', listStyle: 'disc' }}>
+                    {tool.traits.points.map((p, i) => <li key={i}>{p}</li>)}
+                  </ul>
+                  <p><b>대신</b> · {tool.traits.cost}</p>
+                  <p className="mute" style={{ fontSize: 13, marginBottom: 0 }}>{tool.traits.note} 근거: {tool.traits.tested}</p>
+                </div>
+              </>
+            )}
+
+            {((tool.situations || []).length > 0 || !tool.traits) && <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>}
+            {(tool.situations || []).length === 0 && !tool.traits && (
               <div className="panel">이 도구는 아직 기본 기능과 비교해 시험하지 않았어요.</div>
             )}
             {(tool.situations || []).map(s => (

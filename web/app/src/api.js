@@ -7,6 +7,7 @@ import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
+import traitsRaw from './data/tool_traits.json'
 import situationCsv from './data/situation_rules.csv?raw'
 import priorityCsv from './data/situation_priority.csv?raw'
 import goalsCsv from './data/situation_goals.csv?raw'
@@ -240,7 +241,7 @@ export async function getTool(id) {
     label: KO[p.relation],
     review: RS[p.review_state],
   }))
-  return { ...tool, pairs: relatedPairs, situations: toolSituations(id, tools) }
+  return { ...tool, pairs: relatedPairs, situations: toolSituations(id, tools), traits: traitsRaw.traits?.[id] || null }
 }
 
 // 4. 도구함 쌍 판정 (저장된 판정만, no_info 포함)

@@ -56,6 +56,17 @@ describe('결과 품질 선택지', () => {
   })
 })
 
+describe('디자인 도구는 추천 대신 특징만', () => {
+  it('디자인 도구 상세에 직접 써 본 특징이 붙고, 상황 추천에는 디자인이 없다', async () => {
+    const { getTool, getSituations } = await import('./api.js')
+    const taste = await getTool('taste-skill')
+    expect(taste.traits.how).toContain('이름을 불러야')
+    expect(taste.traits.points.length).toBeGreaterThan(0)
+    expect((await getTool('caveman')).traits).toBeNull()
+    expect((await getSituations()).filter(s => s.category === 4)).toHaveLength(0)
+  })
+})
+
 describe('도구 목록', () => {
   it('카테고리 1 필터 시 category=1 도구만 반환', async () => {
     const tools = await getTools({ categoryId: 1 })

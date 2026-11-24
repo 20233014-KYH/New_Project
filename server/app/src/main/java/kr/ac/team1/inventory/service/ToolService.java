@@ -71,7 +71,7 @@ public class ToolService {
                         sources(p), p.getJudgedAt(), p.getA().equals(id) ? p.getB() : p.getA(),
                         Labels.RELATION.get(p.getRelation()), Labels.REVIEW.get(p.getReviewState()), p.isSameRole()))
                 .toList();
-        return new ToolDetailDto(toDto(tool), related, situations(id));
+        return new ToolDetailDto(toDto(tool), related, situations(id), traits(id));
     }
 
     static List<String> splitTools(String s) {
@@ -95,6 +95,21 @@ public class ToolService {
                                         p.getReason()))
                                 .toList(), r.getResultType()))
                 .toList();
+    }
+
+    private tools.jackson.databind.JsonNode traitsCache;
+
+    /** 직접 써 본 특징(seed/tool_traits.json, api.js와 같은 파일). 없으면 null */
+    tools.jackson.databind.JsonNode traits(String id) {
+        if (traitsCache == null) {
+            try (java.io.InputStream in = new org.springframework.core.io.ClassPathResource("seed/tool_traits.json").getInputStream()) {
+                traitsCache = mapper.readTree(in).path("traits");
+            } catch (java.io.IOException e) {
+                throw new java.io.UncheckedIOException(e);
+            }
+        }
+        tools.jackson.databind.JsonNode t = traitsCache.get(id);
+        return t == null || t.isNull() ? null : t;
     }
 
     List<Tool> ordered() {

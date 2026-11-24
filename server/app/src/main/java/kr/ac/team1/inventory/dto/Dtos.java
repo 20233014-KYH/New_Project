@@ -43,7 +43,8 @@ public final class Dtos {
     }
 
     /** 도구 카드(펼쳐서) + pairs + 이 도구를 직접 시험한 상황(기본 기능과 비교) */
-    public record ToolDetailDto(@JsonUnwrapped ToolDto tool, List<ToolPairDto> pairs, List<ToolSituation> situations) {
+    /** traits = 직접 써 본 특징(tool_traits.json, 디자인 도구처럼 추천 대신 특징만 보여 주는 도구). 없으면 null */
+    public record ToolDetailDto(@JsonUnwrapped ToolDto tool, List<ToolPairDto> pairs, List<ToolSituation> situations, JsonNode traits) {
     }
 
     /** 이 도구가 추천 도구로 들어간 상황 규칙 한 줄 + 그 상황의 중요한 것별 고르기 */

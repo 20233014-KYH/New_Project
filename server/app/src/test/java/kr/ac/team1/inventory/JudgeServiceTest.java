@@ -245,6 +245,13 @@ class JudgeServiceTest {
     }
 
     @Test
+    void 디자인_도구는_추천_대신_직접_써_본_특징을_보여_준다() {
+        assertThat(tools.detail("impeccable").traits().path("how").asString()).contains("알아서");
+        assertThat(tools.detail("caveman").traits()).isNull();
+        assertThat(judge.situations()).noneMatch(s -> s.category() == 4);
+    }
+
+    @Test
     void 상황을_안_고르거나_없는_상황이면_카드_없음() {
         assertThat(judge.recommend(List.of("superpowers"), NONE).situation()).isNull();
         assertThat(judge.recommend(List.of("superpowers"), new Answers("", "", "", "없는상황", null, null)).situation()).isNull();

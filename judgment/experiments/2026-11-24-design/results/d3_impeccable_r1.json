@@ -1,0 +1,50 @@
+{
+ "task": "d3",
+ "cond": "impeccable",
+ "rep": 1,
+ "sec": 565,
+ "rc": 0,
+ "plugins": [
+  "impeccable",
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [
+  "impeccable:impeccable"
+ ],
+ "turns": 44,
+ "has_html": true,
+ "grade": {
+  "mode": "d3",
+  "aiLook": 0,
+  "flags": {
+   "Inter·기본 글꼴만 씀": false,
+   "파랑·보라 그라데이션": false,
+   "이모지 아이콘": false,
+   "둥근 모서리+그림자가 대부분": false
+  },
+  "a11y": {},
+  "detail": {
+   "fonts": [
+    "gothic a1",
+    "gasoek one"
+   ],
+   "rounded": 10,
+   "shadow": 2,
+   "blocks": 81,
+   "emoji": 0,
+   "mult4": 0.51
+  }
+ },
+ "usage": {
+  "input_tokens": 60,
+  "cache_creation_input_tokens": 109885,
+  "cache_read_input_tokens": 2403717,
+  "output_tokens": 50627
+ },
+ "total_tokens": 2564289,
+ "price_weighted": 630923,
+ "stderr_tail": ""
+}

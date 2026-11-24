@@ -1,0 +1,142 @@
+{
+ "task": "d1",
+ "cond": "taste_call",
+ "rep": 1,
+ "sec": 47,
+ "rc": 0,
+ "plugins": [
+  "taste-skill",
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [
+  "taste-skill:redesign-skill"
+ ],
+ "turns": 5,
+ "has_html": true,
+ "grade": {
+  "mode": "d1",
+  "score": 6,
+  "checks": {
+   "1 글자 대비": false,
+   "2 이미지 설명(alt)": true,
+   "3 키보드 초점 표시": true,
+   "4 입력칸 이름표(label)": true,
+   "5 제목 순서": false,
+   "6 누르는 크기 44px 이상": false,
+   "7 간격 4px 배수 90% 이상": false,
+   "8 글꼴 2종 이하": true,
+   "9 이모지 아이콘 없음": true,
+   "10 보라 그라데이션 없음": true
+  },
+  "contentOk": true,
+  "missing": [],
+  "inputs": 5,
+  "buttons": 5,
+  "detail": {
+   "axe": {
+    "color-contrast": 1,
+    "heading-order": 1
+   },
+   "mult4": 0.7,
+   "fonts": [
+    "pretendard variable"
+   ],
+   "focus": [
+    {
+     "tag": "BUTTON",
+     "text": "사진 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "A",
+     "text": "비밀번호 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "탈퇴하기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "취소",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "저장",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "사진 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "A",
+     "text": "비밀번호 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "탈퇴하기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "취소",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "저장",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "사진 바꾸기",
+     "ring": true
+    }
+   ],
+   "smallTargets": [
+    [
+     122,
+     40,
+     "사진 바꾸기"
+    ],
+    [
+     122,
+     40,
+     "비밀번호 바꾸기"
+    ],
+    [
+     82,
+     40,
+     "탈퇴하기"
+    ],
+    [
+     58,
+     40,
+     "취소"
+    ],
+    [
+     82,
+     40,
+     "저장"
+    ]
+   ]
+  }
+ },
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 24468,
+  "cache_read_input_tokens": 112896,
+  "output_tokens": 6318
+ },
+ "total_tokens": 143690,
+ "price_weighted": 73473,
+ "stderr_tail": ""
+}

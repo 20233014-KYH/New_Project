@@ -1,0 +1,111 @@
+{
+ "task": "d1",
+ "cond": "uiux",
+ "rep": 1,
+ "sec": 32,
+ "rc": 0,
+ "plugins": [
+  "ui-ux-pro-max",
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [],
+ "turns": 3,
+ "has_html": true,
+ "grade": {
+  "mode": "d1",
+  "score": 7,
+  "checks": {
+   "1 글자 대비": true,
+   "2 이미지 설명(alt)": true,
+   "3 키보드 초점 표시": true,
+   "4 입력칸 이름표(label)": true,
+   "5 제목 순서": true,
+   "6 누르는 크기 44px 이상": true,
+   "7 간격 4px 배수 90% 이상": false,
+   "8 글꼴 2종 이하": true,
+   "9 이모지 아이콘 없음": false,
+   "10 보라 그라데이션 없음": false
+  },
+  "contentOk": true,
+  "missing": [],
+  "inputs": 5,
+  "buttons": 5,
+  "detail": {
+   "axe": {},
+   "mult4": 0.38,
+   "fonts": [
+    "system-ui"
+   ],
+   "focus": [
+    {
+     "tag": "BUTTON",
+     "text": "📷 사진 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "A",
+     "text": "비밀번호 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "탈퇴하기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "취소",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "💾 저장",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "📷 사진 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "A",
+     "text": "비밀번호 바꾸기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "탈퇴하기",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "취소",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "💾 저장",
+     "ring": true
+    },
+    {
+     "tag": "BUTTON",
+     "text": "📷 사진 바꾸기",
+     "ring": true
+    }
+   ],
+   "smallTargets": []
+  }
+ },
+ "usage": {
+  "input_tokens": 6,
+  "cache_creation_input_tokens": 15048,
+  "cache_read_input_tokens": 104519,
+  "output_tokens": 3621
+ },
+ "total_tokens": 123194,
+ "price_weighted": 47373,
+ "stderr_tail": ""
+}
