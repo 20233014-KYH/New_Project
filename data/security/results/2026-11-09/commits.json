@@ -1,0 +1,146 @@
+{
+ "ChromeDevTools_chrome-devtools-mcp": {
+  "commit": "b701776",
+  "date": "2026-10-28"
+ },
+ "Egonex-AI_Understand-Anything": {
+  "commit": "a6ea402",
+  "date": "2026-11-07"
+ },
+ "Flux159_mcp-server-kubernetes": {
+  "commit": "5536776",
+  "date": "2026-10-26"
+ },
+ "GLips_Figma-Context-MCP": {
+  "commit": "c083d65",
+  "date": "2026-06-24"
+ },
+ "Graphify-Labs_graphify": {
+  "commit": "0a8cd4e",
+  "date": "2026-10-27"
+ },
+ "Jpisnice_shadcn-ui-mcp-server": {
+  "commit": "30efb8a",
+  "date": "2026-10-03"
+ },
+ "JuliusBrussee_caveman": {
+  "commit": "9b68f7e",
+  "date": "2026-10-25"
+ },
+ "Leonxlnx_taste-skill": {
+  "commit": "12af471",
+  "date": "2026-10-25"
+ },
+ "OthmanAdi_planning-with-files": {
+  "commit": "2362ca3",
+  "date": "2026-11-07"
+ },
+ "affaan-m_ECC": {
+  "commit": "25278e7",
+  "date": "2026-10-26"
+ },
+ "alibaba_open-code-review": {
+  "commit": "0d40339",
+  "date": "2026-11-06"
+ },
+ "anthropics_claude-code-security-review": {
+  "commit": "0c6a49f",
+  "date": "2026-02-11"
+ },
+ "bytebase_dbhub": {
+  "commit": "1f3fa03",
+  "date": "2026-10-26"
+ },
+ "ccusage_ccusage": {
+  "commit": "0c1bdd1",
+  "date": "2026-11-09"
+ },
+ "colbymchenry_codegraph": {
+  "commit": "01e0ac3",
+  "date": "2026-10-28"
+ },
+ "containers_kubernetes-mcp-server": {
+  "commit": "19e48a6",
+  "date": "2026-11-06"
+ },
+ "garrytan_gstack": {
+  "commit": "e077053",
+  "date": "2026-11-09"
+ },
+ "googleapis_mcp-toolbox": {
+  "commit": "bfd4ffa",
+  "date": "2026-10-27"
+ },
+ "grab_cursor-talk-to-figma-mcp": {
+  "commit": "ddd90f3",
+  "date": "2026-07-26"
+ },
+ "hashicorp_terraform-mcp-server": {
+  "commit": "63df659",
+  "date": "2026-11-06"
+ },
+ "headroomlabs-ai_headroom": {
+  "commit": "bb8d18a",
+  "date": "2026-11-07"
+ },
+ "jarrodwatts_claude-hud": {
+  "commit": "e043520",
+  "date": "2026-11-08"
+ },
+ "microsoft_playwright-mcp": {
+  "commit": "0c4107a",
+  "date": "2026-10-22"
+ },
+ "nextlevelbuilder_ui-ux-pro-max-skill": {
+  "commit": "28b3b8d",
+  "date": "2026-10-26"
+ },
+ "nizos_tdd-guard": {
+  "commit": "ffb7026",
+  "date": "2026-11-03"
+ },
+ "obra_superpowers": {
+  "commit": "2ce8aa1",
+  "date": "2026-10-21"
+ },
+ "open-gsd_gsd-core": {
+  "commit": "d5ab466",
+  "date": "2026-11-08"
+ },
+ "oraios_serena": {
+  "commit": "ede329a",
+  "date": "2026-10-28"
+ },
+ "pbakaus_impeccable": {
+  "commit": "4b6b80f",
+  "date": "2026-11-08"
+ },
+ "phuryn_pm-skills": {
+  "commit": "9af7bfd",
+  "date": "2026-11-08"
+ },
+ "rtk-ai_rtk": {
+  "commit": "e05c7bd",
+  "date": "2026-10-25"
+ },
+ "supabase_mcp": {
+  "commit": "6b2fca9",
+  "date": "2026-11-06"
+ },
+ "thedotmack_claude-mem": {
+  "commit": "66c8344",
+  "date": "2026-11-08"
+ },
+ "trailofbits_skills": {
+  "commit": "e4dd0bb",
+  "date": "2026-11-06"
+ },
+ "upstash_context7": {
+  "commit": "078c0c7",
+  "date": "2026-11-06"
+ },
+ "zilliztech_claude-context": {
+  "commit": "6fc318b",
+  "date": "2026-07-14"
+ }
+}
