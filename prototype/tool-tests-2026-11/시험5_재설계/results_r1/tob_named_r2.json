@@ -1,0 +1,154 @@
+{
+  "condition": "tob_named",
+  "rep": 2,
+  "turn": {
+    "sec": 133.1,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "variant-analysis:variant-analysis"
+    ],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\root-cause.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\searching.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\triage.md"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r2\\rules\\sqli.yaml"
+    ],
+    "texts": [
+      "Small repo; read all Python files.",
+      "Semgrep으로 규칙을 검증하는 중입니다. 승인 프롬프트가 걸려서 명령을 하나씩 나눠 실행합니다.",
+      "Windows 기본 인코딩(cp949) 때문에 한글 주석을 못 읽습니다. UTF-8 모드로 다시 실행합니다.",
+      "Semgrep 결과가 수동 코드 검토 결과와 일치합니다. 안전한 곳(`export_table`, `get_profile`, `by_event`, `list_by_ids`, `sort_report`, `count_members`)은 걸리지 않습니다.\n\n## 요약\n\n**근본 원인:** 사용자 입력(함수 인자)이 `run()`/`run_write()`에 SQL 텍스트로 직접 조립되어 들어가고, `?` 바인딩이나 허용 목록을 거치지 않습니다. 변형은 f-string, `+` 연결, `.format`, `%` 서식, 조각을 만들어 주는 도우미, 도우미를 거치는 간접 호출, 딕셔너리 키 조립, `date()` 안에 넣는 숫자 형태로 나타났습니다.\n\n**취약 (`routes.py`에서 모두 사용자 입력으로 도달)**\n| 위치 | 형태 |\n|---|---|\n| `login.find_user` | f-string 원본 사례 |\n| `members/profile.update_nickname` | `%` 서식 (UPDATE) |\n| `events/calendar.event_by_title` | `.format` |\n| `events/attendance.AttendanceRepo.by_member` | f-string을 `_q`에 넘김 |\n| `fees/report.monthly_report` | `+` 연결 |\n| `fees/payments.find_payments` | `sqlutil.eq`를 통한 간접 주입 |\n| `members/search.search_members` | `sqlutil.like`를 통한 간접 주입 |\n| `notices/board.search_notices` | 열 이름(키)과 값 둘 다 조립 |\n| `admin/maintenance.delete_old` | `'-{days} days'`에서 따옴표를 깨고 나올 수 있는 DELETE |\n| `sqlutil.eq`, `sqlutil.like` | 위험 조각을 만드는 도우미 (근원) |\n\n**안전으로 판단한 곳:** `export_table`(허용 목록), `get_profile`·`by_event`(`int()`), `list_by_ids`(`?` 바인딩), `sort_report`(열 이름 매핑), `count_members`(설정 상수), `check_password`·`record_login`·`events_between`·`post_notice`·`record_payment`(바인딩). `AttendanceRepo._q`는 조각을 받는 싱크라 `by_member` 때문에 주입이 가능하지만 별도로 나열하지 않았습니다. `delete_old`의 `log.info`는 SQL이 아니라 로그 주입 수준입니다. 코드는 수정하지 않았습니다.\n\n**Semgrep 규칙** (`rules/sqli.yaml`):\n- 규칙 1은 함수 인자를 소스로, `run`/`run_write`/`execute`/`_q`를 싱크로 하는 taint 규칙입니다. `int()`, `in_list`, `order_by`, 허용 목록 검사는 안전으로 처리합니다.\n- 규칙 2는 `eq`·`like`처럼 값을 따옴표 안에 붙인 조각을 반환하는 도우미를 잡습니다.\n- 한글 때문에 Windows 기본 인코딩(cp949)에서 semgrep이 규칙 파일을 읽지 못해, 규칙 파일은 영어 ASCII로만 썼습니다.\n- 한계: 규칙 1은 `db.py`를 제외했고, 허용 목록 판별은 `if x not in ALLOWED: raise` 형태만 인식합니다. `_q` 내부 `run(f\"...{cond}\")`도 걸리지만 의도된 결과입니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/members/profile.py:update_nickname\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/fees/report.py:monthly_report\nclubapp/fees/payments.py:find_payments\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/admin/maintenance.py:delete_old\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like"
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "cadf57e3-85a8-495d-95f6-74b2e5e3f36f",
+    "result": "Semgrep 결과가 수동 코드 검토 결과와 일치합니다. 안전한 곳(`export_table`, `get_profile`, `by_event`, `list_by_ids`, `sort_report`, `count_members`)은 걸리지 않습니다.\n\n## 요약\n\n**근본 원인:** 사용자 입력(함수 인자)이 `run()`/`run_write()`에 SQL 텍스트로 직접 조립되어 들어가고, `?` 바인딩이나 허용 목록을 거치지 않습니다. 변형은 f-string, `+` 연결, `.format`, `%` 서식, 조각을 만들어 주는 도우미, 도우미를 거치는 간접 호출, 딕셔너리 키 조립, `date()` 안에 넣는 숫자 형태로 나타났습니다.\n\n**취약 (`routes.py`에서 모두 사용자 입력으로 도달)**\n| 위치 | 형태 |\n|---|---|\n| `login.find_user` | f-string 원본 사례 |\n| `members/profile.update_nickname` | `%` 서식 (UPDATE) |\n| `events/calendar.event_by_title` | `.format` |\n| `events/attendance.AttendanceRepo.by_member` | f-string을 `_q`에 넘김 |\n| `fees/report.monthly_report` | `+` 연결 |\n| `fees/payments.find_payments` | `sqlutil.eq`를 통한 간접 주입 |\n| `members/search.search_members` | `sqlutil.like`를 통한 간접 주입 |\n| `notices/board.search_notices` | 열 이름(키)과 값 둘 다 조립 |\n| `admin/maintenance.delete_old` | `'-{days} days'`에서 따옴표를 깨고 나올 수 있는 DELETE |\n| `sqlutil.eq`, `sqlutil.like` | 위험 조각을 만드는 도우미 (근원) |\n\n**안전으로 판단한 곳:** `export_table`(허용 목록), `get_profile`·`by_event`(`int()`), `list_by_ids`(`?` 바인딩), `sort_report`(열 이름 매핑), `count_members`(설정 상수), `check_password`·`record_login`·`events_between`·`post_notice`·`record_payment`(바인딩). `AttendanceRepo._q`는 조각을 받는 싱크라 `by_member` 때문에 주입이 가능하지만 별도로 나열하지 않았습니다. `delete_old`의 `log.info`는 SQL이 아니라 로그 주입 수준입니다. 코드는 수정하지 않았습니다.\n\n**Semgrep 규칙** (`rules/sqli.yaml`):\n- 규칙 1은 함수 인자를 소스로, `run`/`run_write`/`execute`/`_q`를 싱크로 하는 taint 규칙입니다. `int()`, `in_list`, `order_by`, 허용 목록 검사는 안전으로 처리합니다.\n- 규칙 2는 `eq`·`like`처럼 값을 따옴표 안에 붙인 조각을 반환하는 도우미를 잡습니다.\n- 한글 때문에 Windows 기본 인코딩(cp949)에서 semgrep이 규칙 파일을 읽지 못해, 규칙 파일은 영어 ASCII로만 썼습니다.\n- 한계: 규칙 1은 `db.py`를 제외했고, 허용 목록 판별은 `if x not in ALLOWED: raise` 형태만 인식합니다. `_q` 내부 `run(f\"...{cond}\")`도 걸리지만 의도된 결과입니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/members/profile.py:update_nickname\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/fees/report.py:monthly_report\nclubapp/fees/payments.py:find_payments\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/admin/maintenance.py:delete_old\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like",
+    "usage": {
+      "input_tokens": 32,
+      "cache_creation_input_tokens": 53026,
+      "cache_read_input_tokens": 900964,
+      "output_tokens": 13386,
+      "output_tokens_details": {
+        "thinking_tokens": 5392
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 53026,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1464,
+          "cache_read_input_tokens": 74845,
+          "cache_creation_input_tokens": 1712,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1712
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 27,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "rule_eval": {
+    "fixture": [
+      "_q",
+      "by_member",
+      "delete_old",
+      "eq",
+      "event_by_title",
+      "find_payments",
+      "find_user",
+      "like",
+      "monthly_report",
+      "search_members",
+      "search_notices",
+      "update_nickname"
+    ],
+    "holdout": [
+      "hx_find_room",
+      "hx_rename_room",
+      "hx_room_by_owner",
+      "hx_rooms_sorted"
+    ],
+    "error": null
+  },
+  "tokens": {
+    "total_in": 954022,
+    "output": 13386
+  }
+}

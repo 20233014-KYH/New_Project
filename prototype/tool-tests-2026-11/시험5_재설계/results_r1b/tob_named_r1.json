@@ -1,0 +1,121 @@
+{
+  "condition": "tob_named",
+  "rep": 1,
+  "turn": {
+    "sec": 34.6,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "variant-analysis:variant-analysis"
+    ],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\reload.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\components\\build.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py"
+    ],
+    "writes": [],
+    "texts": [
+      "Candidates: flagging.py:351, screen_recording_utils.py:281, plus review of video.py:473, screen_recording_utils.py:20, processing_utils.py:1139, ffmpy, and others.",
+      "같은 원인(문자열로 조립한 명령을 셸에 넘기는 것)이 한 군데 더 있었습니다. 코드는 수정하지 않았습니다.\n\n`subprocess`, `os.system`, `create_subprocess_shell`, `shell=True`를 저장소 전체에서 검색하고 각 호출 지점의 입력 출처를 확인했습니다. 두 번째 인스턴스는 `flagging.py`의 `archive_flagged_media()`입니다.\n\n- **씨앗**: `extract_video_thumbnail()`은 `video_path`와 `timestamp`를 f-string에 넣고 `shell=True`로 실행합니다. 따옴표 처리도 없습니다.\n- **변종**: `archive_flagged_media()`는 `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`을 호출합니다. `flag_dir`과 `label`을 셸에 그대로 넘기므로, 공백이나 `;`, `$()`가 들어 있으면 같은 방식으로 명령이 주입됩니다. 이 함수는 저장소 안에 호출자가 없어서 `label`이 실제로 외부 입력인지는 확인하지 못했습니다. 다만 `label`과 `flag_dir`에 아무 검증이 없는 함수라서 취약 목록에 넣었습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:apply_zoom_effect — 함수 이름은 주변 코드로 추정했습니다. `asyncio.create_subprocess_shell`에 `\"{input_path}\"`를 넣는 셸 문자열 패턴이라 구조는 같습니다. 하지만 `input_path`는 `routes.py:2011`에서 `tempfile.NamedTemporaryFile(suffix=\".mp4\")`가 만든 서버 생성 경로이고 업로드 파일명이 들어가지 않으므로 지금은 악용할 수 없습니다. 방어가 아니라 우연히 안전한 상태라, 코드 정리 대상으로 권합니다.\ngradio/screen_recording_utils.py:probe_recording_duration — 인자 리스트 호출이며 임시 디렉터리 파일명(`.name`)만 사용합니다.\ngradio/processing_utils.py:get_video_length — 인자 리스트 호출입니다.\ngradio/components/video.py:get_video_duration_ffprobe — 인자 리스트 호출입니다.\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg — `shlex.split`으로 인자를 만들고 셸을 쓰지 않습니다. `convert_video_to_playable_mp4`와 `process_video_with_ffmpeg`가 이를 사용하며, 같은 이유로 안전합니다.\ngradio/cli/commands/reload.py:main — `[sys.executable, \"-u\", path]` 리스트 호출입니다.\ngradio/cli/commands/deploy_space.py:deploy_space — gcloud 호출은 모두 고정된 인자 리스트입니다. 마지막 `deploy_command`는 실행 직전 구성만 보고 리스트로 판단했고 조립 과정은 읽지 않았습니다.\ngradio/cli/commands/components/build.py:_build — 리스트 인자이며 셸을 쓰지 않습니다.\ngradio/utils.py:get_node_path — `where node`, `which node` 고정 리스트 호출입니다.\ndemo/text_analysis/run.py — `os.system`을 쓰지만 문자열이 고정 상수라 사용자 입력이 없습니다. 이 파일은 모듈 수준 코드라 함수 이름이 없습니다.\n\n`dev.py`, `install_component.py`, `node_server.py`, `tunneling.py`는 검색에서 `subprocess` 호출이 잡혔지만 내용은 읽지 않았습니다. 그래서 위 목록에 넣지 않았고 이 두 분류 어디에도 판정을 내리지 않았습니다."
+    ],
+    "denied": [],
+    "session": "e9e03c41-c292-4f74-86dc-b26d0527c788",
+    "result": "같은 원인(문자열로 조립한 명령을 셸에 넘기는 것)이 한 군데 더 있었습니다. 코드는 수정하지 않았습니다.\n\n`subprocess`, `os.system`, `create_subprocess_shell`, `shell=True`를 저장소 전체에서 검색하고 각 호출 지점의 입력 출처를 확인했습니다. 두 번째 인스턴스는 `flagging.py`의 `archive_flagged_media()`입니다.\n\n- **씨앗**: `extract_video_thumbnail()`은 `video_path`와 `timestamp`를 f-string에 넣고 `shell=True`로 실행합니다. 따옴표 처리도 없습니다.\n- **변종**: `archive_flagged_media()`는 `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`을 호출합니다. `flag_dir`과 `label`을 셸에 그대로 넘기므로, 공백이나 `;`, `$()`가 들어 있으면 같은 방식으로 명령이 주입됩니다. 이 함수는 저장소 안에 호출자가 없어서 `label`이 실제로 외부 입력인지는 확인하지 못했습니다. 다만 `label`과 `flag_dir`에 아무 검증이 없는 함수라서 취약 목록에 넣었습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:apply_zoom_effect — 함수 이름은 주변 코드로 추정했습니다. `asyncio.create_subprocess_shell`에 `\"{input_path}\"`를 넣는 셸 문자열 패턴이라 구조는 같습니다. 하지만 `input_path`는 `routes.py:2011`에서 `tempfile.NamedTemporaryFile(suffix=\".mp4\")`가 만든 서버 생성 경로이고 업로드 파일명이 들어가지 않으므로 지금은 악용할 수 없습니다. 방어가 아니라 우연히 안전한 상태라, 코드 정리 대상으로 권합니다.\ngradio/screen_recording_utils.py:probe_recording_duration — 인자 리스트 호출이며 임시 디렉터리 파일명(`.name`)만 사용합니다.\ngradio/processing_utils.py:get_video_length — 인자 리스트 호출입니다.\ngradio/components/video.py:get_video_duration_ffprobe — 인자 리스트 호출입니다.\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg — `shlex.split`으로 인자를 만들고 셸을 쓰지 않습니다. `convert_video_to_playable_mp4`와 `process_video_with_ffmpeg`가 이를 사용하며, 같은 이유로 안전합니다.\ngradio/cli/commands/reload.py:main — `[sys.executable, \"-u\", path]` 리스트 호출입니다.\ngradio/cli/commands/deploy_space.py:deploy_space — gcloud 호출은 모두 고정된 인자 리스트입니다. 마지막 `deploy_command`는 실행 직전 구성만 보고 리스트로 판단했고 조립 과정은 읽지 않았습니다.\ngradio/cli/commands/components/build.py:_build — 리스트 인자이며 셸을 쓰지 않습니다.\ngradio/utils.py:get_node_path — `where node`, `which node` 고정 리스트 호출입니다.\ndemo/text_analysis/run.py — `os.system`을 쓰지만 문자열이 고정 상수라 사용자 입력이 없습니다. 이 파일은 모듈 수준 코드라 함수 이름이 없습니다.\n\n`dev.py`, `install_component.py`, `node_server.py`, `tunneling.py`는 검색에서 `subprocess` 호출이 잡혔지만 내용은 읽지 않았습니다. 그래서 위 목록에 넣지 않았고 이 두 분류 어디에도 판정을 내리지 않았습니다.",
+    "usage": {
+      "input_tokens": 13,
+      "cache_creation_input_tokens": 31157,
+      "cache_read_input_tokens": 251742,
+      "output_tokens": 3960,
+      "output_tokens_details": {
+        "thinking_tokens": 329
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 31157,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1591,
+          "cache_read_input_tokens": 52166,
+          "cache_creation_input_tokens": 1784,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1784
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 16,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "tokens": {
+    "total_in": 282912,
+    "output": 3960
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "condition": "gsd",
+  "rep": 1,
+  "sessions": [
+    {
+      "i": 1,
+      "sec": 37.5,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 6,
+      "tokens": 241509,
+      "result": " 회원 등록·목록: `add_member`, `members` (오늘 완료)\n2. `charge_month`: month 형식 검증, 면제 회원 제외, 같은 달 중복 부과 정책\n3. `pay`: 등록 회원인지, 부과된 달인지 검증하고 분할·초과 납부 정책 정하기\n4. `unpaid`: 면제 회원을 빼고 납부 합계가 부과액보다 적은 이메일 목록\n5. `report`: `{\"charged\", \"paid\", \"unpaid\"}`\n6. `export_csv`\n\n**1단계 동작** (`dues/club.py`, `tests/test_members.py`)\n- 이메일은 앞뒤 공백을 지우고 소문자로 저장하며, 대소문자만 다른 중복은 거부합니다.\n- 이름은 공백을 지우고, 빈 값이나 문자열이 아닌 값은 거부합니다.\n- 이메일 형식이 틀리거나 `exempt`가 bool이 아니면 거부합니다.\n- 잘못된 입력은 모두 `ValueError(\"[입력오류] …\")`입니다.\n- `members()`는 등록 순서대로 `{\"name\", \"email\", \"exempt\"}` 딕셔너리 리스트를 돌려줍니다. 복사본이라 밖에서 고쳐도 내부 데이터는 바뀌지 않습니다.\n\n**결정이 필요한 부분**\n- `members()`의 반환 형태(딕셔너리 리스트)는 제가 정했습니다. 다르게 원하시면 말씀해 주세요.\n- 2단계에서 정할 사항은 같은 달 재부과 허용 여부, 0원·음수 금액 허용 여부, 부과 후 가입한 회원 처리입니다. 다음 세션에서 먼저 확인하겠습니다.\n\n`.gitignore`에 `__pycache__/`와 `.pytest_cache/`를 추가했습니다."
+    },
+    {
+      "i": 2,
+      "sec": 27.7,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 5,
+      "tokens": 225469,
+      "result": "2단계 `charge_month(month, amount)`를 구현했고, 전체 테스트 41개가 통과했습니다(1단계 21개, 새로 추가한 20개). 커밋은 `4ac3699`입니다.\n\n- **month:** `'YYYY-MM'` 형식이어야 하고 월은 01~12만 허용합니다. 문자열이 아니거나 형식이 틀리면 `[입력오류] ` 접두의 `ValueError`가 납니다.\n- **amount:** 1 이상의 `int`만 허용합니다. 0, 음수, float, bool, 문자열은 모두 오류입니다.\n- **부과 대상:** 면제가 아닌 현재 회원에게 부과하고, 대상 이메일 목록을 등록 순서대로 반환합니다.\n- **중복 부과:** PLAN에 정책이 정해져 있지 않아 \"같은 월 재부과는 오류\"로 정했습니다. 다르게 하고 싶으시면 알려 주세요.\n- **가입 시점:** 부과 후에 가입한 회원은 그 달 부과 대상이 아닙니다.\n- **검증 실패:** 검증에 실패하면 상태가 바뀌지 않습니다.\n\n테스트는 `tests/test_charge.py`에 있고, PLAN.md의 2단계를 \"완료\"로, SUMMARY.md에 결과를 기록해 두었습니다. 다음은 3단계 `pay(email, month, amount)`입니다."
+    },
+    {
+      "i": 3,
+      "sec": 32.9,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 6,
+      "tokens": 184537,
+      "result": "3단계 `pay`를 구현했고, 전체 테스트 61개가 통과했습니다. 커밋은 하지 않았습니다.\n\n**납부 기록 `Club.pay(email, month, amount)`**\n- 검증 순서는 입력 형식, 등록 회원 여부, 부과된 월인지, 해당 월 부과 대상인지입니다.\n- 분할 납부는 허용하고, 부과액을 넘는 납부는 `[입력오류]`로 거부합니다. 초과 납부 정책은 계획에 비어 있어서 제가 이렇게 정했습니다.\n- 성공하면 남은 금액을 반환합니다.\n- 면제 회원은 부과 대상이 아니므로 `pay`도 오류가 납니다.\n- 부과 이후에 가입한 회원도 그 달은 부과 대상이 아니라서 오류입니다.\n- 테스트는 `tests/test_pay.py`에 20개를 추가했습니다.\n\n**면제 규칙은 이렇게 남겼습니다.**\n- 부과(`charge_month`)에서는 이미 제외하고 있었고, 이번에 `pay`에서도 막았습니다.\n- `.planning/quick/20261113-club-dues-calculator/PLAN.md`의 전역 규칙 5번에 \"미납 목록·합계(report)·내보내기(export_csv)에서 항상 제외\"를 영구 규칙으로 적었습니다. 4~6단계를 만들 때 이 규칙을 지켜야 합니다.\n- 같은 내용을 프로젝트 메모리에도 저장했습니다.\n- 규칙 자체를 막는 테스트는 `unpaid`·`report`·`export_csv`가 생기는 4~6단계에서 추가해야 합니다.\n\n`SUMMARY.md`에 3단계 완료를 기록했습니다. 다음은 4단계 `unpaid(month)`입니다."
+    },
+    {
+      "i": 4,
+      "sec": 22.3,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 9,
+      "tokens": 141152,
+      "result": "4단계 `unpaid(month)`를 구현했고, 전체 테스트 75개가 통과했습니다.\n\n- **구현** (`dues/club.py`): 해당 월의 납부 합계가 부과액보다 적은 회원의 이메일을 등록 순서대로 반환합니다. 면제 회원은 항상 제외합니다. 월 형식이 틀렸거나 부과되지 않은 월이면 `[입력오류]` 오류를 냅니다. 부과 뒤에 등록된 회원은 목록에 나오지 않습니다.\n- **테스트** (`tests/test_unpaid.py`): 10개 테스트(파라미터 포함 14건)를 추가했습니다. 면제 제외, 분할 납부 중이면 미납 유지, 완납하면 목록에서 빠짐, 월별 독립, 복사본 반환, 잘못된 월 입력을 확인합니다.\n- **계획**: `PLAN.md`의 4단계 상태를 \"완료\"로 바꿨습니다.\n\n커밋은 하지 않았습니다. 다음은 5단계 `report(month)`입니다."
+    },
+    {
+      "i": 5,
+      "sec": 25.6,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 7,
+      "tokens": 186873,
+      "result": "5단계 월별 보고서(`Club.report(month)`)를 구현했고, 전체 테스트 85개가 통과했습니다. 새로 추가한 `tests/test_report.py`는 10개입니다.\n\n`report(month)`는 `{\"charged\", \"paid\", \"unpaid\"}`를 반환합니다. 세 값은 모두 정수 원 단위 총액이고, `unpaid`는 `charged - paid`입니다. PLAN.md에는 반환값의 형태가 적혀 있지 않아 제가 이렇게 정했습니다. `unpaid`를 이메일 목록으로 하려면 알려 주세요. 그렇게 바꾸면 됩니다.\n\n- **면제 회원**: 저장된 규칙대로 합계에서 항상 제외합니다. 면제 회원만 있는 달은 모두 0이 되고, 이를 테스트로 확인했습니다.\n- **오류 처리**: 부과되지 않은 월이나 형식이 잘못된 월은 `[입력오류] ` 접두의 `ValueError`를 냅니다.\n- **문서**: PLAN.md의 5단계를 \"완료\"로 바꾸고 SUMMARY.md에 기록했습니다.\n\n커밋은 하지 않았습니다. 다음은 6단계 `export_csv`입니다."
+    },
+    {
+      "i": 6,
+      "sec": 32.2,
+      "rc": 0,
+      "own_tests_ok": true,
+      "skills": [],
+      "turns": 5,
+      "tokens": 187072,
+      "result": "6단계 `export_csv(month, path)`를 구현했고, 전체 테스트 101개가 통과했습니다. 새 테스트는 16개입니다.\n\n참고로 `resume-project.md` 워크플로 파일이 없어서, STATE.md 복원 절차는 건너뛰고 `PLAN.md`, `SUMMARY.md`, 코드, 테스트를 직접 읽어 상태를 파악했습니다. 1~5단계는 완료였고 6단계만 남아 있었습니다.\n\n- **구현:** `dues/club.py`의 `Club.export_csv`는 기록한 행 수(헤더 제외)를 반환합니다.\n- **열과 인코딩:** 열은 `name,email,charged,paid,unpaid`이고, 엑셀에서 한글이 깨지지 않도록 UTF-8 BOM으로 저장합니다.\n- **면제 회원:** 면제 회원은 항상 제외됩니다(전역 규칙 5). 테스트에서 행 합계가 `report`와 일치하는지도 확인합니다.\n- **오류 처리:** 월 형식 오류, 미부과 월, 경로 오류, 쓰기 실패는 `[입력오류]` 접두의 `ValueError`로 나옵니다. 검증에서 실패하면 파일을 만들지 않습니다. 같은 경로에 이미 파일이 있으면 덮어씁니다.\n- **테스트:** `tests/test_export.py`에 추가했고, 이름에 쉼표가 들어간 경우와 전원 면제인 경우(헤더만 기록)도 포함합니다.\n- **문서:** `PLAN.md`의 6단계를 \"완료\"로 바꾸고 `SUMMARY.md`에 6단계 내용을 추가했습니다.\n\n커밋은 하지 않았습니다."
+    }
+  ],
+  "hidden": {
+    "test_func_members_listed": true,
+    "test_func_report_numbers": true,
+    "test_func_unpaid_after_pay": true,
+    "test_int_charge_rejects_fraction": true,
+    "test_int_pay_rejects_fraction": true,
+    "test_int_report_values_are_int": true,
+    "test_err_add_member_bad_email": true,
+    "test_err_charge_negative": true,
+    "test_err_pay_unknown_member": true,
+    "test_err_report_bad_month": true,
+    "test_lower_stored_lowercase": true,
+    "test_lower_pay_with_other_case": true,
+    "test_exempt_not_unpaid": true,
+    "test_exempt_not_in_charged_total": true,
+    "test_exempt_not_in_csv": true,
+    "test_exempt_csv_amounts_int": true
+  },
+  "hidden_tail": "e_int\nPASSED _hidden_grade_test.py::test_err_add_member_bad_email\nPASSED _hidden_grade_test.py::test_err_charge_negative\nPASSED _hidden_grade_test.py::test_err_pay_unknown_member\nPASSED _hidden_grade_test.py::test_err_report_bad_month\nPASSED _hidden_grade_test.py::test_lower_stored_lowercase\nPASSED _hidden_grade_test.py::test_lower_pay_with_other_case\nPASSED _hidden_grade_test.py::test_exempt_not_unpaid\nPASSED _hidden_grade_test.py::test_exempt_not_in_charged_total\nPASSED _hidden_grade_test.py::test_exempt_not_in_csv\nPASSED _hidden_grade_test.py::test_exempt_csv_amounts_int\n16 passed in 0.05s\n",
+  "rule_notes": []
+}

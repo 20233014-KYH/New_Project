@@ -1,0 +1,141 @@
+{
+  "situation": "S6",
+  "condition": "sp",
+  "rep": 3,
+  "model": "sonnet",
+  "prompt": "이 할 일 앱에 마감일을 넣고, 마감이 지난 할 일을 따로 볼 수 있게 하고 싶어. 코드는 아직 쓰지 말고, 개발 계획만 세워 줘.",
+  "turn1": {
+    "sec": 9.2,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "superpowers:brainstorming"
+    ],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "Using superpowers:brainstorming to scope this feature before drafting the plan.",
+      "마감일 기능은 놓치기 쉬운 부분이 있어서 계획을 짜기 전에 몇 가지만 여쭤보려고 해요. 질문 없이 바로 계획을 받고 싶으시면 말씀해 주세요. 제가 합리적인 기본값으로 정해서 계획서를 쓸게요.\n\n이 앱을 쓰다가 \"마감일이 있었으면\" 싶었던 순간이 언제였나요? 그때 상황을 하나 들려 주세요."
+    ],
+    "denied": [],
+    "session": "0775382b-ea78-45a7-97c6-f488b08fffc6",
+    "result": "마감일 기능은 놓치기 쉬운 부분이 있어서 계획을 짜기 전에 몇 가지만 여쭤보려고 해요. 질문 없이 바로 계획을 받고 싶으시면 말씀해 주세요. 제가 합리적인 기본값으로 정해서 계획서를 쓸게요.\n\n이 앱을 쓰다가 \"마감일이 있었으면\" 싶었던 순간이 언제였나요? 그때 상황을 하나 들려 주세요.",
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 12070,
+      "cache_read_input_tokens": 52779,
+      "output_tokens": 421,
+      "output_tokens_details": {
+        "thinking_tokens": 160
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 12070,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 4,
+          "output_tokens": 236,
+          "cache_read_input_tokens": 30726,
+          "cache_creation_input_tokens": 3397,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3397
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 3,
+    "plugins": [
+      "superpowers",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 35
+  },
+  "asked": true,
+  "turn2": {
+    "sec": 36.7,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\README.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_sp_r3\\tests\\test_storage.py"
+    ],
+    "writes": [],
+    "texts": [
+      "질문은 여기서 마치고, 계획에 쓸 기본값은 계획서 안에 제 판단이라고 표시해 둘게요. 먼저 현재 코드가 어떻게 생겼는지 확인할게요.",
+      "현재 구조(`model.py`에 로직, `cli.py`와 `web.py`가 각각 화면 담당, `storage.py`가 JSON 저장)에 맞춰 짠 계획이에요. 코드는 쓰지 않았어요.\n\n## 핵심 방향\n- **마감일은 선택 항목**으로 두고, `due`라는 필드를 `\"YYYY-MM-DD\"` 문자열로 저장해요. 기존 `created`와 같은 형식이에요.\n- **마감 지남 기준**은 \"완료되지 않았고, 마감일이 오늘보다 이전\"이에요. 마감일이 오늘이면 아직 지난 게 아니에요.\n- 이 판단은 `model.py` 한 곳에 만들고, 명령줄과 웹이 같은 함수를 써요. 두 화면의 결과가 어긋나지 않게 하려는 거예요.\n\n## 기존 데이터 호환\n- **파일 버전은 2 그대로 둬요.** `due`는 없어도 되는 필드로 두고, 없으면 마감일 없음으로 읽어요. 그래서 이전 파일을 변환할 필요가 없고, 기존 `test_v2_unchanged`도 그대로 통과해요.\n- 버전 1 파일은 지금처럼 `migrate()`가 버전 2로 바꿔요. 이 부분은 건드리지 않아요.\n- `storage.py` 맨 위 형식 설명에 `due`(선택)만 추가해요.\n- 마감일을 읽는 코드는 모두 `it.get(\"due\")`로 읽어서, 필드가 없는 항목에서 오류가 나지 않게 해요.\n\n## 작업 순서\n1. **모델 (`model.py`)**\n   - `add_item(data, title, due=None)`: 마감일이 있을 때만 저장해요.\n   - 날짜 검증 함수: `YYYY-MM-DD`가 아니거나 없는 날짜면 오류를 내요.\n   - `is_overdue(item, today)`: `today`를 인자로 받아서 시험할 때 날짜를 고정할 수 있어요.\n   - `overdue_items(data, today)`\n   - 이미 만든 항목의 마감일을 바꾸거나 지우는 함수도 추가해요.\n2. **명령줄 (`cli.py`)**\n   - `add \"제목\" --due 2026-12-01`\n   - `list --overdue`: 마감 지난 것만 보여 줘요.\n   - `due <id> <날짜|none>`: 마감일을 바꾸거나 지워요.\n   - `format_item`에 `마감 …`을 표시하고, 지난 항목에는 `[기한 지남]` 표시를 붙여요.\n   - 잘못된 날짜나 없는 id는 오류 메시지만 보여 주고 종료해요.\n3. **웹 (`web.py`)**\n   - 표에 마감일 열을 추가하고, 지난 항목은 눈에 띄게 표시해요. `row_html`이 `format_item`과 같은 정보를 보여 주는 구조라서 같이 바꿔요.\n   - 마감 지난 목록은 `/?filter=overdue`와 `/api/items?overdue=1`로 보여 줘요. 화면 맨 위에 \"전체 / 마감 지남\" 링크를 둬요.\n   - `POST /api/items`에서 `due`를 선택으로 받아요. 형식이 틀리면 400으로 응답해요.\n4. **시험 (`tests/`)**\n   - 마감일 없는 기존 항목과 버전 1 데이터가 `due` 없이도 그대로 읽히는지 확인해요.\n   - `is_overdue` 경계값: 어제, 오늘, 내일, 완료된 항목, 마감일 없음.\n   - 날짜 형식 검증.\n   - 명령줄 `list --overdue` 출력과 `--due` 추가. `storage.PATH`는 import할 때 정해지니, 시험에서는 임시 파일로 바꿔 써요.\n   - 웹 필터와 `due` 검증. 포트를 임시로 열어서 요청하는 방식이에요.\n5. **README**: 새 명령과 웹 주소를 추가해요.\n\n## 제 판단으로 정한 것 (바꾸고 싶으면 말씀해 주세요)\n- 파일 버전을 올리지 않고 선택 필드로 추가해요.\n- 날짜 입력은 `YYYY-MM-DD` 한 가지만 받아요. \"내일\", \"+3d\" 같은 표현은 이번에 넣지 않아요.\n- \"오늘\"은 실행하는 컴퓨터의 현지 날짜예요.\n- 마감 지남 목록은 마감일이 오래된 순으로 정렬해요. 전체 목록은 지금 순서를 유지해요.\n\n## 주의할 점\n- 웹과 명령줄이 같은 `todo.json`을 쓰는데 잠금이 없어요. 동시에 저장하면 한쪽 변경이 사라질 수 있어요. 지금도 있는 문제라 이번 범위에서는 빼요.\n- `web.py`는 제목을 HTML에 그대로 넣어서 이스케이프가 없어요. 이것도 기존 문제라 이번 범위 밖이지만, 별도로 고치길 권해요. 마감일은 형식을 검증하니 새로 생기는 위험은 없어요.\n\n## 범위 밖\n알림, 반복 일정, 시간(시·분) 단위 마감, 수정 화면(웹 폼)은 포함하지 않아요.\n\n이 계획대로 진행해도 되면 말씀해 주세요. 구현은 승인 후에 시작할게요."
+    ],
+    "denied": [],
+    "session": "0775382b-ea78-45a7-97c6-f488b08fffc6",
+    "result": "현재 구조(`model.py`에 로직, `cli.py`와 `web.py`가 각각 화면 담당, `storage.py`가 JSON 저장)에 맞춰 짠 계획이에요. 코드는 쓰지 않았어요.\n\n## 핵심 방향\n- **마감일은 선택 항목**으로 두고, `due`라는 필드를 `\"YYYY-MM-DD\"` 문자열로 저장해요. 기존 `created`와 같은 형식이에요.\n- **마감 지남 기준**은 \"완료되지 않았고, 마감일이 오늘보다 이전\"이에요. 마감일이 오늘이면 아직 지난 게 아니에요.\n- 이 판단은 `model.py` 한 곳에 만들고, 명령줄과 웹이 같은 함수를 써요. 두 화면의 결과가 어긋나지 않게 하려는 거예요.\n\n## 기존 데이터 호환\n- **파일 버전은 2 그대로 둬요.** `due`는 없어도 되는 필드로 두고, 없으면 마감일 없음으로 읽어요. 그래서 이전 파일을 변환할 필요가 없고, 기존 `test_v2_unchanged`도 그대로 통과해요.\n- 버전 1 파일은 지금처럼 `migrate()`가 버전 2로 바꿔요. 이 부분은 건드리지 않아요.\n- `storage.py` 맨 위 형식 설명에 `due`(선택)만 추가해요.\n- 마감일을 읽는 코드는 모두 `it.get(\"due\")`로 읽어서, 필드가 없는 항목에서 오류가 나지 않게 해요.\n\n## 작업 순서\n1. **모델 (`model.py`)**\n   - `add_item(data, title, due=None)`: 마감일이 있을 때만 저장해요.\n   - 날짜 검증 함수: `YYYY-MM-DD`가 아니거나 없는 날짜면 오류를 내요.\n   - `is_overdue(item, today)`: `today`를 인자로 받아서 시험할 때 날짜를 고정할 수 있어요.\n   - `overdue_items(data, today)`\n   - 이미 만든 항목의 마감일을 바꾸거나 지우는 함수도 추가해요.\n2. **명령줄 (`cli.py`)**\n   - `add \"제목\" --due 2026-12-01`\n   - `list --overdue`: 마감 지난 것만 보여 줘요.\n   - `due <id> <날짜|none>`: 마감일을 바꾸거나 지워요.\n   - `format_item`에 `마감 …`을 표시하고, 지난 항목에는 `[기한 지남]` 표시를 붙여요.\n   - 잘못된 날짜나 없는 id는 오류 메시지만 보여 주고 종료해요.\n3. **웹 (`web.py`)**\n   - 표에 마감일 열을 추가하고, 지난 항목은 눈에 띄게 표시해요. `row_html`이 `format_item`과 같은 정보를 보여 주는 구조라서 같이 바꿔요.\n   - 마감 지난 목록은 `/?filter=overdue`와 `/api/items?overdue=1`로 보여 줘요. 화면 맨 위에 \"전체 / 마감 지남\" 링크를 둬요.\n   - `POST /api/items`에서 `due`를 선택으로 받아요. 형식이 틀리면 400으로 응답해요.\n4. **시험 (`tests/`)**\n   - 마감일 없는 기존 항목과 버전 1 데이터가 `due` 없이도 그대로 읽히는지 확인해요.\n   - `is_overdue` 경계값: 어제, 오늘, 내일, 완료된 항목, 마감일 없음.\n   - 날짜 형식 검증.\n   - 명령줄 `list --overdue` 출력과 `--due` 추가. `storage.PATH`는 import할 때 정해지니, 시험에서는 임시 파일로 바꿔 써요.\n   - 웹 필터와 `due` 검증. 포트를 임시로 열어서 요청하는 방식이에요.\n5. **README**: 새 명령과 웹 주소를 추가해요.\n\n## 제 판단으로 정한 것 (바꾸고 싶으면 말씀해 주세요)\n- 파일 버전을 올리지 않고 선택 필드로 추가해요.\n- 날짜 입력은 `YYYY-MM-DD` 한 가지만 받아요. \"내일\", \"+3d\" 같은 표현은 이번에 넣지 않아요.\n- \"오늘\"은 실행하는 컴퓨터의 현지 날짜예요.\n- 마감 지남 목록은 마감일이 오래된 순으로 정렬해요. 전체 목록은 지금 순서를 유지해요.\n\n## 주의할 점\n- 웹과 명령줄이 같은 `todo.json`을 쓰는데 잠금이 없어요. 동시에 저장하면 한쪽 변경이 사라질 수 있어요. 지금도 있는 문제라 이번 범위에서는 빼요.\n- `web.py`는 제목을 HTML에 그대로 넣어서 이스케이프가 없어요. 이것도 기존 문제라 이번 범위 밖이지만, 별도로 고치길 권해요. 마감일은 형식을 검증하니 새로 생기는 위험은 없어요.\n\n## 범위 밖\n알림, 반복 일정, 시간(시·분) 단위 마감, 수정 화면(웹 폼)은 포함하지 않아요.\n\n이 계획대로 진행해도 되면 말씀해 주세요. 구현은 승인 후에 시작할게요.",
+    "usage": {
+      "input_tokens": 7,
+      "cache_creation_input_tokens": 3834,
+      "cache_read_input_tokens": 103311,
+      "output_tokens": 4149,
+      "output_tokens_details": {
+        "thinking_tokens": 1438
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3834,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 3288,
+          "cache_read_input_tokens": 34759,
+          "cache_creation_input_tokens": 3198,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3198
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 8,
+    "plugins": [
+      "superpowers",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 35
+  },
+  "new_files": [],
+  "tokens": {
+    "input": 13,
+    "cache_create": 15904,
+    "cache_read": 156090,
+    "output": 4570
+  },
+  "sec": 45.9
+}

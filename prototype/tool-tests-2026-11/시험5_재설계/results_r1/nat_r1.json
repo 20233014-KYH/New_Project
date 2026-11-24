@@ -1,0 +1,117 @@
+{
+  "condition": "nat",
+  "rep": 1,
+  "turn": {
+    "sec": 141.8,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\db.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\sqlutil.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\admin\\export.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\admin\\maintenance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\events\\attendance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\events\\calendar.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\fees\\payments.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\fees\\report.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\members\\profile.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\members\\search.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\notices\\board.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\auth\\login.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\api\\routes.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\clubapp\\config.py"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\7c02a74ab8ecb01c\\b3005b40-69c8-486e-ad4f-229e9870811e\\scratchpad\\t\\t1.py",
+      "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\7c02a74ab8ecb01c\\b3005b40-69c8-486e-ad4f-229e9870811e\\scratchpad\\t\\t1.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\nat_r1\\rules\\sqli.yaml"
+    ],
+    "texts": [
+      "Many candidates; I need to read the files in full.",
+      "Use Read instead.",
+      "Semgrep이 cp949로 규칙 파일을 읽다 실패해서, UTF-8 모드로 다시 실행합니다.",
+      "지금은 노티스 게시판 함수가 탐지되지 않는 원인을 스크래치 파일로 확인하고 있습니다.",
+      "`find_user`와 같은 원인(값을 SQL 문자열에 그대로 붙이는 것)의 취약점이 이 저장소에 더 있었습니다. 코드는 고치지 않았습니다. `rules/sqli.yaml`을 만들어 `semgrep`으로 `clubapp`을 검사하니 9건이 나왔고, 아래 목록에서 `_q`를 뺀 8개 함수와 대응됩니다.\n\n**같은 원인인 곳**\n- `admin/maintenance.py:delete_old`: `days`가 `DELETE` 문에 f-string으로 들어갑니다. 로그 문장에도 그대로 들어갑니다.\n- `events/attendance.py:by_member`: `member = '{name}'`을 만들어 `_q`에 넘깁니다. `_q`는 받은 조건을 그대로 SQL에 붙이는 도우미라 같은 줄에서 탐지됩니다.\n- `events/calendar.py:event_by_title`: `.format(title)`로 붙입니다.\n- `fees/payments.py:find_payments`: `sqlutil.eq`가 만든 문자열을 `+`로 붙입니다.\n- `fees/report.py:monthly_report`: `month`를 문자열 연결로 붙입니다.\n- `members/profile.py:update_nickname`: `%` 서식에 `nickname`을 넣습니다. `member_id`는 `int()`로 막혀 있습니다.\n- `members/search.py:search_members`: `sqlutil.like`가 만든 `LIKE '%…%'`를 붙입니다.\n- `notices/board.py:search_notices`: 값뿐 아니라 열 이름(`key`)까지 입력으로 붙입니다.\n- `sqlutil.py:eq`, `sqlutil.py:like`: 값을 따옴표로 감싸 그대로 붙이는 도우미입니다. 위의 `find_payments`와 `search_members`가 이 둘을 통해 취약해집니다.\n\n**안전한 곳**\n- `admin/export.py:export_table`: 허용 목록 검사를 거칩니다.\n- `fees/report.py:sort_report`: 정렬 열을 화이트리스트에서 고릅니다.\n- `members/profile.py:get_profile`: `int()`로 변환합니다.\n- `members/profile.py:count_members`: 상수만 씁니다.\n- `members/search.py:list_by_ids`: `?` 자리표시자를 씁니다.\n- `events/attendance.py:by_event`: `int()`로 변환합니다.\n- `events/calendar.py:events_between`, `fees/payments.py:record_payment`, `notices/board.py:post_notice`, `auth/login.py`의 `check_password`와 `record_login`: 모두 파라미터 바인딩을 씁니다.\n- `db.py`: `run`과 `run_write`는 `params`를 그대로 `execute`에 넘길 뿐입니다.\n\n**semgrep 규칙 (`rules/sqli.yaml`)**\n- 함수 인자와 `request.args`/`json`/`form` 값이 f-string, `+`, `%`, `.format()`으로 조립되어 `run`, `run_write`, `.execute*`로 들어가면 탐지합니다.\n- `int()`/`float()`, `sqlutil.order_by`, `sqlutil.in_list`, `if x not in 허용목록: raise` 검사는 안전한 것으로 봅니다.\n- 위 안전한 곳은 한 건도 탐지하지 않았습니다.\n- `db.py`는 규칙의 `paths.exclude`로 뺐습니다.\n- 규칙 파일은 영어로만 썼습니다. 한글이 들어가면 이 PC에서 `semgrep`이 cp949로 읽다가 실패합니다.\n- 실행: `semgrep --config rules/sqli.yaml clubapp`\n\n한계도 있습니다.\n- `AttendanceRepo._q`는 받은 조건 문자열을 그대로 SQL에 붙이는 구조라 규칙이 이 줄(attendance.py 6번째 줄)에서 직접 탐지합니다. 지금 위험한 호출은 `by_member`뿐이고 `by_event`는 `int()`를 거칩니다. 그래서 목록에는 `by_member`만 넣었습니다.\n- `sqlutil.eq`와 `sqlutil.like` 정의 자체는 규칙이 탐지하지 않습니다. 이 두 함수를 `run` 쪽으로 넘기는 호출 지점에서 탐지됩니다.\n- 모든 함수 인자를 입력으로 보기 때문에, 이미 검증된 값을 내부 함수끼리 넘기는 경우는 오탐이 날 수 있습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/events/attendance.py:by_member\nclubapp/events/calendar.py:event_by_title\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like"
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "b3005b40-69c8-486e-ad4f-229e9870811e",
+    "result": "`find_user`와 같은 원인(값을 SQL 문자열에 그대로 붙이는 것)의 취약점이 이 저장소에 더 있었습니다. 코드는 고치지 않았습니다. `rules/sqli.yaml`을 만들어 `semgrep`으로 `clubapp`을 검사하니 9건이 나왔고, 아래 목록에서 `_q`를 뺀 8개 함수와 대응됩니다.\n\n**같은 원인인 곳**\n- `admin/maintenance.py:delete_old`: `days`가 `DELETE` 문에 f-string으로 들어갑니다. 로그 문장에도 그대로 들어갑니다.\n- `events/attendance.py:by_member`: `member = '{name}'`을 만들어 `_q`에 넘깁니다. `_q`는 받은 조건을 그대로 SQL에 붙이는 도우미라 같은 줄에서 탐지됩니다.\n- `events/calendar.py:event_by_title`: `.format(title)`로 붙입니다.\n- `fees/payments.py:find_payments`: `sqlutil.eq`가 만든 문자열을 `+`로 붙입니다.\n- `fees/report.py:monthly_report`: `month`를 문자열 연결로 붙입니다.\n- `members/profile.py:update_nickname`: `%` 서식에 `nickname`을 넣습니다. `member_id`는 `int()`로 막혀 있습니다.\n- `members/search.py:search_members`: `sqlutil.like`가 만든 `LIKE '%…%'`를 붙입니다.\n- `notices/board.py:search_notices`: 값뿐 아니라 열 이름(`key`)까지 입력으로 붙입니다.\n- `sqlutil.py:eq`, `sqlutil.py:like`: 값을 따옴표로 감싸 그대로 붙이는 도우미입니다. 위의 `find_payments`와 `search_members`가 이 둘을 통해 취약해집니다.\n\n**안전한 곳**\n- `admin/export.py:export_table`: 허용 목록 검사를 거칩니다.\n- `fees/report.py:sort_report`: 정렬 열을 화이트리스트에서 고릅니다.\n- `members/profile.py:get_profile`: `int()`로 변환합니다.\n- `members/profile.py:count_members`: 상수만 씁니다.\n- `members/search.py:list_by_ids`: `?` 자리표시자를 씁니다.\n- `events/attendance.py:by_event`: `int()`로 변환합니다.\n- `events/calendar.py:events_between`, `fees/payments.py:record_payment`, `notices/board.py:post_notice`, `auth/login.py`의 `check_password`와 `record_login`: 모두 파라미터 바인딩을 씁니다.\n- `db.py`: `run`과 `run_write`는 `params`를 그대로 `execute`에 넘길 뿐입니다.\n\n**semgrep 규칙 (`rules/sqli.yaml`)**\n- 함수 인자와 `request.args`/`json`/`form` 값이 f-string, `+`, `%`, `.format()`으로 조립되어 `run`, `run_write`, `.execute*`로 들어가면 탐지합니다.\n- `int()`/`float()`, `sqlutil.order_by`, `sqlutil.in_list`, `if x not in 허용목록: raise` 검사는 안전한 것으로 봅니다.\n- 위 안전한 곳은 한 건도 탐지하지 않았습니다.\n- `db.py`는 규칙의 `paths.exclude`로 뺐습니다.\n- 규칙 파일은 영어로만 썼습니다. 한글이 들어가면 이 PC에서 `semgrep`이 cp949로 읽다가 실패합니다.\n- 실행: `semgrep --config rules/sqli.yaml clubapp`\n\n한계도 있습니다.\n- `AttendanceRepo._q`는 받은 조건 문자열을 그대로 SQL에 붙이는 구조라 규칙이 이 줄(attendance.py 6번째 줄)에서 직접 탐지합니다. 지금 위험한 호출은 `by_member`뿐이고 `by_event`는 `int()`를 거칩니다. 그래서 목록에는 `by_member`만 넣었습니다.\n- `sqlutil.eq`와 `sqlutil.like` 정의 자체는 규칙이 탐지하지 않습니다. 이 두 함수를 `run` 쪽으로 넘기는 호출 지점에서 탐지됩니다.\n- 모든 함수 인자를 입력으로 보기 때문에, 이미 검증된 값을 내부 함수끼리 넘기는 경우는 오탐이 날 수 있습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/admin/maintenance.py:delete_old\nclubapp/events/attendance.py:by_member\nclubapp/events/calendar.py:event_by_title\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/notices/board.py:search_notices\nclubapp/sqlutil.py:eq\nclubapp/sqlutil.py:like",
+    "usage": {
+      "input_tokens": 35,
+      "cache_creation_input_tokens": 54541,
+      "cache_read_input_tokens": 759325,
+      "output_tokens": 14700,
+      "output_tokens_details": {
+        "thinking_tokens": 4830
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 54541,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 2126,
+          "cache_read_input_tokens": 53295,
+          "cache_creation_input_tokens": 1246,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1246
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 38,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "rule_eval": {
+    "fixture": [
+      "_q",
+      "delete_old",
+      "event_by_title",
+      "find_payments",
+      "find_user",
+      "monthly_report",
+      "search_members",
+      "search_notices",
+      "update_nickname"
+    ],
+    "holdout": [
+      "hx_find_room",
+      "hx_rename_room",
+      "hx_room_by_owner",
+      "hx_rooms_sorted"
+    ],
+    "error": null
+  },
+  "tokens": {
+    "total_in": 813901,
+    "output": 14700
+  }
+}

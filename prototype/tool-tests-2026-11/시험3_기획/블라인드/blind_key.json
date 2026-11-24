@@ -1,0 +1,33 @@
+{
+  "seed": 20261113,
+  "key": {
+    "S2": {
+      "A": "sp",
+      "B": "gstack_cmd",
+      "C": "gstack",
+      "D": "none",
+      "E": "plan"
+    },
+    "S3": {
+      "A": "plan",
+      "B": "sp",
+      "C": "gstack_cmd",
+      "D": "gstack",
+      "E": "none"
+    },
+    "S5": {
+      "A": "sp",
+      "B": "gstack",
+      "C": "plan",
+      "D": "gstack_cmd",
+      "E": "none"
+    },
+    "S6": {
+      "A": "gstack",
+      "B": "plan",
+      "C": "sp",
+      "D": "none",
+      "E": "gstack_cmd"
+    }
+  }
+}

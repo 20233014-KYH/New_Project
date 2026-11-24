@@ -1,0 +1,169 @@
+{
+  "condition": "tob_named",
+  "rep": 1,
+  "turn": {
+    "sec": 168.9,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "variant-analysis:variant-analysis"
+    ],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\root-cause.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\prototype\\pilot_judgment\\measure36\\repos\\trailofbits_skills\\plugins\\variant-analysis\\skills\\variant-analysis\\references\\searching.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\auth\\login.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\db.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\sqlutil.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\admin\\export.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\admin\\maintenance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\events\\attendance.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\members\\profile.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\members\\search.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\events\\calendar.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\notices\\board.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\fees\\payments.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\fees\\report.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\clubapp\\api\\routes.py"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\code\\_cwd_r1\\tob_named_r1\\rules\\sqli.yaml"
+    ],
+    "texts": [
+      "find_user와 같은 원인(SQL 문자열에 값을 직접 붙임)이 있는 곳은 코드를 읽어서 모두 분류했습니다. 이제 semgrep 규칙을 만들어 확인합니다.",
+      "Bash 도구가 여러 줄 명령을 거부해서, 파일 작성은 Write 도구로 하겠습니다.",
+      "Windows 인코딩(cp949) 문제입니다. UTF-8 모드로 다시 실행합니다.",
+      "규칙 파일의 한글 때문에 cp949로 못 읽는 문제입니다. 메시지를 ASCII로 바꾸면 환경변수 없이 됩니다.",
+      "YAML 따옴표 문제입니다. 패턴을 작은따옴표로 감쌉니다.",
+      "`rules/sqli.yaml`을 만들었고, 규칙 테스트(`semgrep --test rules/`)는 통과했습니다. 저장소에서 같은 원인의 취약점은 `find_user`를 포함해 9곳입니다. 코드는 고치지 않았습니다.\n\n**원인:** 요청 값이 `?` 자리표시자 없이 f-string, `+`, `%`, `.format()`으로 SQL 문자열에 붙어 `run()`/`run_write()`로 실행됩니다. `routes.py`의 모든 인자는 사용자 입력입니다.\n\n| 위치 | 비고 |\n|---|---|\n| `auth/login.py:find_user` | 처음 찾으신 것 |\n| `members/profile.py:update_nickname` | `%s`로 nickname을 붙임 |\n| `members/search.py:search_members` | `sqlutil.like()`가 `LIKE '%{term}%'`를 만듦 |\n| `fees/payments.py:find_payments` | `sqlutil.eq()`가 `'{value}'`를 만듦 |\n| `fees/report.py:monthly_report` | month를 `+`로 연결 |\n| `events/calendar.py:event_by_title` | `.format()` 사용 |\n| `events/attendance.py:by_member` | 이름을 붙여서 `_q()`로 전달 |\n| `notices/board.py:search_notices` | 필터의 키와 값을 모두 붙임. 키는 열 이름 자리라 따옴표 없이도 뚫림 |\n| `admin/maintenance.py:delete_old` | days를 `date()` 안에 붙임. `DELETE` 문이라 쓰기 주입이고 로그에도 그대로 남음 |\n\n`sqlutil.py`의 `eq`/`like`는 `search_members`와 `find_payments`가 쓰는 뿌리 함수입니다. 여기서 쿼리를 완성하지는 않아서 목록에는 호출한 쪽만 넣었습니다. 고칠 때는 `eq`/`like`부터 손보는 게 좋습니다.\n\n**안전하다고 판단한 곳:**\n- `export_table`: 허용 목록(`ALLOWED_TABLES`)으로 검사합니다.\n- `get_profile`, `by_event`: `int()`를 거칩니다.\n- `sort_report`: `order_by`가 정해 둔 열 이름만 씁니다.\n- `list_by_ids`: `?`와 params를 씁니다.\n- `count_members`: 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `post_notice`, `record_payment`: 모두 파라미터 바인딩을 씁니다.\n\n**semgrep 규칙:**\n- 규칙은 함수 인자가 문자열 조합을 거쳐 `run`/`run_write`/`.execute`/`._q`에 닿는 흐름을 잡습니다.\n- `int()`, `order_by`, `in_list`, `ALLOWED_TABLES` 검사는 안전한 형태로 제외합니다.\n- `db.py`는 SQL을 실행하는 유일한 곳이라 검사에서 뺐습니다.\n- 테스트 파일 `rules/sqli.py`에 취약/안전 사례를 넣어 두었습니다.\n- 이 저장소에 돌리면 위 9곳이 모두 나오고 안전한 곳은 나오지 않습니다.\n- 한계: `attendance.py:6`(`_q` 내부)이 `by_member`와 별개로 한 번 더 잡힙니다. `by_member`와 같은 문제라 목록에는 하나로 셌습니다.\n- 한글이 있으면 이 환경에서 semgrep이 cp949 오류로 읽지 못해, 규칙 파일은 영어로 썼습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/notices/board.py:search_notices\nclubapp/admin/maintenance.py:delete_old"
+    ],
+    "denied": [
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash",
+      "Bash"
+    ],
+    "session": "a29fb9a7-4c8b-43e4-be87-4ad9ec035b62",
+    "result": "`rules/sqli.yaml`을 만들었고, 규칙 테스트(`semgrep --test rules/`)는 통과했습니다. 저장소에서 같은 원인의 취약점은 `find_user`를 포함해 9곳입니다. 코드는 고치지 않았습니다.\n\n**원인:** 요청 값이 `?` 자리표시자 없이 f-string, `+`, `%`, `.format()`으로 SQL 문자열에 붙어 `run()`/`run_write()`로 실행됩니다. `routes.py`의 모든 인자는 사용자 입력입니다.\n\n| 위치 | 비고 |\n|---|---|\n| `auth/login.py:find_user` | 처음 찾으신 것 |\n| `members/profile.py:update_nickname` | `%s`로 nickname을 붙임 |\n| `members/search.py:search_members` | `sqlutil.like()`가 `LIKE '%{term}%'`를 만듦 |\n| `fees/payments.py:find_payments` | `sqlutil.eq()`가 `'{value}'`를 만듦 |\n| `fees/report.py:monthly_report` | month를 `+`로 연결 |\n| `events/calendar.py:event_by_title` | `.format()` 사용 |\n| `events/attendance.py:by_member` | 이름을 붙여서 `_q()`로 전달 |\n| `notices/board.py:search_notices` | 필터의 키와 값을 모두 붙임. 키는 열 이름 자리라 따옴표 없이도 뚫림 |\n| `admin/maintenance.py:delete_old` | days를 `date()` 안에 붙임. `DELETE` 문이라 쓰기 주입이고 로그에도 그대로 남음 |\n\n`sqlutil.py`의 `eq`/`like`는 `search_members`와 `find_payments`가 쓰는 뿌리 함수입니다. 여기서 쿼리를 완성하지는 않아서 목록에는 호출한 쪽만 넣었습니다. 고칠 때는 `eq`/`like`부터 손보는 게 좋습니다.\n\n**안전하다고 판단한 곳:**\n- `export_table`: 허용 목록(`ALLOWED_TABLES`)으로 검사합니다.\n- `get_profile`, `by_event`: `int()`를 거칩니다.\n- `sort_report`: `order_by`가 정해 둔 열 이름만 씁니다.\n- `list_by_ids`: `?`와 params를 씁니다.\n- `count_members`: 상수만 씁니다.\n- `check_password`, `record_login`, `events_between`, `post_notice`, `record_payment`: 모두 파라미터 바인딩을 씁니다.\n\n**semgrep 규칙:**\n- 규칙은 함수 인자가 문자열 조합을 거쳐 `run`/`run_write`/`.execute`/`._q`에 닿는 흐름을 잡습니다.\n- `int()`, `order_by`, `in_list`, `ALLOWED_TABLES` 검사는 안전한 형태로 제외합니다.\n- `db.py`는 SQL을 실행하는 유일한 곳이라 검사에서 뺐습니다.\n- 테스트 파일 `rules/sqli.py`에 취약/안전 사례를 넣어 두었습니다.\n- 이 저장소에 돌리면 위 9곳이 모두 나오고 안전한 곳은 나오지 않습니다.\n- 한계: `attendance.py:6`(`_q` 내부)이 `by_member`와 별개로 한 번 더 잡힙니다. `by_member`와 같은 문제라 목록에는 하나로 셌습니다.\n- 한글이 있으면 이 환경에서 semgrep이 cp949 오류로 읽지 못해, 규칙 파일은 영어로 썼습니다.\n\n취약 목록:\nclubapp/auth/login.py:find_user\nclubapp/members/profile.py:update_nickname\nclubapp/members/search.py:search_members\nclubapp/fees/payments.py:find_payments\nclubapp/fees/report.py:monthly_report\nclubapp/events/calendar.py:event_by_title\nclubapp/events/attendance.py:by_member\nclubapp/notices/board.py:search_notices\nclubapp/admin/maintenance.py:delete_old",
+    "usage": {
+      "input_tokens": 47,
+      "cache_creation_input_tokens": 77506,
+      "cache_read_input_tokens": 1381651,
+      "output_tokens": 14886,
+      "output_tokens_details": {
+        "thinking_tokens": 3888
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 77506,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1493,
+          "cache_read_input_tokens": 75945,
+          "cache_creation_input_tokens": 1561,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1561
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 48,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "rule_eval": {
+    "fixture": [
+      "_q",
+      "by_member",
+      "delete_old",
+      "event_by_title",
+      "find_payments",
+      "find_user",
+      "monthly_report",
+      "search_members",
+      "search_notices",
+      "update_nickname"
+    ],
+    "holdout": [
+      "hx_find_room",
+      "hx_rename_room",
+      "hx_room_by_owner",
+      "hx_rooms_sorted"
+    ],
+    "error": null
+  },
+  "tokens": {
+    "total_in": 1459204,
+    "output": 14886
+  }
+}

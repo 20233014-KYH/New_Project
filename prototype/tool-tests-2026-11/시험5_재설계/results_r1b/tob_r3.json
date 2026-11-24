@@ -1,0 +1,121 @@
+{
+  "condition": "tob",
+  "rep": 3,
+  "turn": {
+    "sec": 46.9,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\tunneling.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\reload.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\cli\\commands\\components\\_docs_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py"
+    ],
+    "writes": [],
+    "texts": [
+      "Candidates to inspect: flagging.py:351, screen_recording_utils.py:281, video.py:473/514/564, processing_utils.py:1139, ffmpy.py, tunneling.py, reload.py, and the CLI ones.",
+      "같은 원인(사용자 영향 가능한 값을 문자열로 이어 붙여 셸로 실행)은 저장소 전체에서 두 곳 더 찾았습니다. 코드는 수정하지 않았습니다.\n\n- **`flagging.py:archive_flagged_media`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 실행합니다. 경로와 `label`에 따옴표나 이스케이프가 없어서 `label`에 `; cmd`나 `$(cmd)`가 들어가면 그대로 실행됩니다. 이 저장소 안에서는 호출하는 곳이 없습니다. 하지만 `label`은 flag 이름에서 오는 값이라 호출자가 사용자 입력을 넘기기 쉽습니다.\n- **`screen_recording_utils.py:process_video_with_ffmpeg`**: `ffprobe ... \"{input_path}\"`를 `create_subprocess_shell`로 실행합니다. 쓰는 방식은 같은 취약 패턴입니다. 다만 `routes.py:2031`에서 넘기는 `input_path`는 서버가 `NamedTemporaryFile`로 만든 임시 경로이고, 업로드 파일명은 쓰이지 않습니다. 지금은 공격자가 값을 바꿀 수 없어서 악용되지 않습니다. 그래도 나중에 입력 경로가 바뀌면 위험해지므로 목록에는 넣었습니다.\n\n씨앗(`extract_video_thumbnail`)은 `timestamp`와 `video_path`가 모두 따옴표 없이 문자열에 들어갑니다. 이 함수도 이 저장소 안에서 호출하는 곳은 없습니다.\n\n**취약 목록:**\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\n\n**비슷하지만 안전:**\ngradio/processing_utils.py:get_video_length\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:async_convert_mp4_to_ts\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg.run\ngradio/tunneling.py:Tunnel.start_tunnel\ngradio/cli/commands/reload.py:main\ngradio/cli/commands/deploy_space.py:deploy_to_gcloud\ngradio/cli/commands/components/_docs_utils.py:format\ngradio/cli/commands/components/install_component.py:_install_command\ngradio/cli/commands/components/build.py:_build\n\n안전하다고 본 이유는 이렇습니다.\n- 위 함수들은 모두 인자를 리스트로 넘기고 `shell=True`를 쓰지 않습니다.\n- `process_video_with_ffmpeg`의 다른 ffmpeg 호출은 `create_subprocess_exec`을 씁니다.\n- `async_convert_mp4_to_ts`는 `ff.cmd.split(\" \")`으로 명령을 쪼갭니다. 공백이 든 경로에서는 인자가 깨질 수 있지만 셸은 거치지 않으므로 명령 주입은 아닙니다.\n- `probe_recording_duration`은 `Path(...).name`으로 파일명만 취하고 임시 디렉터리 안의 파일인지 확인한 뒤 실행합니다.\n\n`demo/text_analysis/run.py`의 `os.system`은 고정 문자열이라 제외했습니다. `js/` 쪽 `spawn`과 `spawnSync`는 테스트와 개발 도구용이라 제외했습니다.\n\n위 함수 이름 중 `Tunnel.start_tunnel`, `deploy_to_gcloud`, `_install_command`, `_build`는 호출 위치(`tunneling.py:150`, `deploy_space.py:237`, `install_component.py:134`, `build.py:162`)에서 근처 코드만 보고 붙인 추정입니다. 실제 함수명은 직접 확인하지 못했습니다."
+    ],
+    "denied": [],
+    "session": "02fe7f6c-f965-467d-86bd-ce1349e3552c",
+    "result": "같은 원인(사용자 영향 가능한 값을 문자열로 이어 붙여 셸로 실행)은 저장소 전체에서 두 곳 더 찾았습니다. 코드는 수정하지 않았습니다.\n\n- **`flagging.py:archive_flagged_media`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 실행합니다. 경로와 `label`에 따옴표나 이스케이프가 없어서 `label`에 `; cmd`나 `$(cmd)`가 들어가면 그대로 실행됩니다. 이 저장소 안에서는 호출하는 곳이 없습니다. 하지만 `label`은 flag 이름에서 오는 값이라 호출자가 사용자 입력을 넘기기 쉽습니다.\n- **`screen_recording_utils.py:process_video_with_ffmpeg`**: `ffprobe ... \"{input_path}\"`를 `create_subprocess_shell`로 실행합니다. 쓰는 방식은 같은 취약 패턴입니다. 다만 `routes.py:2031`에서 넘기는 `input_path`는 서버가 `NamedTemporaryFile`로 만든 임시 경로이고, 업로드 파일명은 쓰이지 않습니다. 지금은 공격자가 값을 바꿀 수 없어서 악용되지 않습니다. 그래도 나중에 입력 경로가 바뀌면 위험해지므로 목록에는 넣었습니다.\n\n씨앗(`extract_video_thumbnail`)은 `timestamp`와 `video_path`가 모두 따옴표 없이 문자열에 들어갑니다. 이 함수도 이 저장소 안에서 호출하는 곳은 없습니다.\n\n**취약 목록:**\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\n\n**비슷하지만 안전:**\ngradio/processing_utils.py:get_video_length\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:async_convert_mp4_to_ts\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg.run\ngradio/tunneling.py:Tunnel.start_tunnel\ngradio/cli/commands/reload.py:main\ngradio/cli/commands/deploy_space.py:deploy_to_gcloud\ngradio/cli/commands/components/_docs_utils.py:format\ngradio/cli/commands/components/install_component.py:_install_command\ngradio/cli/commands/components/build.py:_build\n\n안전하다고 본 이유는 이렇습니다.\n- 위 함수들은 모두 인자를 리스트로 넘기고 `shell=True`를 쓰지 않습니다.\n- `process_video_with_ffmpeg`의 다른 ffmpeg 호출은 `create_subprocess_exec`을 씁니다.\n- `async_convert_mp4_to_ts`는 `ff.cmd.split(\" \")`으로 명령을 쪼갭니다. 공백이 든 경로에서는 인자가 깨질 수 있지만 셸은 거치지 않으므로 명령 주입은 아닙니다.\n- `probe_recording_duration`은 `Path(...).name`으로 파일명만 취하고 임시 디렉터리 안의 파일인지 확인한 뒤 실행합니다.\n\n`demo/text_analysis/run.py`의 `os.system`은 고정 문자열이라 제외했습니다. `js/` 쪽 `spawn`과 `spawnSync`는 테스트와 개발 도구용이라 제외했습니다.\n\n위 함수 이름 중 `Tunnel.start_tunnel`, `deploy_to_gcloud`, `_install_command`, `_build`는 호출 위치(`tunneling.py:150`, `deploy_space.py:237`, `install_component.py:134`, `build.py:162`)에서 근처 코드만 보고 붙인 추정입니다. 실제 함수명은 직접 확인하지 못했습니다.",
+    "usage": {
+      "input_tokens": 15,
+      "cache_creation_input_tokens": 37257,
+      "cache_read_input_tokens": 387371,
+      "output_tokens": 5821,
+      "output_tokens_details": {
+        "thinking_tokens": 1051
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 37257,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1546,
+          "cache_read_input_tokens": 61099,
+          "cache_creation_input_tokens": 993,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 993
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 20,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "tokens": {
+    "total_in": 424643,
+    "output": 5821
+  }
+}
