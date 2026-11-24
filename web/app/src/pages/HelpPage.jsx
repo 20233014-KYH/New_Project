@@ -15,7 +15,7 @@ export default function HelpPage() {
         <p className="lead">화면에 나오는 낱말을 한곳에 모았어요.</p>
 
         <dl className="terms">
-          <dt>처음 읽는 양</dt>
+          <dt>켜 두면 드는 토큰</dt>
           <dd>도구를 켜면 대화를 시작할 때 Claude가 도구 설명을 먼저 읽어요. 도구 하나만 켜고 첫 응답에서 늘어난 토큰을 쟀어요(실측).</dd>
 
           <dt>최대 +n토큰</dt>

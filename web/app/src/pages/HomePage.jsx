@@ -90,7 +90,7 @@ export default function HomePage() {
                         <Link to={`/tool/${t.id}`}>{t.name}</Link>
                         <small>
                           {catName[t.category] || ''} ·{' '}
-                          {t.tokens == null ? '측정 안 함' : `처음 읽는 양 +${fmt(t.tokens)}`}
+                          {t.tokens == null ? '측정 안 함' : `켜 두면 드는 토큰 +${fmt(t.tokens)}`}
                         </small>
                       </div>
                       <button
@@ -148,7 +148,7 @@ export default function HomePage() {
               </li>
             </ol>
             <details>
-              <summary>"처음 읽는 양"이 뭐예요?</summary>
+              <summary>"켜 두면 드는 토큰"이 뭐예요?</summary>
               <p>도구를 켜면 Claude가 대화를 시작할 때 도구 설명을 먼저 읽어요. 그만큼 매번 토큰을 더 써요. 도구 하나만 켜고 첫 응답에서 늘어난 토큰을 쟀어요.</p>
             </details>
           </div>

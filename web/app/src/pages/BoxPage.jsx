@@ -61,7 +61,7 @@ export default function BoxPage() {
         <div className="c">
           <Steps current={1} />
           <h1 tabIndex={-1}>내 도구함</h1>
-          <p className="lead">지금 켜 둔 도구를 담으면, 같이 켰을 때 처음 읽는 양과 겹치는 쌍을 보여 드려요.</p>
+          <p className="lead">지금 켜 둔 도구를 담으면, 같이 켰을 때 켜 두기만 해도 드는 토큰과 겹치는 쌍을 보여 드려요.</p>
           <div className="empty">
             <b style={{ color: 'var(--text)' }}>아직 담은 도구가 없어요.</b><br />
             이름을 알면 위 검색창에, 모르면{' '}

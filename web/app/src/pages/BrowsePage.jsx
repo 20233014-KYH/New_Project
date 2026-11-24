@@ -84,7 +84,7 @@ export default function BrowsePage() {
           <label htmlFor="bs">정렬</label>
           <select id="bs" value={sort} onChange={e => setSort(e.target.value)}>
             <option value="stars">별 많은 순</option>
-            <option value="tokens">처음 읽는 양 적은 순</option>
+            <option value="tokens">켜 두면 드는 토큰 적은 순</option>
           </select>
           <span className="count n" aria-live="polite">{filtered.length}개</span>
         </div>
@@ -105,7 +105,7 @@ export default function BrowsePage() {
                 <div className="i-tok">
                   {t.tokens == null
                     ? <><span className="n">—</span><small>측정 안 함</small></>
-                    : <><span className="n">+{fmt(t.tokens)}</span><small>처음 읽는 양</small>
+                    : <><span className="n">+{fmt(t.tokens)}</span><small>켜 두면 드는 토큰</small>
                         <div className="i-bar" style={{ width: `${Math.min(100, (t.tokens / 10000) * 100)}%` }} /></>
                   }
                 </div>

@@ -60,7 +60,7 @@ export default function FindPage() {
                   <div className="i-tok">
                     {t.tokens == null
                       ? <><span className="n">—</span><small>측정 안 함</small></>
-                      : <><span className="n">+{fmt(t.tokens)}</span><small>처음 읽는 양</small></>
+                      : <><span className="n">+{fmt(t.tokens)}</span><small>켜 두면 드는 토큰</small></>
                     }
                   </div>
                   <div className="i-meta">

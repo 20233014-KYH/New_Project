@@ -200,11 +200,11 @@ export default function ResultPage() {
                         ? <>같은 일을 하는 {x.group.map(id => byId[id]?.name || id).join(', ')} 중 {byId[x.keep]?.name || x.keep}만 남겨요</>
                         : <>{byId[x.keep]?.name || x.keep}와 겹쳐요</>}
                       ({x.review}{x.judged_at ? ` · 확인 ${x.judged_at}` : ''}).{' '}
-                      하나만 켰을 때 잰 값으로는 처음 읽는 양이 <b className="n">{fmt(x.save)}</b>토큰 줄어요(참고값, 같이 켠 상태에서 따로 재지 않음).
+                      이 도구를 끄면 대화마다 약 <b className="n">{fmt(x.save)}</b>토큰을 덜 써요(하나만 켜서 잰 값이라 참고용이에요).
                     </p>
                     <p className="mute" style={{ fontSize: 13.5 }}>
                       {x.group ? '둘씩 보면 아끼는 양이 작지만, 같은 일을 하는 도구가 3개 이상 모여서 합치면 기준을 넘어요. ' : ''}
-                      지금은 처음 읽는 양이 가장 작은 것을 남기는 임시 규칙이에요. 상황에 맞는 쪽을 남기는 규칙은 다음 단계에서 붙여요.
+                      지금은 켜 두면 드는 토큰이 가장 적은 것을 남기는 임시 규칙이에요. 상황에 맞는 쪽을 남기는 규칙은 다음 단계에서 붙여요.
                     </p>
                     <Reason p={x} />
                   </div>
@@ -241,7 +241,7 @@ export default function ResultPage() {
             <h2 style={{ fontSize: 16 }}>이렇게 골랐어요</h2>
             <p className="mute" style={{ fontSize: 14.5 }}>
               1. 쌍마다 저장된 판정을 찾아요.<br />
-              2. 겹치는 쌍은 처음 읽는 양이 큰 쪽을 빼자고 해요.<br />
+              2. 겹치는 쌍은 켜 두면 드는 토큰이 큰 쪽을 빼자고 해요.<br />
               3. 더하기는 직접 시험해서 효과를 잰 도구만 보여 주고, 답하신 조건에 걸리는 주의를 붙여요.
             </p>
             <p className="mute" style={{ fontSize: 13.5 }}>

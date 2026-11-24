@@ -160,7 +160,7 @@ export default function ToolPage() {
           </div>
 
           <aside className="spec panel">
-            <div className="mute" style={{ fontSize: 14 }}>처음 읽는 양(실측)</div>
+            <div className="mute" style={{ fontSize: 14 }}>켜 두면 드는 토큰(실측)</div>
             <div className="big n">
               {tool.tokens == null ? '측정 안 함' : `+${fmt(tool.tokens)}`}
             </div>
@@ -184,9 +184,9 @@ export default function ToolPage() {
 
             <dl style={{ marginTop: 'var(--s6)' }}>
               <dt>저장소</dt><dd>{tool.repo}</dd>
-              <dt>잰 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              <dt>우리가 확인한 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
               {tool.latest_release && tool.latest_release !== tool.version && <>
-                <dt>최신 릴리스</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(잰 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
+                <dt>지금 최신 버전</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(확인한 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
               </>}
               <dt>라이선스</dt><dd>{tool.license || '확인 안 됨'}</dd>
               <dt>별</dt><dd className="n">{fmt(tool.stars)}</dd>
