@@ -13,6 +13,7 @@ import kr.ac.team1.inventory.domain.TestedTool;
 import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.dto.Dtos.AddItem;
+import kr.ac.team1.inventory.dto.Dtos.Caution;
 import kr.ac.team1.inventory.dto.Dtos.Answers;
 import kr.ac.team1.inventory.dto.Dtos.GoalDto;
 import kr.ac.team1.inventory.dto.Dtos.GoalPlan;
@@ -260,7 +261,7 @@ public class JudgeService {
 
     /** 상황 질문의 선택지 (CSV 순서) */
     public List<SituationDto> situations() {
-        return rules.findAll().stream().sorted(Comparator.comparing(SituationRule::getPosition))
+        return rules.findAll().stream().sorted(Comparator.comparing(SituationRule::getPosition)).filter(r -> !r.isCaution())
                 .map(r -> new SituationDto(r.getSituationId(), r.getCategory(), r.getLabel())).toList();
     }
 
@@ -280,13 +281,19 @@ public class JudgeService {
         if (situationId == null || situationId.isBlank()) {
             return null;
         }
-        return rules.findAll().stream().filter(r -> situationId.equals(r.getSituationId())).findFirst()
-                .map(r -> new SituationCard(r.getSituationId(), r.getCategory(), r.getLabel(), r.getBase(),
-                        java.util.Arrays.stream(r.getTools().split(java.util.regex.Pattern.quote("|"))).map(String::trim).filter(t -> !t.isEmpty())
-                                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
-                                        clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList(),
+        List<SituationRule> same = rules.findAll().stream().filter(r -> situationId.equals(r.getSituationId()))
+                .sorted(Comparator.comparing(SituationRule::getPosition)).toList();
+        java.util.function.Function<String, List<ToolRef>> refs = s -> java.util.Arrays.stream(s.split(java.util.regex.Pattern.quote("|")))
+                .map(String::trim).filter(t -> !t.isEmpty())
+                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
+                        clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList();
+        return same.stream().filter(r -> !r.isCaution()).findFirst()
+                .map(r -> new SituationCard(r.getSituationId(), r.getCategory(), r.getLabel(), r.getBase(), refs.apply(r.getTools()),
                         r.getBetter(), r.getCost(), "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
-                        r.getSource(), r.getReview(), pick(situationId, priority, ids, byId, pairMap)))
+                        r.getSource(), r.getReview(), pick(situationId, priority, ids, byId, pairMap),
+                        r.getResultType(), r.getDisplay(),
+                        same.stream().filter(SituationRule::isCaution)
+                                .map(x -> new Caution(refs.apply(x.getTools()), x.getBetter(), x.getCost())).toList()))
                 .orElse(null);
     }
 

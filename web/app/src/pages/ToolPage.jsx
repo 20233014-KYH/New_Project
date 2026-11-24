@@ -129,7 +129,7 @@ export default function ToolPage() {
                 <h3 style={{ marginTop: 0 }}>{s.label}</h3>
                 <dl>
                   <dt style={{ fontWeight: 600 }}>기본 기능으로도</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.base}</dd>
-                  <dt style={{ fontWeight: 600 }}>이 도구를 깔면 더 좋은 때</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.better}</dd>
+                  <dt style={{ fontWeight: 600 }}>{s.resultType === '기본충분' ? '시험 결과: 기본 기능으로 충분했어요' : s.resultType === '주의' ? '주의 (직접 시험)' : '이 도구를 깔면 더 좋은 때'}</dt><dd style={{ margin: "0 0 var(--s2)" }}>{s.better}</dd>
                   <dt style={{ fontWeight: 600 }}>대신</dt><dd style={{ margin: 0 }}>{s.cost}</dd>
                 </dl>
                 {s.picks.length > 0 && (

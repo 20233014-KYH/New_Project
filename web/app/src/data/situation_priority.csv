@@ -1,34 +1,33 @@
-상황ID,중요한 것,고를 도구,이유
-plan-new,accurate,gstack,계획 점수가 가장 높아요 (98점·기본 95점)
-plan-new,save,base,기본 기능도 95점이고 gstack은 토큰이 3~9배 들어요
-idea-vague,save,base,기본 기능도 대안·수요 확인까지 짚고 gstack은 토큰이 3~6배 들어요
-prd,accurate,base,기본 기능이 만점이에요 (pm-skills 22/24)
-prd,save,pm-skills,더 빠르고 토큰도 적게 들어요 (점수는 22/24)
-multi-day,accurate,superpowers,3번 모두 만점이에요 (기본 기능은 3번 중 2번)
-multi-day,save,base,기본 기능도 3번 중 2번 만점이고 superpowers는 토큰이 약 1.3배 들어요
-site-debug,accurate,playwright-mcp|chrome-devtools-mcp,코드 없는 사이트도 직접 눌러 원인을 찾아요 (도구 없이 0/3 → 3/3)
-site-debug,save,base,코드가 있다면 기본 기능으로 읽고 찾아요 (도구를 쓰면 시간·토큰 약 2배)
-e2e-test,accurate,playwright-mcp,압축된 배포 사이트에서 더 정확하고 추가 비용이 없어요 (12/12·기본 11/12)
-lib-new,accurate,base,시험한 새 버전 라이브러리를 기본 기능이 이미 맞게 썼어요 (4/4)
-lib-new,save,base,context7을 써도 더 맞히지 못했고 토큰은 2~3배 들었어요
-code-find,accurate,base,기본 검색이 찾기·이름 바꾸기를 다 맞혀요 (6/6·4/4)
-code-find,save,base,도구를 켜 두기만 해도 토큰이 19~119% 늘어요
-code-flow,accurate,base,기본 검색도 흐름 질문을 다 맞혀요 (codegraph와 같음)
-code-flow,save,base,codegraph는 15~30% 빠르지만 비용이 같거나 조금 더 들어요 (+1~19%)
-db-ask,safe,dbhub,읽기 전용이라 지우기를 막았어요 (파이썬·mcp-toolbox는 실제로 지움)
-db-ask,save,dbhub,토큰이 가장 적어요 (파이썬 대비 -17%)
-db-ask,accurate,base,파이썬이 있으면 기본 기능도 다 맞혀요 (셋 다 8/8)
-long-output,save,rtk,명령 출력은 34% 줄지만 전체 토큰은 2%만 줄어요
-long-output,simple,base,rtk는 전역 설정에 훅을 넣어야 해요
-big-tool-output,accurate,headroom,기본 기능처럼 다 맞히면서 전체 토큰이 약 절반이에요 (9/9)
-big-tool-output,save,caveman,새 토큰이 가장 적어요 (-52%) 대신 JSON에서 중요한 값이 빠졌어요 (7/9)
-big-tool-output,simple,base,headroom은 프록시를 켜 둬야 하고 caveman은 감싸서 실행해야 해요
-terraform,accurate,terraform-mcp-server,최신 provider 버전을 맞혀요 (4/4·기본 1/4)
-terraform,save,base,도구를 쓰면 토큰이 약 20% 더 들어요 (대신 옛 버전을 씀)
-memory,accurate,base,규칙이 코드에 남는 일이면 기본 기능도 6세션 내내 지켜요 (3/3)
-memory,save,base,claude-mem은 기억 정리 모델이 토큰을 약 60% 더 써요
-memory,simple,base,claude-mem은 bun·uv를 따로 설치하고 PATH를 바꿔요
-code-flow,fast,codegraph,정확도는 같고 15~30% 빨라요 (파일을 거의 안 열어요)
-code-find,fast,codegraph,시작점 없이 찾는 과제에서 더 빨랐어요 (73초·기본 90초)
-prd,fast,pm-skills,더 빠르고 토큰도 적게 들어요 (점수는 22/24)
-site-debug,fast,base,코드가 있다면 기본 기능으로 찾는 게 빨라요 (도구를 쓰면 시간 약 2배)
+﻿상황ID,중요한 것,고를 도구,이유,v1과 비교,메모
+plan-new,save,base,기본 기능도 95점이고 gstack은 토큰이 3~9배 들어요,같음,
+idea-vague,save,base,기본 기능도 대안·수요 확인까지 짚고 gstack은 토큰이 3~6배 들어요,같음,
+prd,accurate,base,기본 기능이 만점이에요 (pm-skills 22/24),같음,
+prd,save,pm-skills,더 빠르고 토큰도 적게 들어요 (점수는 22/24),같음,
+multi-day,accurate,base,"결과가 비슷해요 (기본 16·16·14, superpowers 16·16·16. 14점은 시험 설명이 애매해서)",고침,어긋남: 형원 님 초안은 superpowers. rules_v1 S1-05 기본충분
+multi-day,save,base,기본 기능도 3번 중 2번 만점이고 superpowers는 토큰이 약 1.3배 들어요,같음,
+site-debug,accurate,base,"사이트 코드를 받아 읽어도 다 찾아요 (3/3, 브라우저 도구도 3/3)",고침,어긋남: 초안은 playwright·chrome-devtools(명령을 막은 0/3과 비교). rules_v1 S6-01 기본충분
+site-debug,save,base,코드가 있다면 기본 기능으로 읽고 찾아요 (도구를 쓰면 시간·토큰 약 2배),같음,
+e2e-test,accurate,base,"결과가 비슷해요 (기본 11/12, playwright 12/12는 3번 값이 섞인 범위)",고침,어긋남: 초안은 playwright. rules_v1 S6-02 기본충분
+lib-new,accurate,base,시험한 새 버전 라이브러리를 기본 기능이 이미 맞게 썼어요 (4/4),같음,
+lib-new,save,base,context7을 써도 더 맞히지 못했고 토큰은 2~3배 들었어요,같음,
+code-find,accurate,base,기본 검색이 찾기·이름 바꾸기를 다 맞혀요 (6/6·4/4),같음,
+code-find,save,base,도구를 켜 두기만 해도 토큰이 19~119% 늘어요,같음,
+code-flow,accurate,base,기본 검색도 흐름 질문을 다 맞혀요 (codegraph와 같음),같음,
+code-flow,save,base,codegraph는 15~30% 빠르지만 비용이 같거나 조금 더 들어요 (+1~19%),같음,
+db-ask,safe,dbhub,읽기 전용이라 지우기를 막았어요 (파이썬·mcp-toolbox는 실제로 지움),같음,
+db-ask,save,dbhub,토큰이 가장 적어요 (파이썬 대비 -17%),확인 필요,기본 쪽 토큰이 평균만 있어 3번 값 확인 필요
+db-ask,accurate,base,파이썬이 있으면 기본 기능도 다 맞혀요 (셋 다 8/8),같음,
+long-output,save,base,"rtk를 써도 전체 토큰은 거의 같아요 (-1.7%, 흔들림 안)",고침,어긋남: 초안은 rtk. rules_v1 S2-01 기본충분
+long-output,simple,base,rtk는 전역 설정에 훅을 넣어야 해요,같음,
+big-tool-output,accurate,headroom,기본 기능처럼 다 맞히면서 전체 토큰이 약 절반이에요 (9/9),같음,
+big-tool-output,save,headroom,정답은 그대로(9/9)이고 전체 토큰이 약 절반이에요. caveman은 JSON에서 중요한 값을 놓쳤어요,고침,"어긋남: 초안은 caveman. rules_v1 S2-02b 주의, 전체 토큰도 headroom이 더 적음(62,032 vs 105,687)"
+big-tool-output,simple,base,headroom은 프록시를 켜 둬야 하고 caveman은 감싸서 실행해야 해요,같음,
+terraform,accurate,terraform-mcp-server,최신 provider 버전을 맞혀요 (4/4·기본 1/4),같음,
+terraform,save,base,도구를 쓰면 토큰이 약 20% 더 들어요 (대신 옛 버전을 씀),같음,
+memory,accurate,base,규칙이 코드에 남는 일이면 기본 기능도 6세션 내내 지켜요 (3/3),같음,
+memory,save,base,claude-mem은 기억 정리 모델이 토큰을 약 60% 더 써요,같음,
+memory,simple,base,claude-mem은 bun·uv를 따로 설치하고 PATH를 바꿔요,같음,
+code-flow,fast,codegraph,정확도는 같고 15~30% 빨라요 (파일을 거의 안 열어요),확인 필요,시간은 기준 E에 없음. 3번 값 범위 확인 필요
+code-find,fast,codegraph,시작점 없이 찾는 과제에서 더 빨랐어요 (73초·기본 90초),확인 필요,시간은 기준 E에 없음. 과제 하나(73초 vs 90초)라 3번 값 확인 필요
+prd,fast,pm-skills,더 빠르고 토큰도 적게 들어요 (점수는 22/24),같음,
+site-debug,fast,base,코드가 있다면 기본 기능으로 찾는 게 빨라요 (도구를 쓰면 시간 약 2배),같음,

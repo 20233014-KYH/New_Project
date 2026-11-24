@@ -36,7 +36,7 @@ describe('로컬 모드 판정', () => {
 
   it('다른 분야 쌍도 AI 추정 판정이 있고, 카탈로그 36개끼리는 판정 없는 쌍이 없다', async () => {
     // 2026-11-21 다른 분야 540쌍을 Claude·Codex 교차 판정으로 채움
-    const pairs = await judgeBox(['caveman', 'graphify'])
+    const pairs = await judgeBox(['caveman', 'dbhub']) // caveman×graphify는 11/22 사람 검토로 바뀜
     expect(pairs[0].state).toBe('saved')
     expect(pairs[0].review).toBe('AI 추정')
     const all = (await getTools()).map(t => t.id)
@@ -53,15 +53,15 @@ describe('도구 목록', () => {
 })
 
 describe('판정 근거가 화면까지 전달됨', () => {
-  it('검수 상태를 그대로 유지: 사람 검토 87쌍, 직접 시험 4쌍, AI 추정 539쌍', async () => {
+  it('검수 상태를 그대로 유지: 사람 검토 245쌍(다른 분야 158쌍 검수 포함), 직접 시험 4쌍, AI 추정 381쌍', async () => {
     const { getTool } = await import('./api.js')
     const ids = (await getTools()).map(t => t.id)
     const seen = new Map()
     for (const id of ids) for (const p of (await getTool(id)).pairs) seen.set([p.a, p.b].sort().join('|'), p.review)
     const counts = [...seen.values()].reduce((m, r) => ({ ...m, [r]: (m[r] || 0) + 1 }), {})
-    expect(counts['사람 검토']).toBe(87)
+    expect(counts['사람 검토']).toBe(245)
     expect(counts['직접 시험']).toBe(4)
-    expect(counts['AI 추정']).toBe(539)
+    expect(counts['AI 추정']).toBe(381)
   })
 
   it('저장된 판정에는 이유·출처·확인일이 붙음', async () => {

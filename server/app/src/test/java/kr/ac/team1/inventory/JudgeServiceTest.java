@@ -81,7 +81,7 @@ class JudgeServiceTest {
     @Test
     void 다른_분야_쌍도_AI_추정_판정이_있다() {
         // 2026-11-21 다른 분야 540쌍을 Claude·Codex 교차 판정으로 채움 → 카탈로그 36개끼리는 판정 없는 쌍이 없음
-        List<JudgeItem> pairs = judge.judge(List.of("caveman", "graphify"));
+        List<JudgeItem> pairs = judge.judge(List.of("caveman", "dbhub"));   // caveman×graphify는 11/22 사람 검토로 바뀜
         assertThat(pairs).singleElement().satisfies(p -> {
             assertThat(p.state()).isEqualTo("saved");
             assertThat(p.review()).isEqualTo("AI 추정");
@@ -103,16 +103,16 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 검수_상태가_그대로_사람검토_87_직접시험_4_AI추정_539() {
+    void 검수_상태가_그대로_사람검토_245_직접시험_4_AI추정_381() {
         Map<String, String> seen = new HashMap<>();
         for (ToolDto t : tools.list(null, null)) {
             for (ToolPairDto p : tools.detail(t.id()).pairs()) {
                 seen.put(p.a().compareTo(p.b()) < 0 ? p.a() + "|" + p.b() : p.b() + "|" + p.a(), p.review());
             }
         }
-        assertThat(seen.values().stream().filter("사람 검토"::equals).count()).isEqualTo(87);
+        assertThat(seen.values().stream().filter("사람 검토"::equals).count()).isEqualTo(245);
         assertThat(seen.values().stream().filter("직접 시험"::equals).count()).isEqualTo(4);
-        assertThat(seen.values().stream().filter("AI 추정"::equals).count()).isEqualTo(539);
+        assertThat(seen.values().stream().filter("AI 추정"::equals).count()).isEqualTo(381);
     }
 
     @Test
@@ -137,9 +137,10 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 상황_질문_선택지는_규칙_18개() {
-        assertThat(judge.situations()).hasSize(18);
-        assertThat(judge.situations().get(0).id()).isEqualTo("plan-new");
+    void 상황_질문_선택지는_화면에_올리는_규칙_16개() {
+        // 용현 규칙 v1: plan-new·idea-vague(gstack)는 블라인드 비교 대기라 화면에 안 올림, doc 줄·주의 줄은 선택지가 아님
+        assertThat(judge.situations()).hasSize(16);
+        assertThat(judge.situations().get(0).id()).isEqualTo("prd");
     }
 
     @Test
@@ -148,7 +149,8 @@ class JudgeServiceTest {
         assertThat(card.base()).contains("11/12");
         assertThat(card.tools()).extracting(t -> t.id()).containsExactly("playwright-mcp");
         assertThat(card.tools().get(0).inBox()).isFalse();
-        assertThat(card.cost()).isEqualTo("추가 비용 없음");
+        assertThat(card.cost()).startsWith("추가 비용 없음");
+        assertThat(card.resultType()).isEqualTo("기본충분");   // 규칙 v1: 11/12 vs 12/12라 기본 기능으로 충분
         assertThat(card.evidence()).isEqualTo("직접 시험");
     }
 
@@ -165,9 +167,9 @@ class JudgeServiceTest {
     @Test
     void 목적을_고르면_더하기_꺼도_되는_것_그대로를_정한다() {
         var hack = judge.recommend(List.of("caveman"), new Answers("", "", "", null, "accurate", "hackathon")).goal();
-        assertThat(hack.situations()).hasSize(6);
-        assertThat(hack.add()).extracting(x -> x.tool()).containsExactly("gstack", "playwright-mcp", "headroom");
-        assertThat(hack.add().get(2).warnings()).anyMatch(w -> w.contains("caveman"));
+        assertThat(hack.situations()).hasSize(4);   // plan-new·idea-vague는 화면에 안 올림
+        assertThat(hack.add()).extracting(x -> x.tool()).containsExactly("headroom");   // 규칙 v1: e2e-test는 기본 기능으로 충분
+        assertThat(hack.add().get(0).warnings()).anyMatch(w -> w.contains("caveman"));
         assertThat(hack.keep()).isEmpty();
 
         // 토큰이 중요하고, 시험에서 '기본 기능으로 충분'이던 상황의 도구가 도구함에 있으면 꺼도 되는 것
@@ -175,16 +177,15 @@ class JudgeServiceTest {
         assertThat(lp.turnOff()).extracting(x -> x.tool()).containsExactly("graphify");
         assertThat(lp.turnOff().get(0).situations()).containsExactly("큰 코드에서 함수나 기능이 어디 있는지 찾고 싶어요");
 
-        // 이미 있는 도구는 그대로, 시험 주의(PowerShell에선 rtk가 안 됨)는 경고로
+        // 규칙 v1: 토큰 아끼기에서 큰 결과 줄이기는 caveman이 아니라 headroom, rtk는 기본 기능으로 충분
         var save = judge.recommend(List.of("caveman"), new Answers("", "powershell", "", null, "save", "save-limit")).goal();
-        assertThat(save.keep()).extracting(x -> x.tool()).containsExactly("caveman");
-        var rtk = save.add().stream().filter(x -> x.tool().equals("rtk")).findFirst().orElseThrow();
-        assertThat(rtk.warnings()).anyMatch(w -> w.contains("PowerShell"));
+        assertThat(save.keep()).isEmpty();
+        assertThat(save.add()).extracting(x -> x.tool()).containsExactly("headroom");
 
         // 중요한 것을 안 고르면 상황 카드만
         var none = judge.recommend(List.of("caveman"), new Answers("", "", "", null, null, "hackathon")).goal();
         assertThat(none.add()).isEmpty();
-        assertThat(none.situations()).hasSize(6);
+        assertThat(none.situations()).hasSize(4);
         assertThat(judge.goals()).hasSize(6);
     }
 
@@ -195,7 +196,10 @@ class JudgeServiceTest {
         assertThat(acc.tools()).extracting(t -> t.id()).containsExactly("headroom");
         assertThat(acc.label()).isEqualTo("틀리지 않는 것");
         var save = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "save", null)).situation().pick();
-        assertThat(save.tools()).extracting(t -> t.id()).containsExactly("caveman");
+        assertThat(save.tools()).extracting(t -> t.id()).containsExactly("headroom");   // 규칙 v1(priority_v1)
+        var big = judge.recommend(List.of(), new Answers("", "", "", "big-tool-output", "save", null)).situation();
+        assertThat(big.cautions()).hasSize(1);   // caveman 주의: 큰 JSON에서 중요한 값을 놓침
+        assertThat(big.cautions().get(0).tools()).extracting(t -> t.id()).containsExactly("caveman");
         var safe = judge.recommend(List.of(), new Answers("", "", "", "db-ask", "safe", null)).situation().pick();
         assertThat(safe.tools()).extracting(t -> t.id()).containsExactly("dbhub");
         var base = judge.recommend(List.of(), new Answers("", "", "", "code-find", "save", null)).situation().pick();
@@ -221,12 +225,13 @@ class JudgeServiceTest {
     }
 
     @Test
-    void 이미_담은_도구는_inBox로_표시하고_시험_전_근거는_제작자_설명() {
+    void 이미_담은_도구는_inBox로_표시하고_제작자_설명뿐인_줄은_화면에서_뺀다() {
         var debug = judge.recommend(List.of("playwright-mcp"), new Answers("", "", "", "site-debug", null, null)).situation();
         assertThat(debug.tools()).hasSize(2);
         assertThat(debug.tools().get(0).inBox()).isTrue();
         var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security", null, null)).situation();
-        assertThat(sec.evidence()).isEqualTo("제작자 설명");
+        assertThat(sec.evidence()).isEqualTo("직접 시험");   // S6-03b(doc)는 빠지고 S6-03(직접 시험)만 남음
+        assertThat(sec.resultType()).isEqualTo("기본충분");
     }
 
     @Test

@@ -267,7 +267,10 @@ export async function getRecommend(ids, answers) {
 }
 
 // 6. 도구 검색 (홈 검색)
-// --- 상황별 추천 규칙 (data/situation_rules.csv, 서버와 같은 파일) ---
+// --- 상황별 추천 규칙 (data/situation_rules.csv = 용현 규칙 v1, 서버와 같은 파일) ---
+// 결과 종류: 추가(깔면 더 좋아요) / 기본충분(시험해 보니 기본 기능으로 충분) / 주의(같은 상황 카드에 붙는 주의).
+// 화면에서 빼는 줄: 근거가 제작자 설명(doc)뿐이거나 표시 수준에 '화면에 안 올림'이 있는 줄(팀 원칙 11-08, 블라인드 비교 대기)
+export const hiddenRule = r => r.evidenceType === 'doc' || (r.display || '').includes('화면에 안 올림')
 function splitCsv(line) {
   const out = []; let cur = ''; let q = false
   for (let i = 0; i < line.length; i++) {
@@ -290,11 +293,13 @@ function getRules() {
     _rules = lines.slice(1).map(l => {
       const c = splitCsv(l)
       return { ruleId: c[0], category: Number(c[1]), id: c[2], label: c[3], base: c[4], tools: c[5], better: c[6],
-        cost: c[7], evidenceType: c[8], source: c[9], review: c[10] }
-    })
+        cost: c[7], evidenceType: c[8], source: c[9], review: c[10], resultType: c[11] || '추가', display: c[13] || '' }
+    }).filter(r => !hiddenRule(r))
   }
   return _rules
 }
+// 상황마다 대표 줄 하나(주의 줄 제외)
+const mainRules = () => getRules().filter(r => r.resultType !== '주의')
 // 상황 + 중요한 것 → 고를 도구 (data/situation_priority.csv, 서버와 같은 파일). 시험에서 차이가 확인된 조합만 있다
 export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
 const PRIORITY_ORDER = ['accurate', 'save', 'fast', 'simple', 'safe']
@@ -334,7 +339,7 @@ function toolSituations(id, tools) {
   const names = Object.fromEntries(tools.map(t => [t.id, t.name]))
   const picks = getPicks()
   return getRules().filter(r => splitTools(r.tools).includes(id)).map(r => ({
-    id: r.id, label: r.label, base: r.base, better: r.better, cost: r.cost,
+    id: r.id, label: r.label, base: r.base, better: r.better, cost: r.cost, resultType: r.resultType,
     evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
     picks: PRIORITY_ORDER.filter(pr => picks[`${r.id}|${pr}`]).map(pr => {
       const p = picks[`${r.id}|${pr}`]
@@ -346,9 +351,12 @@ function toolSituations(id, tools) {
 // 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신. 안 골랐거나 없는 상황이면 null
 function situationCard(situationId, priority, ids, byId, pairMap) {
   if (!situationId) return null
-  const r = getRules().find(x => x.id === situationId)
+  const r = mainRules().find(x => x.id === situationId)
   if (!r) return null
+  const refs = s => s.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap))
   return {
+    resultType: r.resultType, display: r.display,
+    cautions: getRules().filter(x => x.id === r.id && x.resultType === '주의').map(x => ({ tools: refs(x.tools), text: x.better, cost: x.cost })),
     id: r.id, category: r.category, label: r.label, base: r.base,
     tools: r.tools.split('|').map(t => t.trim()).filter(Boolean).map(t => toolRef(t, ids, byId, pairMap)),
     better: r.better, cost: r.cost, evidence: r.evidenceType === 'tested' ? '직접 시험' : '제작자 설명',
@@ -412,7 +420,7 @@ export async function getSituations() {
     const res = await apiFetch(`${BASE}/situations`)
     return res.json()
   }
-  return getRules().map(r => ({ id: r.id, category: r.category, label: r.label }))
+  return mainRules().map(r => ({ id: r.id, category: r.category, label: r.label }))
 }
 
 export async function searchTools(q) {

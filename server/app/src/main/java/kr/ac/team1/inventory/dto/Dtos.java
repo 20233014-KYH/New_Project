@@ -48,7 +48,7 @@ public final class Dtos {
 
     /** 이 도구가 추천 도구로 들어간 상황 규칙 한 줄 + 그 상황의 중요한 것별 고르기 */
     public record ToolSituation(String id, String label, String base, String better, String cost, String evidence,
-                                List<PickNote> picks) {
+                                List<PickNote> picks, String resultType) {
     }
 
     /** 중요한 것별 고르기 한 줄. chosen = 고른 도구 이름들(" 또는 ") 또는 "기본 기능" */
@@ -98,8 +98,14 @@ public final class Dtos {
     }
 
     /** 고른 상황의 3칸 카드: 기본 기능으로도 / 이럴 땐 깔면 더 좋아요 / 대신 */
+    /** resultType = 추가 / 기본충분, cautions = 같은 상황의 주의 줄(예: 큰 결과 줄이기 × caveman) */
     public record SituationCard(String id, Integer category, String label, String base, List<ToolRef> tools,
-                                String better, String cost, String evidence, String source, String review, Pick pick) {
+                                String better, String cost, String evidence, String source, String review, Pick pick,
+                                String resultType, String display, List<Caution> cautions) {
+    }
+
+    /** 상황 카드에 붙는 주의 한 줄 */
+    public record Caution(List<ToolRef> tools, String text, String cost) {
     }
 
     /** 중요한 것에 따라 고른 도구. base = 기본 기능으로 충분(tools는 빈 목록) */

@@ -139,8 +139,13 @@ public class SeedLoader implements ApplicationRunner {
         List<String> lines = csv.lines().filter(l -> !l.isBlank()).toList();
         for (int i = 1; i < lines.size(); i++) {
             List<String> c = splitCsv(lines.get(i));
+            String resultType = c.size() > 11 && !c.get(11).isBlank() ? c.get(11) : "추가";
+            String display = c.size() > 13 ? c.get(13) : "";
+            if (SituationRule.hidden(c.get(8), display)) {
+                continue;   // 근거가 제작자 설명뿐이거나 '화면에 안 올림'
+            }
             rules.save(new SituationRule(c.get(0), Integer.parseInt(c.get(1)), c.get(2), c.get(3), c.get(4), c.get(5),
-                    c.get(6), c.get(7), c.get(8), c.get(9), c.get(10), i));
+                    c.get(6), c.get(7), c.get(8), c.get(9), c.get(10), i, resultType, display));
         }
         log.info("상황별 추천 규칙 {}개 넣음", rules.count());
     }

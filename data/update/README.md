@@ -8,6 +8,7 @@
 | 2 | `discover.py [--min-stars 1000] [--days 90]` | Claude Code 관련 주제(topic)의 인기 저장소 중 카탈로그에 없는 것을 `candidates_날짜.csv`로 모아요. 분야는 설명 낱말로 **추정**만 하고, 넣을지는 사람이 정해요. |
 | 3 | `add_tool.py owner/repo 분야번호 [--id 아이디] [--write]` | 고른 후보를 넣을 준비를 하고, 기존 도구 전부와의 판정을 AI 두 개(Claude·Codex)로 만들어요(지시문은 `judgment/2026-11-21-cross-ai/판정지시문.md`). 기본은 미리보기(`new_아이디/`), `--write`일 때만 카탈로그에 넣어요. 한국어 소개·처음 읽는 양은 사람이 채워요. |
 | 2-1 | `apply_criteria.py <measured.csv> [--write]` | 처음 읽는 양을 다시 잰 뒤(`judgment/review/2026-11-21-remeasure/`) 새 값과 겹침 기준(빈 세션의 5%)을 카탈로그 두 벌에 넣어요. 같은 일 쌍(`same_role`)의 겹침/상황따라를 새 기준으로 다시 정하고 이유 칸 숫자도 고쳐요. Claude Code가 바뀌면 이걸 다시 돌려요. |
+| 2-2 | `apply_review.py <검수표.csv> <출처> [--write]` | 사람 검수표(맞음/틀림·고친 판정·이유)를 판정에 넣어요. 맞음은 검토 상태만 "사람 검토"로, 틀림은 고친 판정으로 바꾸고 원래 AI 이유는 근거 칸에 남겨요. 처음 쓴 곳: 다른 분야 158쌍 검수(PR #30). |
 | 4 | 서버 `POST /api/admin/judge-missing?limit=20` | 서버를 켠 상태에서 판정이 빈 쌍을 서버 AI(Claude)가 채워요. 환경 변수 `ANTHROPIC_API_KEY`가 있을 때만 켜지고, 없으면 503으로 알려 줘요. 한 번만 판정해서 '교차 검수 전'으로 표시돼요. `GET /api/admin/ai-status`로 빈 쌍 수를 볼 수 있어요. |
 
 화면 도구 상세에는 "잰 버전"과 "최신 릴리스"가 다르면 둘 다 보여 줘요.

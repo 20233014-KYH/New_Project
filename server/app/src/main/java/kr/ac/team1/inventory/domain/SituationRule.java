@@ -42,6 +42,12 @@ public class SituationRule {
 
     private String review;
 
+    /** 결과 종류: 추가 / 기본충분 / 주의 (용현 규칙 v1) */
+    private String resultType;
+
+    /** 표시 수준(예: 기본 기능으로 충분(시험으로 확인)) */
+    private String display;
+
     /** CSV 순서(질문 선택지를 같은 순서로 보여 주려고) */
     private Integer position;
 
@@ -63,6 +69,23 @@ public class SituationRule {
         this.review = review;
         this.position = position;
     }
+
+    public SituationRule(String ruleId, Integer category, String situationId, String label, String base, String tools,
+                         String better, String cost, String evidenceType, String source, String review, Integer position,
+                         String resultType, String display) {
+        this(ruleId, category, situationId, label, base, tools, better, cost, evidenceType, source, review, position);
+        this.resultType = resultType;
+        this.display = display;
+    }
+
+    /** 화면에서 빼는 줄: 근거가 제작자 설명(doc)뿐이거나 표시 수준에 '화면에 안 올림'이 있음 (api.js hiddenRule과 같음) */
+    public static boolean hidden(String evidenceType, String display) {
+        return "doc".equals(evidenceType) || (display != null && display.contains("화면에 안 올림"));
+    }
+
+    public boolean isCaution() { return "주의".equals(resultType); }
+    public String getResultType() { return resultType; }
+    public String getDisplay() { return display; }
 
     public String getRuleId() { return ruleId; }
     public Integer getCategory() { return category; }

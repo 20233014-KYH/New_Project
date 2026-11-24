@@ -40,7 +40,7 @@ function SituationCardView({ s, priority }) {
         <p>{s.base}</p>
       </div>
       <div>
-        <h3>이럴 땐 깔면 더 좋아요</h3>
+        <h3>{s.resultType === '기본충분' ? '깔아 봤지만 기본 기능으로 충분했어요' : '이럴 땐 깔면 더 좋아요'}</h3>
         <p>
           {s.tools.map((t, i) => (
             <span key={t.id}>
@@ -67,6 +67,11 @@ function SituationCardView({ s, priority }) {
         <p>{s.cost}</p>
       </div>
     </div>
+    {(s.cautions || []).map((c, i) => (
+      <p key={`ca-${i}`} className="warn" style={{ marginTop: 'var(--s4)' }}>
+        <b>주의 · {c.tools.map(t => t.name).join(', ')}:</b> {c.text}{c.cost ? ` (${c.cost})` : ''}
+      </p>
+    ))}
     <p className="mute" style={{ fontSize: 13.5, marginBottom: 0 }}>
       근거: {s.review?.startsWith(s.evidence) ? s.review : `${s.evidence}${s.review ? ` · ${s.review}` : ''}`}{s.source ? ` · ${s.source}` : ''}
     </p>

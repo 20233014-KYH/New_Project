@@ -93,7 +93,7 @@ public class ToolService {
                                         "base".equals(p.getTools()) ? "기본 기능"
                                                 : String.join(" 또는 ", splitTools(p.getTools()).stream().map(t -> names.getOrDefault(t, t)).toList()),
                                         p.getReason()))
-                                .toList()))
+                                .toList(), r.getResultType()))
                 .toList();
     }
 
