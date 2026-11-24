@@ -1,0 +1,625 @@
+{
+ "batch": "c2_6",
+ "tools": [
+  {
+   "id": "caveman",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+   "한국어 소개": "원시인처럼 짧게 말하게 해서 토큰을 줄이는 스킬(과 프록시)이에요. 제작자는 토큰 65% 감소를 주장해요.",
+   "이럴 때": "설명이 긴 답변이 부담되고, 디버깅 절차를 꼭 지키지 않아도 되는 일상 작업에서 답변을 짧게 받고 싶을 때",
+   "역할 범위": {
+    "skills": 22,
+    "agents": 3,
+    "commands": 23,
+    "mcp": 0,
+    "hooks_total": 4,
+    "hook_events": {
+     "SessionStart": 1,
+     "SubagentStart": 1,
+     "UserPromptSubmit": 1,
+     "SessionEnd": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 2643,
+   "기능 목록": [
+    "cavecrew: When to delegate to `cavecrew-investigator` (locate code), `cavecrew-builder` (1-2 file ed",
+    "caveman: Activate caveman mode (off | status)",
+    "caveman-compress: Compress a markdown/text file into caveman format to save tokens",
+    "caveman-stats: Show available session usage without estimating savings",
+    "megacave: Activate megacave mode (caveman in Classical Chinese)",
+    "ultracave: Activate ultracave mode (caveman at maximum compression)",
+    "caveman-commit: Generate a terse caveman-style commit message for staged changes",
+    "caveman-discover: Find and label every LLM workflow in the repository so Caveman Cloud groups spend by workf",
+    "caveman-evidence-review: Read-only review of Caveman Cloud evidence: cost, Cave Score, workflows, traces, latency, ",
+    "caveman-explore: Read-only repository explorer for cold-start orientation, broad cross-file localization, o",
+    "caveman-help: Quick reference card for caveman modes, slash commands, and triggers",
+    "caveman-learn: Act on a Caveman learn report - review the ranked token sinks, apply cost-lowering fixes w",
+    "caveman-manage: Inspect Caveman Cloud's experiment lifecycle and block unsafe execution. Use when asked to",
+    "caveman-optimize: Turn a Caveman optimization observation into an operator-chosen candidate with a paired ba",
+    "caveman-review: Caveman-style code review — one-line findings with severity",
+    "caveman-setup: Wire a repository through the Caveman Cloud gateway so every LLM request is measured, with",
+    "investigate-first: Diagnose ambiguous failures before editing. Use for unknown causes, intermittent behavior,",
+    "lean-build: Build feature work with high overbuilding risk. Use for new behavior, product slices, or i",
+    "migration: Implement reversible compatibility-safe transitions. Use for schema, data, API, protocol, ",
+    "safe-refactor: Restructure code while preserving behavior. Use for extraction, consolidation, ownership m",
+    "surgical-patch: Fix bugs and small behavior changes at the narrowest responsible layer. Use when regressio",
+    "verify-and-stop: Prove existing work meets acceptance conditions without expanding scope. Use for validatio",
+    "caveman-init: Drop the always-on caveman activation rule into the current repo for every IDE agent"
+   ]
+  },
+  {
+   "id": "rtk",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies",
+   "한국어 소개": "자주 쓰는 개발 명령의 출력을 줄여 Claude가 읽는 토큰을 줄이는 명령줄 도구예요. 제작자는 60~90% 감소를 주장해요.",
+   "이럴 때": "테스트 로그·git diff처럼 출력이 큰 명령을 자주 돌리는 작업에서 Claude가 읽는 양을 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 1,
+    "hook_events": {
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 17,
+   "기능 목록": []
+  },
+  {
+   "id": "headroom",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 20% fewer tokens for coding agents, 60-95% fewer tokens for JSON, same answers. Library, proxy, MCP server.",
+   "한국어 소개": "도구 출력·로그·파일·검색 결과를 Claude에게 넘기기 전에 압축해 주는 도구예요. 제작자는 같은 답에 토큰 20%(JSON은 60~95%) 감소를 주장해요.",
+   "이럴 때": "긴 로그·JSON·파일을 많이 읽는 긴 세션에서, 실행 방식을 바꿔서라도 입력을 크게 줄이고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 2,
+    "hook_events": {
+     "SessionStart": 1,
+     "PreToolUse": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 24,
+   "기능 목록": []
+  },
+  {
+   "id": "claude-mem",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+   "한국어 소개": "세션 동안 한 일을 기록하고 AI로 요약해 두었다가, 다음 세션에 필요한 내용을 다시 넣어 주는 기억 도구예요.",
+   "이럴 때": "같은 프로젝트를 여러 날 이어서 할 때, 지난 세션에서 한 일과 결정을 다음 세션이 자동으로 알게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 30,
+    "agents": 0,
+    "commands": 30,
+    "mcp": 0,
+    "hooks_total": 17,
+    "hook_events": {
+     "Setup": 1,
+     "SessionStart": 4,
+     "UserPromptSubmit": 2,
+     "PostToolUse": 2,
+     "PostToolUseFailure": 1,
+     "PreToolUse": 2,
+     "Stop": 2,
+     "SessionEnd": 2,
+     "SubagentStop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 1075,
+   "기능 목록": [
+    "Agent Cost Report: Believable agent cost report for any period, default the last 7 full days PT, not counting",
+    "babysit: Watch a pull request or review cycle until it is ready to merge. Use when asked to babysit",
+    "build: Fully automate a coding task with make-plan, do, and babysit.",
+    "build-and-release: Fully automate building and releasing a coding task.",
+    "ccs-align: Run the CCS Align seat's hourly breathing cycle — prove the local claude-mem worker is hea",
+    "childhood: Babysit a shipped release after merge, publication, or deployment. Verify published packag",
+    "cloud-sync: Set up or check claude-mem cloud sync with cmem.ai Pro. Use when the user says \"set up clo",
+    "design-is: Audit a design against Dieter Rams' ten \"Good design is...\" principles, then hand off a /m",
+    "do: Execute a phased implementation plan using subagents. Use when asked to execute, run, or c",
+    "handoff: Generate a HANDOFF.md that captures goal, current state, files touched, failed attempts, a",
+    "how-it-works: Explain how claude-mem captures observations, when memory injection kicks in, and where da",
+    "knowledge-agent: Build and query AI-powered knowledge bases from claude-mem observations. Use when users wa",
+    "learn-codebase: Prime a codebase by reading every source file in full. Use when starting work on a new or ",
+    "make-plan: Create a detailed, phased implementation plan with documentation discovery. Use when asked",
+    "mem-search: This skill should be used when the user asks to \"search memory\", \"what do you remember abo",
+    "mode-creator: Interactively create, install, activate, and verify custom claude-mem modes, including dom",
+    "oh-my-issues: Cluster a GitHub issue backlog by root cause into a small set of plan-master issues, redir",
+    "pathfinder: Map a codebase into feature-grouped flowcharts, identify duplicated concerns across featur",
+    "release: Fully automate a release with version-bump and childhood.",
+    "screenpipe: Search screen and audio history recorded by Screenpipe and optionally save selected contex",
+    "smart-explore: Token-optimized structural code search using tree-sitter AST parsing. Use instead of readi",
+    "standup: Facilitate a read-only standup across git worktrees, branches, or PRs to compare changes a",
+    "timeline-report: Generate a \"Journey Into [Project]\" narrative report analyzing a project's entire developm",
+    "version-bump: Automated semantic versioning and release workflow for Claude Code plugins. Handles versio",
+    "weekly-digests: Generate a serial week-by-week narrative digest of a project's full claude-mem timeline. S",
+    "what-the: What the? Use when the user wants a plain-English breakdown of something technical — the w",
+    "wowerpoint: Turn one document into a kawaii NotebookLM slide deck. Use for \"wowerpoint this\", \"make a ",
+    "mem-setup: This skill should be used when the user asks to \"set up claude-mem\", \"pair claude-mem\", \"c"
+   ]
+  },
+  {
+   "id": "claude-hud",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "A Claude Code plugin that shows what's happening - context usage, active tools, running agents, and todo progress",
+   "한국어 소개": "컨텍스트 사용량, 쓰는 중인 도구, 돌아가는 에이전트, 할 일 진행 상황을 화면에 보여 주는 플러그인이에요.",
+   "이럴 때": "작업 중에 컨텍스트가 얼마나 찼는지, 사용 한도가 얼마나 남았는지 계속 보면서 일하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 78,
+   "기능 목록": [
+    "configure: Configure HUD display options (layout, language, presets, display elements) while preservi",
+    "setup: Configure claude-hud as your statusline"
+   ]
+  },
+  {
+   "id": "ccusage",
+   "분야": "토큰·컨텍스트",
+   "설명(원문)": "npx ccusage",
+   "한국어 소개": "Claude Code 사용 기록을 읽어 토큰과 비용을 날짜·세션별로 보여 주는 명령줄 도구예요(npx ccusage로 실행).",
+   "이럴 때": "지난 한 달 동안 어느 날·어느 세션·어느 모델에 토큰과 돈이 얼마나 들었는지 따져 보고 싶을 때",
+   "역할 범위": null,
+   "처음 읽는 양(토큰)": null,
+   "기능 목록": []
+  },
+  {
+   "id": "playwright-mcp",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Playwright MCP server",
+   "한국어 소개": "Claude가 Playwright로 실제 브라우저를 열고 누르고 확인하게 해 주는 MCP 서버예요.",
+   "이럴 때": "웹 앱의 로그인·결제 같은 흐름을 Claude가 실제 브라우저로 따라가며 확인하게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 25,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 273,
+   "기능 목록": [
+    "mcp:browser_click: ",
+    "mcp:browser_close: ",
+    "mcp:browser_console_messages: ",
+    "mcp:browser_drag: ",
+    "mcp:browser_drop: ",
+    "mcp:browser_emulate_media: ",
+    "mcp:browser_evaluate: ",
+    "mcp:browser_file_upload: ",
+    "mcp:browser_fill_form: ",
+    "mcp:browser_find: ",
+    "mcp:browser_handle_dialog: ",
+    "mcp:browser_hover: ",
+    "mcp:browser_navigate: ",
+    "mcp:browser_navigate_back: ",
+    "mcp:browser_network_request: ",
+    "mcp:browser_network_requests: ",
+    "mcp:browser_press_key: ",
+    "mcp:browser_resize: ",
+    "mcp:browser_run_code_unsafe: ",
+    "mcp:browser_select_option: ",
+    "mcp:browser_snapshot: ",
+    "mcp:browser_tabs: ",
+    "mcp:browser_take_screenshot: ",
+    "mcp:browser_type: ",
+    "mcp:browser_wait_for: "
+   ]
+  },
+  {
+   "id": "chrome-devtools-mcp",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Chrome DevTools for coding agents",
+   "한국어 소개": "Chrome 개발자 도구를 AI 코딩 도구가 쓰게 해 주는 MCP 서버예요.",
+   "이럴 때": "페이지가 왜 느린지, 어떤 요청이 실패하는지 Chrome 개발자 도구 수준으로 Claude가 분석하게 하고 싶을 때",
+   "역할 범위": {
+    "skills": 7,
+    "agents": 0,
+    "commands": 7,
+    "mcp": 32,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 939,
+   "기능 목록": [
+    "a11y-debugging: Uses Chrome DevTools MCP for accessibility (a11y) debugging and auditing based on web.dev ",
+    "chrome-devtools: Uses Chrome DevTools via MCP for efficient debugging, troubleshooting and browser automati",
+    "chrome-devtools-cli: Use this skill to write shell scripts or run shell commands to automate tasks in the brows",
+    "cookie-debugging: Uses Chrome DevTools MCP for inspecting, debugging, and testing cookies, session state, au",
+    "debug-optimize-lcp: Guides debugging and optimizing Largest Contentful Paint (LCP) using Chrome DevTools MCP t",
+    "memory-leak-debugging: Diagnoses and resolves memory leaks in JavaScript/Node.js applications. Use when a user re",
+    "troubleshooting: Uses Chrome DevTools MCP and documentation to troubleshoot connection and target issues. T",
+    "mcp:click: ",
+    "mcp:close_page: ",
+    "mcp:drag: ",
+    "mcp:emulate: ",
+    "mcp:evaluate_script: ",
+    "mcp:fill: ",
+    "mcp:fill_form: ",
+    "mcp:get_console_message: ",
+    "mcp:get_css_styles: ",
+    "mcp:get_network_request: ",
+    "mcp:handle_dialog: ",
+    "mcp:hover: ",
+    "mcp:lighthouse_audit: ",
+    "mcp:list_console_messages: ",
+    "mcp:list_network_requests: ",
+    "mcp:list_pages: ",
+    "mcp:navigate_page: ",
+    "mcp:new_page: ",
+    "mcp:performance_analyze_insight: ",
+    "mcp:performance_start_trace: ",
+    "mcp:performance_stop_trace: ",
+    "mcp:press_key: ",
+    "mcp:resize_page: ",
+    "mcp:screencast_start: ",
+    "mcp:screencast_stop: ",
+    "mcp:select_page: ",
+    "mcp:take_heapsnapshot: ",
+    "mcp:take_screenshot: ",
+    "mcp:take_snapshot: ",
+    "mcp:type_text: ",
+    "mcp:upload_file: ",
+    "mcp:wait_for: "
+   ]
+  },
+  {
+   "id": "open-code-review",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+   "한국어 소개": "정해진 검사 단계와 AI를 섞어 줄 단위로 리뷰 의견을 다는 코드 리뷰 도구예요. 알리바바에서 쓰는 방식이라고 소개해요.",
+   "이럴 때": "큰 PR에서 Claude가 파일을 빼먹거나 줄 번호가 어긋나는 리뷰 문제를 겪고, 별도 리뷰 도구로 돌리고 싶을 때",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 2,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 84,
+   "기능 목록": [
+    "delegate-review: Run OCR in delegation mode — OCR handles file selection and rules, the host agent performs",
+    "review: Run OpenCodeReview (OCR) to review code changes and autonomously apply fixes."
+   ]
+  },
+  {
+   "id": "tdd-guard",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Automated TDD enforcement for Claude Code",
+   "한국어 소개": "Claude Code가 테스트 먼저 쓰기(TDD)를 지키도록 자동으로 막아 주는 도구예요.",
+   "이럴 때": "Claude가 테스트를 건너뛰고 구현부터 하는 걸 지시가 아니라 규칙으로 막고 싶을 때",
+   "역할 범위": {
+    "skills": 1,
+    "agents": 0,
+    "commands": 1,
+    "mcp": 0,
+    "hooks_total": 3,
+    "hook_events": {
+     "PreToolUse": 1,
+     "UserPromptSubmit": 1,
+     "SessionStart": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 14,
+   "기능 목록": [
+    "setup: Set up or update TDD Guard for the current project. Detects the test framework, installs o"
+   ]
+  },
+  {
+   "id": "trailofbits-skills",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "Trail of Bits skills for security research, vulnerability detection, and audit workflows",
+   "한국어 소개": "보안 회사 Trail of Bits가 만든 보안 연구·취약점 찾기·감사용 스킬 모음이에요.",
+   "이럴 때": "스마트 계약, C/C++·Rust 메모리 안전, 의존성 공급망처럼 특정 분야를 보안 전문가 방식으로 깊게 감사하고 싶을 때",
+   "역할 범위": {
+    "skills": 84,
+    "agents": 30,
+    "commands": 91,
+    "mcp": 0,
+    "hooks_total": 8,
+    "hook_events": {
+     "SessionStart": 3,
+     "PreToolUse": 2,
+     "SessionEnd": 1,
+     "Stop": 1,
+     "SubagentStop": 1
+    }
+   },
+   "처음 읽는 양(토큰)": 3466,
+   "기능 목록": [
+    "audit-context-building",
+    "algorand-vulnerability-scanner",
+    "audit-prep-assistant",
+    "cairo-vulnerability-scanner",
+    "code-maturity-assessor",
+    "cosmos-vulnerability-scanner",
+    "guidelines-advisor",
+    "secure-workflow-guide",
+    "solana-vulnerability-scanner",
+    "substrate-vulnerability-scanner",
+    "token-integration-analyzer",
+    "ton-vulnerability-scanner",
+    "burpsuite-project-parser",
+    "burp-search",
+    "chrome-mcp-troubleshooting",
+    "constant-time-analysis",
+    "ct-check",
+    "interpreting-culture-index",
+    "devcontainer-setup",
+    "differential-review",
+    "diff-review",
+    "firebase-apk-scanner",
+    "scan-apk",
+    "gh-cli",
+    "dwarf-expert",
+    "entry-point-analyzer",
+    "entry-points",
+    "mutation-testing",
+    "post-patch-validation",
+    "property-based-testing",
+    "semgrep-rule-creator",
+    "semgrep-rule",
+    "semgrep-rule-variant-creator",
+    "sharp-edges",
+    "codeql",
+    "sarif-parsing",
+    "semgrep",
+    "spec-to-code-compliance",
+    "address-sanitizer",
+    "aflpp",
+    "atheris",
+    "cargo-fuzz",
+    "constant-time-testing",
+    "coverage-analysis",
+    "fuzzing-dictionary",
+    "fuzzing-obstacles",
+    "harness-writing",
+    "libafl",
+    "libfuzzer",
+    "ossfuzz",
+    "ruzzy",
+    "testing-handbook-generator",
+    "wycheproof",
+    "audit-augmentation",
+    "crypto-protocol-diagram",
+    "diagramming-code",
+    "genotoxic",
+    "graph-evolution",
+    "mermaid-to-proverif",
+    "slicing-code-context",
+    "trailmark",
+    "trailmark-finding-triage",
+    "trailmark-review-gate",
+    "trailmark-structural",
+    "trailmark-summary",
+    "trailmark-variant-neighborhood",
+    "vector-forge",
+    "variant-analysis",
+    "c-review",
+    "rust-review",
+    "modern-python",
+    "audit",
+    "review-walkthrough",
+    "second-opinion",
+    "yara-rule-authoring",
+    "git-cleanup",
+    "goal-prompt",
+    "supply-chain-risk-auditor",
+    "zeroize-audit",
+    "let-fate-decide",
+    "... 외 13개"
+   ]
+  },
+  {
+   "id": "claude-code-security-review",
+   "분야": "테스트·보안·리뷰",
+   "설명(원문)": "An AI-powered security review GitHub Action using Claude to analyze code changes for security vulnerabilities.",
+   "한국어 소개": "Claude로 코드 변경의 보안 문제를 검사하는 GitHub Action이에요(Claude Code용 명령 파일도 함께 있어요).",
+   "이럴 때": "팀 저장소의 모든 PR에 보안 리뷰 코멘트를 자동으로 달고 싶을 때(Claude Code 명령만 필요하면 기본 /security-review로 충분)",
+   "역할 범위": {
+    "skills": 0,
+    "agents": 0,
+    "commands": 0,
+    "mcp": 0,
+    "hooks_total": 0,
+    "hook_events": {}
+   },
+   "처음 읽는 양(토큰)": 45,
+   "기능 목록": [
+    "security-review: Complete a security review of the pending changes on the current branch"
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "a": "caveman",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "caveman-init ~ mcp:browser_drop (0.27) | caveman-manage ~ mcp:browser_run_code_unsafe (0.20) | caveman-optimize ~ mcp:browser_evaluate (0.18)"
+  },
+  {
+   "a": "caveman",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "caveman-commit ~ mcp:get_console_message (0.21) | caveman-compress ~ mcp:type_text (0.17) | caveman-optimize ~ mcp:evaluate_script (0.15)"
+  },
+  {
+   "a": "caveman",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "caveman-learn ~ review (0.15) | caveman-review ~ review (0.10)"
+  },
+  {
+   "a": "caveman",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "caveman",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "caveman-review ~ audit-augmentation (0.19) | surgical-patch ~ post-patch-validation (0.13) | investigate-first ~ post-patch-validation (0.11)"
+  },
+  {
+   "a": "caveman",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "caveman-review ~ security-review (0.11)"
+  },
+  {
+   "a": "rtk",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "rtk",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "headroom",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "smart-explore ~ mcp:browser_find (0.14) | oh-my-issues ~ mcp:browser_close (0.13) | mem-search ~ mcp:browser_find (0.11)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "oh-my-issues ~ mcp:close_page (0.13) | build ~ chrome-devtools-cli (0.12) | build-and-release ~ chrome-devtools-cli (0.11)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-mem",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "babysit ~ review-pr (0.21) | babysit ~ pr-improver (0.19) | babysit ~ github-triage (0.18)"
+  },
+  {
+   "a": "claude-mem",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "claude-hud",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "playwright-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "chrome-devtools-mcp",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "open-code-review",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "tdd-guard",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "trailofbits-skills",
+   "비슷한 기능 후보": "없음"
+  },
+  {
+   "a": "ccusage",
+   "b": "claude-code-security-review",
+   "비슷한 기능 후보": "없음"
+  }
+ ]
+}

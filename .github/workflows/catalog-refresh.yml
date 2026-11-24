@@ -1,0 +1,57 @@
+# 카탈로그 자동 최신화 (매주 월요일 09:00 한국 시간, 또는 Actions 화면에서 직접 실행)
+# 1) refresh.py: 36개 도구의 별·최근 업데이트·최신 릴리스를 GitHub에서 다시 읽어 entries.json(두 벌)의 auto 칸을 고침
+#    우리가 잰 값(잰 버전·처음 읽는 양·역할 범위)과 판정은 건드리지 않음. 새 버전이 나온 도구는 보고서에 "다시 잴 것"으로 적음
+# 2) discover.py: 카탈로그에 없는 새 도구 후보를 모음(넣을지는 사람이 정함)
+# 바뀐 것이 있으면 자동으로 합치지 않고 PR을 올려 사람이 보고 합침
+name: 카탈로그 자동 최신화
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"   # 매주 월요일 00:00 UTC = 09:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 새 버전 확인 + 새 후보 찾기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python data/update/refresh.py --write
+          python data/update/discover.py
+      - name: 바뀐 것이 있으면 PR 올리기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "바뀐 것 없음"
+            exit 0
+          fi
+          day=$(date +%Y-%m-%d)
+          branch="auto-refresh-$day"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A web/app/src/data/entries.json server/sample-data/entries.json data/update
+          git commit -m "자동 최신화 $day: 도구 정보 다시 읽기 + 새 후보"
+          git push origin "$branch"
+          report="data/update/refresh_$day.md"
+          {
+            echo "매주 자동으로 돌린 카탈로그 최신화예요. 별·최근 업데이트·최신 릴리스만 바뀌고, 우리가 잰 값과 판정은 그대로예요."
+            echo
+            echo "- 새 버전이 나온 도구: 아래 보고서의 \"다시 잴 것\""
+            echo "- 새 도구 후보: data/update/candidates_$day.csv (넣을지는 사람이 정해요)"
+            echo
+            [ -f "$report" ] && cat "$report"
+          } > /tmp/body.md
+          gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" \
+            --title "[자동] 카탈로그 최신화 $day" --body-file /tmp/body.md

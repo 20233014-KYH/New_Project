@@ -44,6 +44,9 @@ public class ToolPair {
 
     private String judgedAt;
 
+    /** 두 도구가 같은 일을 한다(겹침 기준을 넘으면 겹침, 아니면 상황따라). 같은 일 묶음 판단에 쓴다 */
+    private boolean sameRole;
+
     protected ToolPair() {
     }
 
@@ -58,6 +61,12 @@ public class ToolPair {
         this.judgedAt = judgedAt;
     }
 
+    public ToolPair(String a, String b, String relation, String reviewState, String reason, String sourcesJson, String judgedAt,
+                    boolean sameRole) {
+        this(a, b, relation, reviewState, reason, sourcesJson, judgedAt);
+        this.sameRole = sameRole;
+    }
+
     public Long getId() { return id; }
     public String getPairKey() { return pairKey; }
     public String getA() { return a; }
@@ -67,4 +76,5 @@ public class ToolPair {
     public String getReason() { return reason; }
     public String getSourcesJson() { return sourcesJson; }
     public String getJudgedAt() { return judgedAt; }
+    public boolean isSameRole() { return sameRole; }
 }

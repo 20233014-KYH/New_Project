@@ -13,10 +13,23 @@ import kr.ac.team1.inventory.domain.TestedTool;
 import kr.ac.team1.inventory.domain.Tool;
 import kr.ac.team1.inventory.domain.ToolPair;
 import kr.ac.team1.inventory.dto.Dtos.AddItem;
+import kr.ac.team1.inventory.dto.Dtos.Caution;
 import kr.ac.team1.inventory.dto.Dtos.Answers;
+import kr.ac.team1.inventory.dto.Dtos.GoalDto;
+import kr.ac.team1.inventory.dto.Dtos.GoalPlan;
 import kr.ac.team1.inventory.dto.Dtos.JudgeItem;
+import kr.ac.team1.inventory.dto.Dtos.PlanItem;
+import kr.ac.team1.inventory.dto.Dtos.Pick;
 import kr.ac.team1.inventory.dto.Dtos.RecommendResult;
 import kr.ac.team1.inventory.dto.Dtos.RemoveItem;
+import kr.ac.team1.inventory.dto.Dtos.SituationCard;
+import kr.ac.team1.inventory.dto.Dtos.SituationDto;
+import kr.ac.team1.inventory.dto.Dtos.ToolRef;
+import kr.ac.team1.inventory.domain.SituationGoal;
+import kr.ac.team1.inventory.domain.SituationRule;
+import kr.ac.team1.inventory.repo.SituationGoalRepository;
+import kr.ac.team1.inventory.repo.SituationPickRepository;
+import kr.ac.team1.inventory.repo.SituationRuleRepository;
 import kr.ac.team1.inventory.repo.TestedToolRepository;
 import kr.ac.team1.inventory.repo.ToolPairRepository;
 import kr.ac.team1.inventory.repo.ToolRepository;
@@ -39,12 +52,22 @@ public class JudgeService {
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
     private final TestedToolRepository tested;
+    private final SituationRuleRepository rules;
+    private final SituationPickRepository picks;
+    private final SituationGoalRepository goals;
     private final ToolService toolService;
+    private final OverlapCriteria criteria;
 
-    public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService) {
+    public JudgeService(ToolRepository tools, ToolPairRepository pairs, TestedToolRepository tested, ToolService toolService,
+                        SituationRuleRepository rules, SituationPickRepository picks,
+                        SituationGoalRepository goals, OverlapCriteria criteria) {
+        this.criteria = criteria;
         this.tools = tools;
         this.pairs = pairs;
         this.tested = tested;
+        this.rules = rules;
+        this.picks = picks;
+        this.goals = goals;
         this.toolService = toolService;
     }
 
@@ -76,7 +99,7 @@ public class JudgeService {
 
     public RecommendResult recommend(List<String> rawIds, Answers answers) {
         List<String> ids = clean(rawIds);
-        Answers ans = answers == null ? new Answers("", "", "") : answers;
+        Answers ans = answers == null ? new Answers("", "", "", null, null, null) : answers;
         List<JudgeItem> js = judge(ids);
         Map<String, Tool> byId = tools.findAll().stream().collect(Collectors.toMap(Tool::getId, Function.identity()));
         Map<String, ToolPair> pairMap = pairMap();
@@ -95,7 +118,39 @@ public class JudgeService {
             Tool big = tokens(a) >= tokens(b) ? a : b;
             Tool keep = big == a ? b : a;
             if (remove.stream().noneMatch(r -> r.tool().equals(big.getId()))) {
-                remove.add(new RemoveItem(big.getId(), keep.getId(), tokens(big), p.review(), p.reason(), p.sources(), p.judgedAt()));
+                remove.add(new RemoveItem(big.getId(), keep.getId(), tokens(big), p.review(), p.reason(), p.sources(), p.judgedAt(), null));
+            }
+        }
+
+        // 같은 일 묶음(3개 이상): 가장 큰 것을 남겨도 아끼는 양(합 - 최댓값)이 기준 이상이면 하나만 남긴다.
+        // 남길 도구 = 아직 안 뺀 것 중 처음 읽는 양이 가장 작은 것(같으면 도구함 앞쪽) — 빼기 규칙과 같은 임시 규칙
+        for (List<String> g : roleGroups(ids, pairMap)) {
+            int sum = g.stream().mapToInt(id -> tokens(byId.get(id))).sum();
+            int max = g.stream().mapToInt(id -> tokens(byId.get(id))).max().orElse(0);
+            int saving = sum - max;
+            if (saving < criteria.minTokens()) {
+                continue;
+            }
+            List<String> free = g.stream().filter(id -> remove.stream().noneMatch(r -> r.tool().equals(id))).toList();
+            if (free.size() < 2) {
+                continue;
+            }
+            String keep = free.get(0);
+            for (String id : free) {
+                if (tokens(byId.get(id)) < tokens(byId.get(keep))) {
+                    keep = id;
+                }
+            }
+            String names = g.stream().map(id -> byId.get(id).getName()).collect(Collectors.joining(", "));
+            for (String id : free) {
+                if (id.equals(keep)) {
+                    continue;
+                }
+                ToolPair p = pairMap.get(PairKeys.of(id, keep));
+                remove.add(new RemoveItem(id, keep, tokens(byId.get(id)), Labels.REVIEW.get(p.getReviewState()),
+                        "같은 일을 하는 도구 " + g.size() + "개(" + names + ")를 함께 켰어요. 가장 큰 것을 남겨도 "
+                                + comma(saving) + "토큰을 아껴서(기준 " + comma(criteria.minTokens()) + "토큰) 하나만 남기기를 권해요.",
+                        toolService.sources(p), p.getJudgedAt(), g));
             }
         }
 
@@ -128,7 +183,134 @@ public class JudgeService {
             add.add(new AddItem(t.getTool(), t.getEffect(), t.getCaution(), warnings, unknown, blocked, verdict, t.getTestedOn()));
         }
         int unknownCount = (int) js.stream().filter(p -> "no_info".equals(p.state())).count();
-        return new RecommendResult(js, remove, add, unknownCount);
+        return new RecommendResult(js, remove, add, unknownCount, situationCard(ans.situation(), ans.priority(), ids, byId, pairMap),
+                goalPlan(ans, ids, byId, pairMap));
+    }
+
+    /** 목적 선택지 (CSV 순서) */
+    public List<GoalDto> goals() {
+        return goals.findAll().stream().sorted(Comparator.comparing(SituationGoal::getPosition))
+                .map(g -> new GoalDto(g.getGoalId(), g.getLabel(), g.getDescription())).toList();
+    }
+
+    /**
+     * 목적 → 상황 여러 개의 카드를 모아 도구함을 바꿀 것을 정한다.
+     * 더하기: 중요한 것으로 고른 도구 중 도구함에 없는 것 / 그대로: 고른 도구가 이미 도구함에 있음 /
+     * 꺼도 되는 것: 토큰·속도·간단함이 중요한데 시험에서 '기본 기능으로 충분'이었던 상황의 추천 도구가 도구함에 있음.
+     * 중요한 것을 안 골랐으면 상황 카드만 준다(고를 근거가 없어서).
+     */
+    private GoalPlan goalPlan(Answers ans, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
+        if (ans.goal() == null || ans.goal().isBlank()) {
+            return null;
+        }
+        Map<String, TestedTool> testedMap = tested.findAll().stream().collect(Collectors.toMap(TestedTool::getTool, Function.identity()));
+        return goals.findById(ans.goal()).map(g -> {
+            List<SituationCard> cards = ToolService.splitTools(g.getSituations()).stream()
+                    .map(s -> situationCard(s, ans.priority(), ids, byId, pairMap)).filter(Objects::nonNull).toList();
+            Map<String, PlanItem> add = new java.util.LinkedHashMap<>();
+            Map<String, PlanItem> off = new java.util.LinkedHashMap<>();
+            Map<String, PlanItem> keep = new java.util.LinkedHashMap<>();
+            boolean costMatters = ans.priority() != null && List.of("save", "fast", "simple").contains(ans.priority());
+            for (SituationCard c : cards) {
+                Pick p = c.pick();
+                if (p == null) {
+                    continue;
+                }
+                if (p.base()) {
+                    if (costMatters) {
+                        c.tools().stream().filter(ToolRef::inBox).forEach(t -> merge(off, t, c.label(), p.reason(), List.of()));
+                    }
+                    continue;
+                }
+                for (ToolRef t : p.tools()) {
+                    if (t.inBox()) {
+                        merge(keep, t, c.label(), p.reason(), List.of());
+                        continue;
+                    }
+                    List<String> warnings = new ArrayList<>();
+                    t.overlapWith().forEach(o -> warnings.add("도구함의 " + o + "와 겹쳐요"));
+                    t.similarTo().forEach(o -> warnings.add("도구함의 " + o + "와 비슷한 역할이에요(상황따라)"));
+                    TestedTool tt = testedMap.get(t.id());
+                    if (tt != null && ((tt.getCautionWork() != null && tt.getCautionWork().equals(ans.work()))
+                            || (tt.getCautionShell() != null && tt.getCautionShell().equals(ans.shell())))) {
+                        warnings.add(tt.getCaution());
+                    }
+                    merge(add, t, c.label(), p.reason(), warnings);
+                }
+            }
+            return new GoalPlan(g.getGoalId(), g.getLabel(), g.getDescription(), List.copyOf(add.values()),
+                    List.copyOf(off.values()), List.copyOf(keep.values()), cards);
+        }).orElse(null);
+    }
+
+    /** 같은 도구가 여러 상황에서 나오면 한 줄로 합치고 상황 이름·이유·주의를 이어 붙인다 */
+    private static void merge(Map<String, PlanItem> m, ToolRef t, String situation, String reason, List<String> warnings) {
+        PlanItem old = m.get(t.id());
+        if (old == null) {
+            m.put(t.id(), new PlanItem(t.id(), t.name(), List.of(situation), List.of(reason), List.copyOf(warnings)));
+            return;
+        }
+        List<String> s = new ArrayList<>(old.situations());
+        List<String> r = new ArrayList<>(old.reasons());
+        s.add(situation);
+        r.add(reason);
+        List<String> w = new ArrayList<>(old.warnings());
+        warnings.stream().filter(x -> !w.contains(x)).forEach(w::add);
+        m.put(t.id(), new PlanItem(t.id(), t.name(), s, r, w));
+    }
+
+    /** 상황 질문의 선택지 (CSV 순서) */
+    public List<SituationDto> situations() {
+        return rules.findAll().stream().sorted(Comparator.comparing(SituationRule::getPosition)).filter(r -> !r.isCaution())
+                .map(r -> new SituationDto(r.getSituationId(), r.getCategory(), r.getLabel())).toList();
+    }
+
+    /** 고른 상황의 3칸 카드. 상황을 안 골랐거나 없는 상황이면 null */
+    /** 추천 도구 t와 도구함의 도구 사이 판정이 relation이면 그 도구 id를 모은다. 이미 담은 도구는 빈 목록 */
+    private static List<String> clashWith(String t, List<String> ids, Map<String, ToolPair> pairMap, String relation) {
+        if (ids.contains(t)) {
+            return List.of();
+        }
+        return ids.stream().filter(id -> {
+            ToolPair p = pairMap.get(PairKeys.of(id, t));
+            return p != null && relation.equals(p.getRelation());
+        }).toList();
+    }
+
+    private SituationCard situationCard(String situationId, String priority, List<String> ids, Map<String, Tool> byId, Map<String, ToolPair> pairMap) {
+        if (situationId == null || situationId.isBlank()) {
+            return null;
+        }
+        List<SituationRule> same = rules.findAll().stream().filter(r -> situationId.equals(r.getSituationId()))
+                .sorted(Comparator.comparing(SituationRule::getPosition)).toList();
+        java.util.function.Function<String, List<ToolRef>> refs = s -> java.util.Arrays.stream(s.split(java.util.regex.Pattern.quote("|")))
+                .map(String::trim).filter(t -> !t.isEmpty())
+                .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
+                        clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList();
+        return same.stream().filter(r -> !r.isCaution()).findFirst()
+                .map(r -> new SituationCard(r.getSituationId(), r.getCategory(), r.getLabel(), r.getBase(), refs.apply(r.getTools()),
+                        r.getBetter(), r.getCost(), "tested".equals(r.getEvidenceType()) ? "직접 시험" : "제작자 설명",
+                        r.getSource(), r.getReview(), pick(situationId, priority, ids, byId, pairMap),
+                        r.getResultType(), r.getDisplay(),
+                        same.stream().filter(SituationRule::isCaution)
+                                .map(x -> new Caution(refs.apply(x.getTools()), x.getBetter(), x.getCost())).toList()))
+                .orElse(null);
+    }
+
+    /** 상황 + 중요한 것으로 고른 도구. 안 골랐거나 시험에서 차이를 확인 못 한 조합이면 null */
+    private Pick pick(String situationId, String priority, List<String> ids, Map<String, Tool> byId,
+                           Map<String, ToolPair> pairMap) {
+        if (priority == null || priority.isBlank()) {
+            return null;
+        }
+        return picks.findById(situationId + "|" + priority).map(p -> {
+            boolean base = "base".equals(p.getTools());
+            List<ToolRef> refs = base ? List.of() : java.util.Arrays.stream(p.getTools().split(java.util.regex.Pattern.quote("|")))
+                    .map(String::trim).filter(t -> !t.isEmpty())
+                    .map(t -> new ToolRef(t, byId.containsKey(t) ? byId.get(t).getName() : t, ids.contains(t),
+                            clashWith(t, ids, pairMap, "overlap"), clashWith(t, ids, pairMap, "situational"))).toList();
+            return new Pick(priority, Labels.PRIORITY.get(priority), base, refs, p.getReason());
+        }).orElse(null);
     }
 
     /** 빈 값·중복을 빼고 순서는 지킨다. 없는 도구나 너무 많은 도구는 거절한다. */
@@ -158,6 +340,49 @@ public class JudgeService {
     }
 
     private static int tokens(Tool t) {
-        return t.getTokens() == null ? 0 : t.getTokens();
+        return t == null || t.getTokens() == null ? 0 : t.getTokens();
+    }
+
+    static String comma(int n) {
+        return String.format(java.util.Locale.US, "%,d", n);
+    }
+
+    /** 도구함 안에서 서로 모두 같은 일(sameRole)인 3개 이상 묶음(최대 클리크). 큰 묶음 먼저, 같으면 도구함 순서. api.js roleGroups와 같음 */
+    static List<List<String>> roleGroups(List<String> ids, Map<String, ToolPair> pairMap) {
+        List<List<String>> out = new ArrayList<>();
+        bronKerbosch(new ArrayList<>(), new ArrayList<>(ids), new ArrayList<>(), ids, pairMap, out);
+        Comparator<List<String>> bySize = Comparator.comparingInt(g -> -g.size());
+        out.sort(bySize.thenComparing((x, y) -> {
+            for (int i = 0; i < Math.min(x.size(), y.size()); i++) {
+                int d = ids.indexOf(x.get(i)) - ids.indexOf(y.get(i));
+                if (d != 0) {
+                    return d;
+                }
+            }
+            return x.size() - y.size();
+        }));
+        return out;
+    }
+
+    private static void bronKerbosch(List<String> r, List<String> p, List<String> x, List<String> ids,
+                                     Map<String, ToolPair> pairMap, List<List<String>> out) {
+        if (p.isEmpty() && x.isEmpty()) {
+            if (r.size() >= 3) {
+                out.add(ids.stream().filter(r::contains).toList());
+            }
+            return;
+        }
+        for (String v : new ArrayList<>(p)) {
+            List<String> n = ids.stream().filter(o -> !o.equals(v)).filter(o -> {
+                ToolPair tp = pairMap.get(PairKeys.of(v, o));
+                return tp != null && tp.isSameRole();
+            }).toList();
+            List<String> r2 = new ArrayList<>(r);
+            r2.add(v);
+            bronKerbosch(r2, p.stream().filter(n::contains).collect(Collectors.toCollection(ArrayList::new)),
+                    x.stream().filter(n::contains).collect(Collectors.toCollection(ArrayList::new)), ids, pairMap, out);
+            p.remove(v);
+            x.add(v);
+        }
     }
 }

@@ -21,6 +21,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	// 새 도구가 들어와 판정이 빈 쌍을 서버 AI가 채울 때만 씀(ANTHROPIC_API_KEY가 없으면 꺼져 있음)
+	implementation 'com.anthropic:anthropic-java:3.3.0'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
@@ -39,8 +41,12 @@ processResources {
 		include 'entries.json', 'compat.json', 'categories.json'
 		into 'seed'
 	}
+	from('../../judgment/2026-11-21-cross-ai') {
+		include '판정지시문.md'
+		into 'seed'
+	}
 	from('../../web/app/src/data') {
-		include 'tested.json', 'desc_en.json', 'cards_ko.json'
+		include 'tested.json', 'desc_en.json', 'cards_ko.json', 'situation_rules.csv', 'situation_priority.csv', 'situation_goals.csv'
 		into 'seed'
 	}
 }

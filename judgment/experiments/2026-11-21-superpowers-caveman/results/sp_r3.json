@@ -1,0 +1,31 @@
+{
+ "cond": "sp",
+ "rep": 3,
+ "sec": 31,
+ "rc": 0,
+ "plugins": [
+  "superpowers",
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [
+  "superpowers:systematic-debugging"
+ ],
+ "debug_skill": true,
+ "turns": 8,
+ "tests_passed": 17,
+ "tests_failed": 0,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 20810,
+  "cache_read_input_tokens": 247223,
+  "output_tokens": 2711
+ },
+ "total_tokens": 270758,
+ "price_weighted": 64304,
+ "stderr_tail": "Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n",
+ "hidden_passed": 12,
+ "hidden_failed": 0
+}

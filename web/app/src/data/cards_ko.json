@@ -1,9 +1,9 @@
 {
- "_note": "도구 카드 한국어 문구. summary_ko = 저장소의 GitHub 설명(web/app/src/data/desc_en.json, 2026-10-26)을 노형원이 쉬운 한국어로 옮김(뜻을 더하지 않음). when_ko = 허준서 비교 축 표(PR #17 data/compare_axes_v0.csv '이럴때', 2026-11-09)를 그대로 가져옴. 둘 다 팀원 확인 전.",
+ "_note": "도구 카드 한국어 문구. summary_ko = 저장소의 GitHub 설명(web/app/src/data/desc_en.json, 2026-10-26)을 노형원이 쉬운 한국어로 옮김(뜻을 더하지 않음). when_ko = 허준서 비교 축 표(PR #17 data/compare_axes_v0.csv '이럴때', 2026-11-09)를 그대로 가져옴. 둘 다 팀원 확인 완료(2026-11-19, 단체 대화방).",
  "source": {
   "summary_ko": "GitHub 저장소 설명 번역 (확인 2026-10-26)",
   "when_ko": "허준서 비교 축 표 v0 (PR #17, 확인 2026-11-09)",
-  "review": "팀원 확인 전"
+  "review": "팀원 확인 완료"
  },
  "cards": {
   "superpowers": {

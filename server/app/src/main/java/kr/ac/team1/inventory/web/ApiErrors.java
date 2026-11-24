@@ -17,6 +17,11 @@ public class ApiErrors {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
     }
 
+    @ExceptionHandler(kr.ac.team1.inventory.ai.AiDisabledException.class)
+    public ResponseEntity<Map<String, String>> aiOff(kr.ac.team1.inventory.ai.AiDisabledException e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("message", e.getMessage()));
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Map<String, String>> badRequest(BadRequestException e) {
         return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
