@@ -1,0 +1,67 @@
+{
+  "condition": "curl",
+  "rep": 3,
+  "turn": {
+    "sec": 10.7,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "사이트 응답을 가져오는 `curl` 명령이 권한 승인 대기 상태라 아직 실행하지 못했습니다. 그래서 원인은 아직 확인하지 못했습니다.\n\n원인을 찾으려면 HTML과 JS를 받아서 '추가' 버튼의 이벤트 핸들러와 요청 흐름을 봐야 합니다. `http://127.0.0.1:8816/`에 대한 `curl` 실행을 허용해 주시면 바로 이어서 분석하겠습니다. 허용하기 어렵다면 브라우저에서 아래 내용을 알려 주셔도 됩니다.\n\n- 개발자 도구(F12)의 Console에 나오는 오류 메시지\n- Network 탭에서 '추가'를 눌렀을 때 요청이 나가는지, 나간다면 그 상태 코드"
+    ],
+    "denied": [
+      "Bash",
+      "Bash"
+    ],
+    "session": "45322aad-b9ce-4dcf-9f22-916eb7503166",
+    "result": "사이트 응답을 가져오는 `curl` 명령이 권한 승인 대기 상태라 아직 실행하지 못했습니다. 그래서 원인은 아직 확인하지 못했습니다.\n\n원인을 찾으려면 HTML과 JS를 받아서 '추가' 버튼의 이벤트 핸들러와 요청 흐름을 봐야 합니다. `http://127.0.0.1:8816/`에 대한 `curl` 실행을 허용해 주시면 바로 이어서 분석하겠습니다. 허용하기 어렵다면 브라우저에서 아래 내용을 알려 주셔도 됩니다.\n\n- 개발자 도구(F12)의 Console에 나오는 오류 메시지\n- Network 탭에서 '추가'를 눌렀을 때 요청이 나가는지, 나간다면 그 상태 코드",
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 6948,
+      "cache_read_input_tokens": 81571,
+      "output_tokens": 514,
+      "output_tokens_details": {
+        "thinking_tokens": 70
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 6948,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 372,
+          "cache_read_input_tokens": 29524,
+          "cache_creation_input_tokens": 82,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 82
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 3,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "tokens": {
+    "total_in": 88525,
+    "output": 514
+  }
+}

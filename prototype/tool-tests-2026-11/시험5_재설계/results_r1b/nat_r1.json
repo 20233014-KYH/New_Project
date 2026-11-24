@@ -1,0 +1,72 @@
+{
+  "condition": "nat",
+  "rep": 1,
+  "turn": {
+    "sec": 33.3,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\_vendor\\ffmpy\\ffmpy.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py"
+    ],
+    "writes": [],
+    "texts": [
+      "`extract_video_thumbnail` 말고도 같은 원인(셸 명령 문자열에 값을 끼워 넣어 실행)이 두 곳 더 있습니다. 코드는 고치지 않았습니다. 이 PC에서는 ffmpeg 등을 실행하지 않았고, 코드를 읽어서 판단했습니다.\n\n**근거**\n- **`gradio/flagging.py:351`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`는 따옴표 없이 `label`과 `flag_dir`를 셸 문자열에 넣습니다. `label`에 `; cmd`나 `$(cmd)`가 들어 있으면 임의 명령이 실행됩니다. 이 저장소 안에는 호출하는 곳이 없습니다. 그래서 `label`이 외부 입력에서 오는지는 확인하지 못했고, 호출자에 따라 위험도가 달라집니다.\n- **`gradio/screen_recording_utils.py:279-281`**: `asyncio.create_subprocess_shell`에 `\"{input_path}\"` 형태의 문자열을 넘깁니다. `\"`나 `$()`, 백틱이 들어 있으면 따옴표를 빠져나갈 수 있습니다. 다만 현재 호출 경로(`routes.py:2011-2016`)에서는 `input_path`가 서버가 `NamedTemporaryFile`로 만든 이름이고, 임시 폴더(`GRADIO_TEMP_DIR`)는 운영자가 정합니다. 그래서 지금은 원격에서 악용하기 어렵고, 코드 구조상 잠재적인 취약점입니다.\n\n**안전하다고 본 이유**\n- 인자 리스트로 실행하고 `shell=True`가 없는 곳은 안전합니다. 파일명이 `;`, `$()`, 공백을 포함해도 인자 하나로만 전달됩니다.\n- `gradio/_vendor/ffmpy/ffmpy.py`의 `FFmpeg.run`은 `Popen`에 리스트를 넘깁니다. `self.cmd`는 로그와 오류 메시지용 문자열일 뿐 실행에는 쓰이지 않습니다.\n- `demo/text_analysis/run.py`의 `os.system`은 상수 문자열이라 외부 입력이 들어가지 않습니다.\n- `gradio/cli/commands/` 하위 파일, `tunneling.py`, `node_server.py`의 `Popen`과 `subprocess.run`을 grep으로 확인했는데, 셸을 쓰는 곳은 없었습니다. 이 파일들은 인자를 하나씩 읽지는 않았습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg.run\ngradio/processing_utils.py:convert_video_to_playable_mp4\ndemo/text_analysis/run.py:<module>"
+    ],
+    "denied": [],
+    "session": "94884480-5682-47b8-98e1-357e489eb221",
+    "result": "`extract_video_thumbnail` 말고도 같은 원인(셸 명령 문자열에 값을 끼워 넣어 실행)이 두 곳 더 있습니다. 코드는 고치지 않았습니다. 이 PC에서는 ffmpeg 등을 실행하지 않았고, 코드를 읽어서 판단했습니다.\n\n**근거**\n- **`gradio/flagging.py:351`**: `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`는 따옴표 없이 `label`과 `flag_dir`를 셸 문자열에 넣습니다. `label`에 `; cmd`나 `$(cmd)`가 들어 있으면 임의 명령이 실행됩니다. 이 저장소 안에는 호출하는 곳이 없습니다. 그래서 `label`이 외부 입력에서 오는지는 확인하지 못했고, 호출자에 따라 위험도가 달라집니다.\n- **`gradio/screen_recording_utils.py:279-281`**: `asyncio.create_subprocess_shell`에 `\"{input_path}\"` 형태의 문자열을 넘깁니다. `\"`나 `$()`, 백틱이 들어 있으면 따옴표를 빠져나갈 수 있습니다. 다만 현재 호출 경로(`routes.py:2011-2016`)에서는 `input_path`가 서버가 `NamedTemporaryFile`로 만든 이름이고, 임시 폴더(`GRADIO_TEMP_DIR`)는 운영자가 정합니다. 그래서 지금은 원격에서 악용하기 어렵고, 코드 구조상 잠재적인 취약점입니다.\n\n**안전하다고 본 이유**\n- 인자 리스트로 실행하고 `shell=True`가 없는 곳은 안전합니다. 파일명이 `;`, `$()`, 공백을 포함해도 인자 하나로만 전달됩니다.\n- `gradio/_vendor/ffmpy/ffmpy.py`의 `FFmpeg.run`은 `Popen`에 리스트를 넘깁니다. `self.cmd`는 로그와 오류 메시지용 문자열일 뿐 실행에는 쓰이지 않습니다.\n- `demo/text_analysis/run.py`의 `os.system`은 상수 문자열이라 외부 입력이 들어가지 않습니다.\n- `gradio/cli/commands/` 하위 파일, `tunneling.py`, `node_server.py`의 `Popen`과 `subprocess.run`을 grep으로 확인했는데, 셸을 쓰는 곳은 없었습니다. 이 파일들은 인자를 하나씩 읽지는 않았습니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/flagging.py:archive_flagged_media\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/processing_utils.py:get_video_length\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/_vendor/ffmpy/ffmpy.py:FFmpeg.run\ngradio/processing_utils.py:convert_video_to_playable_mp4\ndemo/text_analysis/run.py:<module>",
+    "usage": {
+      "input_tokens": 9,
+      "cache_creation_input_tokens": 19765,
+      "cache_read_input_tokens": 157870,
+      "output_tokens": 3934,
+      "output_tokens_details": {
+        "thinking_tokens": 917
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 19765,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 1837,
+          "cache_read_input_tokens": 39517,
+          "cache_creation_input_tokens": 1428,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1428
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 12,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "tokens": {
+    "total_in": 177644,
+    "output": 3934
+  }
+}

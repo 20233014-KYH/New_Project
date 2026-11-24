@@ -1,0 +1,42 @@
+[
+  {
+    "id": "F1",
+    "start_prompt": "src/sdk/prompts.ts의 buildObservationPrompt에서 시작해 도구 입력·출력을 정리하고, 필드 길이를 제한한 뒤, 비밀정보 제거 마커를 검사하여 관측용 프롬프트를 반환하는 흐름을 추적해 주세요. 정상 처리에서 입력 내용·길이에 관계없이 호출되는 함수 6개를 최초 호출 순서로 나열하세요. 반복 호출은 한 번만 세고 조건부 보조 함수는 제외하세요.",
+    "nostart_prompt": "도구 실행의 입력·출력을 정리하고, 필드 길이를 제한한 뒤, 비밀정보 제거 마커를 검사하여 관측용 프롬프트 문자열을 만드는 흐름을 추적해 주세요. 정상 처리에서 입력 내용·길이에 관계없이 호출되는 함수 6개를 최초 호출 순서로 나열하세요. 반복 호출은 한 번만 세고 조건부 보조 함수는 제외하세요.",
+    "keys": [
+      "buildObservationPrompt",
+      "buildObservationPromptParts",
+      "stripImagePayloadsFromField",
+      "truncateObservationField",
+      "renderObservationPrompt",
+      "hasRedactionMarker"
+    ],
+    "evidence": [
+      "src/sdk/prompts.ts:373 buildObservationPrompt",
+      "src/sdk/prompts.ts:394 buildObservationPromptParts",
+      "src/sdk/prompts.ts:342 stripImagePayloadsFromField",
+      "src/sdk/prompts.ts:356 truncateObservationField",
+      "src/sdk/prompts.ts:430 renderObservationPrompt",
+      "src/utils/redaction.ts:161 hasRedactionMarker"
+    ]
+  },
+  {
+    "id": "F2",
+    "start_prompt": "src/npx-cli/commands/install.ts의 copyPluginToCache에서 복사 대상 경로를 계산하는 호출을 따라가세요. 버전별 캐시 디렉터리에서 플러그인 디렉터리를 거쳐 Claude 설정 디렉터리를 결정하는 함수까지, 반드시 거치는 함수 5개를 호출 순서로 나열하세요. 복사 원본 경로 계산과 복사 후 정리 작업은 제외하세요.",
+    "nostart_prompt": "설치할 플러그인을 버전별 캐시에 복사할 때, 복사 대상 경로를 계산하는 흐름을 추적해 주세요. 버전별 캐시 디렉터리에서 플러그인 디렉터리를 거쳐 Claude 설정 디렉터리를 결정하는 함수까지, 복사 작업의 입구를 포함하여 반드시 거치는 함수 5개를 호출 순서로 나열하세요. 복사 원본 경로 계산과 복사 후 정리 작업은 제외하세요.",
+    "keys": [
+      "copyPluginToCache",
+      "pluginCacheDirectory",
+      "pluginCacheRootDirectory",
+      "pluginsDirectory",
+      "claudeConfigDirectory"
+    ],
+    "evidence": [
+      "src/npx-cli/commands/install.ts:816 copyPluginToCache",
+      "src/npx-cli/utils/paths.ts:41 pluginCacheDirectory",
+      "src/npx-cli/utils/paths.ts:37 pluginCacheRootDirectory",
+      "src/npx-cli/utils/paths.ts:21 pluginsDirectory",
+      "src/npx-cli/utils/paths.ts:13 claudeConfigDirectory"
+    ]
+  }
+]

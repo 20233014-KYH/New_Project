@@ -1,0 +1,137 @@
+{
+  "situation": "S6",
+  "condition": "gstack",
+  "rep": 3,
+  "model": "sonnet",
+  "prompt": "이 할 일 앱에 마감일을 넣고, 마감이 지난 할 일을 따로 볼 수 있게 하고 싶어. 코드는 아직 쓰지 말고, 개발 계획만 세워 줘.",
+  "turn1": {
+    "sec": 30.6,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\README.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_v3\\S6_gstack_r3\\tests\\test_model.py"
+    ],
+    "writes": [],
+    "texts": [
+      "먼저 현재 앱 구조를 확인하겠습니다.",
+      "현재 앱(Python, 표준 라이브러리만 사용, JSON 파일 저장, CLI와 웹 두 화면)을 읽어 보고 세운 계획입니다. 코드는 쓰지 않았습니다.\n\n## 먼저 정할 것 (제 기본 가정)\n\n| 항목 | 가정 | 이유 |\n|---|---|---|\n| 마감 형식 | 날짜만 (`YYYY-MM-DD`), 시각 없음 | 기존 `created`와 같은 형식이고 가장 단순합니다. |\n| 마감 입력 | 선택 사항. 없는 할 일도 허용 | 기존 데이터와 사용 방식을 그대로 유지합니다. |\n| \"마감 지남\" 기준 | 완료하지 않았고, 마감일이 오늘보다 앞선 것 | 마감일 당일은 아직 지난 것이 아닙니다. |\n| 과거 날짜 입력 | 허용 | 막을 이유가 없습니다. |\n| 마감 수정·삭제 | 이번 범위에 포함 (`due <id> <날짜 또는 none>`) | 오타를 고칠 방법이 필요합니다. |\n\n이 가정과 다르면 알려 주세요. 특히 시각까지 필요한지가 구현 범위를 가장 크게 바꿉니다.\n\n## 단계별 계획\n\n**1. 저장 형식 (`todo/storage.py`)**\n- 항목에 선택 필드 `due: \"YYYY-MM-DD\"`를 추가합니다. 값이 없거나 `null`이면 마감 없음입니다.\n- `VERSION`을 3으로 올리고 `migrate()`에서 v1→v2→v3 순서로 이어 변환합니다. 지금 코드는 v1일 때만 변환하는 구조라 단계를 연결해야 합니다. v2→v3은 `due=None`만 채우면 됩니다.\n- 모듈 맨 위의 형식 설명 문서도 같이 고칩니다.\n- 대안으로 버전을 올리지 않고 `due`를 선택 필드로만 둘 수도 있습니다. 그러면 기존 `test_v2_unchanged`는 그대로 통과하지만 파일 형식 약속이 흐려집니다. 저는 버전을 올리는 쪽을 권합니다.\n\n**2. 핵심 로직 (`todo/model.py`)**\n- `add_item(data, title, due=None)`으로 마감을 선택 인자로 받습니다.\n- `set_due(data, id, due)`를 추가합니다.\n- `parse_due(text)`로 날짜 형식을 검증합니다. 형식이 틀리면 `ValueError`를 냅니다.\n- `is_overdue(item, today=None)`를 추가합니다. `today`를 인자로 받게 해서 테스트에서 오늘 날짜를 고정할 수 있습니다.\n- `overdue_items(data, today=None)`는 마감 오래된 순으로 정렬해 돌려줍니다.\n- CLI와 웹이 판단 로직을 따로 갖지 않도록 모두 model에만 둡니다.\n\n**3. 명령줄 (`todo/cli.py`)**\n- `add \"제목\" --due 2026-12-01`\n- `due <id> 2026-12-01`, `due <id> none`\n- `list --overdue`로 지난 것만 봅니다.\n- `format_item`은 마감일을 표시하고, 지난 항목에는 `[마감 지남]` 표시를 붙입니다.\n- 날짜 형식이 틀리면 트레이스백 대신 한 줄 오류 메시지를 내고 종료합니다.\n\n**4. 웹 (`todo/web.py`)**\n- 표에 \"마감\" 열을 추가하고, 지난 항목은 시각적으로 구분합니다.\n- 지난 할 일만 보는 화면은 `/overdue`와 `/api/items?overdue=1` 두 경로로 제공합니다. 지금은 `self.path == \"/api/items\"`로 정확히 비교하므로, 쿼리 문자열을 처리하려면 `urlparse`로 경로를 먼저 나눠야 합니다.\n- `POST /api/items`는 `due`를 선택으로 받습니다. 형식이 틀리면 지금처럼 500이 나지 않고 400을 돌려줍니다.\n- 기본 화면에 링크 한 줄이나 \"마감 지남\" 구역을 넣어 별도 화면으로 갈 수 있게 합니다.\n\n**5. 테스트 (`tests/`)**\n- `test_model.py`에서 확인할 것:\n  - 어제 마감은 지남, 오늘 마감은 안 지남, 내일 마감은 안 지남\n  - 완료한 항목은 지나도 제외\n  - 마감 없는 항목은 제외\n  - 날짜 형식이 틀리면 오류\n  - 정렬 순서\n- `test_storage.py`에서 확인할 것:\n  - v1 → v3 변환\n  - v2 → v3 변환\n  - 변환을 여러 번 해도 결과가 같음\n  - 기존 `test_v2_unchanged`는 \"v3로 바뀐다\"로 수정해야 합니다. 의도된 변경입니다.\n- CLI는 `main(argv)`로 호출하면 되니 `list --overdue` 출력과 잘못된 날짜 처리를 가볍게 확인합니다.\n- 웹은 서버를 띄워 `/api/items?overdue=1`과 400 응답을 확인합니다.\n\n**6. 문서**\n- README에 `--due`, `due`, `list --overdue`, `/overdue` 사용법을 추가합니다.\n\n## 구현 순서와 위험 요소\n\n순서는 1 → 2 → 5(model·storage 테스트) → 3 → 4 → 5(나머지) → 6입니다. 저장 형식과 판단 로직이 정해져야 화면 두 개가 그 위에 얹히기 때문입니다.\n\n- **기존 `todo.json` 보호**: 사용자 파일이 한 번 v3로 저장되면 이전 버전 코드는 읽을 수 없습니다. 변환은 `save()` 때만 반영되므로 읽기만 하면 파일은 안 바뀝니다. 적용 전에 백업을 권합니다.\n- **오늘 날짜 기준**: `date.today()`는 컴퓨터의 로컬 시간입니다. 개인용 앱이라 문제 없지만 자정을 넘기는 순간 판정이 바뀝니다.\n- **범위 밖이지만 눈에 띈 것**: `web.py`는 제목을 HTML 이스케이프 없이 출력합니다. 마감 열을 추가하면서 그 줄을 건드리게 되니, 함께 고칠지 따로 둘지 정해 주세요. 웹에는 완료·삭제 기능도 없는데, 이번 범위에는 넣지 않았습니다.\n\n위 가정대로 진행해도 될까요? 아니면 시각 포함, 별도 화면 형태 같은 부분을 먼저 조정할까요?"
+    ],
+    "denied": [],
+    "session": "b68870f3-870d-459d-a76d-ee70c3a33789",
+    "result": "현재 앱(Python, 표준 라이브러리만 사용, JSON 파일 저장, CLI와 웹 두 화면)을 읽어 보고 세운 계획입니다. 코드는 쓰지 않았습니다.\n\n## 먼저 정할 것 (제 기본 가정)\n\n| 항목 | 가정 | 이유 |\n|---|---|---|\n| 마감 형식 | 날짜만 (`YYYY-MM-DD`), 시각 없음 | 기존 `created`와 같은 형식이고 가장 단순합니다. |\n| 마감 입력 | 선택 사항. 없는 할 일도 허용 | 기존 데이터와 사용 방식을 그대로 유지합니다. |\n| \"마감 지남\" 기준 | 완료하지 않았고, 마감일이 오늘보다 앞선 것 | 마감일 당일은 아직 지난 것이 아닙니다. |\n| 과거 날짜 입력 | 허용 | 막을 이유가 없습니다. |\n| 마감 수정·삭제 | 이번 범위에 포함 (`due <id> <날짜 또는 none>`) | 오타를 고칠 방법이 필요합니다. |\n\n이 가정과 다르면 알려 주세요. 특히 시각까지 필요한지가 구현 범위를 가장 크게 바꿉니다.\n\n## 단계별 계획\n\n**1. 저장 형식 (`todo/storage.py`)**\n- 항목에 선택 필드 `due: \"YYYY-MM-DD\"`를 추가합니다. 값이 없거나 `null`이면 마감 없음입니다.\n- `VERSION`을 3으로 올리고 `migrate()`에서 v1→v2→v3 순서로 이어 변환합니다. 지금 코드는 v1일 때만 변환하는 구조라 단계를 연결해야 합니다. v2→v3은 `due=None`만 채우면 됩니다.\n- 모듈 맨 위의 형식 설명 문서도 같이 고칩니다.\n- 대안으로 버전을 올리지 않고 `due`를 선택 필드로만 둘 수도 있습니다. 그러면 기존 `test_v2_unchanged`는 그대로 통과하지만 파일 형식 약속이 흐려집니다. 저는 버전을 올리는 쪽을 권합니다.\n\n**2. 핵심 로직 (`todo/model.py`)**\n- `add_item(data, title, due=None)`으로 마감을 선택 인자로 받습니다.\n- `set_due(data, id, due)`를 추가합니다.\n- `parse_due(text)`로 날짜 형식을 검증합니다. 형식이 틀리면 `ValueError`를 냅니다.\n- `is_overdue(item, today=None)`를 추가합니다. `today`를 인자로 받게 해서 테스트에서 오늘 날짜를 고정할 수 있습니다.\n- `overdue_items(data, today=None)`는 마감 오래된 순으로 정렬해 돌려줍니다.\n- CLI와 웹이 판단 로직을 따로 갖지 않도록 모두 model에만 둡니다.\n\n**3. 명령줄 (`todo/cli.py`)**\n- `add \"제목\" --due 2026-12-01`\n- `due <id> 2026-12-01`, `due <id> none`\n- `list --overdue`로 지난 것만 봅니다.\n- `format_item`은 마감일을 표시하고, 지난 항목에는 `[마감 지남]` 표시를 붙입니다.\n- 날짜 형식이 틀리면 트레이스백 대신 한 줄 오류 메시지를 내고 종료합니다.\n\n**4. 웹 (`todo/web.py`)**\n- 표에 \"마감\" 열을 추가하고, 지난 항목은 시각적으로 구분합니다.\n- 지난 할 일만 보는 화면은 `/overdue`와 `/api/items?overdue=1` 두 경로로 제공합니다. 지금은 `self.path == \"/api/items\"`로 정확히 비교하므로, 쿼리 문자열을 처리하려면 `urlparse`로 경로를 먼저 나눠야 합니다.\n- `POST /api/items`는 `due`를 선택으로 받습니다. 형식이 틀리면 지금처럼 500이 나지 않고 400을 돌려줍니다.\n- 기본 화면에 링크 한 줄이나 \"마감 지남\" 구역을 넣어 별도 화면으로 갈 수 있게 합니다.\n\n**5. 테스트 (`tests/`)**\n- `test_model.py`에서 확인할 것:\n  - 어제 마감은 지남, 오늘 마감은 안 지남, 내일 마감은 안 지남\n  - 완료한 항목은 지나도 제외\n  - 마감 없는 항목은 제외\n  - 날짜 형식이 틀리면 오류\n  - 정렬 순서\n- `test_storage.py`에서 확인할 것:\n  - v1 → v3 변환\n  - v2 → v3 변환\n  - 변환을 여러 번 해도 결과가 같음\n  - 기존 `test_v2_unchanged`는 \"v3로 바뀐다\"로 수정해야 합니다. 의도된 변경입니다.\n- CLI는 `main(argv)`로 호출하면 되니 `list --overdue` 출력과 잘못된 날짜 처리를 가볍게 확인합니다.\n- 웹은 서버를 띄워 `/api/items?overdue=1`과 400 응답을 확인합니다.\n\n**6. 문서**\n- README에 `--due`, `due`, `list --overdue`, `/overdue` 사용법을 추가합니다.\n\n## 구현 순서와 위험 요소\n\n순서는 1 → 2 → 5(model·storage 테스트) → 3 → 4 → 5(나머지) → 6입니다. 저장 형식과 판단 로직이 정해져야 화면 두 개가 그 위에 얹히기 때문입니다.\n\n- **기존 `todo.json` 보호**: 사용자 파일이 한 번 v3로 저장되면 이전 버전 코드는 읽을 수 없습니다. 변환은 `save()` 때만 반영되므로 읽기만 하면 파일은 안 바뀝니다. 적용 전에 백업을 권합니다.\n- **오늘 날짜 기준**: `date.today()`는 컴퓨터의 로컬 시간입니다. 개인용 앱이라 문제 없지만 자정을 넘기는 순간 판정이 바뀝니다.\n- **범위 밖이지만 눈에 띈 것**: `web.py`는 제목을 HTML 이스케이프 없이 출력합니다. 마감 열을 추가하면서 그 줄을 건드리게 되니, 함께 고칠지 따로 둘지 정해 주세요. 웹에는 완료·삭제 기능도 없는데, 이번 범위에는 넣지 않았습니다.\n\n위 가정대로 진행해도 될까요? 아니면 시각 포함, 별도 화면 형태 같은 부분을 먼저 조정할까요?",
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 15208,
+      "cache_read_input_tokens": 89724,
+      "output_tokens": 4067,
+      "output_tokens_details": {
+        "thinking_tokens": 809
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 15208,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 3233,
+          "cache_read_input_tokens": 33932,
+          "cache_creation_input_tokens": 3329,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3329
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 9,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 90
+  },
+  "asked": true,
+  "turn2": {
+    "sec": 20.8,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "# 마감일 기능 개발 계획 (최종)\n\n## 확정한 결정\n\n- **마감 형식**: 날짜만 쓰며 `YYYY-MM-DD`입니다. 선택 사항이라 없어도 됩니다.\n- **마감 지남 기준**: 완료하지 않았고 마감일이 오늘보다 앞선 할 일입니다. 마감일 당일은 지난 것이 아닙니다.\n- **노출 범위**: 명령줄과 웹 모두에서 마감일을 보고 입력하고, 지난 할 일만 따로 볼 수 있습니다.\n- **기존 데이터**: 변환 없이 그대로 읽습니다. 이 때문에 앞서 권했던 버전 3 올리기는 철회합니다. 버전 2 형식을 유지하고 `due`를 선택 필드로 추가합니다.\n  - `due`가 없는 항목은 마감 없음으로 읽습니다. 코드에서는 `it.get(\"due\")`로 읽습니다.\n  - 기존 `todo.json`은 한 글자도 바뀌지 않고, 마감을 넣은 항목만 `due`가 붙어 저장됩니다.\n  - 이전 버전 코드로 돌아가도 파일을 읽을 수 있고, 기존 `test_v2_unchanged`도 수정 없이 통과합니다.\n\n## 작업 순서\n\n**1. 저장 (`todo/storage.py`)**\n- `migrate()`와 `VERSION`은 건드리지 않습니다.\n- 맨 위 형식 설명에 `\"due\"`가 선택 필드이고 없으면 마감 없음이라고 한 줄만 추가합니다.\n\n**2. 핵심 로직 (`todo/model.py`)**\n- `add_item(data, title, due=None)`: `due`가 있을 때만 필드를 넣습니다.\n- `parse_due(text)`: `date.fromisoformat`으로 검증하고, 틀리면 `ValueError`를 냅니다.\n- `set_due(data, id, due)`: 날짜 또는 `None`(해제)을 받습니다.\n- `is_overdue(item, today=None)`와 `overdue_items(data, today=None)`: 마감 오래된 순으로 정렬합니다. `today`를 인자로 받아 테스트에서 날짜를 고정합니다.\n- 판정은 여기에만 두고, CLI와 웹은 이 함수만 호출합니다. 그래야 두 화면의 결과가 항상 같습니다.\n\n**3. 명령줄 (`todo/cli.py`)**\n- `add \"제목\" --due 2026-12-01`\n- `due <id> 2026-12-01` / `due <id> none`\n- `list --overdue`\n- `format_item`: 마감이 있으면 `(마감 2026-12-01)`을 표시하고, 지난 항목에는 `[마감 지남]`을 붙입니다.\n- 날짜가 틀리면 트레이스백 대신 한 줄 오류 메시지를 내고 0이 아닌 값으로 종료합니다.\n\n**4. 웹 (`todo/web.py`)**\n- 표에 \"마감\" 열을 추가하고 지난 항목은 눈에 띄게 표시합니다. `row_html`은 CLI와 같은 정보를 보여 주도록 맞춥니다.\n- 경로 처리에 `urlparse`를 도입해서 `/api/items?overdue=1`을 처리합니다.\n- 지난 할 일만 보여 주는 `/overdue` 화면을 추가하고, 기본 화면에서 링크로 이동할 수 있게 합니다.\n- `POST /api/items`는 `due`를 선택으로 받고, 형식이 틀리면 400을 돌려줍니다.\n- 기존 `GET /api/items` 응답은 그대로 두고, 마감 없는 항목에는 `due` 키가 없을 수 있습니다. 이 점을 README에 명시합니다.\n\n**5. 테스트**\n- 기존 테스트는 수정 없이 통과해야 합니다.\n- `tests/test_model.py`: 어제·오늘·내일 마감, 완료 항목 제외, 마감 없는 항목 제외, 잘못된 날짜, 정렬, `set_due` 설정과 해제를 확인합니다.\n- `tests/test_storage.py`: `due`가 없는 v2 데이터가 변하지 않고 로드되는지(기존 데이터 호환), `due`가 있는 항목이 저장 후 다시 읽히는지 확인합니다.\n- 새 `tests/test_cli.py`: `main(argv)`로 `add --due`, `list --overdue` 출력, 잘못된 날짜 처리를 확인합니다. 저장 파일은 `TODO_FILE` 환경변수로 임시 경로로 돌립니다.\n- 웹은 서버를 띄워 `/`, `/overdue`, `/api/items?overdue=1`, 잘못된 `due`의 400을 직접 확인합니다.\n\n**6. 문서 (`README.md`)**\n- 새 명령, `/overdue`, API 쿼리, \"기존 `todo.json`은 그대로 쓸 수 있음\"을 추가합니다.\n\n## 완료 기준\n1. 마감 없는 기존 `todo.json`을 그대로 두고 CLI와 웹에서 목록이 이전과 똑같이 나옵니다.\n2. 같은 데이터에서 CLI `list --overdue`와 웹 `/overdue`가 같은 항목을 같은 순서로 보여 줍니다.\n3. `python -m pytest`가 전부 통과합니다.\n\n## 남은 위험\n- **날짜 기준**: `date.today()`는 컴퓨터의 로컬 날짜입니다. 개인용 앱이라 그대로 두되, 자정을 넘기면 판정이 바뀝니다.\n- **범위 밖**: `web.py`는 제목을 HTML 이스케이프 없이 출력합니다. 이번 계획에는 넣지 않았고, 마감 열을 추가하는 김에 고치려면 `row_html`에 한 줄이 필요합니다. 웹에 완료·삭제 기능이 없는 것도 이번 범위에서는 그대로입니다.\n\n계획은 여기까지이고, 코드는 아직 작성하지 않았습니다."
+    ],
+    "denied": [],
+    "session": "b68870f3-870d-459d-a76d-ee70c3a33789",
+    "result": "# 마감일 기능 개발 계획 (최종)\n\n## 확정한 결정\n\n- **마감 형식**: 날짜만 쓰며 `YYYY-MM-DD`입니다. 선택 사항이라 없어도 됩니다.\n- **마감 지남 기준**: 완료하지 않았고 마감일이 오늘보다 앞선 할 일입니다. 마감일 당일은 지난 것이 아닙니다.\n- **노출 범위**: 명령줄과 웹 모두에서 마감일을 보고 입력하고, 지난 할 일만 따로 볼 수 있습니다.\n- **기존 데이터**: 변환 없이 그대로 읽습니다. 이 때문에 앞서 권했던 버전 3 올리기는 철회합니다. 버전 2 형식을 유지하고 `due`를 선택 필드로 추가합니다.\n  - `due`가 없는 항목은 마감 없음으로 읽습니다. 코드에서는 `it.get(\"due\")`로 읽습니다.\n  - 기존 `todo.json`은 한 글자도 바뀌지 않고, 마감을 넣은 항목만 `due`가 붙어 저장됩니다.\n  - 이전 버전 코드로 돌아가도 파일을 읽을 수 있고, 기존 `test_v2_unchanged`도 수정 없이 통과합니다.\n\n## 작업 순서\n\n**1. 저장 (`todo/storage.py`)**\n- `migrate()`와 `VERSION`은 건드리지 않습니다.\n- 맨 위 형식 설명에 `\"due\"`가 선택 필드이고 없으면 마감 없음이라고 한 줄만 추가합니다.\n\n**2. 핵심 로직 (`todo/model.py`)**\n- `add_item(data, title, due=None)`: `due`가 있을 때만 필드를 넣습니다.\n- `parse_due(text)`: `date.fromisoformat`으로 검증하고, 틀리면 `ValueError`를 냅니다.\n- `set_due(data, id, due)`: 날짜 또는 `None`(해제)을 받습니다.\n- `is_overdue(item, today=None)`와 `overdue_items(data, today=None)`: 마감 오래된 순으로 정렬합니다. `today`를 인자로 받아 테스트에서 날짜를 고정합니다.\n- 판정은 여기에만 두고, CLI와 웹은 이 함수만 호출합니다. 그래야 두 화면의 결과가 항상 같습니다.\n\n**3. 명령줄 (`todo/cli.py`)**\n- `add \"제목\" --due 2026-12-01`\n- `due <id> 2026-12-01` / `due <id> none`\n- `list --overdue`\n- `format_item`: 마감이 있으면 `(마감 2026-12-01)`을 표시하고, 지난 항목에는 `[마감 지남]`을 붙입니다.\n- 날짜가 틀리면 트레이스백 대신 한 줄 오류 메시지를 내고 0이 아닌 값으로 종료합니다.\n\n**4. 웹 (`todo/web.py`)**\n- 표에 \"마감\" 열을 추가하고 지난 항목은 눈에 띄게 표시합니다. `row_html`은 CLI와 같은 정보를 보여 주도록 맞춥니다.\n- 경로 처리에 `urlparse`를 도입해서 `/api/items?overdue=1`을 처리합니다.\n- 지난 할 일만 보여 주는 `/overdue` 화면을 추가하고, 기본 화면에서 링크로 이동할 수 있게 합니다.\n- `POST /api/items`는 `due`를 선택으로 받고, 형식이 틀리면 400을 돌려줍니다.\n- 기존 `GET /api/items` 응답은 그대로 두고, 마감 없는 항목에는 `due` 키가 없을 수 있습니다. 이 점을 README에 명시합니다.\n\n**5. 테스트**\n- 기존 테스트는 수정 없이 통과해야 합니다.\n- `tests/test_model.py`: 어제·오늘·내일 마감, 완료 항목 제외, 마감 없는 항목 제외, 잘못된 날짜, 정렬, `set_due` 설정과 해제를 확인합니다.\n- `tests/test_storage.py`: `due`가 없는 v2 데이터가 변하지 않고 로드되는지(기존 데이터 호환), `due`가 있는 항목이 저장 후 다시 읽히는지 확인합니다.\n- 새 `tests/test_cli.py`: `main(argv)`로 `add --due`, `list --overdue` 출력, 잘못된 날짜 처리를 확인합니다. 저장 파일은 `TODO_FILE` 환경변수로 임시 경로로 돌립니다.\n- 웹은 서버를 띄워 `/`, `/overdue`, `/api/items?overdue=1`, 잘못된 `due`의 400을 직접 확인합니다.\n\n**6. 문서 (`README.md`)**\n- 새 명령, `/overdue`, API 쿼리, \"기존 `todo.json`은 그대로 쓸 수 있음\"을 추가합니다.\n\n## 완료 기준\n1. 마감 없는 기존 `todo.json`을 그대로 두고 CLI와 웹에서 목록이 이전과 똑같이 나옵니다.\n2. 같은 데이터에서 CLI `list --overdue`와 웹 `/overdue`가 같은 항목을 같은 순서로 보여 줍니다.\n3. `python -m pytest`가 전부 통과합니다.\n\n## 남은 위험\n- **날짜 기준**: `date.today()`는 컴퓨터의 로컬 날짜입니다. 개인용 앱이라 그대로 두되, 자정을 넘기면 판정이 바뀝니다.\n- **범위 밖**: `web.py`는 제목을 HTML 이스케이프 없이 출력합니다. 이번 계획에는 넣지 않았고, 마감 열을 추가하는 김에 고치려면 `row_html`에 한 줄이 필요합니다. 웹에 완료·삭제 기능이 없는 것도 이번 범위에서는 그대로입니다.\n\n계획은 여기까지이고, 코드는 아직 작성하지 않았습니다.",
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 3432,
+      "cache_read_input_tokens": 37261,
+      "output_tokens": 2547,
+      "output_tokens_details": {
+        "thinking_tokens": 341
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 3432,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 1,
+          "output_tokens": 2547,
+          "cache_read_input_tokens": 37261,
+          "cache_creation_input_tokens": 3432,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3432
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 1,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 90
+  },
+  "new_files": [],
+  "tokens": {
+    "input": 7,
+    "cache_create": 18640,
+    "cache_read": 126985,
+    "output": 6614
+  },
+  "sec": 51.4
+}

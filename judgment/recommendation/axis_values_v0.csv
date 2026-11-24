@@ -1,0 +1,61 @@
+﻿분야,도구ID,우선그룹,축ID,축 이름,보기,비교표 원문,비교표 근거,비교표 확인커밋,확인
+1 기획·작업 방식,superpowers,절차 전체,1-①,만들어 주는 결과물,개발 문서,설계 문서(docs/superpowers/specs/)와 구현 계획 파일(docs/superpowers/plans/),doc,2ce8aa1,전
+1 기획·작업 방식,superpowers,절차 전체,1-②,정해 주는 작업 단계,전 단계,전 단계: 질문으로 요구 정리 → 워크트리 → 계획 → 서브에이전트 실행 → TDD → 코드 리뷰 → 브랜치 마무리,doc,2ce8aa1,전
+1 기획·작업 방식,superpowers,절차 전체,1-③,따르게 하는 방식,자동,"자동: 세션 시작 훅 1개(SessionStart)가 사용 지시를 넣고, 상황에 맞는 스킬이 저절로 불림",calc,2ce8aa1,전
+1 기획·작업 방식,superpowers,절차 전체,1-④,세션이 끊겨도 이어지나,파일만 남음,계획·설계 파일이 저장소에 남아 다음 세션에서 이어 읽을 수 있음. 세션 상태 파일은 따로 없음,doc,2ce8aa1,전
+1 기획·작업 방식,ecc,절차 전체,1-①,만들어 주는 결과물,개발 문서,"편집 가능한 계획 파일(.claude/plans/*.plan.md), 세션 요약·학습 기록(instinct), 선택형 메모리 보관함(.ecc/)",doc,25278e7,전
+1 기획·작업 방식,ecc,절차 전체,1-②,정해 주는 작업 단계,전 단계,전 단계: 계획 → 테스트 → 구현 → 리뷰 → 검증 → 기억 → 개선. 보안 검사(AgentShield) 포함,doc,25278e7,전
+1 기획·작업 방식,ecc,절차 전체,1-③,따르게 하는 방식,자동,자동: 훅 여러 개가 도구 사용 때마다 검사를 강제(세션 시작·프롬프트·응답 종료 등). 훅 없는 minimal 설치도 있음,doc,25278e7,전
+1 기획·작업 방식,ecc,절차 전체,1-④,세션이 끊겨도 이어지나,세션 기록을 다시 넣음,세션을 요약·학습 기록으로 남기고 세션 시작 때 다시 넣음(기본 최대 8000자),doc,25278e7,전
+1 기획·작업 방식,gstack,절차 전체,1-①,만들어 주는 결과물,개발 문서,"설계 문서(/office-hours), 계획 리뷰, 리뷰·QA 결과, PR(/ship). 앞 단계 문서를 다음 스킬이 읽음",doc,e077053,전
+1 기획·작업 방식,gstack,절차 전체,1-②,정해 주는 작업 단계,전 단계,전 단계(스프린트): 생각 → 계획 → 구현 → 리뷰 → 테스트 → 배포 → 회고. 역할별 스킬(CEO·디자이너·리뷰어·QA),doc,e077053,전
+1 기획·작업 방식,gstack,절차 전체,1-③,따르게 하는 방식,명령,"수동: 사용자가 /office-hours, /review, /qa 같은 명령을 직접 부름. 안전 스킬만 훅으로 막음",doc,e077053,전
+1 기획·작업 방식,gstack,절차 전체,1-④,세션이 끊겨도 이어지나,명령으로 저장·복원,/context-save·/context-restore 스킬로 작업 맥락을 저장·복원,doc,e077053,전
+1 기획·작업 방식,gsd-core,절차 전체,1-①,만들어 주는 결과물,개발 문서,"프로젝트 상태 파일 .planning/ (STATE.md, CONTEXT.md, 단계별 PLAN.md)과 단계마다 PR",doc,d5ab466,전
+1 기획·작업 방식,gsd-core,절차 전체,1-②,정해 주는 작업 단계,전 단계,단계 반복: 논의 → 계획 → 실행 → 검증 → 배포. 무거운 일은 새 컨텍스트의 서브에이전트가 함,doc,d5ab466,전
+1 기획·작업 방식,gsd-core,절차 전체,1-③,따르게 하는 방식,둘 다,"둘 다: /gsd-new-project 같은 명령으로 시작하고, 훅이 7개 시점(세션 시작·도구 사용 전후·압축 전 등)에서 자동으로 돎",calc,d5ab466,전
+1 기획·작업 방식,gsd-core,절차 전체,1-④,세션이 끊겨도 이어지나,계획·상태 파일로 이어짐,STATE.md 등 파일로 세션이 끊겨도 이어짐 (이 도구의 핵심 목적),doc,d5ab466,전
+1 기획·작업 방식,planning-with-files,-,1-①,만들어 주는 결과물,개발 문서,"계획 파일 3개(task_plan.md, findings.md, progress.md)를 프로젝트에 둠",doc,2362ca3,전
+1 기획·작업 방식,planning-with-files,-,1-②,정해 주는 작업 단계,계획 단계만,계획을 적고 따라가게 하는 단계만. 구현·리뷰 절차는 정하지 않음,ai,2362ca3,전
+1 기획·작업 방식,planning-with-files,-,1-③,따르게 하는 방식,자동,"자동: 훅 6개 시점(세션 시작·매 프롬프트·도구 사용 전후·압축 전·응답 종료)이 계획을 다시 넣고, 계획이 끝나기 전 멈추지 않게 붙잡을 수 있음",calc,2362ca3,전
+1 기획·작업 방식,planning-with-files,-,1-④,세션이 끊겨도 이어지나,계획·상태 파일로 이어짐,계획이 디스크에 있어 /clear·압축·종료 뒤에도 현재 단계부터 이어짐. 제작자 측정: 다시 파악하는 데 13.3턴 → 5.0턴,doc,2362ca3,전
+1 기획·작업 방식,pm-skills,-,1-①,만들어 주는 결과물,제품 기획 문서,"제품 기획 문서: PRD, 가설 목록, 우선순위표, 전략, 출시 계획, 지표(North Star) 등",doc,9af7bfd,전
+1 기획·작업 방식,pm-skills,-,1-②,정해 주는 작업 단계,제품 기획 단계,코딩 전 제품 기획 단계(발견 → 전략 → 실행 → 출시 → 성장). 구현 절차는 다루지 않음,doc,9af7bfd,전
+1 기획·작업 방식,pm-skills,-,1-③,따르게 하는 방식,둘 다,"둘 다: 스킬은 관련 대화에서 저절로 쓰이고, /discover 같은 명령이 여러 스킬을 이어 부름",doc,9af7bfd,전
+1 기획·작업 방식,pm-skills,-,1-④,세션이 끊겨도 이어지나,확인 안 됨,세션을 잇는 장치는 확인 못 함,doc,9af7bfd,전
+3 코드 이해·검색,graphify,코드 그래프,3-①,다루는 대상,코드 + 문서·PDF·이미지,코드(약 40개 언어) + 문서·PDF·이미지·영상·음성,doc,0a8cd4e,전
+3 코드 이해·검색,graphify,코드 그래프,3-②,찾는 방식,그래프,"지식 그래프(벡터 검색 아님). 질문, 두 지점 사이 경로 찾기, 개념 설명. 연결마다 '원문에서 읽음/추론함' 표시",doc,0a8cd4e,전
+3 코드 이해·검색,graphify,코드 그래프,3-③,편집까지 하나,찾기만,찾기만 함. MCP 도구 10개는 그래프 조회와 GitHub PR 조회(gh 로그인 사용),pattern,0a8cd4e,전
+3 코드 이해·검색,codegraph,코드 그래프,3-①,다루는 대상,코드만,"코드만 (20개 이상 언어, 웹 프레임워크 라우트·iOS/React Native 연결 포함)",doc,01e0ac3,전
+3 코드 이해·검색,codegraph,코드 그래프,3-②,찾는 방식,그래프,심볼·호출·의존성 그래프 + 이름 전문 검색. 한 번 호출로 관련 코드 원문·호출 흐름·영향 범위를 돌려줌,doc,01e0ac3,전
+3 코드 이해·검색,codegraph,코드 그래프,3-③,편집까지 하나,찾기만,찾기만 함. 기본 노출 MCP 도구는 codegraph_explore 1개(나머지 7개는 숨김),doc,01e0ac3,전
+3 코드 이해·검색,claude-context,-,3-①,다루는 대상,코드만,코드,doc,6fc318b,전
+3 코드 이해·검색,claude-context,-,3-②,찾는 방식,벡터 의미 검색,벡터 의미 검색(임베딩). 글자가 달라도 뜻이 비슷한 코드를 찾음,doc,6fc318b,전
+3 코드 이해·검색,claude-context,-,3-③,편집까지 하나,찾기만,"찾기만 함. MCP 도구 4개(색인·검색·상태·삭제, 팀 실측)",tested,6fc318b,전
+3 코드 이해·검색,context7,-,3-①,다루는 대상,외부 라이브러리 문서,내 코드가 아니라 외부 라이브러리의 최신 문서·예제 코드,doc,078c0c7,전
+3 코드 이해·검색,context7,-,3-②,찾는 방식,라이브러리 문서 찾기,"라이브러리 이름 → ID 찾기, ID로 문서 질의(MCP 도구 2개 또는 ctx7 CLI + 스킬)",doc,078c0c7,전
+3 코드 이해·검색,context7,-,3-③,편집까지 하나,찾기만,찾기만 함,doc,078c0c7,전
+3 코드 이해·검색,serena,-,3-①,다루는 대상,코드만,코드(언어 서버 기준 40개 이상 언어),doc,ede329a,전
+3 코드 이해·검색,serena,-,3-②,찾는 방식,심볼 단위,"IDE처럼 심볼 단위: 정의·참조 찾기, 언어 서버(LSP) 또는 유료 JetBrains 플러그인 사용",doc,ede329a,전
+3 코드 이해·검색,serena,-,3-③,편집까지 하나,편집까지,"편집까지 함: 심볼 단위 수정, 이름 바꾸기·옮기기 같은 리팩터링",doc,ede329a,전
+3 코드 이해·검색,understand-anything,코드 그래프,3-①,다루는 대상,코드 + 업무 흐름·위키,코드 + 업무 흐름(도메인) + 마크다운 위키 지식 베이스,doc,a6ea402,전
+3 코드 이해·검색,understand-anything,코드 그래프,3-②,찾는 방식,그래프,"여러 에이전트가 파일·함수·클래스·의존성을 분석해 지식 그래프를 만들고, 쉬운 말 요약을 붙임",doc,a6ea402,전
+3 코드 이해·검색,understand-anything,코드 그래프,3-③,편집까지 하나,찾기만,"찾고 설명만 함. 변경 영향 분석(/understand-diff), 신입용 안내서(/understand-onboard) 생성",doc,a6ea402,전
+4 디자인·프론트엔드,ui-ux-pro-max-skill,디자인 지침,4-②,도구가 겨냥하는 것,업종에 맞는 디자인 시스템,"업종에 맞는 디자인 시스템 고르기: 업종별 규칙 192개, UI 스타일 79개, 색 조합 192개, 글꼴 짝 74개, UX 지침 119개를 검색해 추천",doc,28b3b8d,전
+4 디자인·프론트엔드,ui-ux-pro-max-skill,디자인 지침,4-③,Figma 연결 방향,없음,없음,doc,28b3b8d,전
+4 디자인·프론트엔드,taste-skill,디자인 지침,4-②,도구가 겨냥하는 것,새 화면을 남다른 분위기로,새 웹사이트·앱 화면을 평균적인 랜딩 페이지가 아니게 만드는 것: 사이트 247개 연구에서 뽑은 20개 방향 중 하나 + 공개 아카이브의 실제 사진,doc,12af471,전
+4 디자인·프론트엔드,taste-skill,디자인 지침,4-③,Figma 연결 방향,없음,없음,doc,12af471,전
+4 디자인·프론트엔드,impeccable,디자인 지침,4-②,도구가 겨냥하는 것,있는 화면 다듬기·점검,"이미 있는 화면을 고치고 검토하는 것: 더 과감하게·차분하게 등 24개 명령, 사용성 점수 리뷰(critique), 접근성·성능 점검(audit)",doc,4b6b80f,전
+4 디자인·프론트엔드,impeccable,디자인 지침,4-③,Figma 연결 방향,없음,없음,doc,4b6b80f,전
+4 디자인·프론트엔드,figma-context-mcp,Figma,4-②,도구가 겨냥하는 것,Figma 디자인을 코드로,Figma 파일 링크를 주면 레이아웃·스타일 정보를 필요한 것만 줄여서 코드 작성에 넘김,doc,c083d65,전
+4 디자인·프론트엔드,figma-context-mcp,Figma,4-③,Figma 연결 방향,읽기만,"읽기만: Figma API로 디자인 데이터와 이미지를 가져옴(MCP 도구 2개, 팀 실측)",doc,c083d65,전
+4 디자인·프론트엔드,cursor-talk-to-figma-mcp,Figma,4-②,도구가 겨냥하는 것,Figma 디자인 고치기,"Claude가 Figma와 대화하듯 디자인을 읽고 '고치게' 함: 글자 일괄 바꾸기, 컴포넌트 인스턴스 덮어쓰기 전파 등",doc,ddd90f3,전
+4 디자인·프론트엔드,cursor-talk-to-figma-mcp,Figma,4-③,Figma 연결 방향,읽기·쓰기,읽기·쓰기 둘 다: MCP 도구 40개(팀 실측)가 로컬 WebSocket 서버와 Figma 플러그인을 거쳐 디자인을 수정,doc,ddd90f3,전
+4 디자인·프론트엔드,shadcn-ui-mcp-server,-,4-②,도구가 겨냥하는 것,shadcn/ui 컴포넌트 원문,shadcn/ui v4 컴포넌트·블록·데모 원문과 메타데이터를 가져옴(React·Svelte·Vue·React Native),doc,30efb8a,전
+4 디자인·프론트엔드,shadcn-ui-mcp-server,-,4-③,Figma 연결 방향,없음,없음 (GitHub에서 shadcn 저장소를 읽음),doc,30efb8a,전
+5 백엔드·인프라,dbhub,범용 DB,5-①,지원하는 대상,일반 DB,"PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, SQLite (한 서버로 여러 DB)",doc,1f3fa03,전
+5 백엔드·인프라,mcp-toolbox,범용 DB,5-①,지원하는 대상,일반 DB; Google Cloud DB,"미리 만든 설정 40종: 일반 DB(PostgreSQL, MySQL, SQL Server, Oracle, SQLite 등)와 Google Cloud(BigQuery, Spanner, AlloyDB, Cloud SQL, Firestore 등), 그 밖에 Snowflake·Neo4j·Elasticsearch 등",calc,bfd4ffa,전
+5 백엔드·인프라,supabase-mcp,-,5-①,지원하는 대상,Supabase,"Supabase 프로젝트(Postgres DB, 스토리지, Edge Functions, 브랜치, 문서 검색)",doc,6b2fca9,전
+5 백엔드·인프라,kubernetes-mcp-server,쿠버네티스,5-①,지원하는 대상,Kubernetes; OpenShift,"Kubernetes와 OpenShift. 여러 클러스터 동시 연결. 도구 묶음(toolset): 기본 config·core, 선택 helm·tekton·kubevirt·관측 도구 등",doc,19e48a6,전
+5 백엔드·인프라,mcp-server-kubernetes,쿠버네티스,5-①,지원하는 대상,Kubernetes,Kubernetes (kubectl·Helm으로 다룰 수 있는 클러스터),doc,5536776,전
+5 백엔드·인프라,terraform-mcp-server,-,5-①,지원하는 대상,Terraform,"Terraform Registry(공개 프로바이더·모듈·정책), HCP Terraform·Terraform Enterprise(워크스페이스·변수·실행)",doc,63df659,전

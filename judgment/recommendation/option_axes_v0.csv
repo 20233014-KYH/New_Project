@@ -1,0 +1,27 @@
+﻿질문ID,선택지ID,선택지 문장,조건,조건(쉬운 말),맞는 도구,같은 그룹(10-B),기본 기능 후보(10-D),맞는 도구의 시험,지금 화면 추천,지금 규칙,지금 규칙과 비교,메모
+C1,plan_only,큰 변경 전에 계획만 세우면 돼요,1-②=계획 단계만,작업 단계가 '계획 단계만',planning-with-files,-,기본: /plan (R1-04),planning-with-files: 시험 안 함,없음 (시험 대기),R1-04 기본 /plan,다름: 표에만 planning-with-files,표로는 planning-with-files도 맞아요. 기본 /plan과 함께 10-D 시험(기본만 vs 더하기)으로 정해요.
+C1,enforce,계획→구현→검토 순서를 도구가 정해 매번 따르게 하고 싶어요,1-②=전 단계 & 1-③=자동|둘 다,"작업 단계가 '전 단계'이고, 따르게 하는 방식이 '자동' 또는 '둘 다'","superpowers, ecc, gsd-core",절차 전체(3개),-,superpowers: 시험 1·3 / ecc: 시험 1 / gsd-core: 시험 안 함,없음 (시험 대기),R1-05 gsd-core 또는 superpowers,다름: 표에만 ecc,표로는 ECC도 맞아요. 시험 1에서 ECC만 켠 쪽은 superpowers만 켠 쪽보다 과제 3개 모두 3번 다 토큰이 더 들었어요(결과는 같음). B-1로는 '다르다'라서 superpowers를 먼저 보여 줘요. 지금 R1-05는 ECC를 아예 뺐어요. 다만 시험 1에는 '도구 없음' 조건이 없어서 E 추천 판정은 아직이에요.
+C1,commands,필요할 때만 역할별 명령을 골라 쓰고 싶어요,1-③=명령,따르게 하는 방식이 '명령'(필요할 때 직접 부름),gstack,-,-,gstack: 시험 3,없음 (시험 대기),R1-06 gstack,같음,시험 3에서 gstack은 자연어로 부탁하면 쓰이지 않았어요. 명령을 부르는 조건으로 시험해요(10-C).
+C1,persist,/clear를 하거나 세션이 끊겨도 계획을 파일로 남겨 이어 가고 싶어요,1-④=계획·상태 파일로 이어짐,세션이 끊겨도 '계획·상태 파일로 이어짐',"gsd-core, planning-with-files",-,-,gsd-core: 시험 안 함 / planning-with-files: 시험 안 함,없음 (시험 대기),R1-07 planning-with-files,다름: 표에만 gsd-core,gsd-core도 계획·상태 파일로 이어져서 맞아요. 다만 gsd-core는 절차 전체 도구라 이 필요만 있으면 하는 일이 더 넓어요.
+C1,product,제품 기획(PRD·전략·로드맵)도 Claude에게 시키고 싶어요,1-①=제품 기획 문서,만들어 주는 결과물이 '제품 기획 문서',pm-skills,-,-,pm-skills: 시험 안 함,없음 (시험 대기),R1-09 pm-skills,같음,gstack의 /office-hours(제품 방향 점검)를 제품 기획으로 볼지는 확인이 필요해요. 초안은 '개발 문서'로 둠.
+C1,parallel,큰 변경을 여러 작업으로 나눠 동시에 처리하고 싶어요,-,맞는 축 없음,-,-,기본: /batch (R1-10),-,없음 (시험 대기),R1-10 기본 /batch,맞는 축 없음 (기본 기능만),4개 축에 '여러 작업으로 나눠 동시에 처리'가 없어요. 지금은 기본 /batch만 후보(10-D).
+C1,unknown,잘 모르겠어요,-,잘 모르겠어요,-,-,-,-,-,R0-08,-,추가 규칙을 쓰지 않아요(R0-08).
+C3,basic,파일 이름이나 단어를 알고 찾는 정도면 돼요,-,기본 기능으로 찾는 정도,-,-,"기본: 기본 검색·Read, Explore (R3-01)",-,없음 (시험 대기),"R3-01 기본 검색·Read, Explore",같음 (기본 기능만),오픈소스 후보가 없는 선택지예요(10-D).
+C3,semantic,파일·함수 이름을 몰라도 뜻으로 찾고 싶어요,3-②=벡터 의미 검색,찾는 방식이 '벡터 의미 검색',claude-context,-,-,claude-context: 시험 안 함,없음 (시험 대기),R3-02 claude-context,같음,-
+C3,docs,내 코드 말고 문서·PDF·이미지도 같이 찾고 싶어요,3-①=코드 + 문서·PDF·이미지,다루는 대상이 '코드 + 문서·PDF·이미지',graphify,-,-,graphify: 시험 안 함,없음 (시험 대기),R3-03 graphify,같음,-
+C3,edit,찾은 코드를 함수·클래스 단위로 고치거나 리팩터링까지 하고 싶어요,3-③=편집까지,편집까지 하는 도구,serena,-,-,serena: 시험 안 함,없음 (시험 대기),R3-04 serena,같음,-
+C3,human,사람이 직접 코드 구조를 그림(대시보드)으로 보고 싶어요,-,맞는 축 없음,-,-,-,-,없음,R3-05 understand-anything,맞는 축 없음,4개 축에 '사람이 화면으로 보나'가 없어요. 축 '결과를 보는 쪽(Claude / 사람 화면)'을 더할지 정해야 해요.
+C3,lib,외부 라이브러리의 최신 공식 문서를 자주 찾아요,3-①=외부 라이브러리 문서,다루는 대상이 '외부 라이브러리 문서',context7,-,-,context7: 시험 안 함,없음 (시험 대기),R3-06 context7,같음,-
+C3,big,프로젝트가 커서 코드 구조(그래프)로 찾고 싶어요,3-②=그래프,찾는 방식이 '그래프',"graphify, codegraph, understand-anything",코드 그래프(3개),-,graphify: 시험 안 함 / codegraph: 시험 안 함 / understand-anything: 시험 안 함,없음 (시험 대기),R3-07 codegraph,"다름: 표에만 graphify, understand-anything",같은 그룹 3개가 모두 맞아요(10-B). 지금 규칙은 codegraph 하나를 골랐어요(근거: AI 추정).
+C3,unknown,잘 모르겠어요,-,잘 모르겠어요,-,-,-,-,-,R0-08,-,추가 규칙을 쓰지 않아요(R0-08).
+C4,figma_read,Figma 디자인을 읽어서 코드로 옮기고 싶어요,4-③=읽기만|읽기·쓰기,Figma를 읽을 수 있는 도구(읽기만 또는 읽기·쓰기),"figma-context-mcp, cursor-talk-to-figma-mcp",Figma(2개),-,figma-context-mcp: 시험 안 함 / cursor-talk-to-figma-mcp: 시험 안 함,없음 (시험 대기),R4-01 figma-context-mcp,다름: 표에만 cursor-talk-to-figma-mcp,읽기·쓰기 도구도 읽을 수 있어서 맞아요. 필요보다 많이 하는 도구도 후보로 넣을지 정해야 해요(초안은 넣음).
+C4,figma_write,Claude가 Figma 디자인을 직접 고치게 하고 싶어요,4-③=읽기·쓰기,Figma를 고칠 수 있는 도구(읽기·쓰기),cursor-talk-to-figma-mcp,-,-,cursor-talk-to-figma-mcp: 시험 안 함,없음 (시험 대기),R4-02 cursor-talk-to-figma-mcp,같음,-
+C4,guide,AI가 만든 화면의 디자인 품질을 높이는 지침을 쓰고 싶어요,4-②=있는 화면 다듬기·점검|새 화면을 남다른 분위기로|업종에 맞는 디자인 시스템,디자인 지침 도구(겨냥하는 것 3가지 중 하나),"ui-ux-pro-max-skill, taste-skill, impeccable",디자인 지침(3개),-,ui-ux-pro-max-skill: 시험 안 함 / taste-skill: 시험 안 함 / impeccable: 시험 안 함,없음 (시험 대기),R4-03 impeccable 또는 taste-skill 또는 ui-ux-pro-max-skill,같음,같은 그룹 3개(10-B). 선택지를 겨냥하는 것 3가지로 나누면 하나씩 고를 수 있어요(질문 화면은 형원 님과).
+C4,shadcn,shadcn/ui 컴포넌트를 써요,4-②=shadcn/ui 컴포넌트 원문,겨냥하는 것이 'shadcn/ui 컴포넌트 원문',shadcn-ui-mcp-server,-,-,shadcn-ui-mcp-server: 시험 안 함,없음 (시험 대기),R4-04 shadcn-ui-mcp-server,같음,-
+C4,unknown,잘 모르겠어요,-,잘 모르겠어요,-,-,-,-,-,R0-08,-,추가 규칙을 쓰지 않아요(R0-08).
+C5,supabase,Supabase를 써요,5-①=Supabase,지원하는 대상에 'Supabase',supabase-mcp,-,-,supabase-mcp: 시험 안 함,없음 (시험 대기),R5-01 supabase-mcp,같음,-
+C5,db,Supabase가 아닌 다른 데이터베이스를 Claude가 다루게 하고 싶어요,5-①=일반 DB|Google Cloud DB,지원하는 대상에 '일반 DB' 또는 'Google Cloud DB',"dbhub, mcp-toolbox",범용 DB(2개),-,dbhub: 시험 안 함 / mcp-toolbox: 시험 안 함,없음 (시험 대기),R5-02 dbhub 또는 mcp-toolbox,같음,-
+C5,k8s,쿠버네티스 클러스터를 다뤄요,5-①=Kubernetes,지원하는 대상에 'Kubernetes',"kubernetes-mcp-server, mcp-server-kubernetes",쿠버네티스(2개),-,kubernetes-mcp-server: 시험 안 함 / mcp-server-kubernetes: 시험 안 함,없음 (시험 대기),R5-03 kubernetes-mcp-server 또는 mcp-server-kubernetes,같음,-
+C5,openshift,OpenShift를 써요,5-①=OpenShift,지원하는 대상에 'OpenShift',kubernetes-mcp-server,-,-,kubernetes-mcp-server: 시험 안 함,없음 (시험 대기),R5-04 kubernetes-mcp-server,같음,-
+C5,terraform,Terraform을 써요,5-①=Terraform,지원하는 대상에 'Terraform',terraform-mcp-server,-,-,terraform-mcp-server: 시험 안 함,없음 (시험 대기),R5-05 terraform-mcp-server,같음,-
+C5,unknown,잘 모르겠어요,-,잘 모르겠어요,-,-,-,-,-,R0-08,-,추가 규칙을 쓰지 않아요(R0-08).

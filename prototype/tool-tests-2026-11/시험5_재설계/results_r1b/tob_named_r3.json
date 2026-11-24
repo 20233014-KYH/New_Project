@@ -1,0 +1,119 @@
+{
+  "condition": "tob_named",
+  "rep": 3,
+  "turn": {
+    "sec": 42.0,
+    "rc": 0,
+    "stderr": "",
+    "skills": [
+      "variant-analysis:variant-analysis"
+    ],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\processing_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\screen_recording_utils.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\flagging.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\components\\video.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\routes.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험5_재설계\\work\\gradio\\gradio\\tunneling.py"
+    ],
+    "writes": [],
+    "texts": [
+      "먼저 씨앗 코드를 확인하고, 저장소 전체에서 셸 실행 sink를 검색하겠습니다.",
+      "Sink 후보: `screen_recording_utils.py:281`(create_subprocess_shell), `flagging.py:351`(os.system). 각각 자세히 보고, 나머지 subprocess 호출의 인자 형태도 확인하겠습니다.",
+      "같은 원인(경로나 값을 문자열 명령에 보간해 셸로 실행)의 변종을 2건 찾았습니다. 코드는 수정하지 않았습니다.\n\n## 요약\n\n저장소의 `*.py`에서 `shell=True`, `os.system`, `os.popen`, `create_subprocess_shell`을 검색했습니다. 로컬 데모 `demo/text_analysis/run.py`는 고정 문자열이라 제외했습니다. 나머지 `subprocess`, `Popen`, `create_subprocess_exec` 호출은 모두 인자 목록 방식인지 확인했습니다.\n\n- **`zoom_in`** (`gradio/screen_recording_utils.py:279-281`)\n  - `f'ffprobe ... \"{input_path}\"'`로 문자열을 만들어 `asyncio.create_subprocess_shell`로 실행합니다.\n  - 큰따옴표로 감싸도 `\"`, `$()`, 백틱은 셸이 그대로 해석합니다.\n  - 현재 유일한 호출 경로인 `routes.py:2031` → `process_video_with_ffmpeg`에서는 `input_path`가 서버가 만든 `NamedTemporaryFile`/`mkstemp` 이름입니다. 업로드 파일명이 들어가지 않아, 지금 경로로는 원격에서 악용하기 어렵습니다.\n  - 다만 `zoom_in`은 모듈 수준의 public 함수이고 검증이 없습니다. 임의의 경로가 들어가면 씨앗과 똑같이 터집니다. 임시 디렉터리 경로(`GRADIO_TEMP_DIR`)에 특수문자가 있으면 운영자 설정 때문에도 깨집니다.\n- **`archive_flagged_media`** (`gradio/flagging.py:348-351`)\n  - `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 따옴표 없이 셸에 넘깁니다. `label`과 `flag_dir`에 공백이나 `;`, `$()`가 있으면 그대로 실행됩니다.\n  - 호출처는 저장소 안에서 찾지 못했습니다. 씨앗도 호출처가 없으므로 같은 기준으로 취약 목록에 넣었습니다.\n  - 이 함수는 `strip_invalid_filename_characters`를 거치지 않습니다. 컴포넌트 `label`은 개발자가 정하는 값이라 신뢰 경계는 씨앗보다 약합니다. 하지만 `label`이 외부 입력에서 오는 앱이면 바로 악용됩니다.\n\n## 안전하다고 본 이유\n\n- `probe_recording_duration`: 인자 목록으로 실행하고, 입력은 `Path(...).name`으로 temp 디렉터리 안의 파일명만 사용합니다.\n- `get_video_length`, `get_video_duration_ffprobe`, `get_video_duration_ffprobe`가 쓰는 `subprocess.run`/`check_output`: 인자 목록 방식이라 셸을 거치지 않습니다.\n- `process_video_with_ffmpeg`, `async_convert_mp4_to_ts`, `combine_stream`, `zoom_in`의 ffmpeg 실행부: `create_subprocess_exec`를 쓰고 셸이 없습니다. `ff.cmd.split()`은 공백 때문에 경로가 쪼개질 수는 있습니다. 하지만 이는 셸 주입이 아니라 인자 분리 문제이고, 경로도 서버 생성 temp 이름입니다.\n- `convert_video_to_playable_mp4`와 `gradio/_vendor/ffmpy/ffmpy.py`: `Popen`에 리스트(`self._cmd`)를 넘기고 `shlex.split`으로 옵션을 나눕니다.\n- `tunneling.py`, `node_server.py`, `cli/commands/*`, `utils.py:1901,1916`: 모두 리스트 인자이고 외부 입력이 들어가지 않습니다.\n- `exec`(`utils.py`, `ipython_ext.py`): 소스 재실행이 목적이며 이번 원인(명령 문자열 보간)과는 다릅니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/screen_recording_utils.py:zoom_in\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\ngradio/processing_utils.py:get_video_length\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:async_convert_mp4_to_ts\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:run\ngradio/tunneling.py:_start_tunnel\ngradio/node_server.py:start_node_server"
+    ],
+    "denied": [],
+    "session": "3ba652b2-7dd6-4b13-91cc-dfb74bd1d5af",
+    "result": "같은 원인(경로나 값을 문자열 명령에 보간해 셸로 실행)의 변종을 2건 찾았습니다. 코드는 수정하지 않았습니다.\n\n## 요약\n\n저장소의 `*.py`에서 `shell=True`, `os.system`, `os.popen`, `create_subprocess_shell`을 검색했습니다. 로컬 데모 `demo/text_analysis/run.py`는 고정 문자열이라 제외했습니다. 나머지 `subprocess`, `Popen`, `create_subprocess_exec` 호출은 모두 인자 목록 방식인지 확인했습니다.\n\n- **`zoom_in`** (`gradio/screen_recording_utils.py:279-281`)\n  - `f'ffprobe ... \"{input_path}\"'`로 문자열을 만들어 `asyncio.create_subprocess_shell`로 실행합니다.\n  - 큰따옴표로 감싸도 `\"`, `$()`, 백틱은 셸이 그대로 해석합니다.\n  - 현재 유일한 호출 경로인 `routes.py:2031` → `process_video_with_ffmpeg`에서는 `input_path`가 서버가 만든 `NamedTemporaryFile`/`mkstemp` 이름입니다. 업로드 파일명이 들어가지 않아, 지금 경로로는 원격에서 악용하기 어렵습니다.\n  - 다만 `zoom_in`은 모듈 수준의 public 함수이고 검증이 없습니다. 임의의 경로가 들어가면 씨앗과 똑같이 터집니다. 임시 디렉터리 경로(`GRADIO_TEMP_DIR`)에 특수문자가 있으면 운영자 설정 때문에도 깨집니다.\n- **`archive_flagged_media`** (`gradio/flagging.py:348-351`)\n  - `os.system(f\"tar czf {archive_path} -C {flag_dir} {label}\")`로 따옴표 없이 셸에 넘깁니다. `label`과 `flag_dir`에 공백이나 `;`, `$()`가 있으면 그대로 실행됩니다.\n  - 호출처는 저장소 안에서 찾지 못했습니다. 씨앗도 호출처가 없으므로 같은 기준으로 취약 목록에 넣었습니다.\n  - 이 함수는 `strip_invalid_filename_characters`를 거치지 않습니다. 컴포넌트 `label`은 개발자가 정하는 값이라 신뢰 경계는 씨앗보다 약합니다. 하지만 `label`이 외부 입력에서 오는 앱이면 바로 악용됩니다.\n\n## 안전하다고 본 이유\n\n- `probe_recording_duration`: 인자 목록으로 실행하고, 입력은 `Path(...).name`으로 temp 디렉터리 안의 파일명만 사용합니다.\n- `get_video_length`, `get_video_duration_ffprobe`, `get_video_duration_ffprobe`가 쓰는 `subprocess.run`/`check_output`: 인자 목록 방식이라 셸을 거치지 않습니다.\n- `process_video_with_ffmpeg`, `async_convert_mp4_to_ts`, `combine_stream`, `zoom_in`의 ffmpeg 실행부: `create_subprocess_exec`를 쓰고 셸이 없습니다. `ff.cmd.split()`은 공백 때문에 경로가 쪼개질 수는 있습니다. 하지만 이는 셸 주입이 아니라 인자 분리 문제이고, 경로도 서버 생성 temp 이름입니다.\n- `convert_video_to_playable_mp4`와 `gradio/_vendor/ffmpy/ffmpy.py`: `Popen`에 리스트(`self._cmd`)를 넘기고 `shlex.split`으로 옵션을 나눕니다.\n- `tunneling.py`, `node_server.py`, `cli/commands/*`, `utils.py:1901,1916`: 모두 리스트 인자이고 외부 입력이 들어가지 않습니다.\n- `exec`(`utils.py`, `ipython_ext.py`): 소스 재실행이 목적이며 이번 원인(명령 문자열 보간)과는 다릅니다.\n\n취약 목록:\ngradio/processing_utils.py:extract_video_thumbnail\ngradio/screen_recording_utils.py:zoom_in\ngradio/flagging.py:archive_flagged_media\n\n비슷하지만 안전:\ngradio/screen_recording_utils.py:probe_recording_duration\ngradio/screen_recording_utils.py:process_video_with_ffmpeg\ngradio/processing_utils.py:get_video_length\ngradio/processing_utils.py:convert_video_to_playable_mp4\ngradio/components/video.py:get_video_duration_ffprobe\ngradio/components/video.py:async_convert_mp4_to_ts\ngradio/components/video.py:combine_stream\ngradio/_vendor/ffmpy/ffmpy.py:run\ngradio/tunneling.py:_start_tunnel\ngradio/node_server.py:start_node_server",
+    "usage": {
+      "input_tokens": 13,
+      "cache_creation_input_tokens": 34444,
+      "cache_read_input_tokens": 266965,
+      "output_tokens": 4775,
+      "output_tokens_details": {
+        "thinking_tokens": 967
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 34444,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 2428,
+          "cache_read_input_tokens": 57577,
+          "cache_creation_input_tokens": 1729,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 1729
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 14,
+    "plugins": [
+      "audit-context-building",
+      "building-secure-contracts",
+      "burpsuite-project-parser",
+      "chrome-mcp-troubleshooting",
+      "constant-time-analysis",
+      "culture-index",
+      "devcontainer-setup",
+      "differential-review",
+      "firebase-apk-scanner",
+      "gh-cli",
+      "dwarf-expert",
+      "entry-point-analyzer",
+      "mutation-testing",
+      "post-patch-validation",
+      "property-based-testing",
+      "semgrep-rule-creator",
+      "semgrep-rule-variant-creator",
+      "sharp-edges",
+      "static-analysis",
+      "spec-to-code-compliance",
+      "testing-handbook-skills",
+      "trailmark",
+      "variant-analysis",
+      "c-review",
+      "rust-review",
+      "modern-python",
+      "insecure-defaults",
+      "review-walkthrough",
+      "second-opinion",
+      "yara-authoring",
+      "git-cleanup",
+      "goal-prompt",
+      "supply-chain-risk-auditor",
+      "zeroize-audit",
+      "let-fate-decide",
+      "agentic-actions-auditor",
+      "code-improver",
+      "fp-check",
+      "dimensional-analysis",
+      "vulnerability-triage-brocards",
+      "github-triage",
+      "open-sourcing",
+      "writing-lean-proofs",
+      "modern-cpp",
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 104
+  },
+  "tokens": {
+    "total_in": 301422,
+    "output": 4775
+  }
+}

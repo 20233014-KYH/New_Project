@@ -1,0 +1,67 @@
+{
+  "condition": "curl",
+  "rep": 1,
+  "turn": {
+    "sec": 10.5,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [],
+    "writes": [],
+    "texts": [
+      "사이트에 접속해서 확인하려고 했는데, `curl`로 `http://127.0.0.1:8814/`를 요청하는 명령이 승인되지 않아 페이지를 받아오지 못했습니다. 그래서 원인은 아직 모릅니다. 확인하지 않은 채 추측으로 원인을 말씀드리지는 않겠습니다.\n\n아래 중 하나를 해 주시면 바로 원인을 찾겠습니다.\n\n1. **`curl` 요청 허용**: 권한 승인 프롬프트에서 허용해 주시면 HTML과 JS를 받아 '추가' 버튼의 동작을 분석하겠습니다.\n2. **직접 확인할 내용 알려주기**:\n   - 브라우저에서 F12를 눌러 Console 탭에 에러가 있는지\n   - '추가' 버튼을 눌렀을 때 Network 탭에 요청이 나가는지, 나간다면 응답 상태 코드가 무엇인지\n\n이 두 가지를 알려 주셔도 됩니다."
+    ],
+    "denied": [
+      "Bash",
+      "Bash"
+    ],
+    "session": "fb1b0959-ad66-43ff-9a6c-ec346f5d1dba",
+    "result": "사이트에 접속해서 확인하려고 했는데, `curl`로 `http://127.0.0.1:8814/`를 요청하는 명령이 승인되지 않아 페이지를 받아오지 못했습니다. 그래서 원인은 아직 모릅니다. 확인하지 않은 채 추측으로 원인을 말씀드리지는 않겠습니다.\n\n아래 중 하나를 해 주시면 바로 원인을 찾겠습니다.\n\n1. **`curl` 요청 허용**: 권한 승인 프롬프트에서 허용해 주시면 HTML과 JS를 받아 '추가' 버튼의 동작을 분석하겠습니다.\n2. **직접 확인할 내용 알려주기**:\n   - 브라우저에서 F12를 눌러 Console 탭에 에러가 있는지\n   - '추가' 버튼을 눌렀을 때 Network 탭에 요청이 나가는지, 나간다면 응답 상태 코드가 무엇인지\n\n이 두 가지를 알려 주셔도 됩니다.",
+    "usage": {
+      "input_tokens": 6,
+      "cache_creation_input_tokens": 4712,
+      "cache_read_input_tokens": 83788,
+      "output_tokens": 582,
+      "output_tokens_details": {
+        "thinking_tokens": 78
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 4712,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 447,
+          "cache_read_input_tokens": 29513,
+          "cache_creation_input_tokens": 82,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 82
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 3,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "tokens": {
+    "total_in": 88506,
+    "output": 582
+  }
+}

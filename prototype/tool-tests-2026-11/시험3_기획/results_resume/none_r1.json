@@ -1,0 +1,175 @@
+{
+  "condition": "none",
+  "rep": 1,
+  "turnA": {
+    "sec": 45.4,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\README.md"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_storage.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_model.py"
+    ],
+    "texts": [
+      "먼저 프로젝트 구조를 살펴보겠습니다.",
+      "셸 명령이 막혀서 편집 도구로 직접 수정합니다.",
+      "1단계를 구현했고 테스트 10개가 모두 통과했습니다. 커밋은 하지 않았습니다.\n\n## 전체 단계 계획\n\n| 단계 | 내용 | 상태 |\n|---|---|---|\n| **1** | 저장 형식에 `due` 추가(버전 3), v1·v2 데이터 마이그레이션 | ✅ 완료 |\n| 2 | `model`에 마감일 검증(`YYYY-MM-DD` 형식, 잘못된 값 거부)과 `set_due(data, id, due)` 추가 | 다음 |\n| 3 | CLI: `add \"제목\" --due 2026-12-31`, `due <id> <날짜\\|none>` 명령, `list`에 마감일 표시 | |\n| 4 | 웹: `POST /api/items`에서 `due` 받기, HTML 표에 마감일 열 추가, 잘못된 입력은 400 응답 | |\n| 5 | 마감 임박·지남 표시(기한 지남 표시, 마감일순 정렬 또는 필터) | |\n| 6 | README와 문서 정리, 전체 테스트 점검 | |\n\n## 1단계에서 바뀐 것\n- `todo/storage.py`\n  - `VERSION`을 3으로 올렸고, 맨 위 형식 설명도 고쳤습니다.\n  - `migrate()`가 v1에서 v2, v2에서 v3 순서로 이어서 변환합니다. v1 파일도 한 번에 v3이 됩니다.\n  - 마감일이 없는 기존 항목은 `due: null`이 됩니다.\n  - 이미 `due`가 있는 값은 덮어쓰지 않고, 두 번 실행해도 결과가 같습니다.\n- `todo/model.py`: `add_item(data, title, due=None)`로 새 항목도 항상 `due` 키를 가집니다. 날짜 검증은 2단계에서 합니다.\n- 테스트\n  - 기존 `test_v2_unchanged`는 v2가 v3으로 바뀌는 새 동작과 맞지 않아 `test_migrate_v2_adds_due`로 교체했습니다. 이전 테스트는 `migrate`가 입력을 직접 수정해서 비교가 항상 참이 되는 구조라 검증력도 약했습니다.\n  - 새로 추가한 테스트는 v1 dict, v3 유지, 멱등성, 옛 파일을 `load()`로 읽고 `save()`한 뒤 다시 읽는 왕복, 파일이 없을 때의 기본 버전입니다.\n  - `add_item`의 `due` 테스트도 추가했습니다.\n\n## 참고\n이 단계까지는 마감일을 입력하거나 볼 수 있는 화면이 없습니다. CLI와 웹은 아직 `due`를 모르지만, 새 형식으로 저장해도 기존 동작에는 영향이 없습니다.\n\n다음 세션에서 이어갈 수 있게 이 계획을 `PLAN.md`로 저장해 둘까요?"
+    ],
+    "denied": [
+      "Bash",
+      "Bash"
+    ],
+    "session": "0bcc6c48-5f49-410f-86c5-39d5bd5571c6",
+    "result": "1단계를 구현했고 테스트 10개가 모두 통과했습니다. 커밋은 하지 않았습니다.\n\n## 전체 단계 계획\n\n| 단계 | 내용 | 상태 |\n|---|---|---|\n| **1** | 저장 형식에 `due` 추가(버전 3), v1·v2 데이터 마이그레이션 | ✅ 완료 |\n| 2 | `model`에 마감일 검증(`YYYY-MM-DD` 형식, 잘못된 값 거부)과 `set_due(data, id, due)` 추가 | 다음 |\n| 3 | CLI: `add \"제목\" --due 2026-12-31`, `due <id> <날짜\\|none>` 명령, `list`에 마감일 표시 | |\n| 4 | 웹: `POST /api/items`에서 `due` 받기, HTML 표에 마감일 열 추가, 잘못된 입력은 400 응답 | |\n| 5 | 마감 임박·지남 표시(기한 지남 표시, 마감일순 정렬 또는 필터) | |\n| 6 | README와 문서 정리, 전체 테스트 점검 | |\n\n## 1단계에서 바뀐 것\n- `todo/storage.py`\n  - `VERSION`을 3으로 올렸고, 맨 위 형식 설명도 고쳤습니다.\n  - `migrate()`가 v1에서 v2, v2에서 v3 순서로 이어서 변환합니다. v1 파일도 한 번에 v3이 됩니다.\n  - 마감일이 없는 기존 항목은 `due: null`이 됩니다.\n  - 이미 `due`가 있는 값은 덮어쓰지 않고, 두 번 실행해도 결과가 같습니다.\n- `todo/model.py`: `add_item(data, title, due=None)`로 새 항목도 항상 `due` 키를 가집니다. 날짜 검증은 2단계에서 합니다.\n- 테스트\n  - 기존 `test_v2_unchanged`는 v2가 v3으로 바뀌는 새 동작과 맞지 않아 `test_migrate_v2_adds_due`로 교체했습니다. 이전 테스트는 `migrate`가 입력을 직접 수정해서 비교가 항상 참이 되는 구조라 검증력도 약했습니다.\n  - 새로 추가한 테스트는 v1 dict, v3 유지, 멱등성, 옛 파일을 `load()`로 읽고 `save()`한 뒤 다시 읽는 왕복, 파일이 없을 때의 기본 버전입니다.\n  - `add_item`의 `due` 테스트도 추가했습니다.\n\n## 참고\n이 단계까지는 마감일을 입력하거나 볼 수 있는 화면이 없습니다. CLI와 웹은 아직 `due`를 모르지만, 새 형식으로 저장해도 기존 동작에는 영향이 없습니다.\n\n다음 세션에서 이어갈 수 있게 이 계획을 `PLAN.md`로 저장해 둘까요?",
+    "usage": {
+      "input_tokens": 11,
+      "cache_creation_input_tokens": 16624,
+      "cache_read_input_tokens": 209465,
+      "output_tokens": 7085,
+      "output_tokens_details": {
+        "thinking_tokens": 739
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 16624,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 1063,
+          "cache_read_input_tokens": 40701,
+          "cache_creation_input_tokens": 3198,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 3198
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 18,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "turnB": {
+    "sec": 27.3,
+    "rc": 0,
+    "stderr": "",
+    "skills": [],
+    "reads": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\cli.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\web.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\README.md",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_model.py"
+    ],
+    "writes": [
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\todo\\model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_model.py",
+      "C:\\Users\\User\\Desktop\\오픈소스_팀플\\시험3_기획\\code\\_cwd_resume\\none_r1\\tests\\test_model.py"
+    ],
+    "texts": [
+      "먼저 현재 진행 상황을 파악하겠습니다.",
+      "Bash가 heredoc을 거부해서 Edit/PowerShell로 테스트를 추가하겠습니다.",
+      "마감일 입력 검증 단계를 끝냈고, 테스트 11개가 모두 통과했습니다.\n\n**이미 끝나 있던 것:** 저장 형식 v3와 v1·v2 마이그레이션(`due` 필드), `add_item(..., due=None)`.\n\n**이번에 한 것:**\n- `todo/model.py`에 `validate_due()`를 추가했습니다. `None`이거나 실제 있는 `YYYY-MM-DD` 날짜만 통과하고, 그 외에는 `ValueError`를 냅니다. 예를 들어 `2026-02-30`, `20261231`, `2026-1-1`, 빈 문자열, 숫자가 거부됩니다. `date.fromisoformat`만 쓰면 `20261231` 같은 형식도 통과하기 때문에 길이를 따로 확인합니다.\n- `add_item()`이 항목을 만들기 전에 검증하므로, 잘못된 값이면 항목이 추가되지 않습니다.\n- `tests/test_model.py`에 거부 케이스 테스트를 추가했습니다.\n\n**남은 단계:**\n1. CLI: `add --due YYYY-MM-DD` 옵션과 `list` 출력에 마감일 표시. `ValueError`는 깔끔한 오류 메시지로 처리합니다.\n2. 웹: `row_html`에 마감일 열을 추가하고, `POST /api/items`가 `due`를 받게 합니다. 잘못된 값이면 400을 돌려줍니다.\n3. README: 사용법 갱신.\n\n다음 단계도 이어서 할까요?"
+    ],
+    "denied": [
+      "Bash",
+      "PowerShell"
+    ],
+    "session": "59797f99-490d-45db-8995-57816f6cfdee",
+    "result": "마감일 입력 검증 단계를 끝냈고, 테스트 11개가 모두 통과했습니다.\n\n**이미 끝나 있던 것:** 저장 형식 v3와 v1·v2 마이그레이션(`due` 필드), `add_item(..., due=None)`.\n\n**이번에 한 것:**\n- `todo/model.py`에 `validate_due()`를 추가했습니다. `None`이거나 실제 있는 `YYYY-MM-DD` 날짜만 통과하고, 그 외에는 `ValueError`를 냅니다. 예를 들어 `2026-02-30`, `20261231`, `2026-1-1`, 빈 문자열, 숫자가 거부됩니다. `date.fromisoformat`만 쓰면 `20261231` 같은 형식도 통과하기 때문에 길이를 따로 확인합니다.\n- `add_item()`이 항목을 만들기 전에 검증하므로, 잘못된 값이면 항목이 추가되지 않습니다.\n- `tests/test_model.py`에 거부 케이스 테스트를 추가했습니다.\n\n**남은 단계:**\n1. CLI: `add --due YYYY-MM-DD` 옵션과 `list` 출력에 마감일 표시. `ValueError`는 깔끔한 오류 메시지로 처리합니다.\n2. 웹: `row_html`에 마감일 열을 추가하고, `POST /api/items`가 `due`를 받게 합니다. 잘못된 값이면 400을 돌려줍니다.\n3. README: 사용법 갱신.\n\n다음 단계도 이어서 할까요?",
+    "usage": {
+      "input_tokens": 15,
+      "cache_creation_input_tokens": 13538,
+      "cache_read_input_tokens": 307722,
+      "output_tokens": 3146,
+      "output_tokens_details": {
+        "thinking_tokens": 386
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 13538,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "global",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 562,
+          "cache_read_input_tokens": 42353,
+          "cache_creation_input_tokens": 80,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 80
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard",
+      "fallback_credit": null
+    },
+    "turns": 15,
+    "plugins": [
+      "cc-plugin-agents-md",
+      "cc-plugin-telemetry",
+      "cc-plugin-privacy",
+      "cc-plugin-plugin-authoring"
+    ],
+    "skill_count": 20
+  },
+  "a_tests": true,
+  "b_tests": true,
+  "a_log": "..........                                                               [100%]\n10 passed in 0.07s\n",
+  "b_log": "...........                                                              [100%]\n11 passed in 0.03s\n",
+  "due_after_a": true,
+  "overdue_after_b": false,
+  "b_changed_code": true,
+  "b_knew_done": true,
+  "plan_files": [],
+  "tokens": {
+    "A": {
+      "total_in": 226100,
+      "output": 7085,
+      "turns": 18,
+      "sec": 45.4
+    },
+    "B": {
+      "total_in": 321275,
+      "output": 3146,
+      "turns": 15,
+      "sec": 27.3
+    }
+  }
+}

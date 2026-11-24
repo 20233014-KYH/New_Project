@@ -1,0 +1,16 @@
+package kr.ac.team1.inventory.service;
+
+import java.util.Map;
+
+/** 화면에 보이는 한국어 이름(로컬 모드 api.js의 KO·RS와 같음) */
+final class Labels {
+
+    static final Map<String, String> RELATION = Map.of(
+            "overlap", "겹침", "situational", "상황따라", "complement", "보완", "none", "관계 없음");
+    static final Map<String, String> REVIEW = Map.of(
+            "tested", "직접 시험", "human_review", "사람 검토", "ai_estimate", "AI 추정");
+    static final String NO_INFO = "확인된 정보 없음";
+
+    private Labels() {
+    }
+}

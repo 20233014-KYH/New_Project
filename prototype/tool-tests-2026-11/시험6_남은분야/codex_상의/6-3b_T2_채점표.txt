@@ -1,0 +1,1884 @@
+Reading additional input from stdin...
+OpenAI Codex v0.160.0
+--------
+workdir: C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 01a1f626-321e-7e51-8ef6-7a7f41791b84
+--------
+user
+시험 채점표를 같이 만들고 있어. 과제는 'src/shared/expand-home.ts의 expandHome 함수 이름을 resolveHomePath로 바꾸고, 이 함수를 가져다 쓰는 곳(src·tests 전부)도 같이 바꾸기. 같은 이름이라도 다른 파일에 따로 만든 함수는 건드리면 안 됨'이야. 코드에서 직접 확인해서 ① 반드시 바꿔야 하는 파일 목록(다시 내보내기 re-export를 거쳐 쓰는 곳 포함, 경로만) ② 이름이 같거나 비슷해도 건드리면 안 되는 함수가 있는 파일과 그 함수 이름 ③ 주석에만 expandHome이 나오는 파일 을 나눠서 적어 줘. src와 tests만 봐. 확실한 것만.
+2026-11-19T23:31:02.256687Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when AuthRequired(AuthRequiredError { www_authenticate_header: "Bearer resource_metadata=\"https://mcp.postman.com/.well-known/oauth-protected-resource/mcp\"" })
+codex
+`src`와 `tests`에서 정의·가져오기·재내보내기 경로를 따라가며 확인하겠습니다. 같은 이름의 별도 함수와 주석에만 나오는 경우도 구분하겠습니다.
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\User\\.codex\\plugins\\cache\\superpowers-dev\\superpowers\\7.0.2\\skills\\using-superpowers\\SKILL.md'" in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+ succeeded in 395ms:
+---
+name: using-superpowers
+description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+---
+
+<SUBAGENT-STOP>
+If you were dispatched as a subagent to execute a specific task, ignore this skill.
+</SUBAGENT-STOP>
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not negotiable. You cannot rationalize your way out of this.
+</EXTREMELY-IMPORTANT>
+
+## The Rule
+
+**Invoke relevant or requested skills BEFORE any response or action** ??including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+
+**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+
+Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
+
+## Skill Priority
+
+When multiple skills apply, process skills come first ??they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.
+
+- "Let's build X" ??superpowers:brainstorming first, then implementation skills.
+- "Fix this bug" ??superpowers:systematic-debugging first, then domain skills.
+
+## Red Flags
+
+These thoughts mean STOP?�you're rationalizing:
+
+| Thought | Reality |
+|---------|---------|
+| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "I need more context first" | Skill check comes BEFORE clarifying questions. |
+| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
+| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
+| "Let me gather information first" | Skills tell you HOW to gather information. |
+| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "I remember this skill" | Skills evolve. Read current version. |
+| "This doesn't count as a task" | Action = task. Check for skills. |
+| "The skill is overkill" | Simple things become complex. Use it. |
+| "I'll just do this one thing first" | Check BEFORE doing anything. |
+| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
+| "I know what that means" | Knowing the concept ??using the skill. Invoke it. |
+
+## Platform Adaptation
+
+If your harness appears here, read its reference file for special instructions:
+
+- Claude Code: `references/claude-code-tools.md`
+- Codex: `references/codex-tools.md`
+- Pi: `references/pi-tools.md`
+- Antigravity: `references/antigravity-tools.md`
+- Hermes Agent: `references/hermes-tools.md`
+- Muse: `references/muse-tools.md`
+
+## User Instructions
+
+User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills, which in turn override default behavior. Only skip skill workflows or instructions when your human partner has explicitly told you to.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files -g AGENTS.md -g '*expand*home*' -g '*resolve*home*' -g package.json; rg -n 'expandHome|resolveHomePath|expand.home|expand-home' src tests" in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+ exited 1 in 2796ms:
+rg : 'rg' �� cmdlet, �Լ�, ��ũ��Ʈ ���� �Ǵ� ������ �� �ִ� ���α׷� �̸����� �νĵ��� �ʽ��ϴ�. �̸��� ��Ȯ���� 
+Ȯ���ϰ� ��ΰ� ���Ե� ��� ��ΰ� �ùٸ��� ������ ���� �ٽ� �õ��Ͻʽÿ�.
+��ġ ��:2 ����:1
++ rg --files -g AGENTS.md -g '*expand*home*' -g '*resolve*home*' -g pac ...
++ ~~
+    + CategoryInfo          : ObjectNotFound: (rg:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+rg : 'rg' �� cmdlet, �Լ�, ��ũ��Ʈ ���� �Ǵ� ������ �� �ִ� ���α׷� �̸����� �νĵ��� �ʽ��ϴ�. �̸��� ��Ȯ���� 
+Ȯ���ϰ� ��ΰ� ���Ե� ��� ��ΰ� �ùٸ��� ������ ���� �ٽ� �õ��Ͻʽÿ�.
+��ġ ��:2 ����:81
++ ... md -g '*expand*home*' -g '*resolve*home*' -g package.json; rg -n 'exp ...
++                                                                ~~
+    + CategoryInfo          : ObjectNotFound: (rg:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+
+codex
+`using-superpowers` 스킬의 작업 지침을 확인했습니다. `rg`가 설치되어 있지 않아 PowerShell 검색으로 참조를 추적하겠습니다.
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:\\Users\\User\\.codex\\plugins\\cache\\superpowers-dev\\superpowers\\7.0.2\\skills\\using-superpowers\\references\\codex-tools.md'" in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath src,tests -Recurse -File | Select-String -Pattern 'expandHome|resolveHomePath|expand.home|expand-home' | ForEach-Object { '{0}:{1}:{2}' -f (Resolve-Path -LiteralPath "'$_.Path -Relative), $_.LineNumber, $_.Line }; Get-ChildItem -LiteralPath src,tests -Recurse -Filter AGENTS.md -File | Select-Object -ExpandProperty FullName; if (Test-Path -LiteralPath AGENTS.md) { Get-Content -LiteralPath AGENTS.md }' in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+ succeeded in 365ms:
+## Subagent dispatch requires multi-agent support
+
+Add to your Codex config (`~/.codex/config.toml`):
+
+```toml
+[features]
+multi_agent = true
+```
+
+This enables the multi-agent tools that skills like
+`dispatching-parallel-agents` and `subagent-driven-development` use.
+Which tools you get depends on the multi-agent version your model
+preset selects (current presets run V2; older ones run V1). Trust your
+actual tool list over any table ??including this one ??when they
+disagree.
+
+- **Spawning:** give children a clean context with
+  `spawn_agent {fork_turns: "none"}`; the default `"all"` copies your
+  entire transcript into the child. On Codex 0.145+, role files under
+  `~/.codex/agents/` attach to isolated forks via `agent_type`.
+  Full-history forks accept `model` and `reasoning_effort` overrides
+  (only `agent_type` is refused there) ??isolated forks are the SDD
+  default for context hygiene, not because overrides require them.
+- **Fix rounds:** resume the implementer with `followup_task` ??it
+  delivers your message, triggers a turn, and transparently reloads a
+  child the harness evicted. Never dispatch a fresh implementer on the
+  theory that a spawned agent cannot be messaged again; on V2 it
+  always can.
+- **Lifecycle:** V2 has no `close_agent`. Finished children are
+  evicted automatically when slots are needed; leaving them unclosed
+  costs nothing. Only V1 sessions have `close_agent` ??there, close
+  reviewers when their review returns, and close each implementer
+  after its task's review passes.
+- **Model names:** never copy a model name from a skill, table, or old
+  session into `spawn_agent` without checking it against your current
+  spawn allowlist ??V2 accepts only V2-capable presets and hard-errors
+  on the rest.
+
+## Waiting on children
+
+`wait_agent` is an event subscription, not a poll: a long wait wakes
+the moment a child produces mailbox activity, with the same latency as
+a short one. Short-timeout polling buys nothing and costs a tool call ??and a context rebill ??per poll. In measured sessions, roughly
+two-thirds of all wait calls were short polls that timed out.
+
+- While you still have local work, do not wait at all. A completed
+  child's final answer is pushed into your mailbox and arrives with
+  your next turn.
+- When you are genuinely idle with children outstanding, wait in
+  bounded stretches: `wait_agent` with `timeout_ms` 300000-600000
+  (5-10 minutes). After each stretch ??wake or timeout ??post one
+  status line, run `list_agents`, and chase any child that finished
+  without reporting. Never stack polls shorter than five minutes; the
+  event subscription wakes a bounded stretch just as fast as a short
+  one.
+- Completion mail cannot wake an idle controller (it is delivered
+  without triggering a turn); covering that idle window is
+  `wait_agent`'s only job. A stretch that times out with no activity
+  is your cue to reconcile, not to shorten the next stretch.
+
+## Model routing on spawns
+
+Every `spawn_agent` you issue ??including when you are yourself a
+spawned child running a fan-out ??sets `model` AND `reasoning_effort`
+explicitly, per the Model Selection rules of the skill you are
+executing. Setting `model` alone is a trap: the child's effort
+silently resets to that model's default, not to yours.
+
+Ask your human partner to add a machine-level backstop to
+`~/.codex/config.toml` so any spawn that slips through still routes to
+a deliberate tier instead of silently inheriting the session's most
+expensive model:
+
+```toml
+[agents]
+default_subagent_model = "<a mid-tier model from your spawn allowlist>"
+default_subagent_reasoning_effort = "medium"
+```
+
+## Environment Detection
+
+Skills that create worktrees or finish branches should detect their
+environment with read-only git commands before proceeding:
+
+```bash
+GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
+GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
+BRANCH=$(git branch --show-current)
+```
+
+- `GIT_DIR != GIT_COMMON` ??already in a linked worktree (skip creation)
+- `BRANCH` empty ??detached HEAD (cannot branch/push/PR from sandbox)
+
+See `using-git-worktrees` Step 0 and `finishing-a-development-branch`
+Step 1 for how each skill uses these signals.
+
+## Codex App Finishing
+
+When the sandbox blocks branch/push operations (detached HEAD in an
+externally managed worktree), the agent commits all work and informs
+the user to use the App's native controls:
+
+- **"Create branch"** ??names the branch, then commit/push/PR via App UI
+- **"Hand off to local"** ??transfers work to the user's local checkout
+
+The agent can still run tests, stage files, and output suggested branch
+names, commit messages, and PR descriptions for the user to copy.
+
+ succeeded in 1616ms:
+.\src\integrations\harness-worker.ts:6:import { expandHome } from '../shared/expand-home.js';
+.\src\integrations\harness-worker.ts:12:  const dataDir = expandHome(process.env.CLAUDE_MEM_DATA_DIR || join(homedir(), '.claude-mem'));
+.\src\services\worker-service.ts:132:import { DEFAULT_CONFIG_PATH, DEFAULT_STATE_PATH, expandHomePath, scopeNativeHookBackedCodexWatches, loadTranscriptWatchConfig } from './transcripts/config.js';
+.\src\services\worker-service.ts:1062:    const resolvedConfigPath = expandHomePath(configPath);
+.\src\services\worker-service.ts:1085:    const statePath = expandHomePath(transcriptConfig.stateFile ?? DEFAULT_STATE_PATH);
+.\src\services\integrations\CodexCliInstaller.ts:554:function expandHome(inputPath: string): string {
+.\src\services\integrations\CodexCliInstaller.ts:574:    && path.resolve(expandHome(context.path)) === CODEX_AGENTS_MD_PATH;
+.\src\services\integrations\DeepSeekHarnessInstaller.ts:4:import { MARKETPLACE_ROOT, DATA_DIR, USER_SETTINGS_PATH, expandHome } from '../../shared/paths.js';
+.\src\services\integrations\DeepSeekHarnessInstaller.ts:24:  return expandHome(settings.CLAUDE_MEM_TRANSCRIPTS_CONFIG_PATH);
+.\src\services\integrations\GrokBotInstaller.ts:5:import { DEFAULT_CONFIG_PATH, DEFAULT_STATE_PATH, expandHomePath, SAMPLE_CONFIG } from '../transcripts/config.js';
+.\src\services\integrations\GrokBotInstaller.ts:235:  const resolvedPath = expandHomePath(configPath);
+.\src\services\integrations\GrokBotInstaller.ts:258:  const resolvedConfigPath = expandHomePath(configPath);
+.\src\services\memory\cli.ts:10:import { expandHome } from '../../shared/expand-home.js';
+.\src\services\memory\cli.ts:40:  if (explicit) return { source: resolve(callerCwd, expandHome(explicit)), all: false };
+.\src\services\memory\ingest.ts:39:import { expandHome } from '../../shared/expand-home.js';
+.\src\services\memory\ingest.ts:99:  const expanded = expandHome(source);
+.\src\services\memory\ingest.ts:482:    source: expandHome(source),
+.\src\services\memory\ingest.ts:639:    source: expandHome(source),
+.\src\services\transcripts\cli.ts:7:  expandHomePath,
+.\src\services\transcripts\cli.ts:26:  if (existsSync(expandHomePath(configPath))) return;
+.\src\services\transcripts\cli.ts:28:  console.log(`Created sample config: ${expandHomePath(configPath)}`);
+.\src\services\transcripts\cli.ts:36:      console.log(`Created sample config: ${expandHomePath(configPath)}`);
+.\src\services\transcripts\cli.ts:54:        console.log(`No active transcript watches in ${expandHomePath(configPath)}; nothing to watch.`);
+.\src\services\transcripts\cli.ts:57:      const statePath = expandHomePath(config.stateFile ?? DEFAULT_STATE_PATH);
+.\src\services\transcripts\cli.ts:76:      console.log(`Config OK: ${expandHomePath(configPath)}`);
+.\src\services\transcripts\config.ts:24:  const normalizedPath = expandHomePath(watch.path).replace(/\\/g, '/');
+.\src\services\transcripts\config.ts:100:export function expandHomePath(inputPath: string): string {
+.\src\services\transcripts\config.ts:102:  // Shared expandTilde/expandHome leave `~user/...` alone (resolving another
+.\src\services\transcripts\config.ts:251:  const resolvedPath = expandHomePath(path);
+.\src\services\transcripts\config.ts:269:  const resolvedPath = expandHomePath(path);
+.\src\services\transcripts\processor.ts:10:import { expandHomePath, shouldSuppressNativeCodexAgentsContext } from './config.js';
+.\src\services\transcripts\processor.ts:728:    const agentsPath = expandHomePath(watch.context.path ?? `${cwd}/AGENTS.md`);
+.\src\services\transcripts\watcher.ts:6:import { expandHomePath } from './config.js';
+.\src\services\transcripts\watcher.ts:594:    const resolvedPath = expandHomePath(watch.path);
+.\src\services\transcripts\watcher.ts:916:    // Some path sources skip expandHomePath, so a literal '~' can reach fs.watch
+.\src\services\transcripts\watcher.ts:918:    filePath = expandHomePath(filePath);
+.\src\shared\expand-home.ts:11:export function expandHome(
+.\src\shared\paths.ts:8:import { expandHome } from './expand-home.js';
+.\src\shared\paths.ts:10:export { expandHome } from './expand-home.js';
+.\src\shared\paths.ts:23:    return expandHome(process.env.CLAUDE_MEM_DATA_DIR);
+.\src\shared\paths.ts:34:        return expandHome(settings.CLAUDE_MEM_DATA_DIR);
+.\src\shared\paths.ts:127:  return expandHome(filePath, platform, home);
+.\src\utils\project-filter.ts:3:import { expandHome } from '../shared/expand-home.js';
+.\src\utils\project-filter.ts:8:  // is home-relative, but `expandHome` only recognises `~` and `~/` on POSIX ? resolving
+.\src\utils\project-filter.ts:12:  let expanded = expandHome(pattern.replace(/\\/g, '/'));
+.\src\utils\project-name.ts:5:import { expandHome } from '../shared/expand-home.js';
+.\src\utils\project-name.ts:278:  const expanded = expandHome(cwd, platform);
+.\src\utils\project-name.ts:367:  const expandedCwd = expandHome(cwd, platform);
+.\src\utils\project-name.ts:413:  const expandedCwd = expandHome(cwd, platform);
+.\tests\shared\paths.test.ts:7:  expandHome,
+.\tests\shared\paths.test.ts:44:describe('expandHome', () => {
+.\tests\shared\paths.test.ts:46:    expect(expandHome('~/x', 'linux')).toBe(join(homedir(), 'x'));
+.\tests\shared\paths.test.ts:47:    expect(expandHome('~/x', 'win32')).toBe(join(homedir(), 'x'));
+.\tests\shared\paths.test.ts:51:    expect(expandHome('~\\x', 'win32')).toBe(join(homedir(), 'x'));
+.\tests\shared\paths.test.ts:55:    expect(expandHome('~\\x', 'linux')).toBe('~\\x');
+.\tests\shared\paths.test.ts:59:    expect(expandHome('~', 'linux')).toBe(homedir());
+.\tests\shared\paths.test.ts:60:    expect(expandHome('~', 'win32')).toBe(homedir());
+.\tests\shared\paths.test.ts:65:    expect(expandHome(abs)).toBe(abs);
+.\tests\shared\paths.test.ts:69:    expect(expandHome('foo/bar', 'linux')).toBe('foo/bar');
+.\tests\shared\paths.test.ts:70:    expect(expandHome('foo\\bar', 'win32')).toBe('foo\\bar');
+.\tests\shared\paths.test.ts:75:    expect(expandHome('foo/~bar')).toBe('foo/~bar');
+.\tests\shared\paths.test.ts:79:    expect(expandHome('~someone/data')).toBe('~someone/data');
+.\tests\transcripts\config.test.ts:6:  expandHomePath,
+.\tests\transcripts\config.test.ts:170:describe('expandHomePath', () => {
+.\tests\transcripts\config.test.ts:172:    expect(expandHomePath('~')).toBe(homedir());
+.\tests\transcripts\config.test.ts:173:    expect(expandHomePath('~/.codex/sessions')).toBe(join(homedir(), '.codex/sessions'));
+.\tests\transcripts\config.test.ts:177:    // expandHome treats `~\` as a home prefix on Windows only; on POSIX a
+.\tests\transcripts\config.test.ts:180:      expect(expandHomePath('~\\')).toBe(homedir());
+.\tests\transcripts\config.test.ts:181:      expect(expandHomePath('~\\.codex\\sessions')).toBe(join(homedir(), '.codex\\sessions'));
+.\tests\transcripts\config.test.ts:183:      expect(expandHomePath('~\\')).toBe('~\\');
+.\tests\transcripts\config.test.ts:184:      expect(expandHomePath('~\\.codex\\sessions')).toBe('~\\.codex\\sessions');
+.\tests\transcripts\config.test.ts:192:    expect(expandHomePath('~alice/transcripts')).toBe('~alice/transcripts');
+.\tests\transcripts\config.test.ts:193:    expect(expandHomePath('~backup/rollout.jsonl')).toBe('~backup/rollout.jsonl');
+.\tests\transcripts\config.test.ts:197:    expect(expandHomePath('/var/log/codex.jsonl')).toBe('/var/log/codex.jsonl');
+.\tests\transcripts\config.test.ts:198:    expect(expandHomePath('relative/path.jsonl')).toBe('relative/path.jsonl');
+.\tests\transcripts\config.test.ts:199:    expect(expandHomePath('')).toBe('');
+.\tests\utils\project-filter.test.ts:75:        // `expandHome` recognises `~` and `~/`, not `~\` on POSIX. Expanding before
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -LiteralPath src/shared/expand-home.ts,src/shared/paths.ts,src/services/transcripts/config.ts,src/services/integrations/DeepSeekHarnessInstaller.ts,tests/shared/paths.test.ts' in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath src,tests -Recurse -File | Select-String -Pattern 'expandTilde|expand-home|shared/paths|[\"'']\\./paths(\\.js)?[\"'']|[\"'']\\.\\./paths(\\.js)?[\"'']|export\\s+\\*' | ForEach-Object { '{0}:{1}:{2}' -f (Resolve-Path -LiteralPath "'$_.Path -Relative), $_.LineNumber, $_.Line }; Get-Content -LiteralPath src/services/integrations/CodexCliInstaller.ts | Select-Object -Skip 535 -First 50; Get-Content -LiteralPath tests/transcripts/config.test.ts | Select-Object -Skip 165 -First 35; Get-Content -LiteralPath tests/utils/project-filter.test.ts | Select-Object -Skip 65 -First 25' in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+ succeeded in 351ms:
+import { homedir } from 'os';
+import { join } from 'path';
+
+/**
+ * Expand a leading home-directory marker without changing valid POSIX paths.
+ *
+ * Both platforms accept the shell-style `~/`, while only Windows treats `~\`
+ * as a separator-prefixed home path. On POSIX, backslash is a legal filename
+ * character, so `~\foo` must remain untouched.
+ */
+export function expandHome(
+  filePath: string,
+  platform: NodeJS.Platform = process.platform,
+  home: string = homedir(),
+): string {
+  if (typeof filePath !== 'string' || filePath.length === 0) return filePath;
+  if (filePath === '~') return home;
+  if (filePath.startsWith('~/') || (platform === 'win32' && filePath.startsWith('~\\'))) {
+    return join(home, filePath.slice(2));
+  }
+  // A `~user/...` form is intentionally left untouched ??resolving another
+  // user's home is out of scope and platform-dependent.
+  return filePath;
+}
+import { join, dirname, basename, sep } from 'path';
+import { homedir } from 'os';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { SettingsDefaultsManager } from './SettingsDefaultsManager.js';
+import { readJsonFileWithBom } from './atomic-json.js';
+import { settingsTarget } from './settings-document.js';
+import { expandHome } from './expand-home.js';
+
+export { expandHome } from './expand-home.js';
+
+function getDirname(): string {
+  if (typeof __dirname !== 'undefined') {
+    return __dirname;
+  }
+  return dirname(fileURLToPath(import.meta.url));
+}
+
+const _dirname = getDirname();
+
+export function resolveDataDir(): string {
+  if (process.env.CLAUDE_MEM_DATA_DIR) {
+    return expandHome(process.env.CLAUDE_MEM_DATA_DIR);
+  }
+
+  const defaultDataDir = join(homedir(), '.claude-mem');
+  const settingsPath = join(defaultDataDir, 'settings.json');
+  try {
+    if (existsSync(settingsPath)) {
+      const raw = readJsonFileWithBom<unknown>(settingsPath);
+      if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) return defaultDataDir;
+      const settings = settingsTarget(raw as Record<string, unknown>);
+      if (typeof settings.CLAUDE_MEM_DATA_DIR === 'string' && settings.CLAUDE_MEM_DATA_DIR) {
+        return expandHome(settings.CLAUDE_MEM_DATA_DIR);
+      }
+    }
+  } catch {
+    // settings file missing or corrupt ??fall through to default
+  }
+
+  return defaultDataDir;
+}
+
+export const DATA_DIR = resolveDataDir();
+// #2753 ??the literal default config dir, independent of process.env state.
+// Lets callers (oauth-token.ts) compare an *effective* config dir against the
+// TRUE default rather than against CLAUDE_CONFIG_DIR (which already folds in
+// process.env). Purely additive: does not change CLAUDE_CONFIG_DIR's own
+// derivation or MARKETPLACE_ROOT below.
+export const DEFAULT_CLAUDE_CONFIG_DIR = join(homedir(), '.claude');
+export const CLAUDE_CONFIG_DIR = process.env.CLAUDE_CONFIG_DIR || DEFAULT_CLAUDE_CONFIG_DIR;
+
+export const MARKETPLACE_ROOT = join(CLAUDE_CONFIG_DIR, 'plugins', 'marketplaces', 'thedotmack');
+
+export const LOGS_DIR = join(DATA_DIR, 'logs');
+export const USER_SETTINGS_PATH = join(DATA_DIR, 'settings.json');
+export const DB_FILENAME = 'claude-mem.db';
+
+/**
+ * Database path resolved at CALL time. `DB_PATH` freezes `DATA_DIR` at import,
+ * which is right for long-lived processes but wrong for anything that must
+ * honor a `CLAUDE_MEM_DATA_DIR` set after this module was loaded.
+ */
+export function resolveDbPath(): string {
+  return join(resolveDataDir(), DB_FILENAME);
+}
+
+export const DB_PATH = join(DATA_DIR, DB_FILENAME);
+
+export const OBSERVER_SESSIONS_DIR = join(DATA_DIR, 'observer-sessions');
+
+export const OBSERVER_SESSIONS_PROJECT = basename(OBSERVER_SESSIONS_DIR);
+
+export function ensureDir(dirPath: string): void {
+  mkdirSync(dirPath, { recursive: true });
+}
+
+/** mkdir failures that retrying can never fix: the data dir is a file, sits under one, or is not writable. */
+const PERMANENT_DIRECTORY_ERROR_CODES = new Set(['ENOTDIR', 'EEXIST', 'EACCES', 'EPERM', 'EROFS']);
+
+export const OBSERVER_WORKING_DIRECTORY_ERROR_PREFIX = 'Observer working directory could not be prepared';
+
+/**
+ * Create the Observer/KnowledgeAgent working directory before an SDK spawn.
+ *
+ * A permanent mkdir failure is rethrown as a message that classifyClaudeError
+ * maps to `setup_required`, so it is recorded once instead of retried on every
+ * ingest. Anything else (EMFILE, ENFILE, EIO, ENOSPC ?? is rethrown unchanged:
+ * a passing file-system hiccup must not park Claude starts behind the setup
+ * cooldown. `makeDirectory` is a test seam; production callers omit it.
+ */
+export function ensureObserverSessionsDir(
+  dir: string = OBSERVER_SESSIONS_DIR,
+  makeDirectory: (dirPath: string) => void = ensureDir,
+): string {
+  try {
+    makeDirectory(dir);
+  } catch (error) {
+    const code = (error as { code?: unknown }).code;
+    if (typeof code !== 'string' || !PERMANENT_DIRECTORY_ERROR_CODES.has(code)) throw error;
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(`${OBSERVER_WORKING_DIRECTORY_ERROR_PREFIX}: ${dir} (${code}): ${detail}`);
+  }
+  return dir;
+}
+
+export function getPackageRoot(): string {
+  return join(_dirname, '..');
+}
+
+/**
+ * Expand a leading `~` / `~/` (or `~\` on Windows) to the user's home dir.
+ *
+ * User-typed config paths like `~/.local/bin/claude` are never expanded by the
+ * shell when passed programmatically to existsSync/posix_spawn, so a literal
+ * `~` reaches the syscall and fails with ENOENT. Every other home-relative path
+ * in the codebase is built with join(homedir(), ...); this brings user-supplied
+ * ones onto the same footing. Non-tilde paths are returned unchanged.
+ *
+ * `home` is injectable so callers behind a homedir() test seam stay testable.
+ */
+export function expandTilde(
+  filePath: string,
+  home: string = homedir(),
+  platform: NodeJS.Platform = process.platform,
+): string {
+  return expandHome(filePath, platform, home);
+}
+
+export const paths = {
+  dataDir: () => DATA_DIR,
+  workerPid: () => join(DATA_DIR, 'worker.pid'),
+  workerHeartbeat: () => join(DATA_DIR, 'worker-heartbeat.json'),
+  // Phase 1b: identifier renamed to `server*`; the on-disk file basenames
+  // remain `.server-beta.*` so existing installations keep finding their
+  // pid/port/runtime state. Plan §1d will migrate the basenames.
+  serverPid: () => join(DATA_DIR, '.server-beta.pid'),
+  serverPort: () => join(DATA_DIR, '.server-beta.port'),
+  serverRuntime: () => join(DATA_DIR, '.server-beta.runtime.json'),
+  settings: () => join(DATA_DIR, 'settings.json'),
+  database: () => join(DATA_DIR, DB_FILENAME),
+  chroma: () => join(DATA_DIR, 'chroma'),
+  combinedCerts: () => join(DATA_DIR, 'combined_certs.pem'),
+  transcriptsConfig: () => join(DATA_DIR, 'transcript-watch.json'),
+  transcriptsState: () => join(DATA_DIR, 'transcript-watch-state.json'),
+  corpora: () => join(DATA_DIR, 'corpora'),
+  supervisorRegistry: () => join(DATA_DIR, 'supervisor.json'),
+  envFile: () => join(DATA_DIR, '.env'),
+  logsDir: () => LOGS_DIR,
+} as const;
+import { existsSync, writeFileSync, mkdirSync } from 'fs';
+import { homedir } from 'os';
+import { join, dirname } from 'path';
+import { readJsonFileWithBom } from '../../shared/atomic-json.js';
+import { expandTilde, paths } from '../../shared/paths.js';
+import type { EventAction, TranscriptSchema, TranscriptWatchConfig } from './types.js';
+import type { SettingsDefaults } from '../../shared/SettingsDefaultsManager.js';
+
+export const DEFAULT_CONFIG_PATH = paths.transcriptsConfig();
+export const DEFAULT_STATE_PATH = paths.transcriptsState();
+
+export const SAMPLE_CONFIG: TranscriptWatchConfig = {
+  version: 1,
+  schemas: {},
+  watches: [],
+  stateFile: DEFAULT_STATE_PATH
+};
+
+export function isNativeHookBackedCodexWatch(watch: { name?: string; path?: string; schema?: string | TranscriptSchema }): boolean {
+  const schemaName = typeof watch.schema === 'string' ? watch.schema : watch.schema?.name;
+  const nameOrSchemaIsCodex = watch.name === 'codex' || schemaName === 'codex';
+  if (!nameOrSchemaIsCodex || !watch.path) return false;
+
+  const normalizedPath = expandHomePath(watch.path).replace(/\\/g, '/');
+  const codexSessionsRoot = join(homedir(), '.codex', 'sessions').replace(/\\/g, '/');
+  return normalizedPath === `${codexSessionsRoot}/**/*.jsonl`;
+}
+
+export function shouldSuppressNativeCodexAgentsContext(watch: {
+  name?: string;
+  path?: string;
+  schema?: string | TranscriptSchema;
+  context?: { mode?: string };
+}): boolean {
+  const schemaName = typeof watch.schema === 'string' ? watch.schema : watch.schema?.name;
+  const isCanonicalCodexWatch = watch.name === 'codex' && (!schemaName || schemaName === 'codex');
+  return watch.context?.mode === 'agents' && isCanonicalCodexWatch && isNativeHookBackedCodexWatch(watch);
+}
+
+/**
+ * Where Codex marks a subagent rollout: its first (session_meta) line carries
+ * payload.source = {"subagent":{"thread_spawn":{"parent_thread_id":??}}
+ * (Codex 0.147+, #3651). Top-level sessions carry a plain string source
+ * ("cli", "vscode") and are captured by the native hooks.
+ */
+export const CODEX_SUBAGENT_SOURCE = { path: 'payload.source.subagent.thread_spawn' } as const;
+
+export type CodexWatchSettings = Pick<
+  SettingsDefaults,
+  'CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION' | 'CLAUDE_MEM_CODEX_SUBAGENT_INGESTION' | 'CLAUDE_MEM_SKIP_SUBAGENT_OBSERVATIONS'
+>;
+
+/**
+ * Native Codex hooks capture top-level sessions, so the native-hook-backed
+ * codex transcript watch is removed by default: nothing is captured twice.
+ *
+ * The hooks never fire for the subagent threads Codex spawns. Capturing those
+ * from their rollouts is opt-in (CLAUDE_MEM_CODEX_SUBAGENT_INGESTION): every
+ * tool call of every subagent turn is an observer request, spend that did not
+ * exist before #3655 and that lands on the gateway allowance or the user's own
+ * plan. Opted in, the watch stays on, scoped to subagent rollouts only, unless
+ * subagent observations are switched off altogether
+ * (CLAUDE_MEM_SKIP_SUBAGENT_OBSERVATIONS, #2736). With the explicit
+ * full-ingestion opt-in the watch is left untouched and ingests every session.
+ */
+export function scopeNativeHookBackedCodexWatches(
+  config: TranscriptWatchConfig,
+  settings: CodexWatchSettings,
+): { config: TranscriptWatchConfig; scoped: number; removed: number } {
+  if (settings.CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION === 'true') {
+    return { config, scoped: 0, removed: 0 };
+  }
+  const captureSubagents = settings.CLAUDE_MEM_CODEX_SUBAGENT_INGESTION === 'true'
+    && settings.CLAUDE_MEM_SKIP_SUBAGENT_OBSERVATIONS !== 'true';
+
+  let scoped = 0;
+  let removed = 0;
+  const watches: TranscriptWatchConfig['watches'] = [];
+  for (const watch of config.watches) {
+    if (!isNativeHookBackedCodexWatch(watch)) {
+      watches.push(watch);
+    } else if (captureSubagents) {
+      scoped += 1;
+      watches.push({ ...watch, subagentOnly: true, subagentSource: { ...CODEX_SUBAGENT_SOURCE } });
+    } else {
+      removed += 1;
+    }
+  }
+
+  return {
+    config: {
+      ...config,
+      watches,
+    },
+    scoped,
+    removed,
+  };
+}
+
+export function expandHomePath(inputPath: string): string {
+  if (!inputPath) return inputPath;
+  // Shared expandTilde/expandHome leave `~user/...` alone (resolving another
+  // user's home is out of scope). The old inline version sliced one character
+  // off any leading tilde, so `~alice/transcripts` was rewritten to
+  // `<home>/alice/transcripts` and the watcher ingested nothing silently.
+  return expandTilde(inputPath);
+}
+
+type JsonObject = Record<string, unknown>;
+
+const isJsonObject = (value: unknown): value is JsonObject =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+/** Every action the processor handles. Typed, so a new EventAction must be listed here too. */
+const EVENT_ACTIONS: Record<EventAction, true> = {
+  session_init: true,
+  session_context: true,
+  user_message: true,
+  assistant_message: true,
+  tool_use: true,
+  tool_result: true,
+  observation: true,
+  file_edit: true,
+  session_end: true,
+};
+
+/** Throws "<location> <rule>"; the loader adds the file, so `transcript validate` says what to fix. */
+function check(condition: unknown, location: string, rule: string): asserts condition {
+  if (!condition) throw new Error(`${location} ${rule}`);
+}
+
+function checkOptionalString(value: unknown, location: string): void {
+  check(value === undefined || typeof value === 'string', location, 'must be a string');
+}
+
+function checkNonEmptyString(value: unknown, location: string): void {
+  check(typeof value === 'string' && value.trim().length > 0, location, 'must be a non-empty string');
+}
+
+function checkOptionalBoolean(value: unknown, location: string): void {
+  check(value === undefined || typeof value === 'boolean', location, 'must be true or false');
+}
+
+function checkFieldSpec(value: unknown, location: string): void {
+  if (typeof value === 'string') return;
+  check(isJsonObject(value), location, 'must be a path string or an object');
+  checkOptionalString(value.path, `${location}.path`);
+  if (value.coalesce === undefined) return;
+  check(Array.isArray(value.coalesce), `${location}.coalesce`, 'must be an array');
+  value.coalesce.forEach((spec, index) => checkFieldSpec(spec, `${location}.coalesce[${index}]`));
+}
+
+function checkMatchRule(value: unknown, location: string): void {
+  check(isJsonObject(value), location, 'must be an object');
+  for (const key of ['path', 'regex', 'contains', 'not_contains', 'starts_with', 'not_starts_with']) {
+    checkOptionalString(value[key], `${location}.${key}`);
+  }
+  if (typeof value.regex === 'string') {
+    try {
+      new RegExp(value.regex);
+    } catch {
+      check(false, `${location}.regex`, 'must be a valid regular expression');
+    }
+  }
+  checkOptionalBoolean(value.exists, `${location}.exists`);
+  for (const key of ['in', 'not_in']) {
+    check(value[key] === undefined || Array.isArray(value[key]), `${location}.${key}`, 'must be an array');
+  }
+  for (const key of ['all', 'any']) {
+    const rules = value[key];
+    if (rules === undefined) continue;
+    check(Array.isArray(rules), `${location}.${key}`, 'must be an array');
+    rules.forEach((rule, index) => checkMatchRule(rule, `${location}.${key}[${index}]`));
+  }
+}
+
+function checkSchema(value: unknown, location: string): void {
+  check(isJsonObject(value), location, 'must be an object');
+  checkNonEmptyString(value.name, `${location}.name`);
+  for (const key of ['eventTypePath', 'sessionIdPath', 'cwdPath', 'projectPath']) {
+    checkOptionalString(value[key], `${location}.${key}`);
+  }
+  check(Array.isArray(value.events), `${location}.events`, 'must be an array');
+  value.events.forEach((event, index) => {
+    const eventLocation = `${location}.events[${index}]`;
+    check(isJsonObject(event), eventLocation, 'must be an object');
+    check(typeof event.name === 'string', `${eventLocation}.name`, 'must be a string');
+    check(typeof event.action === 'string' && Object.hasOwn(EVENT_ACTIONS, event.action),
+      `${eventLocation}.action`, `must be one of ${Object.keys(EVENT_ACTIONS).join(', ')}`);
+    if (event.match !== undefined) checkMatchRule(event.match, `${eventLocation}.match`);
+    if (event.fields === undefined) return;
+    check(isJsonObject(event.fields), `${eventLocation}.fields`, 'must be an object');
+    for (const [name, spec] of Object.entries(event.fields)) checkFieldSpec(spec, `${eventLocation}.fields.${name}`);
+  });
+}
+
+function checkWatch(value: unknown, location: string, schemas: JsonObject | undefined): void {
+  check(isJsonObject(value), location, 'must be an object');
+  checkNonEmptyString(value.name, `${location}.name`);
+  checkNonEmptyString(value.path, `${location}.path`);
+  for (const key of ['workspace', 'project', 'agentId']) checkOptionalString(value[key], `${location}.${key}`);
+  for (const key of ['startAtEnd', 'subagentOnly']) checkOptionalBoolean(value[key], `${location}.${key}`);
+  const { subagentSource, context } = value;
+  if (subagentSource !== undefined) {
+    check(isJsonObject(subagentSource), `${location}.subagentSource`, 'must be an object');
+    check(typeof subagentSource.path === 'string', `${location}.subagentSource.path`, 'must be a string');
+  }
+  if (context !== undefined) {
+    check(isJsonObject(context), `${location}.context`, 'must be an object');
+    check(context.mode === 'agents', `${location}.context.mode`, 'must be "agents"');
+    checkOptionalString(context.path, `${location}.context.path`);
+    if (context.updateOn !== undefined) {
+      check(Array.isArray(context.updateOn), `${location}.context.updateOn`, 'must be an array');
+      context.updateOn.forEach((trigger, index) => check(trigger === 'session_start' || trigger === 'session_end',
+        `${location}.context.updateOn[${index}]`, 'must be "session_start" or "session_end"'));
+    }
+  }
+  if (typeof value.schema !== 'string') {
+    check(isJsonObject(value.schema), `${location}.schema`, 'must be a schema name or an inline schema object');
+    checkSchema(value.schema, `${location}.schema`);
+    return;
+  }
+  checkNonEmptyString(value.schema, `${location}.schema`);
+  // Own entries were checked already; this also rejects a name that resolves
+  // through the prototype instead (e.g. "constructor").
+  const referenced = schemas?.[value.schema];
+  if (referenced !== undefined) checkSchema(referenced, `schemas.${value.schema}`);
+}
+
+/**
+ * Rejects a document the watcher cannot run, mirroring types.ts. Without it, a
+ * non-array `watches` threw inside the watcher, and a non-string match or
+ * field path threw on every entry, which the watcher logged and checkpointed
+ * past, so those entries were lost without a trace.
+ */
+function assertTranscriptWatchConfigShape(parsed: unknown): asserts parsed is TranscriptWatchConfig {
+  check(isJsonObject(parsed), 'the top level', 'must be an object');
+  check(parsed.version === 1, 'version', 'must be 1');
+  const { stateFile, schemas, watches } = parsed;
+  // null means absent (the default state file), as it did before this check.
+  check(stateFile === undefined || stateFile === null || typeof stateFile === 'string', 'stateFile', 'must be a string');
+  if (schemas !== undefined) {
+    check(isJsonObject(schemas), 'schemas', 'must be an object');
+    for (const [name, schema] of Object.entries(schemas)) checkSchema(schema, `schemas.${name}`);
+  }
+  check(Array.isArray(watches), 'watches', 'must be an array');
+  watches.forEach((watch, index) => checkWatch(watch, `watches[${index}]`, schemas));
+}
+
+export function loadTranscriptWatchConfig(path = DEFAULT_CONFIG_PATH): TranscriptWatchConfig {
+  const resolvedPath = expandHomePath(path);
+  if (!existsSync(resolvedPath)) {
+    throw new Error(`Transcript watch config not found: ${resolvedPath}`);
+  }
+  const parsed = readJsonFileWithBom<unknown>(resolvedPath);
+  try {
+    assertTranscriptWatchConfigShape(parsed);
+  } catch (error) {
+    const problem = error instanceof Error ? error.message : String(error);
+    throw new Error(`Invalid transcript watch config: ${resolvedPath} (${problem})`, { cause: error });
+  }
+  if (!parsed.stateFile) {
+    parsed.stateFile = DEFAULT_STATE_PATH;
+  }
+  return parsed;
+}
+
+export function writeSampleConfig(path = DEFAULT_CONFIG_PATH): void {
+  const resolvedPath = expandHomePath(path);
+  const dir = dirname(resolvedPath);
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+  writeFileSync(resolvedPath, JSON.stringify(SAMPLE_CONFIG, null, 2));
+}
+import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { MARKETPLACE_ROOT, DATA_DIR, USER_SETTINGS_PATH, expandHome } from '../../shared/paths.js';
+import { SettingsDefaultsManager } from '../../shared/SettingsDefaultsManager.js';
+import { writeJsonFileAtomic, readJsonFileWithBom } from '../../shared/atomic-json.js';
+import { buildSpawnSyncInvocation, lookupWindowsCommand, spawnHidden } from '../../shared/spawn.js';
+import type { TranscriptSchema, TranscriptWatchConfig } from '../transcripts/types.js';
+
+const PACKAGE_NAME = '@claude-mem/dsh';
+const WATCH_NAME = 'dsh';
+const PROFILE_NAME = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+function markerPath(): string { return join(DATA_DIR, 'integrations', 'dsh.json'); }
+function readInstallState(): { profiles: string[] } {
+  if (!existsSync(markerPath())) return { profiles: [] };
+  const state = readJsonFileWithBom<{ profiles: string[] }>(markerPath());
+  if (!Array.isArray(state.profiles) || !state.profiles.every(profile => typeof profile === 'string' && PROFILE_NAME.test(profile))) {
+    throw new Error('Invalid managed DSH profile state: ' + markerPath());
+  }
+  return state;
+}
+export function dshWatchConfigPath(): string {
+  const settings = SettingsDefaultsManager.loadFromFile(USER_SETTINGS_PATH);
+  return expandHome(settings.CLAUDE_MEM_TRANSCRIPTS_CONFIG_PATH);
+}
+export function findDshPackage(): string | null {
+  const roots = [MARKETPLACE_ROOT];
+  if (process.env.CLAUDE_MEM_DEV_HOOK_SOURCE === '1') roots.push(process.cwd());
+  for (const root of roots) {
+    const dir = join(root, 'dsh');
+    if (existsSync(join(dir, 'package.json')) && existsSync(join(dir, 'lib', 'index.js'))) return dir;
+  }
+  return null;
+}
+
+function readWatchConfig(): TranscriptWatchConfig {
+  const file = dshWatchConfigPath();
+  if (!existsSync(file)) return { version: 1, schemas: {}, watches: [], stateFile: join(DATA_DIR, 'transcript-watch-state.json') };
+  const config = readJsonFileWithBom<TranscriptWatchConfig>(file);
+  if (config.version !== 1 || !Array.isArray(config.watches) || (config.schemas !== undefined && (!config.schemas || typeof config.schemas !== 'object' || Array.isArray(config.schemas)))) {
+    throw new Error('Invalid transcript-watch config; repair ' + file + ' and retry.');
+  }
+  return config;
+}
+export function installDshTranscriptWatch(packageDir: string): void {
+  const config = readWatchConfig();
+  const schema = readJsonFileWithBom<TranscriptSchema>(join(packageDir, 'transcript-schema.json'));
+  const sessions = join(process.env.DSH_HOME || join(homedir(), '.dsh'), 'sessions');
+  // An existing DSH watch is already authoritative; do not add a second writer.
+  if (!config.watches.some(watch => watch.schema === 'dsh')) {
+    if (config.watches.some(watch => watch.name === WATCH_NAME)) throw new Error('A different watch already uses the name dsh.');
+    config.schemas ??= {};
+    config.schemas.dsh ??= schema;
+    const watch = { name: WATCH_NAME, path: sessions, schema: 'dsh', startAtEnd: true, managedBy: 'claude-mem' };
+    config.watches.push(watch);
+  }
+  writeJsonFileAtomic(dshWatchConfigPath(), config);
+}
+export function uninstallDshTranscriptWatch(): void {
+  if (!existsSync(dshWatchConfigPath())) return;
+  const config = readWatchConfig();
+  config.watches = config.watches.filter(watch => !(watch.name === WATCH_NAME && (watch as typeof watch & { managedBy?: string }).managedBy === 'claude-mem'));
+  // A schema may be used by a user-managed watch; it is harmless to keep it.
+  writeJsonFileAtomic(dshWatchConfigPath(), config);
+}
+
+async function runDsh(profile: string, operation: 'add' | 'remove', target: string): Promise<number> {
+  const command = process.platform === 'win32' ? lookupWindowsCommand('dsh') ?? 'dsh.cmd' : 'dsh';
+  const invocation = buildSpawnSyncInvocation(command, ['plugin', '--profile', profile, operation, '--workspace-root', target], {
+    encoding: 'utf8', timeout: 120_000,
+  });
+  return new Promise(resolve => {
+    const child = spawnHidden(invocation.command, invocation.args, { ...invocation.options, stdio: 'pipe' });
+    let output = '';
+    const collect = (chunk: Buffer): void => { output = (output + chunk.toString()).slice(-16_384); };
+    child.stdout?.on('data', collect);
+    child.stderr?.on('data', collect);
+    child.once('error', error => {
+      console.error('DSH could not run: ' + error.message + '. Install dsh and pnpm, then retry.');
+      resolve(1);
+    });
+    child.once('close', code => {
+      if (code !== 0 && output) console.error(output);
+      resolve(code ?? 1);
+    });
+  });
+}
+
+export async function installDeepSeekHarness(profile = 'web'): Promise<number> {
+  if (!PROFILE_NAME.test(profile)) {
+    console.error('Invalid DSH profile name.');
+    return 1;
+  }
+  const packageDir = findDshPackage();
+  if (!packageDir) {
+    console.error('First-party DSH bundle is missing. Restore the package build and re-run install.');
+    return 1;
+  }
+  // Validate user configuration before running DSH or changing its profile.
+  let previous: { profiles: string[] };
+  try {
+    // Required package inputs must be readable before ownership or native profile changes.
+    for (const file of ['LICENSE', 'NOTICE', 'THIRD-PARTY-LICENSES.txt', 'package.json', 'lib/index.js']) readFileSync(join(packageDir, file));
+    readJsonFileWithBom<TranscriptSchema>(join(packageDir, 'transcript-schema.json'));
+    const config = readWatchConfig();
+    if (!config.watches.some(watch => watch.schema === 'dsh') && config.watches.some(watch => watch.name === WATCH_NAME)) {
+      throw new Error('A different watch already uses the name dsh.');
+    }
+    previous = readInstallState();
+  } catch (error) { console.error(String(error)); return 1; }
+  // Persist ownership before external installation. If this directory cannot
+  // be written, no plugin is installed that a later uninstall cannot identify.
+  try { writeJsonFileAtomic(markerPath(), { profiles: [...new Set([...previous.profiles, profile])] }); }
+  catch (error) { console.error('Cannot record DSH installation: ' + String(error)); return 1; }
+  if (await runDsh(profile, 'add', packageDir) !== 0) {
+    try {
+      if (previous.profiles.length) writeJsonFileAtomic(markerPath(), previous);
+      else rmSync(markerPath(), { force: true });
+    } catch (error) { console.error('Could not restore DSH installation state: ' + String(error)); }
+    return 1;
+  }
+  try {
+    installDshTranscriptWatch(packageDir);
+    const settings = SettingsDefaultsManager.loadFromFile(USER_SETTINGS_PATH);
+    if (settings.CLAUDE_MEM_TRANSCRIPTS_ENABLED === 'false') {
+      console.error('DSH recall installed, but automatic capture is disabled by CLAUDE_MEM_TRANSCRIPTS_ENABLED=false.');
+      return 2;
+    }
+    console.log('DSH memory installed in profile ' + profile + '. Context and search use the native plugin; the worker captures transcripts once.');
+    console.log('Restart DSH to load the plugin. Start or restart the claude-mem worker to pick up the transcript watch.');
+    return 0;
+  } catch (error) {
+    console.error('DSH plugin installed, but transcript setup is incomplete: ' + String(error));
+    return 2;
+  }
+}
+export async function uninstallDeepSeekHarness(): Promise<number> {
+  if (!existsSync(markerPath())) return 0;
+  try {
+    const state = readInstallState();
+    for (const profile of state.profiles) {
+      if (await runDsh(profile, 'remove', PACKAGE_NAME) !== 0) return 1;
+    }
+    uninstallDshTranscriptWatch();
+    rmSync(markerPath(), { force: true });
+    return 0;
+  } catch (error) { console.error('DSH uninstall failed: ' + String(error)); return 1; }
+}
+import { describe, it, expect, afterEach } from 'bun:test';
+import {
+  paths,
+  DATA_DIR,
+  resolveDataDir,
+  ensureObserverSessionsDir,
+  expandHome,
+} from '../../src/shared/paths.js';
+import { homedir, tmpdir } from 'os';
+import { join } from 'path';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
+
+describe('paths namespace', () => {
+  it('exposes at least the known core accessors', () => {
+    const keys = Object.keys(paths);
+    const required = [
+      'dataDir',
+      'workerPid',
+      'settings',
+      'database',
+      'chroma',
+      'transcriptsConfig',
+    ];
+    for (const key of required) {
+      expect(keys).toContain(key);
+    }
+  });
+
+  it('every accessor returns a string starting with DATA_DIR', () => {
+    for (const key of Object.keys(paths) as Array<keyof typeof paths>) {
+      const value = paths[key]();
+      expect(typeof value).toBe('string');
+      expect(value.startsWith(DATA_DIR)).toBe(true);
+    }
+  });
+
+  it('every accessor is a callable function', () => {
+    for (const key of Object.keys(paths) as Array<keyof typeof paths>) {
+      expect(typeof paths[key]).toBe('function');
+    }
+  });
+});
+
+describe('expandHome', () => {
+  it('expands a leading ~/ on POSIX and Windows', () => {
+    expect(expandHome('~/x', 'linux')).toBe(join(homedir(), 'x'));
+    expect(expandHome('~/x', 'win32')).toBe(join(homedir(), 'x'));
+  });
+
+  it('expands a leading ~\\ on Windows', () => {
+    expect(expandHome('~\\x', 'win32')).toBe(join(homedir(), 'x'));
+  });
+
+  it('leaves a leading ~\\ untouched on POSIX', () => {
+    expect(expandHome('~\\x', 'linux')).toBe('~\\x');
+  });
+
+  it('expands a bare ~ on POSIX and Windows', () => {
+    expect(expandHome('~', 'linux')).toBe(homedir());
+    expect(expandHome('~', 'win32')).toBe(homedir());
+  });
+
+  it('leaves an absolute path untouched', () => {
+    const abs = join(homedir(), '.claude-mem');
+    expect(expandHome(abs)).toBe(abs);
+  });
+
+  it('leaves a path with no tilde untouched on POSIX and Windows', () => {
+    expect(expandHome('foo/bar', 'linux')).toBe('foo/bar');
+    expect(expandHome('foo\\bar', 'win32')).toBe('foo\\bar');
+  });
+
+  it('does not expand ~ not at position 0', () => {
+    // a tilde mid-path is a literal character, not a home reference
+    expect(expandHome('foo/~bar')).toBe('foo/~bar');
+  });
+
+  it('does not touch a ~user/ form (out of scope)', () => {
+    expect(expandHome('~someone/data')).toBe('~someone/data');
+  });
+});
+
+describe('resolveDataDir tilde expansion', () => {
+  // resolveDataDir consults process.env.CLAUDE_MEM_DATA_DIR first, so we can
+  // exercise the expansion without touching the real settings.json on disk.
+  const sentinel = '/__claude_mem_test_no_real_dir__';
+  const origEnv = process.env.CLAUDE_MEM_DATA_DIR;
+
+  afterEach(() => {
+    if (origEnv === undefined) delete process.env.CLAUDE_MEM_DATA_DIR;
+    else process.env.CLAUDE_MEM_DATA_DIR = origEnv;
+  });
+
+  it('returns an absolute path when the env var is a literal ~ (no stray ~ dir)', () => {
+    process.env.CLAUDE_MEM_DATA_DIR = '~/.claude-mem';
+    const resolved = resolveDataDir();
+    expect(resolved).toBe(join(homedir(), '.claude-mem'));
+    // the regression: a non-absolute, ~-prefixed value used to slip through and
+    // become a cwd-relative path ??a literal `~` directory on disk.
+    expect(resolved.startsWith('~')).toBe(false);
+    expect(join(resolved, 'logs')).toBe(join(homedir(), '.claude-mem', 'logs'));
+  });
+
+  it('returns the home dir when the env var is a bare ~', () => {
+    process.env.CLAUDE_MEM_DATA_DIR = '~';
+    expect(resolveDataDir()).toBe(homedir());
+  });
+
+  it('still returns a real env-var value when it is already absolute', () => {
+    process.env.CLAUDE_MEM_DATA_DIR = sentinel;
+    expect(resolveDataDir()).toBe(sentinel);
+  });
+});
+
+describe('ensureObserverSessionsDir', () => {
+  const created: string[] = [];
+
+  afterEach(() => {
+    for (const dir of created.splice(0)) rmSync(dir, { recursive: true, force: true });
+  });
+
+  function makeTempBase(): string {
+    const base = mkdtempSync(join(tmpdir(), 'cmem-obs-'));
+    created.push(base);
+    return base;
+  }
+
+  it('creates the directory and returns it', () => {
+    const dir = join(makeTempBase(), 'observer-sessions');
+    expect(ensureObserverSessionsDir(dir)).toBe(dir);
+    expect(existsSync(dir)).toBe(true);
+  });
+
+  it('turns a permanent mkdir failure (data dir is a file) into the setup message', () => {
+    const asFile = join(makeTempBase(), 'data-is-a-file');
+    writeFileSync(asFile, 'x');
+    // observer-sessions would sit under a file, so mkdir throws ENOTDIR.
+    expect(() => ensureObserverSessionsDir(join(asFile, 'observer-sessions')))
+      .toThrow(/^Observer working directory could not be prepared: .* \(ENOTDIR\)/);
+  });
+
+  it('rethrows a transient mkdir failure unchanged so it is retried, not parked', () => {
+    for (const code of ['EMFILE', 'ENFILE', 'EIO', 'ENOSPC']) {
+      const transient = Object.assign(new Error(`${code}: simulated`), { code });
+      let caught: unknown;
+      try {
+        ensureObserverSessionsDir('/unused', () => { throw transient; });
+      } catch (error) {
+        caught = error;
+      }
+      expect(caught).toBe(transient);
+    }
+  });
+});
+
+ succeeded in 1620ms:
+.\src\cli\claude-md-commands.ts:20:import { paths } from '../shared/paths.js';
+.\src\cli\spool-hook-event.ts:6:import { resolveDataDir } from '../shared/paths.js';
+.\src\cli\handlers\file-context-dedupe.ts:25:import { resolveDbPath } from '../../shared/paths.js';
+.\src\integrations\harness-worker.ts:6:import { expandHome } from '../shared/expand-home.js';
+.\src\npx-cli\commands\doctor.ts:15:import { resolveDataDir } from '../../shared/paths.js';
+.\src\npx-cli\commands\doctor.ts:16:import { paths } from '../../shared/paths.js';
+.\src\npx-cli\commands\install.ts:13:import { resolveDbPath, USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\npx-cli\commands\server.ts:126:  const { USER_SETTINGS_PATH: settingsPath } = await import('../../shared/paths.js');
+.\src\npx-cli\commands\teambrain.ts:26:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\npx-cli\commands\uninstall.ts:17:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\npx-cli\install\error-reporter.ts:23:import { resolveDataDir } from '../../shared/paths.js';
+.\src\npx-cli\install\setup-runtime.ts:7:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\npx-cli\utils\prune-cache.ts:3:import { installedPluginsPath, pluginCacheRootDirectory } from './paths.js';
+.\src\sdk\hardened-options.ts:51:import { ensureObserverSessionsDir } from '../shared/paths.js';
+.\src\server\auth\auth.ts:8:import { DATA_DIR, ensureDir } from '../../shared/paths.js';
+.\src\server\queue\redis-config.ts:7:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\server\runtime\ServerService.ts:11:import { paths } from '../../shared/paths.js';
+.\src\server\runtime\ServerViewerRoutes.ts:17:import { getPackageRoot } from '../../shared/paths.js';
+.\src\services\worker-service.ts:12:import { DATA_DIR, DB_PATH, USER_SETTINGS_PATH, ensureDir } from '../shared/paths.js';
+.\src\services\worker-service.ts:713:      const { USER_SETTINGS_PATH } = await import('../shared/paths.js');
+.\src\services\context\ContextBuilder.ts:6:import { DB_PATH } from '../../shared/paths.js';
+.\src\services\context\ContextConfigLoader.ts:3:import { paths } from '../../shared/paths.js';
+.\src\services\context\ObservationCompiler.ts:7:import { CLAUDE_CONFIG_DIR } from '../../shared/paths.js';
+.\src\services\domain\ModeManager.ts:6:import { getPackageRoot, paths } from '../../shared/paths.js';
+.\src\services\infrastructure\CleanupV12_4_3.ts:5:import { DATA_DIR, OBSERVER_SESSIONS_PROJECT } from '../../shared/paths.js';
+.\src\services\infrastructure\FtsMaintenance.ts:4:import { DATA_DIR } from '../../shared/paths.js';
+.\src\services\infrastructure\HealthMonitor.ts:5:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\infrastructure\index.ts:2:export * from './ProcessManager.js';
+.\src\services\infrastructure\index.ts:3:export * from './HealthMonitor.js';
+.\src\services\infrastructure\index.ts:4:export * from './GracefulShutdown.js';
+.\src\services\infrastructure\ProcessManager.ts:13:import { paths } from '../../shared/paths.js';
+.\src\services\infrastructure\ProjectMerge.ts:6:import { resolveDbPath } from '../../shared/paths.js';
+.\src\services\infrastructure\WorktreeAdoption.ts:9:import { paths } from '../../shared/paths.js';
+.\src\services\integrations\CcsAlignMiddleCache.ts:5:import { USER_SETTINGS_PATH, DATA_DIR } from '../../shared/paths.js';
+.\src\services\integrations\CcsAlignRulesWalker.ts:5:import { USER_SETTINGS_PATH, DATA_DIR } from '../../shared/paths.js';
+.\src\services\integrations\CodexCliInstaller.ts:20:import { paths } from '../../shared/paths.js';
+.\src\services\integrations\CursorHooksInstaller.ts:9:import { DATA_DIR } from '../../shared/paths.js';
+.\src\services\integrations\DeepSeekHarnessInstaller.ts:4:import { MARKETPLACE_ROOT, DATA_DIR, USER_SETTINGS_PATH, expandHome } from '../../shared/paths.js';
+.\src\services\integrations\GrokBotAwarenessPusher.ts:5:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\integrations\GrokBotBrainbeat.ts:3:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\integrations\GrokBotIndexWriter.ts:6:import { DB_PATH, USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\integrations\install-paths.ts:19:import { MARKETPLACE_ROOT } from '../../shared/paths.js';
+.\src\services\integrations\OmpHooksInstaller.ts:5:import { MARKETPLACE_ROOT } from '../../shared/paths.js';
+.\src\services\integrations\PiInstaller.ts:5:import { MARKETPLACE_ROOT } from '../../shared/paths.js';
+.\src\services\integrations\TelegramNotifier.ts:4:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\integrations\TelegramWrapupNotifier.ts:2:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\integrations\WindsurfHooksInstaller.ts:9:import { DATA_DIR } from '../../shared/paths.js';
+.\src\services\memory\cli.ts:10:import { expandHome } from '../../shared/expand-home.js';
+.\src\services\memory\ingest.ts:38:import { CLAUDE_CONFIG_DIR } from '../../shared/paths.js';
+.\src\services\memory\ingest.ts:39:import { expandHome } from '../../shared/expand-home.js';
+.\src\services\smart-file-read\parser.ts:8:import { resolveDataDir } from "../../shared/paths.js";
+.\src\services\sqlite\SessionSearch.ts:3:import { DATA_DIR, DB_PATH, ensureDir } from '../../shared/paths.js';
+.\src\services\sqlite\SessionStore.ts:4:import { DATA_DIR, DB_PATH, ensureDir, OBSERVER_SESSIONS_PROJECT, USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\sync\ChromaMcpManager.ts:13:import { USER_SETTINGS_PATH, paths } from '../../shared/paths.js';
+.\src\services\sync\ChromaSync.ts:16:import { USER_SETTINGS_PATH, paths } from '../../shared/paths.js';
+.\src\services\sync\CloudSync.ts:49:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\telemetry\backfill.ts:6:import { resolveDataDir } from '../../shared/paths.js';
+.\src\services\telemetry\consent.ts:4:import { resolveDataDir } from '../../shared/paths.js';
+.\src\services\transcripts\cli.ts:2:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\transcripts\config.ts:5:import { expandTilde, paths } from '../../shared/paths.js';
+.\src\services\transcripts\config.ts:102:  // Shared expandTilde/expandHome leave `~user/...` alone (resolving another
+.\src\services\transcripts\config.ts:106:  return expandTilde(inputPath);
+.\src\services\transcripts\processor.ts:5:import { DATA_DIR } from '../../shared/paths.js';
+.\src\services\worker\ClaudeProvider.ts:7:import { USER_SETTINGS_PATH, OBSERVER_WORKING_DIRECTORY_ERROR_PREFIX, paths } from '../../shared/paths.js';
+.\src\services\worker\CodexProvider.ts:2:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\context-window.ts:2:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\DatabaseManager.ts:9:import { USER_SETTINGS_PATH, DB_PATH } from '../../shared/paths.js';
+.\src\services\worker\GeminiProvider.ts:8:import { USER_SETTINGS_PATH, paths } from '../../shared/paths.js';
+.\src\services\worker\OpenAICompatibleProvider.ts:8:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\OpenAICompatProvider.ts:26:import { USER_SETTINGS_PATH, paths } from '../../shared/paths.js';
+.\src\services\worker\OpenRouterProvider.ts:8:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\PaginationHelper.ts:5:import { OBSERVER_SESSIONS_PROJECT } from '../../shared/paths.js';
+.\src\services\worker\provider-dispatch.ts:29:import { paths } from '../../shared/paths.js';
+.\src\services\worker\RateLimitStore.ts:41:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\retry.ts:31:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\stale-spawn-recovery.ts:28:import { DATA_DIR } from '../../shared/paths.js';
+.\src\services\worker\streamed-chat-completion.ts:33:import { USER_SETTINGS_PATH } from '../../shared/paths.js';
+.\src\services\worker\agents\ResponseProcessor.ts:26:import { USER_SETTINGS_PATH } from '../../../shared/paths.js';
+.\src\services\worker\http\middleware.ts:6:import { getPackageRoot } from '../../../shared/paths.js';
+.\src\services\worker\http\shared.ts:11:import { USER_SETTINGS_PATH } from '../../../shared/paths.js';
+.\src\services\worker\http\routes\ChromaRoutes.ts:7:import { USER_SETTINGS_PATH } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\DataRoutes.ts:7:import { getPackageRoot, paths } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\SearchRoutes.ts:36:import { USER_SETTINGS_PATH } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\SessionRoutes.ts:23:import { USER_SETTINGS_PATH, ensureObserverSessionsDir } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\SettingsRoutes.ts:6:import { getPackageRoot, paths, expandTilde } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\SettingsRoutes.ts:308:        target.CLAUDE_CODE_PATH = expandTilde(target.CLAUDE_CODE_PATH);
+.\src\services\worker\http\routes\ViewerRoutes.ts:6:import { getPackageRoot } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\WorkStateRoutes.ts:8:import { USER_SETTINGS_PATH } from '../../../../shared/paths.js';
+.\src\services\worker\http\routes\WorkViewRoutes.ts:6:import { DATA_DIR, DB_PATH, USER_SETTINGS_PATH } from '../../../../shared/paths.js';
+.\src\services\worker\knowledge\CorpusStore.ts:5:import { paths } from '../../../shared/paths.js';
+.\src\services\worker\knowledge\KnowledgeAgent.ts:7:import { USER_SETTINGS_PATH } from '../../../shared/paths.js';
+.\src\services\worker\search\index.ts:8:export * from './types.js';
+.\src\services\worker\session\recycle-conversation.ts:24:import { USER_SETTINGS_PATH } from '../../../shared/paths.js';
+.\src\shared\api-key-pool.ts:53:import { paths } from './paths.js';
+.\src\shared\claude-fallback-readiness.ts:17:import { paths } from './paths.js';
+.\src\shared\cmem-gateway.ts:27:import { paths, USER_SETTINGS_PATH } from './paths.js';
+.\src\shared\context-cache.ts:19:import { resolveDataDir } from './paths.js';
+.\src\shared\EnvManager.ts:7:import { paths } from './paths.js';
+.\src\shared\find-claude-executable.ts:31:import { USER_SETTINGS_PATH, expandTilde } from './paths.js';
+.\src\shared\find-claude-executable.ts:384: * find-claude-executable (expandTilde below). Stating whether the value is the
+.\src\shared\find-claude-executable.ts:430:    const configuredPath = expandTilde(settings.CLAUDE_CODE_PATH, _internals.homedir());
+.\src\shared\hook-settings.ts:6:import { USER_SETTINGS_PATH } from './paths.js';
+.\src\shared\hook-spool.ts:5:import { resolveDataDir } from './paths.js';
+.\src\shared\oauth-token.ts:18:import { paths, CLAUDE_CONFIG_DIR, DEFAULT_CLAUDE_CONFIG_DIR, expandTilde } from './paths.js';
+.\src\shared\oauth-token.ts:64: * (which both `expandTilde` and `CLAUDE_CONFIG_DIR`'s own derivation in
+.\src\shared\oauth-token.ts:78:  if (trimmed) return stripTrailingSep(expandTilde(trimmed));
+.\src\shared\observer-health.ts:18:import { paths } from './paths.js';
+.\src\shared\paths.ts:8:import { expandHome } from './expand-home.js';
+.\src\shared\paths.ts:10:export { expandHome } from './expand-home.js';
+.\src\shared\paths.ts:122:export function expandTilde(
+.\src\shared\port-reclaim.ts:74:import { DATA_DIR, USER_SETTINGS_PATH, paths } from './paths.js';
+.\src\shared\quota-cooldown.ts:41:import { paths } from './paths.js';
+.\src\shared\session-marker-files.ts:10:import { resolveDataDir } from './paths.js';
+.\src\shared\should-track-project.ts:10:} from './paths.js';
+.\src\shared\sync-health.ts:18:import { paths } from './paths.js';
+.\src\shared\teambrain.ts:18:import { paths } from './paths.js';
+.\src\shared\worker-spawn-gate.ts:3:import { resolveDataDir } from './paths.js';
+.\src\shared\worker-utils.ts:8:import { MARKETPLACE_ROOT, DATA_DIR, resolveDataDir } from "./paths.js";
+.\src\storage\postgres\index.ts:17:export * from './agent-events.js';
+.\src\storage\postgres\index.ts:18:export * from './auth.js';
+.\src\storage\postgres\index.ts:19:export * from './config.js';
+.\src\storage\postgres\index.ts:20:export * from './data-deletion.js';
+.\src\storage\postgres\index.ts:21:export * from './generation-jobs.js';
+.\src\storage\postgres\index.ts:22:export * from './observations.js';
+.\src\storage\postgres\index.ts:23:export * from './pool.js';
+.\src\storage\postgres\index.ts:24:export * from './projects.js';
+.\src\storage\postgres\index.ts:25:export * from './rate-limit.js';
+.\src\storage\postgres\index.ts:26:export * from './schema.js';
+.\src\storage\postgres\index.ts:27:export * from './server-sessions.js';
+.\src\storage\postgres\index.ts:28:export * from './teams.js';
+.\src\storage\postgres\index.ts:29:export * from './usage.js';
+.\src\storage\sqlite\index.ts:3:export * from './agent-events.js';
+.\src\storage\sqlite\index.ts:4:export * from './auth.js';
+.\src\storage\sqlite\index.ts:5:export * from './memory-items.js';
+.\src\storage\sqlite\index.ts:6:export * from './projects.js';
+.\src\storage\sqlite\index.ts:7:export * from './schema.js';
+.\src\storage\sqlite\index.ts:8:export * from './server-sessions.js';
+.\src\supervisor\index.ts:13:import { paths } from '../shared/paths.js';
+.\src\supervisor\process-registry.ts:8:import { ensureDir, OBSERVER_SESSIONS_DIR, paths } from '../shared/paths.js';
+.\src\supervisor\shutdown.ts:4:import { paths } from '../shared/paths.js';
+.\src\utils\claude-md-utils.ts:9:import { paths } from '../shared/paths.js';
+.\src\utils\logger.ts:4:import { paths } from '../shared/paths.js';
+.\src\utils\observer-audit.ts:19:import { DATA_DIR } from '../shared/paths.js';
+.\src\utils\project-filter.ts:3:import { expandHome } from '../shared/expand-home.js';
+.\src\utils\project-name.ts:5:import { expandHome } from '../shared/expand-home.js';
+.\src\utils\project-name.ts:6:import { CLAUDE_CONFIG_DIR, USER_SETTINGS_PATH } from '../shared/paths.js';
+.\src\utils\redaction.ts:4:import { USER_SETTINGS_PATH } from '../shared/paths.js';
+.\tests\env-isolation.test.ts:13:import { paths, CLAUDE_CONFIG_DIR, DEFAULT_CLAUDE_CONFIG_DIR, MARKETPLACE_ROOT } from '../src/shared/paths.js';
+.\tests\preload.ts:8: * real ~/.claude-mem. src/shared/paths.ts freezes DATA_DIR at first evaluation
+.\tests\settings-routes-settings-document.test.ts:7:import { paths } from '../src/shared/paths.js';
+.\tests\cli\claude-md-folder-pagination.test.ts:24:      const { paths } = await import(${JSON.stringify(source('shared/paths.ts'))});
+.\tests\cli\claude-md-generate-tag-pairing.test.ts:29:      const { paths } = await import(${JSON.stringify(source('shared/paths.ts'))});
+.\tests\cli\handlers\context-teambrain-brief.test.ts:9:import { paths } from '../../../src/shared/paths.js';
+.\tests\cli\handlers\file-edit-observer-session-skip.test.ts:45:import { OBSERVER_SESSIONS_DIR } from '../../../src/shared/paths.js';
+.\tests\cli\handlers\session-end-handler.test.ts:39:import { OBSERVER_SESSIONS_DIR } from '../../../src/shared/paths.js';
+.\tests\cli\handlers\session-init-plugin-cache-skip.test.ts:3:import { CLAUDE_CONFIG_DIR } from '../../../src/shared/paths.js';
+.\tests\evals\read-gate-trace-analysis.test.ts:117:      toolResult('toolu_other', '1\texport * from "./rate-calculator";'),
+.\tests\hooks\file-context.test.ts:7:import { resolveDbPath } from '../../src/shared/paths.js';
+.\tests\infrastructure\cleanup-v12_4_3.test.ts:10:import { OBSERVER_SESSIONS_PROJECT } from '../../src/shared/paths.js';
+.\tests\infrastructure\graceful-shutdown.test.ts:32:const { paths } = await import('../../src/shared/paths.js');
+.\tests\infrastructure\process-manager.test.ts:39:const { paths } = await import('../../src/shared/paths.js');
+.\tests\infrastructure\shutdown-cleanup-errors.test.ts:6:import { paths } from '../../src/shared/paths';
+.\tests\integration\chroma-windows-lifecycle.test.ts:39: * process starts ? src/shared/paths.ts resolves DATA_DIR into a module-level
+.\tests\integration\worker-ghost-port-recovery.test.ts:435:  const { paths } = await import('../../src/shared/paths.js');
+.\tests\integration\worker-recycle-orphans.test.ts:55: * at import time (src/shared/paths.ts), so the isolation has to already be in
+.\tests\integration\worker-recycle-orphans.test.ts:169:  const { paths } = await import('../../src/shared/paths.js');
+.\tests\integration\fixtures\ghost-worker-host.ts:32:import { paths } from '../../../src/shared/paths.js';
+.\tests\integration\fixtures\stale-worker-host.ts:24:import { paths } from '../../../src/shared/paths.js';
+.\tests\npx-cli\cli-worker-port-settings.test.ts:14:// shared/paths.ts freezes the data dir on first import, and the OpenClaw
+.\tests\npx-cli\cli-worker-port-settings.test.ts:35:const { USER_SETTINGS_PATH } = await import('../../src/shared/paths.js');
+.\tests\npx-cli\install-trial-contract.test.ts:584:      const { USER_SETTINGS_PATH } = await import('./src/shared/paths.ts');
+.\tests\npx-cli\install-update-keeps-provider.test.ts:7:import { USER_SETTINGS_PATH } from '../../src/shared/paths.js';
+.\tests\scripts\resolve-data-dir-parity.test.ts:10: * src/shared/paths.ts, so standalone scripts like worker-logs.cjs read the
+.\tests\scripts\resolve-data-dir-parity.test.ts:17:const WORKER_PATHS = pathToFileURL(join(import.meta.dir, '../../src/shared/paths.ts')).href;
+.\tests\scripts\resolve-data-dir-parity.test.ts:58:describe('scripts/resolve-data-dir.cjs matches resolveDataDir() in src/shared/paths.ts', () => {
+.\tests\sdk\hardened-options-thinking.test.ts:4:import { OBSERVER_SESSIONS_DIR } from '../../src/shared/paths.js';
+.\tests\security\observer-tool-enforcement.test.ts:14:import { OBSERVER_SESSIONS_DIR } from '../../src/shared/paths.js';
+.\tests\services\mode-manager-custom.test.ts:50:      const actualPaths = { ...await import('./src/shared/paths.ts') };
+.\tests\services\mode-manager-custom.test.ts:51:      mock.module('./src/shared/paths.ts', () => ({
+.\tests\services\worker-spawner-pidns.test.ts:5:import { paths } from '../../src/shared/paths.js';
+.\tests\services\queue\redis-config.test.ts:5:import * as realPaths from '../../../src/shared/paths.js';
+.\tests\services\queue\redis-config.test.ts:30:    mock.module('../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\services\queue\redis-config.test.ts:45:    mock.module('../../../src/shared/paths.js', () => ({
+.\tests\services\smart-file-read\grammar-lib-reuse.test.ts:5:import { resolveDataDir } from '../../../src/shared/paths.js';
+.\tests\services\smart-file-read\tree-sitter-bin-path.test.ts:4:import { resolveDataDir } from '../../../src/shared/paths.js';
+.\tests\services\smart-file-read\tree-sitter-cli-load-check.test.ts:4:import { resolveDataDir } from '../../../src/shared/paths.js';
+.\tests\services\sync\chroma-mcp-manager-path.test.ts:8:import * as realPaths from '../../../src/shared/paths.js';
+.\tests\services\sync\chroma-mcp-manager-path.test.ts:40:mock.module('../../../src/shared/paths.js', () => ({
+.\tests\services\sync\chroma-mcp-manager-path.test.ts:99:  mock.module('../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\services\sync\chroma-mcp-manager-singleton.test.ts:12:import * as realPaths from '../../../src/shared/paths.js';
+.\tests\services\sync\chroma-mcp-manager-singleton.test.ts:172:mock.module('../../../src/shared/paths.js', () => ({
+.\tests\services\sync\chroma-mcp-manager-singleton.test.ts:359:  mock.module('../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\services\sync\chroma-mcp-manager-ssl.test.ts:9:import * as realPaths from '../../../src/shared/paths.js';
+.\tests\services\sync\chroma-mcp-manager-ssl.test.ts:73:mock.module('../../../src/shared/paths.js', () => ({
+.\tests\services\sync\chroma-mcp-manager-ssl.test.ts:109:  mock.module('../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\services\worker\stale-spawn-recovery.test.ts:7: * DATA_DIR is resolved at module import time (src/shared/paths.ts), so the
+.\tests\shared\file-read-gate-default.test.ts:5:import { paths } from '../../src/shared/paths.js';
+.\tests\shared\oauth-token.test.ts:21:import { paths, CLAUDE_CONFIG_DIR, DEFAULT_CLAUDE_CONFIG_DIR } from '../../src/shared/paths.js';
+.\tests\shared\oauth-token.test.ts:373:  // as the default. Node's path.join (used by both expandTilde and
+.\tests\shared\observer-transcript-dir.test.ts:56:const { paths } = await import('../../src/shared/paths.js');
+.\tests\shared\observer-transcript-dir.test.ts:180:    // CLAUDE_MEM_CLAUDE_CONFIG_DIR: trim �� expandTilde �� stripTrailingSep.
+.\tests\shared\paths.test.ts:8:} from '../../src/shared/paths.js';
+.\tests\shared\should-track-project.test.ts:2:import { CLAUDE_CONFIG_DIR, MARKETPLACE_ROOT, OBSERVER_SESSIONS_DIR } from '../../src/shared/paths.js';
+.\tests\shared\worker-autostart-flag.test.ts:13:import { DATA_DIR } from '../../src/shared/paths.js';
+.\tests\shared\worker-spawn-gate.test.ts:7:// Eagerly evaluate src/shared/paths.ts BEFORE any per-test env override:
+.\tests\shared\worker-spawn-gate.test.ts:17:import '../../src/shared/paths.js';
+.\tests\shared\worker-spawn-gate.test.ts:19:// The spawn gate's lock path comes from resolveDataDir() (src/shared/paths.ts),
+.\tests\shared\worker-utils-body-read.test.ts:4:import '../../src/shared/paths.js';
+.\tests\shared\worker-utils-fail-loud.test.ts:9:import { DATA_DIR } from '../../src/shared/paths.js';
+.\tests\shared\worker-utils-fetch-verbose.test.ts:9:import '../../src/shared/paths.js';
+.\tests\shared\worker-utils-timeout.test.ts:8:// Eagerly evaluate src/shared/paths.ts BEFORE any per-test env override:
+.\tests\shared\worker-utils-timeout.test.ts:18:import '../../src/shared/paths.js';
+.\tests\shared\worker-utils-viewer-url.test.ts:9:import '../../src/shared/paths.js';
+.\tests\supervisor\process-registry.test.ts:5:import { OBSERVER_SESSIONS_DIR } from '../../src/shared/paths.js';
+.\tests\ui\viewer\settings-count-clear.browser.test.ts:9:import { paths } from '../../../src/shared/paths';
+.\tests\utils\logger-format-context.test.ts:4:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\claude-setup-gate.test.ts:6:import { OBSERVER_SESSIONS_DIR, ensureObserverSessionsDir } from '../../src/shared/paths.js';
+.\tests\worker\codex-failure-booking.test.ts:27:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\codex-gateway-key-lock.test.ts:14:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\database-manager-settings-shape.test.ts:5:import { DB_PATH, USER_SETTINGS_PATH } from '../../src/shared/paths.js';
+.\tests\worker\default-claude-plan-fallback.test.ts:5:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\provider-dispatch.test.ts:31:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\quota-cooldown-profile.test.ts:23:import { paths, DEFAULT_CLAUDE_CONFIG_DIR } from '../../src/shared/paths.js';
+.\tests\worker\quota-cooldown.test.ts:30:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\rate-limit-store.test.ts:15:import { USER_SETTINGS_PATH } from '../../src/shared/paths.js';
+.\tests\worker\reactive-quota-abort-reason.test.ts:16:import { paths } from '../../src/shared/paths.js';
+.\tests\worker\agents\response-processor.test.ts:5:import { paths } from '../../../src/shared/paths.js';
+.\tests\worker\http\routes\data-routes-coercion.test.ts:10:import * as realPaths from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\data-routes-coercion.test.ts:15:mock.module('../../../../src/shared/paths.js', () => ({
+.\tests\worker\http\routes\data-routes-coercion.test.ts:23:  mock.module('../../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\worker\http\routes\data-routes-tool-uses.test.ts:7:import * as realPaths from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\data-routes-tool-uses.test.ts:12:mock.module('../../../../src/shared/paths.js', () => ({
+.\tests\worker\http\routes\data-routes-tool-uses.test.ts:20:  mock.module('../../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\worker\http\routes\memory-routes.test.ts:9:import * as realPaths from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\memory-routes.test.ts:14:mock.module('../../../../src/shared/paths.js', () => ({
+.\tests\worker\http\routes\memory-routes.test.ts:22:  mock.module('../../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\worker\http\routes\search-routes-welcome-hint.test.ts:13:import * as realPaths from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\search-routes-welcome-hint.test.ts:23:mock.module('../../../../src/shared/paths.js', () => ({
+.\tests\worker\http\routes\search-routes-welcome-hint.test.ts:123:    mock.module('../../../../src/shared/paths.js', () => realPathsSnapshot);
+.\tests\worker\http\routes\session-routes-account-switch.test.ts:16:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\session-routes-cmem-gateway-fallback.test.ts:7:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-claude-code-path.test.ts:8:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-cmem-key-lock.test.ts:7:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-codex-path.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-config-dir.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-file-read-gate.test.ts:6:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-quota-fallback.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-secret-masking.test.ts:7:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-secrets.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-session-start-sources.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-unchanged-values.test.ts:7:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-routes-uvx-path.test.ts:5:import { paths } from '../../../../src/shared/paths.js';
+.\tests\worker\http\routes\settings-save-refreshes-context-settings.test.ts:13:import { USER_SETTINGS_PATH } from '../../../../src/shared/paths.js';
+    writeFileSync(agentsMdPath, finalContent + '\n');
+  } else {
+    writeFileSync(agentsMdPath, '');
+  }
+
+  console.log(`  Removed legacy global context from ${agentsMdPath}`);
+}
+
+const cleanupLegacyCodexAgentsMdContext = removeCodexAgentsMdContext;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isCodexTranscriptWatch(watch: Record<string, unknown>): boolean {
+  return watch.name === 'codex' || watch.schema === 'codex';
+}
+
+function expandHome(inputPath: string): string {
+  if (inputPath === '~') return homedir();
+  if (inputPath.startsWith('~/') || inputPath.startsWith('~\\')) {
+    return path.join(homedir(), inputPath.slice(2));
+  }
+  return inputPath;
+}
+
+function isLegacyCodexAgentsContext(context: Record<string, unknown>): boolean {
+  if (context.mode !== 'agents') return false;
+
+  const updateOn = context.updateOn;
+  const hasLegacyUpdateOn = Array.isArray(updateOn)
+    && updateOn.length === 2
+    && updateOn.includes('session_start')
+    && updateOn.includes('session_end');
+  if (!hasLegacyUpdateOn) return false;
+
+  if (context.path === undefined) return true;
+  return typeof context.path === 'string'
+    && path.resolve(expandHome(context.path)) === CODEX_AGENTS_MD_PATH;
+}
+
+function disableCodexTranscriptAgentsContext(): boolean {
+  if (!existsSync(CODEX_TRANSCRIPT_WATCH_CONFIG_PATH)) return true;
+
+  try {
+    stripLegacyTranscriptWatchContexts();
+    return true;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn('WORKER', 'Failed to disable Codex transcript AGENTS.md context', { error: message });
+    expect(SettingsDefaultsManager.getAllDefaults().CLAUDE_MEM_CODEX_SUBAGENT_INGESTION).toBe('false');
+  });
+});
+
+describe('expandHomePath', () => {
+  it('expands a bare ~ and a ~/ prefix to the current home directory', () => {
+    expect(expandHomePath('~')).toBe(homedir());
+    expect(expandHomePath('~/.codex/sessions')).toBe(join(homedir(), '.codex/sessions'));
+  });
+
+  it('expands the Windows ~\\ form only on win32', () => {
+    // expandHome treats `~\` as a home prefix on Windows only; on POSIX a
+    // backslash is a legal filename character and must stay literal.
+    if (process.platform === 'win32') {
+      expect(expandHomePath('~\\')).toBe(homedir());
+      expect(expandHomePath('~\\.codex\\sessions')).toBe(join(homedir(), '.codex\\sessions'));
+    } else {
+      expect(expandHomePath('~\\')).toBe('~\\');
+      expect(expandHomePath('~\\.codex\\sessions')).toBe('~\\.codex\\sessions');
+    }
+  });
+
+  it('leaves ~user/ paths alone instead of reparenting them under this user home', () => {
+    // `~alice/transcripts` names alice's home, not a directory inside ours.
+    // Rewriting it to <home>/alice/transcripts pointed the watcher at a path
+    // that does not exist, and it ingested nothing without reporting an error.
+    expect(expandHomePath('~alice/transcripts')).toBe('~alice/transcripts');
+    expect(expandHomePath('~backup/rollout.jsonl')).toBe('~backup/rollout.jsonl');
+  });
+
+  it('passes absolute, relative and empty paths through untouched', () => {
+    expect(expandHomePath('/var/log/codex.jsonl')).toBe('/var/log/codex.jsonl');
+    expect(expandHomePath('relative/path.jsonl')).toBe('relative/path.jsonl');
+    expect(expandHomePath('')).toBe('');
+  });
+    describe('with ~ home directory expansion', () => {
+      it('expands ~ to home directory', () => {
+        const home = homedir();
+        expect(isProjectExcluded(`${home}/secret`, '~/secret')).toBe(true);
+        expect(isProjectExcluded(`${home}/projects/secret`, '~/projects/*')).toBe(true);
+      });
+
+      it('expands a Windows-form ~\\ pattern', () => {
+        const home = homedir();
+        // `expandHome` recognises `~` and `~/`, not `~\` on POSIX. Expanding before
+        // normalising separators left a Windows-written exclusion as a literal `~/...`,
+        // which matches no absolute path ??so the entry silently stopped excluding.
+        expect(isProjectExcluded(`${home}/projects/secret`, '~\\projects\\secret')).toBe(true);
+        expect(isProjectExcluded(`${home}/projects/secret`, '~\\projects\\*')).toBe(true);
+        expect(isProjectExcluded(home, '~\\')).toBe(true);
+      });
+
+      it('does not glue the home directory onto a ~name pattern', () => {
+        const home = homedir();
+        // `~backup/*` used to expand by concatenation to `<home>backup/*`, a path with no
+        // separator between the home directory and the pattern. That excluded a sibling of
+        // the home directory nobody named, and left a real `~backup` directory unexcluded.
+        expect(isProjectExcluded(`${home}backup/thing`, '~backup/*')).toBe(false);
+        expect(isProjectExcluded('/opt/~backup/thing', '~backup/*')).toBe(false);
+      });
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath src,tests -Recurse -File | Select-String -Pattern '\\bexpandHome\\b' | Group-Object Path | ForEach-Object { (Resolve-Path -LiteralPath "'$_.Name -Relative) + '"' (' + "'$_.Count + '"')'; "'$_.Group | ForEach-Object { '"'  {0}: {1}' -f "'$_.LineNumber, $_.Line.Trim() } }; Get-ChildItem -LiteralPath src,tests -Recurse -File | Select-String -Pattern '"'(export.*from.*(shared/paths|expand-home)|function\\s+(expandTilde|expandHomePath|resolveHomePath))' | ForEach-Object { '{0}:{1}:{2}' -f (Resolve-Path -LiteralPath "'$_.Path -Relative), $_.LineNumber, $_.Line }' in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$taskFiles = @('"'src/integrations/harness-worker.ts','src/services/integrations/DeepSeekHarnessInstaller.ts','src/services/memory/cli.ts','src/services/memory/ingest.ts','src/utils/project-filter.ts','src/utils/project-name.ts','tests/shared/paths.test.ts'); foreach ("'$taskFile in $taskFiles) { $taskFile; Get-Content -LiteralPath $taskFile -TotalCount 45 }; Get-ChildItem -LiteralPath src,tests -Recurse -File | Select-String -Pattern '"'expand[-_]?[Hh]ome|[Rr]esolveHome|expandTilde' | Where-Object { "'$_.Line -match '"'(function\\s|=>)' } | ForEach-Object { '{0}:{1}:{2}' -f (Resolve-Path -LiteralPath "'$_.Path -Relative), $_.LineNumber, $_.Line }' in C:\Users\User\Desktop\오픈소스_팀플\시험6_남은분야\code\_cwd_6_3\none
+ succeeded in 1122ms:
+.\src\integrations\harness-worker.ts (2)
+  6: import { expandHome } from '../shared/expand-home.js';
+  12: const dataDir = expandHome(process.env.CLAUDE_MEM_DATA_DIR || join(homedir(), '.claude-mem'));
+.\src\services\integrations\CodexCliInstaller.ts (2)
+  554: function expandHome(inputPath: string): string {
+  574: && path.resolve(expandHome(context.path)) === CODEX_AGENTS_MD_PATH;
+.\src\services\integrations\DeepSeekHarnessInstaller.ts (2)
+  4: import { MARKETPLACE_ROOT, DATA_DIR, USER_SETTINGS_PATH, expandHome } from '../../shared/paths.js';
+  24: return expandHome(settings.CLAUDE_MEM_TRANSCRIPTS_CONFIG_PATH);
+.\src\services\memory\cli.ts (2)
+  10: import { expandHome } from '../../shared/expand-home.js';
+  40: if (explicit) return { source: resolve(callerCwd, expandHome(explicit)), all: false };
+.\src\services\memory\ingest.ts (4)
+  39: import { expandHome } from '../../shared/expand-home.js';
+  99: const expanded = expandHome(source);
+  482: source: expandHome(source),
+  639: source: expandHome(source),
+.\src\services\transcripts\config.ts (1)
+  102: // Shared expandTilde/expandHome leave `~user/...` alone (resolving another
+.\src\shared\expand-home.ts (1)
+  11: export function expandHome(
+.\src\shared\paths.ts (5)
+  8: import { expandHome } from './expand-home.js';
+  10: export { expandHome } from './expand-home.js';
+  23: return expandHome(process.env.CLAUDE_MEM_DATA_DIR);
+  34: return expandHome(settings.CLAUDE_MEM_DATA_DIR);
+  127: return expandHome(filePath, platform, home);
+.\src\utils\project-filter.ts (3)
+  3: import { expandHome } from '../shared/expand-home.js';
+  8: // is home-relative, but `expandHome` only recognises `~` and `~/` on POSIX ? resolving
+  12: let expanded = expandHome(pattern.replace(/\\/g, '/'));
+.\src\utils\project-name.ts (4)
+  5: import { expandHome } from '../shared/expand-home.js';
+  278: const expanded = expandHome(cwd, platform);
+  367: const expandedCwd = expandHome(cwd, platform);
+  413: const expandedCwd = expandHome(cwd, platform);
+.\tests\shared\paths.test.ts (13)
+  7: expandHome,
+  44: describe('expandHome', () => {
+  46: expect(expandHome('~/x', 'linux')).toBe(join(homedir(), 'x'));
+  47: expect(expandHome('~/x', 'win32')).toBe(join(homedir(), 'x'));
+  51: expect(expandHome('~\\x', 'win32')).toBe(join(homedir(), 'x'));
+  55: expect(expandHome('~\\x', 'linux')).toBe('~\\x');
+  59: expect(expandHome('~', 'linux')).toBe(homedir());
+  60: expect(expandHome('~', 'win32')).toBe(homedir());
+  65: expect(expandHome(abs)).toBe(abs);
+  69: expect(expandHome('foo/bar', 'linux')).toBe('foo/bar');
+  70: expect(expandHome('foo\\bar', 'win32')).toBe('foo\\bar');
+  75: expect(expandHome('foo/~bar')).toBe('foo/~bar');
+  79: expect(expandHome('~someone/data')).toBe('~someone/data');
+.\tests\transcripts\config.test.ts (1)
+  177: // expandHome treats `~\` as a home prefix on Windows only; on POSIX a
+.\tests\utils\project-filter.test.ts (1)
+  75: // `expandHome` recognises `~` and `~/`, not `~\` on POSIX. Expanding before
+.\src\services\transcripts\config.ts:100:export function expandHomePath(inputPath: string): string {
+.\src\shared\paths.ts:10:export { expandHome } from './expand-home.js';
+.\src\shared\paths.ts:122:export function expandTilde(
+
+ succeeded in 1220ms:
+src/integrations/harness-worker.ts
+import { existsSync, readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { spawn } from 'node:child_process';
+import { isConnectionRefusedError } from '../shared/connection-errors.js';
+import { expandHome } from '../shared/expand-home.js';
+
+const TIMEOUT_MS = 5_000;
+
+/** Resolve the same per-user address as the worker, including persisted settings. */
+export function resolveHarnessWorkerUrl(): string {
+  const dataDir = expandHome(process.env.CLAUDE_MEM_DATA_DIR || join(homedir(), '.claude-mem'));
+  let settings: Record<string, unknown> = {};
+  try {
+    const document = JSON.parse(readFileSync(join(dataDir, 'settings.json'), 'utf8').replace(/^\uFEFF/, ''));
+    const nested = document?.env;
+    settings = nested && typeof nested === 'object' && !Array.isArray(nested)
+      && Object.keys(nested).some(key => key.startsWith('CLAUDE_MEM_')) ? nested : document ?? {};
+  } catch {
+    // Settings are optional; environment overrides and per-user defaults remain usable.
+  }
+  const setting = (key: string, fallback: string): string =>
+    process.env[key] || (typeof settings[key] === 'string' && settings[key] ? String(settings[key]) : fallback);
+  const configuredHost = setting('CLAUDE_MEM_WORKER_HOST', '127.0.0.1');
+  const host = configuredHost === 'localhost' ? '127.0.0.1' : configuredHost;
+  const port = setting('CLAUDE_MEM_WORKER_PORT', String(37700 + ((process.getuid?.() ?? 77) % 100)));
+  return 'http://' + (host.includes(':') && !host.startsWith('[') ? '[' + host + ']' : host) + ':' + port;
+}
+
+let starting: Promise<void> | undefined;
+
+/** Only start code from the installed marketplace, never the current repository. */
+export function startHarnessWorker(): Promise<void> {
+  if (starting) return starting;
+  const root = join(process.env.CLAUDE_CONFIG_DIR || join(homedir(), '.claude'), 'plugins', 'marketplaces', 'thedotmack');
+  const runner = join(root, 'plugin', 'scripts', 'bun-runner.js');
+  const worker = join(root, 'plugin', 'scripts', 'worker-service.cjs');
+  if (!existsSync(runner) || !existsSync(worker)) {
+    return Promise.reject(new Error('Run npx claude-mem install to install the worker.'));
+  }
+  const attempt = new Promise<void>((resolve, reject) => {
+    const child = spawn(process.execPath, [runner, worker, 'start'], {
+      stdio: 'ignore', windowsHide: true, timeout: 15_000,
+    });
+    child.once('error', reject);
+src/services/integrations/DeepSeekHarnessInstaller.ts
+import { existsSync, readFileSync, rmSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
+import { MARKETPLACE_ROOT, DATA_DIR, USER_SETTINGS_PATH, expandHome } from '../../shared/paths.js';
+import { SettingsDefaultsManager } from '../../shared/SettingsDefaultsManager.js';
+import { writeJsonFileAtomic, readJsonFileWithBom } from '../../shared/atomic-json.js';
+import { buildSpawnSyncInvocation, lookupWindowsCommand, spawnHidden } from '../../shared/spawn.js';
+import type { TranscriptSchema, TranscriptWatchConfig } from '../transcripts/types.js';
+
+const PACKAGE_NAME = '@claude-mem/dsh';
+const WATCH_NAME = 'dsh';
+const PROFILE_NAME = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
+function markerPath(): string { return join(DATA_DIR, 'integrations', 'dsh.json'); }
+function readInstallState(): { profiles: string[] } {
+  if (!existsSync(markerPath())) return { profiles: [] };
+  const state = readJsonFileWithBom<{ profiles: string[] }>(markerPath());
+  if (!Array.isArray(state.profiles) || !state.profiles.every(profile => typeof profile === 'string' && PROFILE_NAME.test(profile))) {
+    throw new Error('Invalid managed DSH profile state: ' + markerPath());
+  }
+  return state;
+}
+export function dshWatchConfigPath(): string {
+  const settings = SettingsDefaultsManager.loadFromFile(USER_SETTINGS_PATH);
+  return expandHome(settings.CLAUDE_MEM_TRANSCRIPTS_CONFIG_PATH);
+}
+export function findDshPackage(): string | null {
+  const roots = [MARKETPLACE_ROOT];
+  if (process.env.CLAUDE_MEM_DEV_HOOK_SOURCE === '1') roots.push(process.cwd());
+  for (const root of roots) {
+    const dir = join(root, 'dsh');
+    if (existsSync(join(dir, 'package.json')) && existsSync(join(dir, 'lib', 'index.js'))) return dir;
+  }
+  return null;
+}
+
+function readWatchConfig(): TranscriptWatchConfig {
+  const file = dshWatchConfigPath();
+  if (!existsSync(file)) return { version: 1, schemas: {}, watches: [], stateFile: join(DATA_DIR, 'transcript-watch-state.json') };
+  const config = readJsonFileWithBom<TranscriptWatchConfig>(file);
+  if (config.version !== 1 || !Array.isArray(config.watches) || (config.schemas !== undefined && (!config.schemas || typeof config.schemas !== 'object' || Array.isArray(config.schemas)))) {
+    throw new Error('Invalid transcript-watch config; repair ' + file + ' and retry.');
+  }
+  return config;
+}
+export function installDshTranscriptWatch(packageDir: string): void {
+src/services/memory/cli.ts
+import {
+  dryRunMemorySource,
+  formatMemoryDryRunReport,
+  memoryDirForCwd,
+  claudeProjectsDir,
+  type MemoryIngestReport,
+} from './ingest.js';
+import { resolve } from 'path';
+import { ensureWorkerRunning, workerHttpRequest } from '../../shared/worker-utils.js';
+import { expandHome } from '../../shared/expand-home.js';
+
+function getArgValue(args: string[], name: string): string | null {
+  const index = args.indexOf(name);
+  if (index === -1) return null;
+  return args[index + 1] ?? null;
+}
+
+function hasFlag(args: string[], name: string): boolean {
+  return args.includes(name);
+}
+
+const USAGE =
+  'Usage: claude-mem memory ingest [--source <dir> | --all] [--dry-run] [--require-cwd]\n' +
+  '  default: the current repo\'s memory dir (cwd)\n' +
+  '  --all:   sweep every ~/.claude/projects/*/memory/\n' +
+  '  --dry-run:     zero-spend scan + count (do this first)\n' +
+  '  --require-cwd: skip orphaned dirs whose cwd cannot be resolved';
+
+/**
+ * Resolve the effective source dir from flags (default = the caller's repo
+ * memory). The npx CLI runs this from the plugin root and passes the directory
+ * the user ran it in as --cwd, as it does for adopt; process.cwd() is only the
+ * fallback for a direct invocation. A relative --source is relative to it too.
+ */
+function resolveSource(args: string[]): { source: string; all: boolean } {
+  const all = hasFlag(args, '--all');
+  if (all) return { source: claudeProjectsDir(), all: true };
+  const callerCwd = resolve(getArgValue(args, '--cwd') ?? process.cwd());
+  const explicit = getArgValue(args, '--source');
+  if (explicit) return { source: resolve(callerCwd, expandHome(explicit)), all: false };
+  return { source: memoryDirForCwd(callerCwd), all: false };
+}
+
+export async function runMemoryCommand(subcommand: string | undefined, args: string[]): Promise<number> {
+  switch (subcommand) {
+src/services/memory/ingest.ts
+/**
+ * Claude Code auto-memory ingest.
+ *
+ * Claude Code writes "auto memory" ??markdown it distills for itself ??to
+ *   <CLAUDE_CONFIG_DIR>/projects/<encoded-cwd>/memory/MEMORY.md   (an index of links)
+ *   <CLAUDE_CONFIG_DIR>/projects/<encoded-cwd>/memory/<topic>.md  (distilled prose)
+ * where <encoded-cwd> is the repo's absolute path with every character outside
+ * [a-zA-Z0-9] replaced by '-', and a name over 200 characters cut to 200 plus a
+ * hash suffix (see `cwdToDashed`; CLAUDE_CONFIG_DIR defaults to ~/.claude).
+ *
+ * Unlike transcripts, memory is ALREADY distilled ??each topic file is the same
+ * KIND of artifact the observation generator produces. So memory-ingest does NOT
+ * run the generation pipeline. It stores each file's prose DIRECTLY as an
+ * observation (mechanical store-direct, zero model spend), reusing claude-mem's
+ * existing `storeObservation` seam (content-hash dedup + Chroma sync).
+ *
+ * Reads stay inside Claude Code's projects directory: every source is resolved
+ * (symlinks included) and must lie within it. A sibling transcript is read only
+ * for its `cwd`, to key the project; transcript content is never ingested.
+ *
+ * This module is the DB-free half: enumerate + parse + count. The real store
+ * path (`ingestMemorySource`) runs inside the worker where the SQLite store lives.
+ */
+import {
+  closeSync,
+  constants as fsConstants,
+  existsSync,
+  fstatSync,
+  lstatSync,
+  openSync,
+  readFileSync,
+  readSync,
+  readdirSync,
+  realpathSync,
+  statSync,
+} from 'fs';
+import { basename, dirname, isAbsolute, join, relative } from 'path';
+import { CLAUDE_CONFIG_DIR } from '../../shared/paths.js';
+import { expandHome } from '../../shared/expand-home.js';
+import { cwdToDashed } from '../context/ObservationCompiler.js';
+import { getProjectContext } from '../../utils/project-name.js';
+
+const MD_EXT = '.md';
+const JSONL_EXT = '.jsonl';
+/** The link-only index Claude Code maintains; carries no knowledge of its own. */
+src/utils/project-filter.ts
+
+import { basename } from 'path';
+import { expandHome } from '../shared/expand-home.js';
+import { logger } from './logger.js';
+
+function globToRegex(pattern: string): RegExp {
+  // Separators first, then home expansion. A pattern written on Windows as `~\projects\secret`
+  // is home-relative, but `expandHome` only recognises `~` and `~/` on POSIX ??resolving
+  // another user's home is deliberately out of its scope. Expanding before normalising left
+  // that pattern as a literal `~/projects/secret`, which matches no absolute path, so a
+  // configured exclusion silently stopped excluding.
+  let expanded = expandHome(pattern.replace(/\\/g, '/'));
+
+  // Again on the way out: on Windows `homedir()` itself returns backslashes, so the
+  // expanded path needs normalising even when the pattern arrived POSIX-form.
+  expanded = expanded.replace(/\\/g, '/');
+
+  let regex = expanded.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+
+  regex = regex
+    .replace(/\*\*/g, '<<<GLOBSTAR>>>')  
+    .replace(/\*/g, '[^/]*')              
+    .replace(/\?/g, '[^/]')               
+    .replace(/<<<GLOBSTAR>>>/g, '.*');    
+
+  return new RegExp(`^${regex}$`);
+}
+
+/**
+ * `dir/**` means "everything under dir" and users also expect it to cover `dir`
+ * itself, but the regex needs a character after `dir/`. Match the pattern with
+ * its trailing `/**` removed against the path as well.
+ */
+function matchesGlobPattern(pattern: string, normalizedPath: string, pathBasename: string): boolean {
+  const regex = globToRegex(pattern);
+  if (regex.test(normalizedPath) || regex.test(pathBasename)) return true;
+  if (pattern.replace(/\\/g, '/').endsWith('/**')) {
+    return globToRegex(pattern.slice(0, -3)).test(normalizedPath.replace(/\/+$/, ''));
+  }
+  return false;
+}
+
+/**
+ * Returns true when `folderPath` matches any of the supplied glob patterns.
+ * Patterns support `*`, `**`, `?`, and a leading `~`. Matches against both the
+src/utils/project-name.ts
+import path from 'path';
+import { existsSync, realpathSync, statSync } from 'fs';
+import { homedir, tmpdir } from 'os';
+import { execFileSync } from 'child_process';
+import { expandHome } from '../shared/expand-home.js';
+import { CLAUDE_CONFIG_DIR, USER_SETTINGS_PATH } from '../shared/paths.js';
+import { SettingsDefaultsManager, type SettingsDefaults } from '../shared/SettingsDefaultsManager.js';
+import { logger } from './logger.js';
+import { detectWorktree, type WorktreeInfo } from './worktree.js';
+import { matchProjectEnvironment, parseProjectEnvironments, type ProjectEnvironment } from './project-environments.js';
+
+const CLAUDE_PROJECT_DIR_ENV = 'CLAUDE_PROJECT_DIR';
+const UNKNOWN_PROJECT_NAME = 'unknown-project';
+
+/**
+ * Resolve the anchor directory for a Claude Code hook payload: prefer
+ * `CLAUDE_PROJECT_DIR` (the directory Claude Code declares for the session) over
+ * the raw hook cwd, so SDK/subagent temp cwds never become the project identity
+ * (#3437). Returns `null` when neither a declared project dir nor a usable cwd
+ * exists. Scoped to the hook adapter boundary ??callers that already hold an
+ * authoritative cwd (worker, transcript, worktree) must not route through this.
+ */
+export function resolveHookProjectPath(cwd: string | null | undefined): string | null {
+  const claudeProjectDir = process.env[CLAUDE_PROJECT_DIR_ENV]?.trim();
+  if (claudeProjectDir) {
+    return claudeProjectDir;
+  }
+  if (!cwd || cwd.trim() === '') {
+    return null;
+  }
+  return cwd;
+}
+
+/**
+ * Resolve the git repository ROOT for a directory, so a project's name is
+ * stable across its subdirectories and worktrees (#2663). Returns the absolute
+ * repo-root path, or null when `dir` is not inside a git repo (or git is
+ * unavailable). `--show-toplevel` resolves to the working-tree root even when
+ * invoked from a worktree or a nested subdirectory.
+ */
+function findGitRepoRoot(dir: string): string | null {
+  try {
+    const root = execFileSync('git', ['rev-parse', '--show-toplevel'], {
+      cwd: dir,
+      encoding: 'utf-8',
+tests/shared/paths.test.ts
+import { describe, it, expect, afterEach } from 'bun:test';
+import {
+  paths,
+  DATA_DIR,
+  resolveDataDir,
+  ensureObserverSessionsDir,
+  expandHome,
+} from '../../src/shared/paths.js';
+import { homedir, tmpdir } from 'os';
+import { join } from 'path';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
+
+describe('paths namespace', () => {
+  it('exposes at least the known core accessors', () => {
+    const keys = Object.keys(paths);
+    const required = [
+      'dataDir',
+      'workerPid',
+      'settings',
+      'database',
+      'chroma',
+      'transcriptsConfig',
+    ];
+    for (const key of required) {
+      expect(keys).toContain(key);
+    }
+  });
+
+  it('every accessor returns a string starting with DATA_DIR', () => {
+    for (const key of Object.keys(paths) as Array<keyof typeof paths>) {
+      const value = paths[key]();
+      expect(typeof value).toBe('string');
+      expect(value.startsWith(DATA_DIR)).toBe(true);
+    }
+  });
+
+  it('every accessor is a callable function', () => {
+    for (const key of Object.keys(paths) as Array<keyof typeof paths>) {
+      expect(typeof paths[key]).toBe('function');
+    }
+  });
+});
+
+describe('expandHome', () => {
+  it('expands a leading ~/ on POSIX and Windows', () => {
+.\src\services\integrations\CodexCliInstaller.ts:554:function expandHome(inputPath: string): string {
+.\src\services\transcripts\config.ts:100:export function expandHomePath(inputPath: string): string {
+.\src\shared\expand-home.ts:11:export function expandHome(
+.\src\shared\paths.ts:122:export function expandTilde(
+.\tests\shared\paths.test.ts:44:describe('expandHome', () => {
+.\tests\transcripts\config.test.ts:170:describe('expandHomePath', () => {
+
+codex
+**① 반드시 바꿔야 하는 파일 — 9개**
+
+```text
+src/shared/expand-home.ts
+src/shared/paths.ts
+src/integrations/harness-worker.ts
+src/services/integrations/DeepSeekHarnessInstaller.ts
+src/services/memory/cli.ts
+src/services/memory/ingest.ts
+src/utils/project-filter.ts
+src/utils/project-name.ts
+tests/shared/paths.test.ts
+```
+
+**② 이름을 바꾸면 안 되는 별도 함수**
+
+| 파일 | 함수 이름 |
+|---|---|
+| `src/services/integrations/CodexCliInstaller.ts` | `expandHome` |
+| `src/services/transcripts/config.ts` | `expandHomePath` |
+| `src/shared/paths.ts` | `expandTilde` |
+
+`expandTilde`는 이름을 유지하고, 본문에서 호출하는 `expandHome`만 `resolveHomePath`로 바꿔야 합니다.
+
+**③ 정확한 식별자 `expandHome`이 주석에만 나오는 파일**
+
+```text
+src/services/transcripts/config.ts
+tests/transcripts/config.test.ts
+tests/utils/project-filter.test.ts
+```
+
+`src/shared/paths.ts`의 re-export를 거쳐 사용하는 곳은 `DeepSeekHarnessInstaller.ts`와 `tests/shared/paths.test.ts`입니다. `src`·`tests`의 코드만 직접 확인했으며, 파일은 수정하지 않았습니다.
+tokens used
+39,655
+**① 반드시 바꿔야 하는 파일 — 9개**
+
+```text
+src/shared/expand-home.ts
+src/shared/paths.ts
+src/integrations/harness-worker.ts
+src/services/integrations/DeepSeekHarnessInstaller.ts
+src/services/memory/cli.ts
+src/services/memory/ingest.ts
+src/utils/project-filter.ts
+src/utils/project-name.ts
+tests/shared/paths.test.ts
+```
+
+**② 이름을 바꾸면 안 되는 별도 함수**
+
+| 파일 | 함수 이름 |
+|---|---|
+| `src/services/integrations/CodexCliInstaller.ts` | `expandHome` |
+| `src/services/transcripts/config.ts` | `expandHomePath` |
+| `src/shared/paths.ts` | `expandTilde` |
+
+`expandTilde`는 이름을 유지하고, 본문에서 호출하는 `expandHome`만 `resolveHomePath`로 바꿔야 합니다.
+
+**③ 정확한 식별자 `expandHome`이 주석에만 나오는 파일**
+
+```text
+src/services/transcripts/config.ts
+tests/transcripts/config.test.ts
+tests/utils/project-filter.test.ts
+```
+
+`src/shared/paths.ts`의 re-export를 거쳐 사용하는 곳은 `DeepSeekHarnessInstaller.ts`와 `tests/shared/paths.test.ts`입니다. `src`·`tests`의 코드만 직접 확인했으며, 파일은 수정하지 않았습니다.
