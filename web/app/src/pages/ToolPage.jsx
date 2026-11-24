@@ -151,7 +151,7 @@ export default function ToolPage() {
               {tool.tokens == null ? '측정 안 함' : `+${fmt(tool.tokens)}`}
             </div>
             <div className="mute" style={{ fontSize: 13, margin: 'var(--s2) 0 var(--s6)' }}>
-              도구 하나만 켜고 첫 응답에서 더 읽은 토큰 · {tool.checked_at || '2026-10-18'}
+              도구 하나만 켜고 첫 응답에서 더 읽은 토큰 · {(tool.token_note || '').match(/\d{4}-\d{2}-\d{2}/)?.[0] || tool.checked_at}
             </div>
 
             <h2 style={{ fontSize: 16 }}>역할 범위</h2>
