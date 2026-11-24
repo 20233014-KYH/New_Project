@@ -29,6 +29,8 @@ const ANSWERS = [
   { work: '', shell: '', logs: '', goal: 'long-project', priority: 'fast' },
   { work: '', shell: '', logs: '', goal: 'release' },
   { work: '', shell: '', logs: '', situation: 'no-such-situation' },
+  { work: '', shell: '', logs: '', goal: 'hackathon', priority: 'quality' },
+  { work: '', shell: '', logs: '', situation: 'multi-day', priority: 'quality' },
 ]
 
 describe.skipIf(!SERVER)('서버 = 로컬 모드', () => {

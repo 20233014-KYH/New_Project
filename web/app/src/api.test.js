@@ -44,6 +44,18 @@ describe('로컬 모드 판정', () => {
   })
 })
 
+describe('결과 품질 선택지', () => {
+  it('결과 품질이 중요하면 토큰이 더 들어도 시험에서 결과가 나았던 도구를 고른다', async () => {
+    const A = (situation, goal) => ({ work: '', shell: '', logs: '', situation, goal, priority: 'quality' })
+    const multi = (await getRecommend([], A('multi-day'))).situation.pick
+    expect(multi.label).toBe('결과 품질')
+    expect(multi.tools.map(t => t.id)).toEqual(['superpowers'])
+    expect((await getRecommend([], A('code-find'))).situation.pick.base).toBe(true)
+    const hack = (await getRecommend([], A(null, 'hackathon'))).goal
+    expect(hack.add.map(x => x.tool)).toEqual(['playwright-mcp', 'headroom'])
+  })
+})
+
 describe('도구 목록', () => {
   it('카테고리 1 필터 시 category=1 도구만 반환', async () => {
     const tools = await getTools({ categoryId: 1 })

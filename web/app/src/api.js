@@ -301,8 +301,8 @@ function getRules() {
 // 상황마다 대표 줄 하나(주의 줄 제외)
 const mainRules = () => getRules().filter(r => r.resultType !== '주의')
 // 상황 + 중요한 것 → 고를 도구 (data/situation_priority.csv, 서버와 같은 파일). 시험에서 차이가 확인된 조합만 있다
-export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
-const PRIORITY_ORDER = ['accurate', 'save', 'fast', 'simple', 'safe']
+export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', quality: '결과 품질', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
+const PRIORITY_ORDER = ['accurate', 'quality', 'save', 'fast', 'simple', 'safe']
 let _picks = null
 function getPicks() {
   if (!_picks) {

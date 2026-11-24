@@ -158,8 +158,8 @@ class JudgeServiceTest {
     void 도구_상세에_기본_기능과_비교한_시험_상황이_붙는다() {
         var sits = tools.detail("headroom").situations();
         assertThat(sits).extracting(x -> x.id()).containsExactly("big-tool-output");
-        assertThat(sits.get(0).picks()).extracting(x -> x.priority()).containsExactly("accurate", "save", "simple");
-        assertThat(sits.get(0).picks().get(2).chosen()).isEqualTo("기본 기능");
+        assertThat(sits.get(0).picks()).extracting(x -> x.priority()).containsExactly("accurate", "quality", "save", "simple");
+        assertThat(sits.get(0).picks().get(3).chosen()).isEqualTo("기본 기능");
         assertThat(tools.detail("codegraph").situations()).extracting(x -> x.id()).containsExactly("code-find", "code-flow");
         assertThat(tools.detail("tdd-guard").situations()).isEmpty();
     }
@@ -232,6 +232,16 @@ class JudgeServiceTest {
         var sec = judge.recommend(List.of("superpowers"), new Answers("", "", "", "security", null, null)).situation();
         assertThat(sec.evidence()).isEqualTo("직접 시험");   // S6-03b(doc)는 빠지고 S6-03(직접 시험)만 남음
         assertThat(sec.resultType()).isEqualTo("기본충분");
+    }
+
+    @Test
+    void 결과_품질이_중요하면_토큰이_더_들어도_결과가_나았던_도구를_고른다() {
+        var multi = judge.recommend(List.of(), new Answers("", "", "", "multi-day", "quality", null)).situation().pick();
+        assertThat(multi.label()).isEqualTo("결과 품질");
+        assertThat(multi.tools()).extracting(t -> t.id()).containsExactly("superpowers");
+        assertThat(judge.recommend(List.of(), new Answers("", "", "", "code-find", "quality", null)).situation().pick().base()).isTrue();
+        var hack = judge.recommend(List.of(), new Answers("", "", "", null, "quality", "hackathon")).goal();
+        assertThat(hack.add()).extracting(x -> x.tool()).containsExactly("playwright-mcp", "headroom");
     }
 
     @Test
