@@ -1,0 +1,46 @@
+﻿질문ID,질문 문장,선택지ID,선택지 문장,고르면,연결,메모
+Q0,어떤 일에 쓸 도구를 찾아요?,cat1,기획·작업 방식,Q1-1,,
+Q0,어떤 일에 쓸 도구를 찾아요?,cat2,토큰·컨텍스트,Q1-2,,
+Q0,어떤 일에 쓸 도구를 찾아요?,cat3,코드 이해·검색,Q1-3,,
+Q0,어떤 일에 쓸 도구를 찾아요?,cat4,디자인·프론트엔드,Q1-4,,
+Q0,어떤 일에 쓸 도구를 찾아요?,cat5,백엔드·인프라,Q1-5,,
+Q0,어떤 일에 쓸 도구를 찾아요?,cat6,QA·테스트,Q1-6,,
+Q0,어떤 일에 쓸 도구를 찾아요?,beginner,처음이에요 / 잘 모르겠어요,Q1-goal,,CLAUDE.md '처음이에요' 입구. 목적으로 고름
+Q1-1,어떤 상황이에요?,plan-new,새 프로젝트 계획을 세우고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-1,어떤 상황이에요?,idea-vague,막연한 아이디어를 다듬고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-1,어떤 상황이에요?,prd,제품 기획서(PRD)를 쓰고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-1,어떤 상황이에요?,resume,끊긴 작업을 이어서 하고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-1,어떤 상황이에요?,multi-day,여러 날에 걸쳐 작업해요,Q2,rules_v1.csv 상황ID,
+Q1-1,어떤 상황이에요?,none,여기에 없어요,결과,,카드 없이 도구함 겹침만 보여 줌
+Q1-2,어떤 상황이에요?,long-output,긴 명령 출력(로그·테스트) 때문에 토큰이 빨리 줄어요,Q2,rules_v1.csv 상황ID,
+Q1-2,어떤 상황이에요?,big-tool-output,연결한 도구가 큰 결과를 통째로 줘서 토큰이 빨리 줄어요,Q2,rules_v1.csv 상황ID,
+Q1-2,어떤 상황이에요?,usage-view,남은 토큰과 사용량을 보고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-2,어떤 상황이에요?,memory,여러 날 이어서 일할 때 앞에서 정한 걸 기억하게 하고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-2,어떤 상황이에요?,none,여기에 없어요,결과,,카드 없이 도구함 겹침만 보여 줌
+Q1-3,어떤 상황이에요?,lib-new,라이브러리 새 버전 사용법이 필요해요,Q2,rules_v1.csv 상황ID,
+Q1-3,어떤 상황이에요?,code-find,큰 코드에서 함수나 기능이 어디 있는지 찾고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-3,어떤 상황이에요?,code-flow,큰 코드에서 기능 전체가 어떻게 돌아가는지 알고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-3,어떤 상황이에요?,none,여기에 없어요,결과,,카드 없이 도구함 겹침만 보여 줌
+Q1-4,어떤 상황이에요?,none,아직 직접 시험한 상황이 없어요 (넘어가기),결과,,시험 전이라 상황 없음(팀 원칙: 시험한 것만). 결과에는 도구함 겹침만 보여 줌
+Q1-5,어떤 상황이에요?,db-ask,DB에 뭐가 들었는지 물어보고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-5,어떤 상황이에요?,terraform,Terraform 인프라 설정을 쓰고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-5,어떤 상황이에요?,none,여기에 없어요,결과,,카드 없이 도구함 겹침만 보여 줌
+Q1-6,어떤 상황이에요?,site-debug,배포된 사이트의 고장 원인을 찾고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-6,어떤 상황이에요?,e2e-test,화면 테스트를 만들고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-6,어떤 상황이에요?,security,보안 구멍을 찾고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-6,어떤 상황이에요?,variant,버그 하나를 찾은 뒤 같은 버그를 더 찾고 싶어요,Q2,rules_v1.csv 상황ID,
+Q1-6,어떤 상황이에요?,none,여기에 없어요,결과,,카드 없이 도구함 겹침만 보여 줌
+Q1-goal,어떤 일을 하려고 해요?,hackathon,해커톤처럼 짧은 시간에 만들어요,Q1-goal-sit,idea-vague|plan-new|lib-new|e2e-test|big-tool-output|usage-view,아이디어부터 화면 확인까지 며칠 안에 끝내요
+Q1-goal,어떤 일을 하려고 해요?,long-project,몇 주 이상 이어지는 프로젝트를 해요,Q1-goal-sit,multi-day|resume|memory|code-find|code-flow,여러 날에 걸쳐 같은 코드를 키워 가요
+Q1-goal,어떤 일을 하려고 해요?,legacy,남이 만든 큰 코드를 고쳐요,Q1-goal-sit,code-find|code-flow|site-debug|variant,낯선 코드에서 위치를 찾고 흐름을 이해해야 해요
+Q1-goal,어떤 일을 하려고 해요?,backend,서버·DB·인프라를 다뤄요,Q1-goal-sit,db-ask|terraform|lib-new,DB를 조회하고 인프라 설정을 써요
+Q1-goal,어떤 일을 하려고 해요?,save-limit,사용 한도가 자꾸 바닥나요,Q1-goal-sit,long-output|big-tool-output|usage-view|code-find,같은 일을 토큰을 덜 쓰고 하고 싶어요
+Q1-goal,어떤 일을 하려고 해요?,release,출시 전에 점검해요,Q1-goal-sit,security|e2e-test|variant|site-debug,보안 구멍과 화면 동작을 확인해요
+Q1-goal,어떤 일을 하려고 해요?,none,여기에 없어요,결과,,
+Q1-goal-sit,그중 어떤 상황이에요?,(연결된 상황ID),(rules_v1의 상황(쉬운 말)),Q2,Q1-goal의 연결 칸,고른 목적의 상황만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,accurate,틀리지 않는 것,결과,priority_v1.csv 중요한 것,그 상황에 고르기 규칙이 있는 보기만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,save,토큰·한도 아끼기,결과,priority_v1.csv 중요한 것,그 상황에 고르기 규칙이 있는 보기만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,simple,설치·관리가 간단한 것,결과,priority_v1.csv 중요한 것,그 상황에 고르기 규칙이 있는 보기만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,safe,실수로 망가뜨리지 않는 것,결과,priority_v1.csv 중요한 것,그 상황에 고르기 규칙이 있는 보기만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,fast,빨리 끝내기,결과,priority_v1.csv 중요한 것,그 상황에 고르기 규칙이 있는 보기만 보여 줌
+Q2,이 일을 할 때 무엇이 제일 중요해요?,any,상관없어요,결과,,상황 카드만 보여 줌
