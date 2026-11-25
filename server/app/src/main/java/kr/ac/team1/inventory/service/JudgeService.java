@@ -222,7 +222,9 @@ public class JudgeService {
                     }
                     continue;
                 }
-                for (ToolRef t : p.tools()) {
+                // '또는'으로 묶인 도구는 하나만: 도구함에 이미 있는 쪽을 그대로, 없으면 첫 번째만 더하기 (api.js goalPlan과 같음)
+                List<ToolRef> inBoxPick = p.tools().stream().filter(ToolRef::inBox).toList();
+                for (ToolRef t : inBoxPick.isEmpty() ? p.tools().stream().limit(1).toList() : inBoxPick) {
                     if (t.inBox()) {
                         merge(keep, t, c.label(), p.reason(), List.of());
                         continue;

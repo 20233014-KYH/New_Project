@@ -404,7 +404,9 @@ function goalPlan(ans, ids, byId, pairMap, testedMap) {
       if (costMatters) c.tools.filter(t => t.inBox).forEach(t => mergePlan(off, t, c.label, p.reason, []))
       continue
     }
-    for (const t of p.tools) {
+    // '또는'으로 묶인 도구는 하나만: 도구함에 이미 있는 쪽을 그대로, 없으면 첫 번째만 더하기 (서버 JudgeService.goalPlan과 같음)
+    const inBoxPick = p.tools.filter(t => t.inBox)
+    for (const t of (inBoxPick.length ? inBoxPick : p.tools.slice(0, 1))) {
       if (t.inBox) { mergePlan(keep, t, c.label, p.reason, []); continue }
       const warnings = [...t.overlapWith.map(o => `도구함의 ${o}와 겹쳐요`), ...t.similarTo.map(o => `도구함의 ${o}와 비슷한 역할이에요(상황따라)`)]
       const tt = testedMap[t.id]

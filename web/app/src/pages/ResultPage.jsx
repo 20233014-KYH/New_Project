@@ -40,7 +40,8 @@ function SituationCardView({ s, priority }) {
         <p>{s.base}</p>
       </div>
       <div>
-        <h3>{s.resultType === '기본충분' ? '깔아 봤지만 기본 기능으로 충분했어요' : '이럴 땐 깔면 더 좋아요'}</h3>
+        <h3>{s.resultType !== '기본충분' ? '이럴 땐 깔면 더 좋아요'
+          : (s.pick && !s.pick.base ? '기본으로도 되지만, 결과를 더 다듬고 싶다면' : '깔아 봤지만 기본 기능으로 충분했어요')}</h3>
         <p>
           {s.tools.map((t, i) => (
             <span key={t.id}>

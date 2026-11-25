@@ -40,6 +40,9 @@ public class SeedLoader implements ApplicationRunner {
     private static final Logger log = LoggerFactory.getLogger(SeedLoader.class);
 
     private final ObjectMapper mapper;
+
+    @jakarta.persistence.PersistenceContext
+    private jakarta.persistence.EntityManager em;
     private final CategoryRepository categories;
     private final ToolRepository tools;
     private final ToolPairRepository pairs;
@@ -62,35 +65,37 @@ public class SeedLoader implements ApplicationRunner {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)   // 파일을 읽다 실패하면 지운 것까지 모두 되돌림
     public void run(ApplicationArguments args) throws IOException {
-        // 상황별 추천 규칙은 도구 데이터와 따로 넣는다(이미 도구가 들어 있는 MySQL에도 규칙만 새로 들어가게)
-        if (rules.count() == 0) {
-            loadSituationRules();
+        // 파일에서만 오는 데이터는 켤 때마다 파일 내용으로 새로 맞춘다.
+        // (MySQL처럼 데이터가 남는 DB에서도 새 규칙·고르기·토큰 숫자·판정이 반영되게. 서버 AI가 채운 판정은 남긴다)
+        rules.deleteAllInBatch();
+        picks.deleteAllInBatch();
+        goals.deleteAllInBatch();
+        tested.deleteAllInBatch();
+        em.flush();
+        em.clear();   // 지운 줄이 메모리에 남아 있다가 다시 고쳐지지 않게 비운다
+        loadSituationRules();
+        loadSituationPicks();
+        for (List<String> c : readCsv("seed/situation_goals.csv")) {
+            goals.save(new SituationGoal(c.get(0), c.get(1), c.get(2), c.get(3), (int) goals.count()));
         }
-        if (picks.count() == 0) {
-            loadSituationPicks();
-        }
-        if (goals.count() == 0) {
-            for (List<String> c : readCsv("seed/situation_goals.csv")) {
-                goals.save(new SituationGoal(c.get(0), c.get(1), c.get(2), c.get(3), (int) goals.count()));
-            }
-            log.info("목적 {}개 넣음", goals.count());
-        }
-        if (tools.count() > 0) {
-            log.info("DB에 데이터가 이미 있어 처음 데이터 넣기를 건너뜀 (도구 {}개)", tools.count());
-            return;
-        }
+        log.info("목적 {}개 넣음", goals.count());
         JsonNode cats = read("categories.json");
+        Set<Integer> catIds = new java.util.HashSet<>();
         for (JsonNode c : cats.path("categories")) {
             categories.save(new Category(c.path("id").asInt(), text(c, "name"), text(c, "desc"), text(c, "when")));
+            catIds.add(c.path("id").asInt());
         }
+        categories.findAll().stream().filter(c -> !catIds.contains(c.getId())).forEach(categories::delete);
 
         JsonNode desc = read("desc_en.json").path("desc");
         JsonNode cards = read("cards_ko.json").path("cards");
         int order = 0;
+        Set<String> toolIds = new java.util.HashSet<>();
         for (JsonNode e : read("entries.json").path("entries")) {
             String id = text(e, "id");
+            toolIds.add(id);
             JsonNode auto = e.path("auto");
             String pushed = text(auto, "pushed_at");
             JsonNode card = cards.path(id);
@@ -103,10 +108,23 @@ public class SeedLoader implements ApplicationRunner {
                     e.hasNonNull("scope") ? mapper.writeValueAsString(e.path("scope")) : null,
                     text(e, "token_note"), text(e, "checked_at"), order++);
             tool.setLatest(text(auto, "latest_release"), text(auto, "refreshed_at"));
-            tools.save(tool);
+            tools.save(tool);   // 같은 id가 있으면 새 값으로 덮어씀
         }
 
+        // 파일에서 빠진 도구와, 그 도구가 들어간 판정은 지운다
+        tools.findAll().stream().filter(t -> !toolIds.contains(t.getId())).forEach(tools::delete);
+        java.util.Map<String, ToolPair> existing = new java.util.HashMap<>();
+        for (ToolPair p : pairs.findAll()) {
+            if (!toolIds.contains(p.getA()) || !toolIds.contains(p.getB())) {
+                pairs.delete(p);
+            } else {
+                existing.put(p.getPairKey(), p);
+            }
+        }
         for (JsonNode p : read("compat.json").path("pairs")) {
+            if (!toolIds.contains(text(p, "a")) || !toolIds.contains(text(p, "b"))) {
+                continue;   // 카탈로그에서 빠진 도구의 판정은 넣지 않는다
+            }
             Set<String> sources = new LinkedHashSet<>();
             for (JsonNode ev : p.path("evidence")) {
                 String s = text(ev, "source");
@@ -115,10 +133,16 @@ public class SeedLoader implements ApplicationRunner {
                 }
             }
             String review = text(p, "review_state");
-            pairs.save(new ToolPair(text(p, "a"), text(p, "b"), text(p, "relation"),
+            ToolPair fresh = new ToolPair(text(p, "a"), text(p, "b"), text(p, "relation"),
                     review != null ? review : "ai_estimate", text(p, "reason_ko"),
                     mapper.writeValueAsString(new ArrayList<>(sources)), text(p, "judged_at"),
-                    p.path("same_role").isBoolean() && p.path("same_role").asBoolean()));
+                    p.path("same_role").isBoolean() && p.path("same_role").asBoolean());
+            ToolPair old = existing.get(fresh.getPairKey());
+            if (old != null) {
+                old.updateFrom(fresh);   // 같은 쌍은 내용만 새로(지웠다 다시 넣으면 같은 키가 겹쳐 실패할 수 있음)
+            } else {
+                pairs.save(fresh);
+            }
         }
 
         int i = 0;
@@ -126,7 +150,7 @@ public class SeedLoader implements ApplicationRunner {
             tested.save(new TestedTool(text(t, "tool"), text(t, "effect"), text(t, "caution"),
                     text(t, "caution_work"), text(t, "caution_shell"), text(t, "date"), i++));
         }
-        log.info("처음 데이터 넣기 끝: 분야 {}개, 도구 {}개, 판정 {}쌍, 시험한 도구 {}개",
+        log.info("파일 데이터 맞추기 끝: 분야 {}개, 도구 {}개, 판정 {}쌍, 시험한 도구 {}개",
                 categories.count(), tools.count(), pairs.count(), tested.count());
     }
 

@@ -53,6 +53,12 @@ describe('결과 품질 선택지', () => {
     expect((await getRecommend([], A('code-find'))).situation.pick.base).toBe(true)
     const hack = (await getRecommend([], A(null, 'hackathon'))).goal
     expect(hack.add.map(x => x.tool)).toEqual(['playwright-mcp', 'headroom'])
+    // '또는'으로 묶인 도구(playwright 또는 chrome-devtools)는 하나만 더하기
+    const legacy = (await getRecommend([], A(null, 'legacy'))).goal
+    expect(legacy.add.map(x => x.tool)).toEqual(['playwright-mcp'])
+    const has = (await getRecommend(['chrome-devtools-mcp'], A(null, 'legacy'))).goal
+    expect(has.add).toHaveLength(0)
+    expect(has.keep.map(x => x.tool)).toEqual(['chrome-devtools-mcp'])
   })
 })
 
