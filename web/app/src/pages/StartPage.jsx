@@ -60,7 +60,7 @@ export default function StartPage() {
         {picked && starters.length > 0 && (
           <>
             <h2 style={{ marginTop: 'var(--s8)' }}>
-              {categories.find(c => c.id === picked)?.name}: 처음 읽는 양이 적은 3개
+              {categories.find(c => c.id === picked)?.name}: 켜 두면 드는 토큰이 적은 3개
             </h2>
             <div className="starter">
               {starters.map(t => (
@@ -68,13 +68,13 @@ export default function StartPage() {
                   <h3>
                     <Link to={`/tool/${t.id}`} style={{ textDecoration: 'none' }}>{t.name}</Link>
                   </h3>
-                  <p className="n">처음 읽는 양 +{fmt(t.tokens)} · 별 {fmt(t.stars)}</p>
+                  <p className="n">켜 두면 드는 토큰 +{fmt(t.tokens)} · 별 {fmt(t.stars)}</p>
                   <AddButton id={t.id} box={box} onToggle={toggleBox} />
                 </div>
               ))}
             </div>
             <p className="note">
-              시작용 추천 목록은 아직 정하지 않았어요. 지금은 같은 분야에서 처음 읽는 양이 적은 3개를 보여 주는 예시예요.
+              시작용 추천 목록은 아직 정하지 않았어요. 지금은 같은 분야에서 켜 두면 드는 토큰이 적은 3개를 보여 주는 예시예요.
             </p>
             <div className="row-actions">
               <Link className="btn btn-p" to="/box">도구함 보기</Link>

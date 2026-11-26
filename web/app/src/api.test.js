@@ -44,6 +44,35 @@ describe('로컬 모드 판정', () => {
   })
 })
 
+describe('결과 품질 선택지', () => {
+  it('결과 품질이 중요하면 토큰이 더 들어도 시험에서 결과가 나았던 도구를 고른다', async () => {
+    const A = (situation, goal) => ({ work: '', shell: '', logs: '', situation, goal, priority: 'quality' })
+    const multi = (await getRecommend([], A('multi-day'))).situation.pick
+    expect(multi.label).toBe('결과 품질')
+    expect(multi.tools.map(t => t.id)).toEqual(['superpowers'])
+    expect((await getRecommend([], A('code-find'))).situation.pick.base).toBe(true)
+    const hack = (await getRecommend([], A(null, 'hackathon'))).goal
+    expect(hack.add.map(x => x.tool)).toEqual(['playwright-mcp', 'headroom'])
+    // '또는'으로 묶인 도구(playwright 또는 chrome-devtools)는 하나만 더하기
+    const legacy = (await getRecommend([], A(null, 'legacy'))).goal
+    expect(legacy.add.map(x => x.tool)).toEqual(['playwright-mcp'])
+    const has = (await getRecommend(['chrome-devtools-mcp'], A(null, 'legacy'))).goal
+    expect(has.add).toHaveLength(0)
+    expect(has.keep.map(x => x.tool)).toEqual(['chrome-devtools-mcp'])
+  })
+})
+
+describe('디자인 도구는 추천 대신 특징만', () => {
+  it('디자인 도구 상세에 직접 써 본 특징이 붙고, 상황 추천에는 디자인이 없다', async () => {
+    const { getTool, getSituations } = await import('./api.js')
+    const taste = await getTool('taste-skill')
+    expect(taste.traits.how).toContain('이름을 불러야')
+    expect(taste.traits.points.length).toBeGreaterThan(0)
+    expect((await getTool('caveman')).traits).toBeNull()
+    expect((await getSituations()).filter(s => s.category === 4)).toHaveLength(0)
+  })
+})
+
 describe('도구 목록', () => {
   it('카테고리 1 필터 시 category=1 도구만 반환', async () => {
     const tools = await getTools({ categoryId: 1 })

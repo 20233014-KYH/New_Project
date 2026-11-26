@@ -120,8 +120,22 @@ export default function ToolPage() {
               <Link to="/help">판정 낱말 풀이</Link>
             </p>
 
-            <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>
-            {(tool.situations || []).length === 0 && (
+            {tool.traits && (
+              <>
+                <h2 style={{ marginTop: 'var(--s12)' }}>직접 써 본 특징</h2>
+                <div className="panel" style={{ marginBottom: 'var(--s4)' }}>
+                  <p style={{ marginTop: 0 }}><b>쓰는 법</b> · {tool.traits.how}</p>
+                  <ul style={{ paddingLeft: '1.2em', listStyle: 'disc' }}>
+                    {tool.traits.points.map((p, i) => <li key={i}>{p}</li>)}
+                  </ul>
+                  <p><b>대신</b> · {tool.traits.cost}</p>
+                  <p className="mute" style={{ fontSize: 13, marginBottom: 0 }}>{tool.traits.note} 근거: {tool.traits.tested}</p>
+                </div>
+              </>
+            )}
+
+            {((tool.situations || []).length > 0 || !tool.traits) && <h2 style={{ marginTop: 'var(--s12)' }}>Claude 기본 기능과 비교</h2>}
+            {(tool.situations || []).length === 0 && !tool.traits && (
               <div className="panel">이 도구는 아직 기본 기능과 비교해 시험하지 않았어요.</div>
             )}
             {(tool.situations || []).map(s => (
@@ -146,7 +160,7 @@ export default function ToolPage() {
           </div>
 
           <aside className="spec panel">
-            <div className="mute" style={{ fontSize: 14 }}>처음 읽는 양(실측)</div>
+            <div className="mute" style={{ fontSize: 14 }}>켜 두면 드는 토큰(실측)</div>
             <div className="big n">
               {tool.tokens == null ? '측정 안 함' : `+${fmt(tool.tokens)}`}
             </div>
@@ -170,9 +184,9 @@ export default function ToolPage() {
 
             <dl style={{ marginTop: 'var(--s6)' }}>
               <dt>저장소</dt><dd>{tool.repo}</dd>
-              <dt>잰 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
+              <dt>우리가 확인한 버전</dt><dd className="n">{tool.version || '확인 안 됨'}</dd>
               {tool.latest_release && tool.latest_release !== tool.version && <>
-                <dt>최신 릴리스</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(잰 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
+                <dt>지금 최신 버전</dt><dd className="n">{tool.latest_release} <span className="mute" style={{ fontSize: 12.5 }}>(확인한 뒤 새로 나옴 · {tool.refreshed_at} 확인)</span></dd>
               </>}
               <dt>라이선스</dt><dd>{tool.license || '확인 안 됨'}</dd>
               <dt>별</dt><dd className="n">{fmt(tool.stars)}</dd>

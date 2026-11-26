@@ -7,6 +7,7 @@ import compatRaw from './data/compat.json'
 import testedRaw from './data/tested.json'
 import descRaw from './data/desc_en.json'
 import cardsRaw from './data/cards_ko.json'
+import traitsRaw from './data/tool_traits.json'
 import situationCsv from './data/situation_rules.csv?raw'
 import priorityCsv from './data/situation_priority.csv?raw'
 import goalsCsv from './data/situation_goals.csv?raw'
@@ -240,7 +241,7 @@ export async function getTool(id) {
     label: KO[p.relation],
     review: RS[p.review_state],
   }))
-  return { ...tool, pairs: relatedPairs, situations: toolSituations(id, tools) }
+  return { ...tool, pairs: relatedPairs, situations: toolSituations(id, tools), traits: traitsRaw.traits?.[id] || null }
 }
 
 // 4. 도구함 쌍 판정 (저장된 판정만, no_info 포함)
@@ -301,8 +302,8 @@ function getRules() {
 // 상황마다 대표 줄 하나(주의 줄 제외)
 const mainRules = () => getRules().filter(r => r.resultType !== '주의')
 // 상황 + 중요한 것 → 고를 도구 (data/situation_priority.csv, 서버와 같은 파일). 시험에서 차이가 확인된 조합만 있다
-export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
-const PRIORITY_ORDER = ['accurate', 'save', 'fast', 'simple', 'safe']
+export const PRIORITY_LABEL = { accurate: '틀리지 않는 것', quality: '결과 품질', save: '토큰·한도 아끼기', simple: '설치·관리가 간단한 것', safe: '실수로 망가뜨리지 않는 것', fast: '빨리 끝내기' }
+const PRIORITY_ORDER = ['accurate', 'quality', 'save', 'fast', 'simple', 'safe']
 let _picks = null
 function getPicks() {
   if (!_picks) {
@@ -403,7 +404,9 @@ function goalPlan(ans, ids, byId, pairMap, testedMap) {
       if (costMatters) c.tools.filter(t => t.inBox).forEach(t => mergePlan(off, t, c.label, p.reason, []))
       continue
     }
-    for (const t of p.tools) {
+    // '또는'으로 묶인 도구는 하나만: 도구함에 이미 있는 쪽을 그대로, 없으면 첫 번째만 더하기 (서버 JudgeService.goalPlan과 같음)
+    const inBoxPick = p.tools.filter(t => t.inBox)
+    for (const t of (inBoxPick.length ? inBoxPick : p.tools.slice(0, 1))) {
       if (t.inBox) { mergePlan(keep, t, c.label, p.reason, []); continue }
       const warnings = [...t.overlapWith.map(o => `도구함의 ${o}와 겹쳐요`), ...t.similarTo.map(o => `도구함의 ${o}와 비슷한 역할이에요(상황따라)`)]
       const tt = testedMap[t.id]

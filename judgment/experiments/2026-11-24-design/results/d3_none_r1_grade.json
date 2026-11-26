@@ -1,0 +1,25 @@
+{
+ "mode": "d3",
+ "aiLook": 0,
+ "flags": {
+  "Inter·기본 글꼴만 씀": false,
+  "파랑·보라 그라데이션": false,
+  "이모지 아이콘": false,
+  "둥근 모서리+그림자가 대부분": false
+ },
+ "a11y": {
+  "color-contrast": 2
+ },
+ "detail": {
+  "fonts": [
+   "noto serif kr",
+   "pretendard",
+   "arial"
+  ],
+  "rounded": 15,
+  "shadow": 1,
+  "blocks": 57,
+  "emoji": 0,
+  "mult4": 0.43
+ }
+}

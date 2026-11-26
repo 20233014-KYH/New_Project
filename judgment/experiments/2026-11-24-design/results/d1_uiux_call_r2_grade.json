@@ -1,0 +1,85 @@
+{
+ "mode": "d1",
+ "score": 8,
+ "checks": {
+  "1 글자 대비": true,
+  "2 이미지 설명(alt)": true,
+  "3 키보드 초점 표시": true,
+  "4 입력칸 이름표(label)": true,
+  "5 제목 순서": true,
+  "6 누르는 크기 44px 이상": true,
+  "7 간격 4px 배수 90% 이상": false,
+  "8 글꼴 2종 이하": true,
+  "9 이모지 아이콘 없음": true,
+  "10 보라 그라데이션 없음": false
+ },
+ "contentOk": true,
+ "missing": [],
+ "inputs": 5,
+ "buttons": 5,
+ "detail": {
+  "axe": {},
+  "mult4": 0.72,
+  "fonts": [
+   "pretendard"
+  ],
+  "focus": [
+   {
+    "tag": "BUTTON",
+    "text": "사진 바꾸기",
+    "ring": true
+   },
+   {
+    "tag": "A",
+    "text": "비밀번호 바꾸기",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "탈퇴하기",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "취소",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "저장",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "사진 바꾸기",
+    "ring": true
+   },
+   {
+    "tag": "A",
+    "text": "비밀번호 바꾸기",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "탈퇴하기",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "취소",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "저장",
+    "ring": true
+   },
+   {
+    "tag": "BUTTON",
+    "text": "사진 바꾸기",
+    "ring": true
+   }
+  ],
+  "smallTargets": []
+ }
+}

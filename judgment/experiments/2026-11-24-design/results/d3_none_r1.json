@@ -1,0 +1,50 @@
+{
+ "task": "d3",
+ "cond": "none",
+ "rep": 1,
+ "sec": 46,
+ "rc": 0,
+ "plugins": [
+  "cc-plugin-agents-md",
+  "cc-plugin-telemetry",
+  "cc-plugin-privacy",
+  "cc-plugin-plugin-authoring"
+ ],
+ "skills": [],
+ "turns": 2,
+ "has_html": true,
+ "grade": {
+  "mode": "d3",
+  "aiLook": 0,
+  "flags": {
+   "Inter·기본 글꼴만 씀": false,
+   "파랑·보라 그라데이션": false,
+   "이모지 아이콘": false,
+   "둥근 모서리+그림자가 대부분": false
+  },
+  "a11y": {
+   "color-contrast": 2
+  },
+  "detail": {
+   "fonts": [
+    "noto serif kr",
+    "pretendard",
+    "arial"
+   ],
+   "rounded": 15,
+   "shadow": 1,
+   "blocks": 57,
+   "emoji": 0,
+   "mult4": 0.43
+  }
+ },
+ "usage": {
+  "input_tokens": 4,
+  "cache_creation_input_tokens": 15275,
+  "cache_read_input_tokens": 64059,
+  "output_tokens": 6128
+ },
+ "total_tokens": 85466,
+ "price_weighted": 56144,
+ "stderr_tail": ""
+}

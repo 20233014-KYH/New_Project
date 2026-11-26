@@ -67,6 +67,16 @@ public class ToolPair {
         this.sameRole = sameRole;
     }
 
+    /** 파일(compat.json)이 바뀌었을 때 같은 쌍의 내용을 새 값으로 맞춘다(서버를 다시 켤 때) */
+    public void updateFrom(ToolPair other) {
+        this.relation = other.relation;
+        this.reviewState = other.reviewState;
+        this.reason = other.reason;
+        this.sourcesJson = other.sourcesJson;
+        this.judgedAt = other.judgedAt;
+        this.sameRole = other.sameRole;
+    }
+
     public Long getId() { return id; }
     public String getPairKey() { return pairKey; }
     public String getA() { return a; }
