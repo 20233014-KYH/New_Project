@@ -25,6 +25,12 @@
 
 - 2026-11-15: 셸 명령이 없는 훅(`type: prompt`)도 셈. trailofbits 훅이 6개 → 8개(5가지 시점)로 바뀜 (PR #14 대조 중 발견)
 
+## 사람 확인 (2026-11-28)
+
+- 형원 님이 시험한 8개(playwright-mcp, chrome-devtools-mcp, trailofbits/skills, claude-code-security-review, superpowers, gstack, gsd-core, planning-with-files)의 사실 **57줄을 허준서가 원문과 대조해 모두 "맞음"** 으로 확인했어요(이슈 #22).
+- 근거 종류는 그대로 두고 `reviewed: true`, `reviewed_by`, `reviewed_at`만 더했어요. 마크다운에는 "사람 확인함(허준서, 2026-11-28)"으로 보여요.
+- 검수 기록: [`../../reviews.csv`](../../reviews.csv). 전체 178줄 중 57줄 확인, 나머지 121줄은 사람 확인 전이에요.
+
 ## 남은 확인
 
 - 새 24개 신호의 사람 라벨(특히 R1 원격 실행 형태 중 다른 도구 설치 안내인 것)

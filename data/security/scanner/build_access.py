@@ -303,28 +303,22 @@ out = {
     "generated": "2026-11-09",
     "evidence_kinds": EVIDENCE_CODE,
     "evidence_revised": "2026-11-08: 글자 패턴으로 찾은 결과를 calc에서 pattern으로 바꿈(PR #12 의견). 사실·상태는 그대로",
-    "note": "도움말이며 보증이 아님. 찾지 못함은 없음이 아니다. reviewed=false는 사람 검수 전.",
+    "note": "도움말이며 보증이 아님. 찾지 못함은 없음이 아니다. reviewed=false는 사람 검수 전, true는 사람이 원문과 대조해 맞다고 확인함(reviewed_by·reviewed_at).",
     "statuses": ["찾음", "검사에서 찾지 못함", "검사 전", "해당 없음(MCP 도구 없음)"],
     "columns": COLS,
     "scanned_by": SCANNED_BY,
     "tools": [dict(no=TOOLS[f]["no"], id=f, name=TOOLS[f]["name"], checked=commits.get(f, {}), cells=table[f])
               for f in sorted(TOOLS, key=lambda x: TOOLS[x]["no"])],
 }
+# 사람 검수 반영 (2026-11-28 추가): ../reviews.csv에 "맞음"으로 적힌 줄은 reviewed=true
+import reviews
+_applied, _missing, _not_ok = reviews.apply(out, reviews.load(Path(__file__).parent.parent / "reviews.csv"))
+out["reviewed_count"] = _applied
 json.dump(out, open(out_dir / "access_scope.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 # 검토용 마크다운
-md = []
-for t in out["tools"]:
-    md.append(f"### {t['name']}  (확인: {t['checked'].get('commit','')} · {t['checked'].get('date','')})")
-    for c in COLS:
-        cell = t["cells"][c]
-        md.append(f"- **{c}** [{cell['status']}]")
-        for x in cell["facts"]:
-            md.append(f"    - ({x['when']}) {x['text']} — {x['evidence']}"
-                      + (", 사람 확인 전" if x["evidence_code"] == "pattern" else "")
-                      + (f" · {x['confirm']}" if x.get("confirm") else ""))
-        for n in cell["notes"]:
-            md.append(f"    - 참고: {n}")
-    md.append("")
-open(out_dir / "access_scope.md", "w", encoding="utf-8").write("\n".join(md))
-print("\n".join(md))
+md = reviews.render_md(out, COLS)
+open(out_dir / "access_scope.md", "w", encoding="utf-8").write(md)
+print(md)
+if _missing:
+    print(f"주의: 검수표 {len(_missing)}줄이 표에서 안 보임(문장이 바뀌었을 수 있음)")

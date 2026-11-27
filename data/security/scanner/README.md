@@ -66,6 +66,12 @@ tools[] → cells[칸 이름] → {
 - `confirm`이 있는 줄은 "설치 경로에서 실제로 쓰는지" 같은 확인이 남은 것입니다.
 - `build_access.py`의 `MANUAL` 목록은 스캐너 밖에서 코드·문서로 확인한 사실입니다(파일:줄 근거 포함).
 
+## 사람 검수 반영 (2026-11-28)
+
+- 사람이 확인한 결과는 `data/security/reviews.csv`에 한 줄씩 적어요(도구 id, 칸, 문장, 맞음/틀림, 누가, 언제).
+- `build_access.py`가 표를 만들 때 이 파일을 읽어 "맞음"인 줄에 `reviewed: true`를 붙여요. 문장이 바뀐 줄은 자동으로 확인 전으로 돌아가요.
+- 다시 스캔하지 않고 검수만 반영할 때: `cd data/security/scanner && python3 apply_reviews.py ../results/2026-11-09`
+
 ## v4에서 바뀐 것 (2026-11-09, 36개로 확대)
 
 - `scanner.py`의 `TOOLS`에 24개를 더해 36개 전체를 스캔합니다. 결과: [`../results/2026-11-09/`](../results/2026-11-09/)
