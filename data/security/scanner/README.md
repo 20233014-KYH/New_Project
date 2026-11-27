@@ -70,6 +70,7 @@ tools[] → cells[칸 이름] → {
 
 - 사람이 확인한 결과는 `data/security/reviews.csv`에 한 줄씩 적어요(도구 id, 칸, 문장, 맞음/틀림, 누가, 언제).
 - `build_access.py`가 표를 만들 때 이 파일을 읽어 "맞음"인 줄에 `reviewed: true`를 붙여요. 문장이 바뀐 줄은 자동으로 확인 전으로 돌아가요.
+- 사실은 맞지만 오해하기 쉬운 문장은 `fixed_text` 칸에 고친 문장을 적어요. 화면 문장이 바뀌고, 프로그램이 만든 원래 문장은 `text_raw`에 남아요. (예: superpowers의 "토큰·키 환경변수를 읽음" → 자기 화면 서버 접속 키라고 분명히 함)
 - 다시 스캔하지 않고 검수만 반영할 때: `cd data/security/scanner && python3 apply_reviews.py ../results/2026-11-09`
 
 ## v4에서 바뀐 것 (2026-11-09, 36개로 확대)

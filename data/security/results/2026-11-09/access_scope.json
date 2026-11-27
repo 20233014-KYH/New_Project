@@ -46,7 +46,7 @@
      "status": "찾음",
      "facts": [
       {
-       "text": "토큰·키 환경변수를 읽음 (BRAINSTORM_TOKEN, BRAINSTORM_TOKEN_FILE) · 3곳",
+       "text": "브레인스토밍 화면용 로컬 서버가 자기 접속 키를 만들거나 환경변수(BRAINSTORM_TOKEN, BRAINSTORM_TOKEN_FILE)에서 읽음 · 3곳. 사용자의 API 키를 읽는 것이 아님",
        "when": "사용",
        "evidence": "프로그램이 찾음(글자 패턴)",
        "evidence_code": "pattern",
@@ -57,7 +57,8 @@
         "skills/brainstorming/scripts/server.cjs:134"
        ],
        "reviewed_by": "허준서",
-       "reviewed_at": "2026-11-28"
+       "reviewed_at": "2026-11-28",
+       "text_raw": "토큰·키 환경변수를 읽음 (BRAINSTORM_TOKEN, BRAINSTORM_TOKEN_FILE) · 3곳"
       }
      ],
      "notes": []
